@@ -1,0 +1,102 @@
+-- CATATAN UNTUK UPDATE APLIKASI INI :
+-- 1. Untuk saat ini, coba buatkan database baru termasuk tabel, view, function, procedure
+-- 2. Untuk selanjutnya, saya akan log-kan perubahan di database dengan informasi tanggal perubahan
+
+-- START - REVISI DB SESI 1 (05-12-2012): ---------------------------------
+ALTER TABLE tPegawai_Pendidikan CHANGE tahun_masuk tahun_masuk YEAR NULL;
+ALTER TABLE tPegawai_Pendidikan CHANGE tahun_lulus tahun_lulus YEAR NULL;
+ALTER TABLE tPegawai_Pendidikan CHANGE tgl_ijazah tgl_ijazah DATE NULL;
+
+ALTER TABLE tPegawai_Jabatan DROP no_sk_pelantikan;
+ALTER TABLE tPegawai_Jabatan DROP tgl_sk_pelantikan;
+ALTER TABLE tPegawai_Jabatan ADD no_spmt VARCHAR(30) NULL AFTER tunj_jab;
+ALTER TABLE tPegawai_Jabatan ADD tgl_spmt DATE NULL AFTER no_spmt;
+ALTER TABLE tPegawai_Jabatan ADD no_spp VARCHAR(30) NULL AFTER tgl_spmt;
+ALTER TABLE tPegawai_Jabatan ADD tgl_spp DATE NULL AFTER no_spp;
+
+-- TABEL JENIS BARCODE
+DROP TABLE IF EXISTS tRef_Jns_Barcode;
+CREATE TABLE IF NOT EXISTS tRef_Jns_Barcode (
+  ID_JB INT NOT NULL auto_increment,
+  kode_barcode TINYINT NOT NULL,
+  jns_barcode VARCHAR(50) NULL,
+  PRIMARY KEY(kode_barcode),UNIQUE(ID_JB),INDEX(jns_barcode)) ENGINE = MyISAM;
+INSERT INTO tRef_Jns_Barcode (kode_barcode,jns_barcode) VALUES 
+	(1,'Inpassing'),
+	(2,'KGB'),
+	(3,'Kenaikan Pangkat'),
+	(4,'Pensiun'),
+	(5,'Izin Belajar'),
+	(6,'Ujian Dinas'),
+	(7,'Satya Lencana'),
+	(8,'Cuti'),
+	(9,'Taperum'),
+	(10,'SK Rikes'),
+	(11,'SK Meninggal'),
+	(12,'Karpeg'),
+	(13,'Karis/Karsu'),
+	(14,'SK CPNS'),
+	(15,'SK PNS'),
+	(16,'SK PMK'),
+	(17,'Mutasi Masuk'),
+	(18,'Mutasi Keluar'),
+	(19,'Surat Pindah Tugas'),
+	(20,'Dispilin Pegawai');
+
+-- TABEL BARCODE
+DROP TABLE IF EXISTS tTrans_Barcode;
+CREATE TABLE IF NOT EXISTS tTrans_Barcode (
+	ID_Barcode int(11) NOT NULL auto_increment,
+  ID_proses int(11) default NULL,
+  kode_barcode int(11) default NULL,
+  barcode VARCHAR(15) default NULL,
+  file_path VARCHAR(255) default NULL,
+  createdBy varchar(15) default NULL,
+  createdDate datetime NOT NULL default '0000-00-00 00:00:00',
+  updatedBy varchar(15) NOT NULL,
+  updatedDate datetime NOT NULL default '0000-00-00 00:00:00',
+  status_data TINYINT(1) NULL default 1,
+  PRIMARY KEY (ID_Barcode), INDEX(ID_proses, kode_barcode),
+  INDEX(kode_barcode), FOREIGN KEY (kode_barcode) REFERENCES tRef_Jns_Barcode (kode_barcode)
+) ENGINE = MyISAM;
+
+-- CREATE/REPLACE ULANG SEMUA TABLE TRANSAKSI (03_db_tabel_transaksi.sql)
+-- CREATE/REPLACE ULANG SEMUA TABLE TRANSAKSI (04_db_tabel_report.sql)
+-- CREATE/REPLACE SEMUA FUNCTION, PROCEDURE DAN TABLE VIEW
+	- 05_db_func_global_i.sql
+	- 06_db_func_getlast_id_ref.sql
+	- 07_db_func_getlast_id.sql
+	- 08_db_func_global_ii.sql
+	
+	- 09_db_tabel_referensi_view.sql
+	- 10_db_tabel_profil_view.sql
+
+	- 11_db_func_impasing.sql
+	- 12_db_func_control.sql
+	- 13_db_func_kgb.sql
+	- 14_db_func_pensiun.sql
+	- 15_db_func_sotk.sql
+	- 16_db_func_report.sql
+
+	- 17_db_tabel_transaksi_view.sql
+	- 18_db_tabel_report_view.sql
+
+	- 19_db_procedure_sk_pns.sql
+	- 20_db_tabel_procedure.sql
+	- 21_db_tabel_procedure_rekap.sql
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+-- END - REVISI DB SESI 1 (05-12-2012): ---------------------------------

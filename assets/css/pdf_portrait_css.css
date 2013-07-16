@@ -1,0 +1,35 @@
+/* This is a comment
+Author                 : Mohamad Sofiyullah
+Created                : 26 Nov 2010
+*/
+
+body {font-family: Helvetica; font-size: 9pt; margin: 0;} 
+p {margin-top: 0;}
+
+/* Page Breaks */
+.pbb_before { page-break-before:always !important; }
+.pba_after  { page-break-after:always !important; }
+.pbi_avoid { page-break-inside:avoid !important; }
+
+#kop_line {float: left; margin: 0px auto 0px auto; padding: 5px; width: 380px; height: 10px; border: 0px #000000 solid; font-size: 12pt; text-align: center; overflow: hidden;}
+#txt_tm_center {float: left; margin: 0px auto 0px auto; padding: 20px 0 0 380px; width: 340px; min-height: 75px; border: 0px #000000 solid; font-size: 10pt; text-align: center;}
+
+/* CSS TABLE ------------------------------------ START */
+/* thead{display:table-header-group !important; display:table-cell;} */
+/* tbody{display:table-row-group !important; display: table-row; display:table-cell;} */
+thead td{text-align: center;  font-weight:bold; padding: 1px 3px 1px 3px; border: thin solid black; border-width: 1px 1px 1px 1px}
+thead td .txt{background-color:#cccccc;}
+tbody td{vertical-align:text-top; padding: 1px 3px 1px 3px; border: thin solid black; border-width: 1px 1px 1px 1px;}
+tbody td .ttd_left{vertical-align:text-top; padding: 1px 3px 1px 3px; border: thin solid black; border-width: 1px 0px 1px 1px;}
+tbody td .ttd_right{vertical-align:text-top; padding: 1px 3px 1px 3px; border: thin solid black; border-width: 1px 1px 1px 1px;}
+.nh{background-color:#e7eaec;}
+.nb{background-color:#e7eaec;}
+.centers{text-align: center;}
+.rights{text-align: right;}
+.img{text-align: center; padding: 2px 3px 2px 3px;}
+  .img img{border: 1px solid #cccccc; outline: 1px dotted red;}
+.noborder {border: 0px #000000 solid;}
+.td_no_frame{text-align: left; vertical-align:text-top; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 0 0 0 0;}
+
+#BoxTbl {float: left; margin: 5px 0 2px 0; padding: 0; width: 690px; min-height: 50px; border: 0px #000000 solid; overflow: hidden;}
+/* CSS TABLE ------------------------------------ END */

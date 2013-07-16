@@ -1,0 +1,32 @@
+/* This is a comment
+Author                 : Mohamad Sofiyullah
+Created                : 26 Nov 2010
+*/
+
+body {margin: 0;} 
+p {margin-top: 0;}
+
+/* Page Breaks */
+.pbb_before { page-break-before:always !important; }
+.pba_after  { page-break-after:always !important; }
+.pbi_avoid { page-break-inside:avoid !important; }
+
+#kop_line {float: left; margin: 0px auto 0px auto; padding: 5px; width: 380px; height: 10px; border: 0px #000000 solid; font-size: 12pt; text-align: center; overflow: hidden;}
+#txt_tm_center {float: left; margin: 20px 0 0 800px; padding: 0 0 0 0; width: 340px; min-height: 75px; border: 0px #000000 solid; font-size: 10pt; text-align: center;}
+
+/* CSS TABLE ------------------------------------ START */
+/* thead{display:table-header-group !important; display:table-cell;} */
+/* tbody{display:table-row-group !important; display: table-row; display:table-cell;} */
+td {page-break-after: auto !important;}
+thead td{text-align: center;  font-weight:bold; font-size: 10px; padding: 2px 3px 2px 3px; border: thin solid black; border-width: 1px 1px 1px 1px;}
+thead td .txt{background-color:#cccccc;}
+tbody td{vertical-align:text-top; font-size: 10px; padding: 2px 5px 2px 5px; border: thin solid black; border-width: 1px 1px 1px 1px;}
+.nb{background-color:#e7eaec;}
+.centers{text-align: center;}
+.rights{text-align: right;}
+.td_no_frame{text-align: left; padding: 1px 3px 1px 3px; border: 0px #ffffff solid; border-width: 0 0 0 0;}
+.img{text-align: center; padding: 2px 3px 2px 3px;}
+  .img img{border: 0px #ffffff solid;}
+
+#BoxTbl {float: left; margin: 5px 0 0 10px; padding: 0; width: 1150px; min-height: 50px; border: 0px #000000 solid; overflow: hidden;}
+/* CSS TABLE ------------------------------------ END */

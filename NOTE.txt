@@ -1,0 +1,16 @@
+MEMBUAT FILE .htaccess :
+
+1. Buatlah file dengan nama .htaccess, simpan di root :
+
+RewriteEngine on
+RewriteCond $1 !^(index\.php|resources|robots\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+
+2. Buka config.php from system/application/config directory and replace
+$config['index_page'] = “index.php” by $config['index_page'] = “”
+
+3. Aktifkan module Apache : "rewrite_module" 
+
+ 

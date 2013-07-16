@@ -1,0 +1,41 @@
+//// ASSET BANGUNAN /////////
+
+'kd_lokasi', 'kd_brg', 'no_aset', 'kuantitas', 
+'rph_aset', 'no_kib', 'type', 'thn_sls', 
+'thn_pakai', 'no_imb', 'tgl_imb', 'kd_prov', 
+'kd_kab', 'kd_kec', 'kd_kel', 'alamat', 
+'kd_rtrw', 'no_kibtnh', 'jns_trn', 'dari', 
+'tgl_prl', 'kondisi', 'rph', 'dasar_hrg', 
+'sumber', 'no_dana', 'tgl_dana', 'unit_pmk', 
+'alm_pmk', 'catatan', 'tgl_buku', 'rphwajar', 
+'rphnjop', 'status', 'cad1', 'luas_dsr', 
+'luas_bdg', 'jml_lt'
+
+//// ASSET TANAH ///////////
+
+'kd_lokasi', 'kd_brg', 'no_aset', 'kuantitas', 
+'rph_aset', 'no_kib', 'luas_tnhs', 'luas_tnhb', 
+'luas_tnhl', 'luas_tnhk', 'kd_prov', 'kd_kab', 
+'kd_kec', 'kd_kel', 'kd_rtrw', 'alamat', 
+'batas_u', 'batas_s', 'batas_t', 'batas_b', 
+'jns_trn', 'sumber', 'dari', 'dasar_hrg', 
+'no_dana', 'tgl_dana', 'surat1', 'surat2', 
+'surat3', 'rph_m2', 'unit_pmk', 'alm_pmk', 
+'catatan', 'tgl_prl', 'tgl_buku', 'rphwajar', 
+'rphnjop', 'status', 'smilik'
+
+//// ASSET ALAT BESAR //////////
+
+`kd_lokasi`, `kd_brg`, `no_aset`, `kuantitas`, `no_kib`, `type`, `merk`, `pabrik`, `thn_rakit`, `thn_buat`, `negara`, `kapasitas`, `sis_opr`, `sis_dingin`, `sis_bakar`, `duk_alat`, `pwr_train`, `no_mesin`, `no_rangka`, `lengkap1`, `lengkap2`, `lengkap3`, `unit_pmk`, `alm_pmk`, `catatan`, `kondisi`, `status`, `rphwajar`, `jns_trn`, `tgl_buku`, `dari`, `tgl_prl`, `rph_aset`, `dasar_hrg`, `sumber`, `no_dana`, `tgl_dana`, `cad1`'
+
+//// ASSET ANGKUTAN //////////////
+
+`kd_lokasi`, `kd_brg`, `no_aset`, `kuantitas`, `no_kib`, `merk`, `type`, `pabrik`, `thn_rakit`, `thn_buat`, `negara`, `muat`, `bobot`, `daya`, `msn_gerak`, `jml_msn`, `bhn_bakar`, `no_mesin`, `no_rangka`, `no_polisi`, `no_bpkb`, `lengkap1`, `lengkap2`, `lengkap3`, `unit_pmk`, `alm_pmk`, `catatan`, `status`, `rphwajar`, `kondisi`, `jns_trn`, `tgl_buku`, `dari`, `tgl_prl`, `rph_aset`, `dasar_hrg`, `sumber`, `no_dana`, `tgl_dana`, `cad1`
+
+//// ASSET SENJATA //////////////
+
+`kd_lokasi`, `kd_brg`, `no_aset`, `no_kib`, `kuantitas`, `nama`, `merk`, `type`, `kaliber`, `no_pabrik`, `thn_buat`, `surat`, `tgl_surat`, `lengkap1`, `lengkap2`, `lengkap3`, `kondisi`, `unit_pmk`, `alm_pmk`, `catatan`, `rphwajar`, `jns_trn`, `tgl_buku`, `dari`, `tgl_prl`, `rph_aset`, `dasar_hrg`, `sumber`, `no_dana`, `tgl_dana`, `status`
+
+//// ASSET PERAIRAN ////////////
+
+`kd_lokasi`, `kd_brg`, `no_aset`, `kuantitas`, `no_kib`, `luas_bdg`, `luas_dsr`, `kapasitas`, `thn_sls`, `thn_pakai`, `no_imb`, `tgl_imb`, `kd_prov`, `kd_kab`, `kd_kec`, `kd_kel`, `alamat`, `kd_rtrw`, `no_kibtnh`, `kondisi`, `rph_wajar`, `unit_pmk`, `alm_pmk`, `catatan`, `kons_sist`, `rphwajar`, `jns_trn`, `tgl_buku`, `tgl_prl`, `dari`, `rph_aset`, `dasar_hrg`, `sumber`, `no_dana`, `tgl_dana`, `status`

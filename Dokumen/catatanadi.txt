@@ -1,0 +1,28 @@
+//// Pengadaan
+Jenis Transaksi (jns_trn)
+Tgl Buku (tgl_buku)
+
+Dari (dari)
+Tgl Perolehan (tgl_prl)
+
+Harga per M2 (rph_m2)
+Harga Seluruhnya (rph_aset)
+Dasar Harga [perolehan, Taksiran] (dasar_hrg)
+
+Sumber Dana [APBN, NON APBN] (sumber)
+	No (no_dana)
+	Tanggal (tgl_dana)
+
+
+//// General Tanah
+luas tanah seluruhnya (luas_tnhs)
+luas tanah untuk bangunan (luas_thnb)
+luas tanah untuk sarana lingkungan (luas_thnl)
+luas tanah kosong (luas_thnk)
+jalan (alm_pmk)
+nama unit (unit_pmk)
+
+
+///// general angkutan
+
+msn_gerak (mesin pengerak)

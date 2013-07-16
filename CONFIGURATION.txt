@@ -1,0 +1,21 @@
+CONFIGURATION LIST :
+1) APACHE MODULE : rewrite_module
+2) PHP EXTENSIONS : php_bz2, php_gd2, php_ming
+3) SMTP SERVER (on script):
+4) UBAH tmpdir untuk MySQL
+
+MODE PRODUCTION :
+Ubah pada index.php
+
+define('ENVIRONMENT', 'development');
+menjadi ..
+define('ENVIRONMENT', 'production');
+
+
+PHPExcel :
+At least PHP Version 5.2.0
+php_zip enabled
+php_xml enabled (xml, xmlreader, xmlrpc, xmlwriter)
+php_gd2 enabled 
+
+

@@ -1,0 +1,38 @@
+/* This is a comment
+Author                 : Mohamad Sofiyullah
+Created                : 26 Nov 2010
+*/
+
+body {font-family: Helvetica; font-size: 9pt; margin: 2em 0em 2em 1em;} 
+p {margin-top: 0;}
+
+/* Page Breaks */
+.pbb_before { page-break-before:always !important; }
+.pba_after  { page-break-after:always !important; }
+.pbi_avoid { page-break-inside:avoid !important; }
+
+#kop_line {float: left; margin: 0px auto 0px auto; padding: 5px; width: 700px; height: 10px; border: 0px #000000 solid; font-size: 12pt; text-align: center; overflow: hidden;}
+#txt_tm_center {float: left; margin: 0px auto 0px auto; padding: 20px 0 0 700px; width: 340px; min-height: 75px; border: 0px #000000 solid; font-size: 11pt; text-align: center;}
+
+/* CSS TABLE ------------------------------------ START */
+/* thead{display:table-header-group !important; display:table-cell;} */
+/* tbody{display:table-row-group !important; display: table-row; display:table-cell;} */
+#BoxTbl {float: left; margin: 5px 0 2px 0; padding: 0; width: 690px; min-height: 50px; border: 0px #000000 solid; overflow: hidden;}
+.ClsGroup{text-align: left; background-color:#fff; font-weight:bold; padding: 10px 3px 1px 3px; border:thin black solid; border-width: 0 0 1px 0;} 
+.ClsTh_start{text-align: center; background-color:#ccc; font-weight:bold; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 1px;} 
+.ClsTh{text-align: center; background-color:#ccc; font-weight:bold; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 0;} 
+.ClsTh2_start{text-align: center; background-color:#e7eaec; font-weight:bold; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 1px;} 
+.ClsTh2{text-align: center; background-color:#e7eaec; font-weight:bold; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 0;} 
+.centers_start{text-align: center; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 1px; }
+.centers{text-align: center; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 0; }
+.rights{text-align: right; vertical-align:text-top; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 0;}
+.numbers{text-align: center; vertical-align:text-top; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 0;}
+.texts{text-align: left; vertical-align:text-top; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 1px 1px 1px 0;}
+.texts p {margin-top: 0;margin-bottom: 0; border:thin black solid; border-width: 1px 1px 1px 0;}
+.td_no_frame{text-align: left; vertical-align:text-top; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 0 0 0 0;}
+.td_line_head{text-align: left; vertical-align:text-top; padding: 1px 3px 1px 3px; border:thin black solid; border-width: 0 0 1px 0;}
+.sum{text-align: right;font-weight: bold; padding: 1px 3px 1px 3px;}
+.img{text-align: center; padding: 2px 3px 2px 3px;}
+  .img img{border: 1px solid #cccccc;}
+.trData:hover {background-color: #faf7d1;}
+/* CSS TABLE ------------------------------------ END */

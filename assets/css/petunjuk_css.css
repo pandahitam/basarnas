@@ -1,0 +1,11 @@
+/* CSS Petunjuk Sistem */
+body {font-family:'lucida grande',tahoma,arial,sans-serif; font-size:11px;}
+p {margin-top: 0;}
+#judul{font-size: 12px; font-weight:bold; margin-bottom: 10px;}
+#judul_1{font-size: 11px; font-weight:bold; margin-bottom: 10px;}
+
+ul.cc {list-style-type:circle; margin: 0px 0px 10px 0px; padding-left: 20px;}
+ul.sq {list-style-type:square; margin: 0px 0px 10px 0px; padding-left: 20px;}
+ol.ur {list-style-type:upper-roman; margin: 0px 0px 10px 0px; padding-left: 20px;}
+ol.la {list-style-type:lower-alpha; margin: 0px 0px 10px 0px; padding-left: 20px;}
+ol.ds {list-style-type:decimal; margin: 0px 0px 10px 0px; padding-left: 20px;}

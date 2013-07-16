@@ -1,0 +1,29 @@
+/* This is a comment
+Author                 : Mohamad Sofiyullah
+Created                : 26 Nov 2010
+*/
+
+body {font-family: 'Times Roman'; font-size:10pt; margin: 0;} 
+p {margin-top: 0;}
+
+#logo_head_c {float: left; margin: 0px auto 0px auto; padding: 0 0 0 0; width: 700px; min-height: 30px; border: 0px #000000 solid; text-align: center;}
+#txt_title {float: left; margin: 0px auto 0px auto; padding: 10px 0 0 0; width: 700px; min-height: 75px; border: 0px #000000 solid; font-weight: bold; text-decoration:underline; font-size: 14pt; text-align: center;}
+#txt_title_2 {float: left; margin: 0px auto 0px auto; padding: 80px 0 0 0; width: 700px; min-height: 75px; border: 0px #000000 solid; font-weight: bold; text-decoration:underline; font-size: 14pt; text-align: center;}
+#txt_number {float: left; margin: 0px auto 0px auto; padding: 0 0 40px 0; width: 700px; min-height: 75px; border: 0px #000000 solid; font-size: 12pt; text-align: center;}
+#txt_narasi {float: left; margin: 0px auto 0px auto; padding: 0 0 10px 0; width: 550px; min-height: 75px; border: 0px #000000 solid; font-size: 12pt; text-align: justify;}
+#txt_tm {position: absolute; top: 660px; left: 410px; padding: 0; width: 320px; min-height: 10px; border: 0px #000000 solid; font-size: 12pt; text-align: left;}
+#tm_line {position: absolute; top: 710px; left: 410px; padding: 0; width: 300px; height: 5px; border: 1px #000000 solid; border-width: 1px 0 0 0; font-size: 12pt; text-align: center; overflow: hidden;}
+#txt_tm_center {position: absolute; top: 730px; left: 395px; padding: 0; width: 340px; min-height: 75px; border: 0px #000000 solid; font-size: 12pt; text-align: center;}
+#txt_tembusan {position: fixed; top: 975px; left: 20px; margin: 0px auto 0px auto; padding: 0 0 10px 0; width: 650px; min-height: 75px; border: 0px #000000 solid; font-size: 12pt; text-align: left;}
+ol.n {list-style-type: decimal; margin: 0; padding-left: 20px;}
+ol.a {list-style-type: lower-alpha; margin: 0; padding-left: 20px;}
+ol.r {list-style-type: upper-roman; margin: 0; padding-left: 20px;}
+#barcode_fix {position: fixed; top: 1100px; left: 420px; margin: 0; padding: 0; min-width: 200px; height: 55px; border: 0px #000000 solid; text-align: right; overflow: hidden;}
+#barcode_abs {position: absolute; top: 1100px; left: 420px; margin: 0; padding: 0; min-width: 200px; height: 55px; border: 0px #000000 solid; text-align: right; overflow: hidden;}
+
+/* CSS TABLE ------------------------------------ START */
+td{vertical-align:text-top;}
+#BoxTbl {float: left; margin: 0px auto 0px auto; padding: 0 0 30px 0; width: 550px; min-height: 50px; border: 0px #000000 solid; font-size: 12pt; overflow: hidden;}
+.ClsTd{text-align: left; vertical-align:text-top; padding: 1px 3px 10px 3px; border:thin black solid; border-width: 0px 0px 0px 0px; font-size: 12pt;}
+.ClsTd_C{text-align: center; vertical-align:text-top; font-size: 12pt;}
+/* CSS TABLE ------------------------------------ END */

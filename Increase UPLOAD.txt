@@ -1,0 +1,18 @@
+php.ini configuration :
+
+file_uploads = On
+upload_max_filesize = 2M
+post_max_size = 8M
+max_execution_time = 30
+max_input_time = 60
+memory_limit = 8M
+
+To .....
+
+upload_max_filesize = 20M
+post_max_size = 80M
+max_execution_time = 300
+max_input_time = 600
+memory_limit = 80M
+
+apache.conf configuration :
