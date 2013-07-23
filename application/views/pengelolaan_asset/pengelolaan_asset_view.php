@@ -4,7 +4,17 @@
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
 <script>
 ////PANEL UTAMA MASTER DATA  -------------------------------------------- START
-	
+
+$.ajax({
+    url : 'http://localhost:8888/basarnas/services/assetByKode/3010110001/107010900414412000KP/2',
+    type : 'GET',
+    dataType : 'JSON',
+    success : function (data)
+    {
+        console.log(data);
+    }
+});
+
 var Tab_PA = Ext.createWidget('tabpanel', {
 	id: 'Tab_PA', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
   defaults: {autoScroll:true},
