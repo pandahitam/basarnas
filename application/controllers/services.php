@@ -13,8 +13,8 @@ class services extends MY_Controller {
             $result = null;
             if (isset($kd_brg) && isset($kd_lokasi) && isset($no_aset))
             {
-                $result = $this->model->AssetServicesWithFilter($kd_brg,$kd_lokasi,$no_aset)[0];
-                
+                $temp = $this->model->AssetServicesWithFilter($kd_brg,$kd_lokasi,$no_aset);
+                $result = $temp[0];
                 $imageArray = explode(",", $result->image_url);
                 $images = array();
                 foreach ($imageArray as $str)
