@@ -49,7 +49,12 @@
             }),
             autoLoad: true
         });
-
+        
+        Reference.Data.kondisiPerlengkapan = new Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
+            data: [{text: 'Baik', value: 'Baik'}, {text: 'Rusak Ringan', value: 'Rusak Ringan'}, {text: 'Rusak', value: 'Rusak'}]
+        });
+        
         Reference.Data.unitWaktu = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
             data: [{text: 'Day', value: 1}, {text: 'Month', value: 2}, {text: 'Year', value: 3}]
@@ -536,24 +541,24 @@
                                     'change': {
                                         fn: function(obj, value) {
 
-//                                            if (value !== null)
-//                                            {
-//                                                var unorField = Ext.getCmp('nama_unor');
-//                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
-//                                                if (unorField !== null && kodeUnkerField !== null) {
-//                                                    if (value.length > 0) {
-//                                                        unorField.enable();
-//                                                        kodeUnkerField.setValue(value);
-//                                                        Reference.Data.unor.changeParams({params: {id_open: 1, kode_unker: value}});
-//                                                    }
-//                                                    else {
-//                                                        unorField.disable();
-//                                                    }
-//                                                }
-//                                                else {
-//                                                    console.error('unit organisasi could not be found');
-//                                                }
-//                                            }
+                                            if (value !== null)
+                                            {
+                                                var unorField = Ext.getCmp('nama_unor');
+                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                if (unorField !== null && kodeUnkerField !== null) {
+                                                    if (value.length > 0) {
+                                                        unorField.enable();
+                                                        kodeUnkerField.setValue(value);
+                                                        Reference.Data.unor.changeParams({params: {id_open: 1, kode_unker: value}});
+                                                    }
+                                                    else {
+                                                        unorField.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
 
                                         },
                                         scope: this
@@ -2594,6 +2599,175 @@
                                     name: 'is_realisasi',
                                     boxLabel: 'Yes'
                                 }]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.perlengkapan = function() {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PERLENGKAPAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [{
+                            columnWidth: .34,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'id_warehouse',
+                                    id : 'id_warehouse',
+                                    allowBlank: true,
+                                    store: '',
+                                    valueField: '',
+                                    displayField: '', emptyText: 'Pilih Warehouse',
+                                    value: 1,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Ruang',
+                                    name: 'id_ruang',
+                                    id : 'id_ruang',
+                                    allowBlank: true,
+                                    store: '',
+                                    valueField: '',
+                                    displayField: '', emptyText: 'Pilih Ruang',
+                                    value: 1,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Rak',
+                                    name: 'id_rak',
+                                    id : 'id_rak',
+                                    allowBlank: true,
+                                    store: '',
+                                    valueField: '',
+                                    displayField: '', emptyText: 'Pilih Rak',
+                                    value: 1,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                }
+                                  ]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number'
+                                },
+                                {
+                                    fieldLabel: 'Part Number',
+                                    name: 'part_number'
+                                },    
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Kondisi',
+                                    name: 'kondisi',
+                                    id : 'kondisi',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Kondisi',
+                                    value: 1,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Kuantitas',
+                                    name: 'kuantitas'
+                                }, {
+                                    fieldLabel: 'Dari',
+                                    name: 'dari'
+                                },
+                                {
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Tanggal Perolehan',
+                                    name: 'tanggal_perolehan',
+                                    format: 'Y-m-d'
+                                },
+                                {
+                                    fieldLabel: 'No Dana',
+                                    name: 'no_dana'
+                                },]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '100%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Penggunaan Waktu',
+                                    name: 'penggunaan_waktu',                                    
+                                },{
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Penggunaan Freq',
+                                    name: 'penggunaan_freq',                                    
+                                },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Unit Waktu',
+                                    name: 'unit_waktu',
+                                    id : 'unit_waktu',
+                                    allowBlank: true,
+                                    store: Reference.Data.unitWaktu,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Unit Waktu',
+                                    value: 1,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu'
+                                },{
+                                    xtype: 'combo',
+                                    disabled:false,
+                                    fieldLabel: 'Unit Freq',
+                                    name: 'unit_freq',
+                                    id : 'unit_freq',
+                                    allowBlank: true,
+                                    store: Reference.Data.unitPengunaan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Unit Freq',
+                                    value: 1,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Freq'
+                                },
+                                {
+                                    xtype: 'checkboxfield',
+                                    value: 0,
+                                    inputValue: 1,
+                                    fieldLabel: 'Disimpan',
+                                    name: 'disimpan',
+                                    boxLabel: 'Ya'
+                                },
+                                {
+                                    xtype: 'checkboxfield',
+                                    inputValue: 1,
+                                    fieldLabel: 'Dihapus',
+                                    name: 'dihapus',
+                                    boxLabel: 'Ya'
+                                },
+                                
+                            ]
                         }]
                 }]
 
