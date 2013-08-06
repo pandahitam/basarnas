@@ -94,7 +94,15 @@ var Center_PA = {
                                 tooltip: {
                                     text: 'Inventaris Asset - Luar'
                                 }
-                }
+                },
+                {text: 'Perlengkapan', iconCls: 'icon-book', 
+                                handler: function(){
+                                    Load_TabPage_Asset('perlengkapan_panel',BASE_URL+'asset_perlengkapan/perlengkapan')
+                                }, 
+                                tooltip: {
+                                    text: 'Inventaris Asset - Perlengkapan'
+                                }
+                },
 	  ]
   })
 };

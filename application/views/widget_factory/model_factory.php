@@ -4,6 +4,15 @@
 <script>
 ////// Model In View
 
+Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id','warehouse_id','ruang_id','rak_id',
+        'serial_number', 'part_number','kd_brg','kd_lokasi',
+        'no_aset','kondisi', 'kuantitas', 'dari',
+        'tanggal_perolehan','no_dana','penggunaan_waktu',
+        'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
+        'dihapus','image_url','document_url']
+});
+
 Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
     fields: ['id','kd_brg', 'kd_lokasi', 'no_aset',
                             'kode_unor', 'jenis', 'subjenis', 'pelaksana_nama', 'pelaksana_startdate', 

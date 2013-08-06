@@ -549,7 +549,6 @@
 
             function Load_WidgetFactory(factory) {
                 var factoryUrl = BASE_URL + 'widget_factory/';
-
                 switch (factory) {
                     case "form":
                         {
@@ -589,7 +588,7 @@
                     renderer: 'data',
                     success: function(response) {
 
-                        var jsonData = response.responseText.substring(13);
+                        var jsonData = response.responseText.substring(14);
                         var aHeadNode = document.getElementsByTagName('head')[0];
                         var aScript = document.createElement('script');
                         aScript.text = jsonData;
