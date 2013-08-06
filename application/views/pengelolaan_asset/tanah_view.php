@@ -45,7 +45,7 @@
 
         Tanah.Form.create = function(data, edit) {
             var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit);
-            form.insert(0, Form.Component.unit(edit));
+            form.insert(0, Form.Component.unit(edit,form));
             form.insert(1, Form.Component.kode(edit));
             form.insert(2, Form.Component.basicAsset(edit));
             form.insert(3, Form.Component.address());
