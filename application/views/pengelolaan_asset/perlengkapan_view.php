@@ -47,11 +47,10 @@
             var form = Form.asset(Perlengkapan.URL.createUpdate, Perlengkapan.Data, edit);
             
             form.insert(0, Form.Component.unit(edit));
-            form.insert(1, Form.Component.kode(edit));
 //            form.insert(3, Form.Component.address());
 //            form.insert(4, Form.Component.perlengkapan());
 //            form.insert(5, Form.Component.tambahanPerlengkapanTanah());
-            form.insert(2, Form.Component.perlengkapan());
+            form.insert(2, Form.Component.perlengkapan(edit));
             form.insert(3, Form.Component.fileUpload(edit));
             if (data !== null)
             {

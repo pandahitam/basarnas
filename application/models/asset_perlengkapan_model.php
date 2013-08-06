@@ -25,7 +25,6 @@ class Asset_Perlengkapan_Model extends MY_Model{
             $query = "$this->selectColumn
                             FROM $this->table as t
                             LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LIMIT 0,$this->limit";
 
 		return $this->Get_By_Query($query);	
@@ -49,6 +48,12 @@ class Asset_Perlengkapan_Model extends MY_Model{
 //		return $this->Get_By_Query($query);
 	}
 	
+        function get_partNumberDetails($part_number)
+        {
+            $this->db->where('part_number',"$part_number");
+            $query = $this->db->get('ref_perlengkapan');
+            return $query->row();
+        }
 	
 	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){
 		$kode = NULL;

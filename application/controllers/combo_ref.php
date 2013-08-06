@@ -36,6 +36,68 @@ class Combo_Ref extends CI_Controller {
 
         echo json_encode($data);
     }
+    
+    function combo_warehouse(){
+    
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $query = $this->db->query('select id, nama from ref_warehouse');
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_warehouseRuang(){
+    
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $id_warehouse = $this->input->get_post("warehouse_id");
+            $query = $this->db->query("select id, nama from ref_warehouseruang where warehouse_id = $id_warehouse");
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_warehouseRak(){
+    
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $id_warehouseruang = $this->input->get_post("warehouseruang_id");
+            $query = $this->db->query("select id, nama from ref_warehouserak where warehouseruang_id = $id_warehouseruang");
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_partNumber(){
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $query = $this->db->query('Select part_number,kd_brg,nama from ref_perlengkapan');
+
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
 
     function combo_prov() {
         if ($this->input->get_post("id_open")) {

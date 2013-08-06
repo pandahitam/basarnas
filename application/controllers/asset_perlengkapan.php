@@ -23,12 +23,14 @@ class Asset_Perlengkapan extends MY_Controller {
 	function modifyPerlengkapan(){
 
                 $dataSimak = array();
+//                var_dump($_POST);
+//                die;
                 //$dataExt = array();
-                $dataKode = array();
+//                $dataKode = array();
                 
-                $kodeFields = array(
-                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
-                );
+//                $kodeFields = array(
+//                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
+//                );
                 
 	  	$simakFields = array(
 			'id','warehouse_id','ruang_id','rak_id',
@@ -42,13 +44,8 @@ class Asset_Perlengkapan extends MY_Controller {
 //                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
 //                        'kode_unor','image_url','document_url'
 //                );
-		
-		foreach ($kodeFields as $field) {
-			$dataKode[$field] = $this->input->post($field);
-		}
-                
-                $kd_brg = $this->codeGenerator($dataKode);
-                
+//		
+
 		foreach ($simakFields as $field) {
 			$dataSimak[$field] = $this->input->post($field);
 		}
@@ -62,7 +59,11 @@ class Asset_Perlengkapan extends MY_Controller {
                 {
                     $dataSimak['dihapus'] = 0;
                 }
-                $dataSimak['kd_brg'] = $kd_brg;
+                
+                $partNumberDetails = $this->model->get_partNumberDetails($dataSimak['part_number']);
+                $dataSimak['kd_brg'] = $partNumberDetails->kd_brg;
+//                $dataSimak['part_number'] = $partNumberDetails->part_number;
+//                $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'],$dataSimak['kd_lokasi']);
                 
 //                foreach ($extFields as $field) {
 //			$dataExt[$field] = $this->input->post($field);

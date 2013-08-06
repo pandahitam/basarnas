@@ -23,8 +23,45 @@
             subKelompok: BASE_URL + 'combo_ref/combo_subKelompok',
             subsubKelompok: BASE_URL + 'combo_ref/combo_subsubKelompok',
             imageBasePath: BASE_URL + '/uploads/images/',
-            documentBasePath: BASE_URL + '/uploads/documents/'
+            documentBasePath: BASE_URL + '/uploads/documents/',
+            warehouse: BASE_URL +'combo_ref/combo_warehouse',
+            warehouseRuang: BASE_URL + 'combo_ref/combo_warehouseRuang',
+            warehouseRak: BASE_URL + 'combo_ref/combo_warehouseRak',
+            partNumber: BASE_URL + 'combo_ref/combo_partNumber',
         };
+        
+        Reference.Data.warehouse = new Ext.create('Ext.data.Store', {
+            fields: ['id', 'nama'], storeId: 'DataWarehouse',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.warehouse, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.warehouseRuang = new Ext.create('Ext.data.Store', {
+            fields: ['id', 'nama'], storeId: 'DataWarehouseRuang',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.warehouseRuang, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, warehouse_id:0}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.warehouseRak = new Ext.create('Ext.data.Store', {
+            fields: ['id', 'nama'], storeId: 'DataWarehouseRak',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.warehouseRak, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, warehouseruang_id:0}
+            }),
+            autoLoad: true
+        });
+
+        
+        Reference.Data.partNumber = new Ext.create('Ext.data.Store', {
+            fields: ['part_number', 'nama','kd_brg'], storeId: 'DataPartNumber',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.partNumber, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
 
         Reference.Data.unker = new Ext.create('Ext.data.Store', {
             fields: ['kdlok', 'ur_upb'], idProperty: 'ID_UK', storeId: 'DataUnker',
@@ -1291,10 +1328,10 @@
                                     }
                                 }
                             },{
-                                xtype : 'numberfield',
+                                xtype : 'textfield',
                                 fieldLabel : 'No Asset',
                                 labelWidth: 70,
-                                name : 'no_aset',
+                                name : 'no_aset'
                             }]
                     }]
             };
@@ -2605,7 +2642,7 @@
             return component;
         };
         
-        Form.Component.perlengkapan = function() {
+        Form.Component.perlengkapan = function(edit) {
 
             var component = [{
                     xtype: 'fieldset',
@@ -2615,7 +2652,111 @@
                     border: false,
                     defaultType: 'container',
                     frame: true,
-                    items: [{
+                    items: [
+                        {
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'warehouse_id',
+                                id: 'warehouse_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouse = Ext.getCmp('combo_warehouse_id');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'ruang_id',
+                                id: 'ruang_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'rak_id',
+                                id: 'rak_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRak = Ext.getCmp('combo_rak_id');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                name: 'unit_waktu',
+                                id: 'unit_waktu',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboUnitWaktu = Ext.getCmp('combo_unit_waktu');
+                                            if (comboUnitWaktu !== null)
+                                            {
+                                                comboUnitWaktu.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                name: 'unit_freq',
+                                id: 'unit_freq',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboUnitFreq = Ext.getCmp('combo_unit_freq');
+                                            if (comboUnitFreq !== null)
+                                            {
+                                                comboUnitFreq.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                name: 'part_number',
+                                id: 'part_number',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboPartNumber = Ext.getCmp('combo_part_number');
+                                            if (comboPartNumber !== null)
+                                            {
+                                                comboPartNumber.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                name: 'kd_brg',
+                                id: 'kd_brg',
+                            }
+                            ]
+                    },
+                        
+                       {
                             columnWidth: .34,
                             layout: 'anchor',
                             defaults: {
@@ -2627,38 +2768,131 @@
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Warehouse',
-                                    name: 'id_warehouse',
-                                    id : 'id_warehouse',
+                                    name: 'combo_warehouse_id',
+                                    id : 'combo_warehouse_id',
                                     allowBlank: true,
-                                    store: '',
-                                    valueField: '',
-                                    displayField: '', emptyText: 'Pilih Warehouse',
-                                    value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
+                                                    var fieldWarehouse = Ext.getCmp('warehouse_id');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
                                 }, {
                                     xtype: 'combo',
-                                    disabled: false,
+                                    disabled: true,
                                     fieldLabel: 'Ruang',
-                                    name: 'id_ruang',
-                                    id : 'id_ruang',
-                                    allowBlank: true,
-                                    store: '',
-                                    valueField: '',
-                                    displayField: '', emptyText: 'Pilih Ruang',
-                                    value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                    name: 'combo_ruang_id',
+                                    id : 'combo_ruang_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = Ext.getCmp('combo_rak_id');
+                                                    var fieldWarehouseRuang = Ext.getCmp('ruang_id');
+                                                    
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
                                 }, {
                                     xtype: 'combo',
-                                    disabled: false,
+                                    disabled: true,
                                     fieldLabel: 'Rak',
-                                    name: 'id_rak',
-                                    id : 'id_rak',
-                                    allowBlank: true,
-                                    store: '',
-                                    valueField: '',
-                                    displayField: '', emptyText: 'Pilih Rak',
-                                    value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                    name: 'combo_rak_id',
+                                    id : 'combo_rak_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = Ext.getCmp('rak_id');
+                                                    
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
                                 }
                                   ]
                         }, {
@@ -2674,9 +2908,45 @@
                                     name: 'serial_number'
                                 },
                                 {
+                                    xtype: 'combo',
+                                    disabled: false,
                                     fieldLabel: 'Part Number',
-                                    name: 'part_number'
-                                },    
+                                    name: 'combo_part_number',
+                                    id : 'combo_part_number',
+                                    allowBlank: false,
+                                    store: Reference.Data.partNumber,
+                                    valueField: 'part_number',
+                                    displayField: 'nama', emptyText: 'Pilih Part Number',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldPartNumber = Ext.getCmp('part_number');
+                                                    
+                                                    if (fieldPartNumber != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldPartNumber.setValue(value);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },   
                                 {
                                     xtype: 'combo',
                                     disabled: false,
@@ -2687,7 +2957,6 @@
                                     store: Reference.Data.kondisiPerlengkapan,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Pilih Kondisi',
-                                    value: 1,
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
                                 },
                                 {
@@ -2730,26 +2999,79 @@
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Unit Waktu',
-                                    name: 'unit_waktu',
-                                    id : 'unit_waktu',
+                                    name: 'combo_unit_waktu',
+                                    id : 'combo_unit_waktu',
                                     allowBlank: true,
                                     store: Reference.Data.unitWaktu,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Pilih Unit Waktu',
-                                    value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu'
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldUnitWaktu = Ext.getCmp('unit_waktu');
+                                                    
+                                                    if (fieldUnitWaktu != null) {
+                                                        
+                                                            fieldUnitWaktu.setValue(value);
+                                                        
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
                                 },{
                                     xtype: 'combo',
                                     disabled:false,
                                     fieldLabel: 'Unit Freq',
-                                    name: 'unit_freq',
-                                    id : 'unit_freq',
+                                    name: 'combo_unit_freq',
+                                    id : 'combo_unit_freq',
                                     allowBlank: true,
                                     store: Reference.Data.unitPengunaan,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Pilih Unit Freq',
-                                    value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Freq'
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Freq',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldUnitFreq = Ext.getCmp('unit_freq');
+                                                    if (fieldUnitFreq != null) {
+                                                    
+                                                            fieldUnitFreq.setValue(value);
+                                                        
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
                                 },
                                 {
                                     xtype: 'checkboxfield',

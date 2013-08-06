@@ -78,6 +78,11 @@ class MY_Controller extends CI_Controller{
         {
             return implode("",$dataKode);
         }
+        
+        function noAssetGenerator($kd_brg, $kd_lokasi)
+        {
+            return $kd_brg.$kd_lokasi;
+        }
 		
 }
 ?>
