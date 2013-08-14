@@ -59,6 +59,13 @@ class Asset_Senjata extends MY_Controller {
                 
                 $dataExt['kd_brg'] = $kd_brg;	
                 
+                                //GENERASI NO_ASET 
+                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
+                {
+                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                    $dataExt['no_aset'] = $dataSimak['no_aset'];
+                }
+                
 		$this->modifyData($dataSimak,$dataExt);
                 
 	}

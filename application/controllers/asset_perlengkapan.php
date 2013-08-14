@@ -64,22 +64,18 @@ class Asset_Perlengkapan extends MY_Controller {
                 //GENERATE NO ASET
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
                 {
-                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                    $this->db->where('id',$dataSimak['id']);
+                    $query = $this->db->get('asset_perlengkapan');
+                    $result = $query->row();
+                    if($query->num_rows === 0)
+                    {
+                        $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                    }
+                    else
+                    {
+                        $dataSimak['no_aset'] = $result->no_aset;
+                    }
                 }
-//                else //if operation is update
-//                {
-//                    $this->db->where('id',$dataSimak['id']);
-//                    $query = $this->db->get('asset_perlengkapan');
-//                    $result = $query->row();
-//                    if($query->num_rows === 0)
-//                    {
-//                        $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
-//                    }
-//                    else
-//                    {
-//                        $dataSimak['no_aset'] = $result->no_aset;
-//                    }
-//                }
                 
 //                $dataSimak['part_number'] = $partNumberDetails->part_number;
 //                $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'],$dataSimak['kd_lokasi']);

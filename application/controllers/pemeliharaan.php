@@ -41,6 +41,18 @@ class Pemeliharaan extends MY_Controller {
 			$data[$field] = $this->input->post($field);
 		} 
                 
+                /*
+                 * as of this time of writing this controller seems not yet updated
+                 * with the latest structure like the one in asset inventaris
+                 * therefore please uncomment the generasi of no_aset when changes had been made
+                 */
+                //GENERASI NO_ASET 
+//                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
+//                {
+//                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+//                    $dataExt['no_aset'] = $dataSimak['no_aset'];
+//                }
+                
 		$this->modifyData(null,$data);
 	}
 	

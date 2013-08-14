@@ -55,7 +55,11 @@ class asset_alatbesar extends MY_Controller {
 			$dataExt[$field] = $this->input->post($field);
 		} 
                 $dataExt['kd_brg'] = $kd_brg;
-                	
+                
+                if($dataSimak['no_aset'] = "Digenerasi Otomatis")
+                {
+                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                }
 			
 		$this->modifyData($dataSimak, $dataExt);
 	}

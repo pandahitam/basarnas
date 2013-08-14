@@ -79,42 +79,33 @@ class MY_Controller extends CI_Controller{
             return implode("",$dataKode);
         }
         
-        function noAssetGenerator($temp_kd_brg, $temp_kd_lokasi)
+        function noAssetGenerator($kd_brg, $kd_lokasi)
         {
-            $kd_brg = "";
-            $kd_lokasi = "";
-            if($temp_kd_brg != null || $temp_kd_brg != '')
-            {
-                $kd_brg = $temp_kd_brg;
-                $this->db->where("kd_brg",$kd_brg);
-            }
-            if($temp_kd_lokasi != null || $temp_kd_lokasi != '')
-            {
-                $kd_lokasi = $temp_kd_lokasi;
-                $this->db->where("kd_lokasi",$kd_lokasi);
-            }
+            
+            $this->db->where("kd_brg",$kd_brg);
+            $this->db->where("kd_lokasi",$kd_lokasi);
             $this->db->order_by("no_aset",'desc');
             $query = $this->db->get('view_noasetgenerator');
             $result = $query->row();
             if($query->num_rows() === 0)
             {
-                return $kd_brg.$kd_lokasi.'1';
+                return '0';
             }
             else
             {
-                if($result->no_aset != null && is_numeric(substr($result->no_aset, -1)))
+                if($result->no_aset != null && $result->no_aset != '')
                 {
-                    $previous_no_aset = substr($result->no_aset,-1);
+                    $previous_no_aset = $result->no_aset;
                     $incrementor = (int)$previous_no_aset + 1;
-                    return $kd_brg.$kd_lokasi.$incrementor;
+                    return $incrementor;
                 }
                 else
                 {
-                    return $kd_brg.$kd_lokasi.'1';
+                    return '0';
                 }
                 
             }
-            return $kd_brg.$kd_lokasi;
+            return '0';
         }
 		
 }
