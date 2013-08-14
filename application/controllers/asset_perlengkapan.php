@@ -23,8 +23,6 @@ class Asset_Perlengkapan extends MY_Controller {
 	function modifyPerlengkapan(){
 
                 $dataSimak = array();
-//                var_dump($_POST);
-//                die;
                 //$dataExt = array();
 //                $dataKode = array();
                 
@@ -62,6 +60,27 @@ class Asset_Perlengkapan extends MY_Controller {
                 
                 $partNumberDetails = $this->model->get_partNumberDetails($dataSimak['part_number']);
                 $dataSimak['kd_brg'] = $partNumberDetails->kd_brg;
+                
+                //GENERATE NO ASET
+                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
+                {
+                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                }
+//                else //if operation is update
+//                {
+//                    $this->db->where('id',$dataSimak['id']);
+//                    $query = $this->db->get('asset_perlengkapan');
+//                    $result = $query->row();
+//                    if($query->num_rows === 0)
+//                    {
+//                        $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+//                    }
+//                    else
+//                    {
+//                        $dataSimak['no_aset'] = $result->no_aset;
+//                    }
+//                }
+                
 //                $dataSimak['part_number'] = $partNumberDetails->part_number;
 //                $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'],$dataSimak['kd_lokasi']);
                 

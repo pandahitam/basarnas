@@ -1328,10 +1328,9 @@
                                     }
                                 }
                             },{
-                                xtype : 'textfield',
-                                fieldLabel : 'No Asset',
-                                labelWidth: 70,
-                                name : 'no_aset'
+                                xtype : 'hidden',
+                                name : 'no_aset',
+                                value: ''
                             }]
                     }]
             };

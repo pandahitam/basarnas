@@ -67,6 +67,30 @@ class Asset_Tanah extends MY_Controller {
 		} 
                 
                 $dataExt['kd_brg'] = $kd_brg;	
+                
+                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
+                {
+                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                    $dataExt['no_aset'] = $dataSimak['no_aset'];
+                }
+//                else //if update not creating new no_aset
+//                {
+//                    $this->db->where('kd_brg',$dataSimak['kd_brg']);
+//                    $this->db->where('kd_lokasi',$dataSimak['kd_lokasi']);
+//                    $query = $this->db->get('asset_tanah');
+//                    $result = $query->row();
+//                    if($query->num_rows === 0)
+//                    {
+//                        $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+//                    }
+//                    else
+//                    {
+//                        $dataSimak['no_aset'] = $result->no_aset;
+//                    }
+//                    $dataExt['no_aset'] = $dataSimak['no_aset'];
+//                }
+                
+                
                 		
 		$this->modifyData($dataSimak,$dataExt);
 	}
