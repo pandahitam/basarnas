@@ -694,13 +694,17 @@
             var _tab = Modal.assetEdit.getComponent('asset-window-tab');
             if (_tab !== null)
             {
-                _tab.add({
-                    title: title,
-                    id: tabid,
-                    closable: true,
-                    border: false,
-                    items: [items],
-                });
+                var tabpanel = _tab.getComponent(tabid);
+                if (tabpanel === null || tabpanel === undefined)
+                {
+                    _tab.add({
+                        title: title,
+                        id: tabid,
+                        closable: true,
+                        border: false,
+                        items: [items],
+                    });
+                }
 
                 _tab.setActiveTab(tabid);
             }

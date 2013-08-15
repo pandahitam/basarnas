@@ -151,7 +151,13 @@
                                         }
 
                                     },
-                                    {text: 'Peraturan', iconCls: 'icon-menu_impasing', id: 'm_peraturan'}
+                                    {text: 'Peraturan', iconCls: 'icon-menu_impasing', id: 'm_peraturan'},
+                                    {text: 'Pengelolaan', iconCls: 'icon-menu_impasing', id: 'm_pengelolaan',
+                                        handler: function()
+                                        {
+                                            Load_TabPage('pengelolaan', BASE_URL + 'pengelolaan')
+                                        }
+                                    }
                                 ]
                             }
                         }, '-', {
