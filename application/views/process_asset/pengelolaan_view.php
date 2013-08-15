@@ -58,7 +58,7 @@
                 }
             };
 
-            var form = Form.perencanaan(setting);
+            var form = Form.pengelolaan(setting);
 
             if (data !== null)
             {
