@@ -214,5 +214,5 @@ Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPengelolaan', {extend: 'Ext.data.Model',
-    fields: ['id','nama_document','tanggal_document','pembuat','perihal','date_upload','document_url']
+    fields: ['id','nama','no_document','tanggal_document','pembuat','perihal','date_upload','image_url', 'document_url']
 });

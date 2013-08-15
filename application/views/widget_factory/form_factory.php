@@ -338,6 +338,15 @@
 
         }
         
+        Form.pengelolaan = function(setting)
+        {
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0,Form.Component.pengelolaan(setting.isEditing));
+            form.insert(1,Form.Component.fileUpload(setting.isEditing));
+            
+            return form;
+        }
+        
         Form.assetRuang = function(setting)
         {
             var form = Form.asset(setting.url, setting.data, setting.isEditing);
@@ -2640,6 +2649,59 @@
 
             return component;
         };
+        
+        Form.Component.pengelolaan = function(edit) {
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PERENCANAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [{
+                            columnWidth: .5,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype : 'hidden',
+                                    name : 'id'
+                                }, {
+                                    fieldLabel: 'Nama',
+                                    name: 'nama',
+                                }, {
+                                    fieldLabel: 'Pembuat',
+                                    name: 'pembuat'
+                                }, {
+                                    fieldLabel: 'Perihal',
+                                    name: 'perihal'
+                                }]
+                        }, {
+                            columnWidth: .5,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    fieldLabel: 'No Document',
+                                    name: 'no_document'
+                                }, {
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Tgl Document',
+                                    name: 'tanggal_document',
+                                    format : 'Y-m-d'
+                                }, ]
+                        }]
+                }]
+
+            return component;
+        }
         
         Form.Component.perlengkapan = function(edit) {
 

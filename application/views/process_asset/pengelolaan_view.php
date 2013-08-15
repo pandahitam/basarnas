@@ -38,7 +38,7 @@
                 data: Pengelolaan.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Reference',
                     fn: function() {
 
@@ -57,7 +57,7 @@
                     noAsetHidden: true
                 }
             };
-
+            debugger;
             var form = Form.pengelolaan(setting);
 
             if (data !== null)
@@ -83,7 +83,7 @@
                 var data = selected[0].data;
                 if (Modal.processEdit.items.length === 0)
                 {
-                    Modal.processEdit.setTitle('Edit Perairan');
+                    Modal.processEdit.setTitle('Edit Pengelolaan');
                 }
                 var _form = Pengelolaan.Form.create(data, true);
                 Modal.processEdit.add(_form);
@@ -184,7 +184,7 @@
                     {header: 'ID', dataIndex: 'id', width: 50, groupable: false, filter: {type: 'number'}},
                     {header: 'Nama', dataIndex: 'nama', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'No Document', dataIndex: 'no_document', width: 150, groupable: false, filter: {type: 'string'}},
-                    {header: 'Tanggal Document', dataIndex: 'tangal_document', width: 150, groupable: false, filter: {type: 'date'}},
+                    {header: 'Tanggal Document', dataIndex: 'tanggal_document', width: 150, groupable: false, filter: {type: 'date'}},
                     {header: 'Pembuat', dataIndex: 'pembuat', width: 100, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Perihal', dataIndex: 'perihal', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Date Upload', dataIndex: 'date_upload', width: 100, groupable: false, filter: {type: 'date'}},

@@ -27,31 +27,15 @@ class Pengelolaan extends MY_Controller {
                 $data = array();
                 
 	  	$fields = array(
-                    'id', 'kd_brg', 'kd_lokasi', 'no_aset',
-                    'kode_unker', 'kode_unor', 'jenis', 'nama', 
-                    'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 
-                    'kondisi', 'deskripsi', 'harga', 'kode_angaran', 
-                    'unit_waktu', 'unit_pengunaan',
-                    'freq_waktu', 'freq_pengunaan', 'status', 'durasi', 
-                    'rencana_waktu', 'rencana_pengunaan', 'rencana_keterangan', 'alert', 
-                    'document_url','image_url'
+                    'id', 'nama', 'no_document', 'tanggal_document',
+                    'pembuat', 'perihal', 'document_url', 'image_url'
                 );
                 
                 foreach ($fields as $field) {
 			$data[$field] = $this->input->post($field);
 		} 
-                
-                /*
-                 * as of this time of writing this controller seems not yet updated
-                 * with the latest structure like the one in asset inventaris
-                 * therefore please uncomment the generasi of no_aset when changes had been made
-                 */
-                //GENERASI NO_ASET 
-//                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
-//                {
-//                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
-//                    $dataExt['no_aset'] = $dataSimak['no_aset'];
-//                }
+                $today = new DateTime();
+                $data['date_upload'] = $today->format('Y-m-d');
                 
 		$this->modifyData(null,$data);
 	}

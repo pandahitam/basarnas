@@ -5,7 +5,7 @@ class Pengelolaan_Model extends MY_Model{
 		parent::__construct();
 		$this->extTable = 'pengelolaan';
                 
-                $this->selectColumn = "SELECT id, nama, no_document, tanggal_document, pembuat, perihal, date_upload, document_url";
+                $this->selectColumn = "SELECT id, nama, no_document, tanggal_document, pembuat, perihal, date_upload, image_url, document_url";
 	}
 	
 	function get_AllData(){
