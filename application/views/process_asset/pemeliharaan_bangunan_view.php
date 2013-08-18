@@ -60,7 +60,7 @@ PemeliharaanBangunan.Form.create = function(data,edit){
                 noAsetHidden : false
             }
         };
-            
+        debugger;
 	var form = Form.pemeliharaan(setting);
         
 	if (data !== null)
@@ -83,7 +83,7 @@ PemeliharaanBangunan.Action.edit = function (){
     {
         var data = selected[0].data;
         delete data.nama_unker;
-        console.log(data);
+        debugger;
         if (Modal.processEdit.items.length === 0)
         {
                 Modal.processEdit.setTitle('Edit Pemeliharaan Bangunan');
@@ -186,8 +186,8 @@ var setting = {
                     {header: 'ID',              dataIndex: 'id',                width: 50, groupable: false, filter:{type:'number'}},
                     {header: 'Unit Kerja',      dataIndex: 'nama_unker',        width: 180,groupable : false,filter:{type:'string'}},
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor',         width: 130,groupable : false,filter:{type:'string'}},
-                    {header: 'Kode Lokasi',     dataIndex: 'kode_lokasi',       width: 130,hidden:true,groupable : false,filter:{type:'string'}},
-                    {header: 'Kode Barang',     dataIndex: 'kode_barang',       width: 130,hidden:false,groupable : false,filter:{type:'string'}},
+                    {header: 'Kode Lokasi',     dataIndex: 'kd_lokasi',       width: 130,hidden:true,groupable : false,filter:{type:'string'}},
+                    {header: 'Kode Barang',     dataIndex: 'kd_brg',       width: 130,hidden:false,groupable : false,filter:{type:'string'}},
                     {header: 'No Aset',         dataIndex: 'no_aset',           width: 130, hidden:true,    groupable: false,filter:{type:'string'}}, 
                     {header: 'Pelaksana',      dataIndex: 'pelaksana_nama',    width: 70,  hidden:false,groupable : false,filter:{type:'string'}},
                     {header: 'Pelaksanaan Tgl Start', dataIndex: 'pelaksana_startdate',     width: 120,groupable : false,filter:{type:'string'}},

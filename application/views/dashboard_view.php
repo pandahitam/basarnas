@@ -161,7 +161,7 @@
                                             Load_TabPage('pengadaan_asset', BASE_URL + 'pengadaan');
                                         }
                                     },
-                                    {text: 'Pemeliharaan', iconCls: 'icon-menu_impasing', id: 'm_pengelolaan',
+                                    {text: 'Pemeliharaan', iconCls: 'icon-menu_impasing', id: 'm_pemeliharaan',
                                         menu: {
                                             items: [{
                                                     text: 'Pemeliharaan Umum ',
@@ -196,7 +196,13 @@
                                         }
 
                                     },
-                                    {text: 'Peraturan', iconCls: 'icon-menu_impasing', id: 'm_peraturan'}
+                                    {text: 'Peraturan', iconCls: 'icon-menu_impasing', id: 'm_peraturan'},
+                                    {text: 'Pengelolaan', iconCls: 'icon-menu_impasing', id: 'm_pengelolaan',
+                                        handler: function()
+                                        {
+                                            Load_TabPage('pengelolaan', BASE_URL + 'pengelolaan')
+                                        }
+                                    }
                                 ]
                             }
                         }, '-', {

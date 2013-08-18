@@ -32,7 +32,7 @@ class User extends CI_Controller {
     function ext_login() {
         $cond = array(
             'user' => $this->input->post('username'),
-            'pass' => md5($this->input->post('password'))
+            'pass' => md5($this->input->post('password')) 
         );
         $query = $this->db->get_where('tuser', $cond, 1);
         if ($query->num_rows() > 0) {

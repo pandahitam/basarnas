@@ -89,12 +89,13 @@
         Bangunan.Window.actionSidePanels = function() {
             var actions = {
                 details: function() {
-                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('bangunan-details');
-                    if (tabpanels === undefined)
-                    {
-                        Bangunan.Action.edit();
-                    }
+//                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+//                    var tabpanels = _tab.getComponent('bangunan-details');
+//                    if (tabpanels === undefined)
+//                    {
+//                        Bangunan.Action.edit();
+//                    }
+                    Bangunan.Action.edit();
                 },
                 pengadaan: function() {
                     var _tab = Modal.assetEdit.getComponent('asset-window-tab');
