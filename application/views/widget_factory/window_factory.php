@@ -165,6 +165,392 @@
                 }
             })
         };
+        
+        Region.filterPanelAset = function(data) {
+            var panel = {
+                region: 'west',
+                title: 'Filter',
+                width: 200,
+                split: true,
+                collapsible: true,
+                floatable: false,
+                frame: true,
+                items: [{
+                        xtype: 'label',
+                        text: 'Filter By Kode Barang',
+                        height: 30,
+                        style: 'font-weight:bold; display:block',
+                        
+                    },{
+                        xtype: 'label',
+                        text: 'Golongan',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Golongan',
+                        name: 'aset-golongan',
+                        id: 'aset-golongan',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.golongan,
+                        valueField: 'kd_gol',
+                        displayField: 'ur_gol', emptyText: 'Golongan',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        data.filter([{property: 'kd_brg', value: value}]);
+                                        var filterByGolongan = value;
+                                        var filterByBidang = Ext.getCmp('aset-bidang');
+                                                if (filterByGolongan !== null && filterByBidang !== null) {
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        filterByBidang.enable();
+                                                        Reference.Data.bidang.changeParams({params: {id_open: 1, kd_gol: value}});
+                                                    }
+                                                    else {
+                                                        filterByBidang.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('error');
+                                                }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    }, {
+                        xtype: 'label',
+                        text: 'Bidang',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Bidang',
+                        name: 'aset-bidang',
+                        id: 'aset-bidang',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.bidang,
+                        disabled:true,
+                        valueField: 'kd_bid',
+                        displayField: 'ur_bid', emptyText: 'Bidang',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
+                                        data.filter({property: 'kd_brg', value: filterByGolonganValue+value});
+                                        
+                                            var filterByKelompok = Ext.getCmp('aset-kelompok');
+                                            var filterByBidang = value;
+                                            if (filterByKelompok !== null && filterByBidang !== null) {
+                                                if (!isNaN(value) && value.length > 0) {
+                                                    filterByKelompok.enable();
+                                                    Reference.Data.kelompok.changeParams({params: {id_open: 1, kd_gol: filterByGolonganValue, kd_bid: value}});
+                                                }
+                                                else {
+                                                    filterByKelompok.disable();
+                                                }
+                                            }
+                                            else {
+                                                console.error('error');
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Kelompok',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Kelompok',
+                        name: 'aset-kelompok',
+                        id: 'aset-kelompok',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        disabled:true,
+                        store: Reference.Data.kelompok,
+                        valueField: 'kd_kel',
+                        displayField: 'ur_kel', emptyText: 'Kelompok',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Kelompok',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
+                                        var filterByBidangValue = Ext.getCmp('aset-bidang').value;
+                                        data.filter({property: 'kd_brg', value: filterByGolonganValue+filterByBidangValue+value});
+                                        
+                                        var filterBySubKelompok = Ext.getCmp('aset-subkel');
+                                        var filterByKelompok = value;
+                                        if (filterByKelompok !== null && filterBySubKelompok !== null && !isNaN(value)) {
+                                            filterBySubKelompok.enable();
+                                            Reference.Data.subKelompok.changeParams({params: {id_open: 1,
+                                                    kd_gol: filterByGolonganValue,
+                                                    kd_bid: filterByBidangValue,
+                                                    kd_kel: value}});
+                                            }
+                                    
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Sub Kelompok',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Sub Kelompok',
+                        name: 'aset-subkel',
+                        id: 'aset-subkel',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        disabled:true,
+                        store: Reference.Data.subKelompok,
+                        valueField: 'kd_skel',
+                        displayField: 'ur_skel', emptyText: 'Sub Kelompok',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Sub Kelompok',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
+                                        var filterByBidangValue = Ext.getCmp('aset-bidang').value;
+                                        var filterByKelompokValue = Ext.getCmp('aset-kelompok').value;
+                                        data.filter({property: 'kd_brg', value: filterByGolonganValue+filterByBidangValue+filterByKelompokValue+value});
+                                        
+                                        var filterBySubSubKelompok = Ext.getCmp('aset-subsubkel');
+                                        var filterBySubKelompok = value;
+
+                                        if (filterBySubKelompok !== null && filterBySubSubKelompok !== null && !isNaN(value)) {
+                                            filterBySubSubKelompok.enable();
+                                            Reference.Data.subSubKelompok.changeParams({params: {id_open: 1,
+                                                    kd_gol: filterByGolonganValue,
+                                                    kd_bid: filterByBidangValue,
+                                                    kd_kel: filterByKelompokValue,
+                                                    kd_skel: value}});
+                                        }
+                                    
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Sub Sub Kelompok',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Sub Sub Kelompok',
+                        name: 'aset-subsubkel',
+                        id: 'aset-subsubkel',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        disabled:true,
+                        store: Reference.Data.subSubKelompok,
+                        valueField: 'kd_sskel',
+                        displayField: 'ur_sskel', emptyText: 'Sub Sub Kelompok',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Sub Sub Kelompok',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
+                                        var filterByBidangValue = Ext.getCmp('aset-bidang').value;
+                                        var filterByKelompokValue = Ext.getCmp('aset-kelompok').value;
+                                        var filterBySubKelompokValue = Ext.getCmp('aset-subkel').value;
+                                        data.filter({property: 'kd_brg', value: filterByGolonganValue+filterByBidangValue+filterByKelompokValue+filterBySubKelompokValue+value});
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: '   ',
+                        height: 20,
+                        style: 'display:block',
+                        
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Filter By Klasifikasi Aset',
+                        height: 30,
+                        style: 'font-weight:bold; display:block',
+                        
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Level 1',
+                        height: 30,
+                        
+                    },
+                    {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Level1',
+                        name: 'aset-klasifikasiAset-lvl1',
+                        id: 'aset-klasifikasiAset-lvl1',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.klasifikasiAset_lvl1,
+                        valueField: 'kd_lvl1',
+                        displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        data.filter([{property: 'kd_klasifikasi_aset', value: value}]);
+                                        var filterByLevel1 = value;
+                                        var filterByLevel2 = Ext.getCmp('aset-klasifikasiAset-lvl2');
+                                                if (filterByLevel1 !== null && filterByLevel2 !== null) {
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        filterByLevel2.enable();
+                                                        Reference.Data.klasifikasiAset_lvl2.changeParams({params: {id_open: 1, kd_lvl1: value}});
+                                                    }
+                                                    else {
+                                                        filterByLevel2.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('error');
+                                                }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Level 2',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Level 2',
+                        name: 'aset-klasifikasiAset-lvl2',
+                        id: 'aset-klasifikasiAset-lvl2',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.klasifikasiAset_lvl2,
+                        disabled:true,
+                        valueField: 'kd_lvl2',
+                        displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
+                                        data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+value});
+                                        
+                                            var filterByLevel3 = Ext.getCmp('aset-klasifikasiAset-lvl3');
+                                            var filterByLevel2 = value;
+                                            if (filterByLevel3 !== null && filterByLevel2 !== null) {
+                                                if (!isNaN(value) && value.length > 0) {
+                                                    filterByLevel3.enable();
+                                                    Reference.Data.klasifikasiAset_lvl3.changeParams({params: {id_open: 1, kd_lvl1: filterByLevel1Value, kd_lvl2: value}});
+                                                }
+                                                else {
+                                                    filterByLevel3.disable();
+                                                }
+                                            }
+                                            else {
+                                                console.error('error');
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Level 3',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Level 3',
+                        name: 'aset-klasifikasiAset-lvl3',
+                        id: 'aset-klasifikasiAset-lvl3',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.klasifikasiAset_lvl3,
+                        disabled:true,
+                        valueField: 'kd_lvl3',
+                        displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
+                                        var filterByLevel2Value = Ext.getCmp('aset-klasifikasiAset-lvl2').value;
+                                        data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+filterByLevel2Value+value});
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    ]
+            };
+
+            return panel;
+        };
 
         Region.filterPanelPemeliharaanBangunan = function(data) {
             var panel = {

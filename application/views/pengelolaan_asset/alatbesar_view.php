@@ -472,8 +472,8 @@
         Alatbesar.Grid.grid = Grid.inventarisGrid(setting, Alatbesar.Data);
 
         var new_tabpanel_Asset = {
-            id: 'alatbesar_panel', title: 'Alatbesar', iconCls: 'icon-tanah_Alatbesar', closable: true, border: false,
-            items: [Alatbesar.Grid.grid]
+            id: 'alatbesar_panel', title: 'Alatbesar', iconCls: 'icon-tanah_Alatbesar', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAset(Alatbesar.Data),Alatbesar.Grid.grid]
         };
 
 <?php

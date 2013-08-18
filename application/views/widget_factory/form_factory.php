@@ -28,7 +28,36 @@
             warehouseRuang: BASE_URL + 'combo_ref/combo_warehouseRuang',
             warehouseRak: BASE_URL + 'combo_ref/combo_warehouseRak',
             partNumber: BASE_URL + 'combo_ref/combo_partNumber',
+            klasifikasiAset_lvl1: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl1',
+            klasifikasiAset_lvl2: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl2',
+            klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
         };
+        
+        Reference.Data.klasifikasiAset_lvl1 = new Ext.create('Ext.data.Store', {
+            fields: ['kd_lvl1', 'nama'], storeId: 'DataKlasifikasiAset_lvl1 ',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.klasifikasiAset_lvl1, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+           Reference.Data.klasifikasiAset_lvl2 = new Ext.create('Ext.data.Store', {
+            fields: ['kd_lvl2', 'nama'], storeId: 'DataKlasifikasiAset_lvl2',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.klasifikasiAset_lvl2, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, kd_lvl1:0}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.klasifikasiAset_lvl3 = new Ext.create('Ext.data.Store', {
+            fields: ['kd_lvl3', 'nama'], storeId: 'DataKlasifikasiAset_lvl3',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.klasifikasiAset_lvl3, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, kd_lvl1:0, kd_lvl2:0}
+            }),
+            autoLoad: true
+        });
+        
+     
         
         Reference.Data.warehouse = new Ext.create('Ext.data.Store', {
             fields: ['id', 'nama'], storeId: 'DataWarehouse',

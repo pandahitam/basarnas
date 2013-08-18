@@ -431,8 +431,8 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'bangunan_panel', title: 'Bangunan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,
-            items: [Bangunan.Grid.grid]
+            id: 'bangunan_panel', title: 'Bangunan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAset(Bangunan.Data),Bangunan.Grid.grid]
         };
 
     <?php } else {

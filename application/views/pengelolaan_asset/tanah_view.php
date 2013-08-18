@@ -447,8 +447,8 @@
         Tanah.Grid.grid = Grid.inventarisGrid(setting, Tanah.Data);
 
         var new_tabpanel_Asset = {
-            id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,
-            items: [Tanah.Grid.grid]
+            id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAset(Tanah.Data),Tanah.Grid.grid]
         };
 <?php
 

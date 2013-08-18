@@ -212,6 +212,24 @@
                             }
                         }, '-', {
                             text: 'LAPORAN', iconCls: 'icon-menu_laporan', id: 'm_laporan',
+                                    menu:{
+                                items:[{
+                                        text: 'Aset/Unit Kerja ',
+                                        iconCls: 'icon-menu_impasing',
+                                        id: 'm_laporan_aset_unker',
+                                        handler: function() {
+                                            Load_TabPage('laporan_aset_unker', BASE_URL + 'laporan_aset_unker');
+                                        }
+                                    },
+                                    {
+                                        text: 'Aset/ Kategori Barang',
+                                        iconCls: 'icon-menu_impasing',
+                                        id: 'm_laporan_aset_kategoribarang',
+                                        handler: function() {
+                                            Load_TabPage('laporan_aset_kategoribarang', BASE_URL + 'laporan_aset_kategoribarang');
+                                    }
+                                }]
+                                    },
                         }, '->', {
                             text: 'Ubah Kata Sandi', iconCls: 'icon-key', handler: function() {
                                 Load_Popup('winchangepass', BASE_URL + 'pengguna_login/ubahsandi');

@@ -37,6 +37,54 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_klasifikasiAset_lvl1()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $query = $this->db->query('select kd_lvl1, nama from ref_klasifikasiaset_lvl1');
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_klasifikasiAset_lvl2()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $kd_lvl1 = $this->input->get_post("kd_lvl1");
+            $query = $this->db->query("select kd_lvl2, nama from ref_klasifikasiaset_lvl2 where kd_lvl1 =$kd_lvl1");
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_klasifikasiAset_lvl3()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $kd_lvl1 = $this->input->get_post("kd_lvl1");
+            $kd_lvl2 = $this->input->get_post("kd_lvl2");
+            $query = $this->db->query("select kd_lvl3, nama from ref_klasifikasiaset_lvl3 where kd_lvl1 =$kd_lvl1 and kd_lvl2 = $kd_lvl2");
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_warehouse(){
     
         $data = array();

@@ -436,8 +436,8 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'perairan_panel', title: 'Perairan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,
-            items: [Perairan.Grid.grid]
+            id: 'perairan_panel', title: 'Perairan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAset(Perairan.Data),Perairan.Grid.grid]
         };
 
 <?php } else {
