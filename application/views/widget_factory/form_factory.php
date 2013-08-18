@@ -361,6 +361,7 @@
 
         Form.process = function(url, data, edit, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
                 frame: true,
                 url: url,
                 bodyStyle: 'padding:5px',

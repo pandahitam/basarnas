@@ -55,7 +55,52 @@
             Ext.form.Field.prototype.msgTarget = 'side';
             Ext.QuickTips.init();
 
-            Ext.namespace('SIMPEG');
+            Ext.namespace('SIMPEG','Dashboard');
+
+            Dashboard.URL = {
+            readGrafikUnkerTotalAset: BASE_URL + 'dashboard/grafik_unker_totalaset',
+            readGrafikKategoriBarangTotalAset : BASE_URL + 'dashboard/grafik_kategoribarang_totalaset',
+
+            };
+
+            Dashboard.readerGrafikUnkerTotalAset = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderGrafikUnkerTotalAset_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
+            
+            Dashboard.readerGrafikKategoriBarangTotalAset = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderGrafikKategoriBarang_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
+
+            Dashboard.proxyGrafikUnkerTotalAset = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyGrafikUnkerTotalAset_Dashboard',
+                url: Dashboard.URL.readGrafikUnkerTotalAset, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerGrafikUnkerTotalAset,
+            });
+            
+            Dashboard.modelGrafikUnkerTotalAset = Ext.define('MGrafikUnkerTotalAset', {extend: 'Ext.data.Model',
+                fields: ['kd_lokasi','ur_upb','totalAset']
+            });
+
+            Dashboard.DataGrafikUnkerTotalAset = new Ext.create('Ext.data.Store', {
+                id: 'Data_GrafikUnkerTotalAset', storeId: 'DataGrafikUnkerTotalAset', model: Dashboard.modelGrafikUnkerTotalAset, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyGrafikUnkerTotalAset, groupField: 'tipe'
+            });
+            
+            Dashboard.proxyGrafikKategoriBarangTotalAset = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyGrafikKategoriBarangTotalAset_Dashboard',
+                url: Dashboard.URL.readGrafikKategoriBarangTotalAset, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerGrafikKategoriBarangTotalAset,
+            });
+            
+            Dashboard.modelGrafikKategoriBarangTotalAset = Ext.define('MGrafikKategoriBarangTotalAset', {extend: 'Ext.data.Model',
+                fields: ['nama','totalAset']
+            });
+
+            Dashboard.DataGrafikKategoriBarangTotalAset = new Ext.create('Ext.data.Store', {
+                id: 'Data_GrafikKategoriBarangTotalAset', storeId: 'DataGrafikKategoriBarangTotalAset', model: Dashboard.modelGrafikKategoriBarangTotalAset, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyGrafikKategoriBarangTotalAset, groupField: 'tipe'
+            });
+            
             Ext.onReady(function() {
                 var clock = Ext.create('Ext.toolbar.TextItem', {text: Ext.Date.format(new Date(), 'd M Y, g:i:s A')});
 
@@ -180,13 +225,116 @@
                 };
 
                 var Layout_Header = {id: 'layout-header', region: 'north', split: false, collapsible: false, border: false, items: [Content_Header, Content_MainMenu]};
+                
 
+                    
+                var GrafikUnkerTotalAset = Ext.create('Ext.chart.Chart', {
+                            width:800,
+                            height:550,
+                            animate: true,
+                            renderTo:Ext.getBody(),
+                            store: Dashboard.DataGrafikUnkerTotalAset,
+                            theme:'Category6',
+                            axes: [{
+                                type: 'Category',
+                                position: 'bottom',
+                                fields: ['ur_upb'],
+                                title: 'Unit Kerja',
+                                label: {
+                                    rotate:{degrees:270}
+                                },
+                            }, {
+                                type: 'Numeric',
+                                position: 'left',
+                                fields: ['totalAset'],
+                                title: 'Aset Dalam Rupiah x 1 jt',
+                                label: {
+                                        renderer: Ext.util.Format.numberRenderer('0,0')
+                                },
+                            }],
+                            //Add Bar series.
+                            series: [{
+                                type: 'column',
+                                axis: 'bottom',
+                                xField: 'ur_upb',
+                                yField: 'totalAset',
+                                highlight: true,
+                                label: {
+                                    display: 'insideEnd',
+                                    field: 'totalAset',
+                                    orientation: 'vertical',
+                                    renderer: Ext.util.Format.numberRenderer('0,0'),
+                                    color: '#333',
+                                   'text-anchor': 'middle'
+                                }
+                            }]
+                        });
+                        
+                var GrafikKategoriBarangTotalAset = Ext.create('Ext.chart.Chart', {
+                            width:800,
+                            height:550,
+                            animate: true,
+                            renderTo:Ext.getBody(),
+                            store: Dashboard.DataGrafikKategoriBarangTotalAset,
+                            theme:'Category6',
+                            axes: [{
+                                type: 'Category',
+                                position: 'bottom',
+                                fields: ['nama'],
+                                title: 'Kategori Barang',
+                                label: {
+                                    rotate:{degrees:270}
+                                },
+                            }, {
+                                type: 'Numeric',
+                                position: 'left',
+                                fields: ['totalAset'],
+                                title: 'Aset Dalam Rupiah x 1 jt',
+                                label: {
+                                        renderer: Ext.util.Format.numberRenderer('0,0')
+                                },
+                            }],
+                            //Add Bar series.
+                            series: [{
+                                type: 'column',
+                                axis: 'bottom',
+                                xField: 'nama',
+                                yField: 'totalAset',
+                                highlight: true,
+                                label: {
+                                    display: 'insideEnd',
+                                    field: 'totalAset',
+                                    orientation: 'vertical',
+                                    renderer: Ext.util.Format.numberRenderer('0,0'),
+                                    color: '#333',
+                                   'text-anchor': 'middle'
+                                }
+                            }]
+                        });
+                        
+                        
+                var GrafikUnkerTotalAsetContainer = Ext.create(Ext.panel.Panel,{
+                    id: 'GrafikUnkerTotalAsetContainer',
+                    title: "Grafik Total Aset/Unit Kerja", 
+                    autoScroll: true, 
+                    height: 600,
+                    items:[GrafikUnkerTotalAset],
+                    });
+                    
+                var GrafikKategoriBarangTotalAsetContainer = Ext.create(Ext.panel.Panel,{
+                    id: 'GrafikKategoriBarangTotalAsetContainer',
+                    title: "Grafik Total Aset/Kategori Barang", 
+                    autoScroll: true, 
+                    height: 600,
+                    items:[GrafikKategoriBarangTotalAset],
+                    });
+                        
                 var Content_Body_Tabs = Ext.createWidget('tabpanel', {
                     id: 'Content_Body_Tabs', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
                     defaults: {autoScroll: true},
                     items: [{
-                            id: 'dashboard', title: 'Dashboard', bodyPadding: 10, iconCls: 'icon-gnome', closable: false,
-                            html: '<font size=6; font color="#002D59"; font face="Times New Romans"><center><br><h1><br>SISTEM INFORMASI MANAJEMENT ASSET <br>BADAN SAR NASIONAL <br>(SIMASS BASARNAS)<br><br>TAHUN <?php echo date("Y"); ?></h1></center> </font> <br><br><p align=center> <img src="assets/images/logo_pemda_150.png"> </p>'
+                            id: 'dashboard', title: 'Dashboard', bodyPadding: 10, iconCls: 'icon-gnome', closable: false,layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}}, tdAttrs : {align : 'center',},},
+                            items:[GrafikUnkerTotalAsetContainer, GrafikKategoriBarangTotalAsetContainer]
                         }],
                     listeners: {
                         'tabchange': function(tabPanel, tab) {
@@ -336,7 +484,7 @@
                     id: 'layout-body', region: 'center', layout: 'fit', border: false, deferredRender: true,
                     items: [{
                             id: 'items-body', border: false, layout: 'card', autoRender: true, closable: false, activeItem: 0,
-                            items: [Content_Body_Tabs]
+                            items:[Content_Body_Tabs],
                         }]
                 });
 
@@ -371,7 +519,6 @@
                 });
 
             });
-
             function Show_Chat() {
                 Ext.MessageBox.show({title: 'Chat !', msg: 'Chatting !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
             }

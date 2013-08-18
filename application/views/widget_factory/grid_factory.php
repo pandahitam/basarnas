@@ -383,10 +383,11 @@
                 listeners: {
                     itemdblclick: function(dataview, record, item, index, e) {
                         var data = record.data;
+                        debugger;
                         if (data !== null)
                         {
-                            var temp = Ext.getCmp('form-create');
-                            if (temp !== null)
+                            var temp = Ext.getCmp('form-process');
+                            if (temp !== null && temp != undefined)
                             {
                                 var form = temp.getForm();
                                 form.setValues(data);
