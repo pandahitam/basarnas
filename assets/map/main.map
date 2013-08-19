@@ -1,0 +1,344 @@
+MAP
+	NAME basarnas
+	STATUS ON
+	SIZE 768 480
+	EXTENT 94.973492 -11.007750 141.066985 7.033773
+	SHAPEPATH "data"
+	IMAGECOLOR 255 255 255
+	#IMAGECOLOR 200 200 200
+	UNITS DD
+
+	PROJECTION
+	  "proj=latlong"
+	  "ellps=WGS84"
+	  "datum=WGS84"
+	END
+
+	IMAGETYPE PNG
+
+	SYMBOL
+		NAME "Circle"
+		FILLED true
+		TYPE ellipse
+		POINTS 1 1 END
+	END
+	
+	SYMBOL
+		NAME 'star'
+		TYPE VECTOR
+		FILLED TRUE
+		POINTS
+			0 .375
+			.35 .375
+			.5 0
+			.65 .375
+			1 .375
+			.75 .625
+			.875 1
+			.5 .75
+			.125 1
+			.25 .625
+		END
+	END 
+
+	WEB
+		#HEADER templates/header.html
+		#TEMPLATE "set in index.html"
+		#FOOTER templates/footer.html    
+		EMPTY "/basarnas/assets/map/templates/empty.html"
+		IMAGEPATH "C:/xampp/htdocs/basarnas/assets/map/tmp/"
+		IMAGEURL "/basarnas/assets/map/tmp/"
+	END
+
+	REFERENCE
+		IMAGE "graphics/reference.png"
+		EXTENT 94.973492 -11.007750 141.066985 7.033773
+		SIZE 192 120
+		STATUS ON
+		#MINBOXSIZE 50
+		#MAXBOXSIZE 500
+		COLOR -1 -1 -1
+		OUTLINECOLOR 255 0 0
+		#MARKERSIZE 50
+		#MARKER 'star'
+	END
+	
+	SCALEBAR
+		LABEL
+			COLOR 0 0 0
+			ANTIALIAS true
+			SIZE small
+		END
+		POSITION ll
+		STYLE 0
+		SIZE 144 5
+		UNITS KILOMETERS
+		INTERVALS 2
+		TRANSPARENT true
+		STATUS embed
+		BACKGROUNDCOLOR 255 0 0
+		IMAGECOLOR 255 255 255
+		COLOR 255 255 255
+		OUTLINECOLOR 0 0 255
+	END
+	
+	LEGEND
+		LABEL
+			COLOR 0 0 0
+			ANTIALIAS true
+			SIZE small
+		END
+		POSITION ur
+		TRANSPARENT false
+		STATUS embed
+		#IMAGECOLOR -1 -1 -1
+		KEYSIZE 20 10
+		KEYSPACING 5 5
+		#OUTLINECOLOR 200 200 200
+	END
+	
+	 QUERYMAP
+	 	STATUS ON
+	 	STYLE HILITE
+	 	COLOR 255 255 0
+	 END
+
+	LAYER
+		GROUP			"Polygon"
+		NAME 			Batas_Negara
+		TYPE 			POLYGON
+		STATUS 			OFF
+		DATA 			Batas_Negara
+		CLASS
+			NAME "Batas Negara"
+			COLOR 203 247 233
+			OUTLINECOLOR 110 110 110
+			TEMPLATE "templates/bn.html"
+		END
+		HEADER "templates/bn_header.html"
+		FOOTER "templates/bn_footer.html"
+		METADATA
+			"DESCRIPTION" "Batas_Negara"
+			"GROUP" "Polygon"
+			"LAYER" "Batas_Negara"
+		END
+	END
+	
+	LAYER
+		GROUP "Polygon"
+		NAME Batas_Provinsi
+		TYPE POLYGON
+		STATUS ON
+		DATA Batas_Provinsi
+		LABELITEM "PROVINSI"
+		CLASSITEM "PROVINSI"
+		TRANSPARENCY	50
+		CLASS
+			NAME "Batas Provinsi"
+			COLOR 238 207 250
+			OUTLINECOLOR 255 255 255
+			TEMPLATE "templates/bp.html"
+			EXPRESSION /./      
+			LABEL
+				COLOR 100 100 100
+				SHADOWCOLOR 218 218 218
+				SHADOWSIZE 2 2
+				TYPE BITMAP
+				SIZE MEDIUM
+				POSITION CC
+				PARTIALS FALSE
+				BUFFER 2
+			END
+		END
+		HEADER "templates/bp_header.html"
+		FOOTER "templates/bp_footer.html"
+		METADATA
+			"DESCRIPTION" "Batas_Provinsi"
+			"GROUP" "Polygon"
+			"LAYER" "Batas_Provinsi"
+			qstring_validation_pattern '^[0-9]{4}$' 
+		END
+	END
+
+	LAYER
+		GROUP "Polygon"
+		NAME Batas_Kabupaten
+		TYPE POLYGON
+		STATUS OFF
+		DATA Batas_Kabupaten
+		LABELITEM "KOTA"
+		#CLASSITEM "KOTA"
+		CLASS
+			NAME "Batas Kabupaten"
+			COLOR 191 184 242
+			OUTLINECOLOR 255 255 255
+			TEMPLATE "templates/bk.html"
+			#EXPRESSION /./      
+			LABEL
+				COLOR 100 100 100
+				SHADOWCOLOR 218 218 218
+				SHADOWSIZE 2 2
+				TYPE BITMAP
+				SIZE SMALL
+				POSITION CC
+				PARTIALS FALSE
+				BUFFER 2
+			END
+		END
+		HEADER "templates/bk_header.html"
+		FOOTER "templates/bk_footer.html"
+		METADATA
+			"DESCRIPTION" "Batas_Kabupaten"
+			"GROUP" "Polygon"
+			"LAYER" "Batas_Kabupaten"
+			qstring_validation_pattern '^[0-9]{4}$' 
+		END
+	END
+
+	LAYER
+		GROUP "Polygon"
+		NAME Batas_Kecamatan
+		TYPE POLYGON
+		STATUS OFF
+		DATA Batas_Kecamatan
+		CLASS
+			NAME "Batas Kecamatan"
+			COLOR 203 218 242
+			OUTLINECOLOR 110 110 110
+			TEMPLATE "templates/bkc.html"
+		END
+		HEADER "templates/bkc_header.html"
+		FOOTER "templates/bkc_footer.html"
+		METADATA
+			"DESCRIPTION" "Batas_Kecamatan"
+			"GROUP" "Polygon"
+			"LAYER" "Batas_Kecamatan"
+		END
+	END
+	
+	LAYER
+		NAME Jalan_Lokal
+		GROUP "Jalan"
+		#MAXSCALE 600000
+		STATUS OFF
+		DATA Jalan_Lokal
+		TYPE LINE
+		CLASS
+			NAME "Jalan Lokal"
+			STYLE
+				COLOR 205 137 102
+			END
+		END
+		METADATA
+			"DESCRIPTION" "Jalan_Lokal"
+			"GROUP" "Jalan"
+			"LAYER" "Jalan_Lokal"
+		END
+	END
+	
+	LAYER
+		NAME Text_Kota_Kabupaten
+		GROUP "Annotasi"
+		TYPE ANNOTATION
+		DATA Text_Kota_Kabupaten
+		STATUS ON
+		LABELITEM "NAMA"
+		CLASSITEM "NAMA"
+		#LABELMAXSCALE 2000000
+		CLASS
+			EXPRESSION /./      
+			LABEL
+				COLOR 0 0 0
+				SHADOWCOLOR 218 218 218
+				SHADOWSIZE 2 2
+				TYPE BITMAP
+				SIZE MEDIUM
+				POSITION CC
+				PARTIALS FALSE
+				BUFFER 2
+			END
+		END
+
+		METADATA
+			"DESCRIPTION" "Text_Kota_Kabupaten"
+			"GROUP" "Annotasi"
+			"LAYER" "Text_Kota_Kabupaten"
+		END
+	END	
+	
+	LAYER
+		NAME Kantor_SAR
+		GROUP "Annotasi"
+		TYPE POINT
+		DATA kansar
+		STATUS ON
+		LABELITEM "NAMA"
+		#CLASSITEM "JENIS"
+		#LABELMAXSCALE 2000000
+		#MINSCALE 1000000
+		CLASS
+			NAME "Kantor SAR"
+			TEMPLATE "templates/ks.html"
+			#EXPRESSION /./
+			STYLE
+				SYMBOL "star"
+				SIZE 14
+				COLOR 13 0 153
+			END      
+			LABEL
+				COLOR 13 0 153
+				SHADOWCOLOR 218 218 218
+				SHADOWSIZE 2 2
+				TYPE BITMAP
+				SIZE MEDIUM
+				POSITION UC
+				PARTIALS FALSE
+				BUFFER 2
+			END
+		END
+		HEADER "templates/ks_header.html"
+		FOOTER "templates/ks_footer.html"
+		METADATA
+			"DESCRIPTION" "Kantor_SAR"
+			"GROUP" "Annotasi"
+			"LAYER" "Kantor_SAR"
+			qstring_validation_pattern '^[0-9]{4}$' 
+		END
+	END	
+
+	LAYER
+		NAME Pos_SAR
+		GROUP "Annotasi"
+		TYPE POINT
+		DATA possar
+		STATUS ON
+		LABELITEM "NAMA"
+		#CLASSITEM "NAMA"
+		#LABELMAXSCALE 2000000
+		#MINSCALE 1000000
+		CLASS
+			NAME "Pos SAR"
+			#EXPRESSION /./
+			STYLE
+				SYMBOL "Circle"
+				SIZE 6
+				COLOR 149 0 166 
+			END      
+			LABEL
+				COLOR 149 0 166
+				SHADOWCOLOR 218 218 218
+				SHADOWSIZE 2 2
+				TYPE BITMAP
+				SIZE SMALL #MEDIUM
+				POSITION UC
+				PARTIALS FALSE
+				BUFFER 2
+			END
+		END
+		METADATA
+			"DESCRIPTION" "Pos_SAR"
+			"GROUP" "Annotasi"
+			"LAYER" "Pos_SAR"
+		END
+	END	
+END # Map File
