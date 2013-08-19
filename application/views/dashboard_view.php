@@ -60,7 +60,7 @@
             Dashboard.URL = {
             readGrafikUnkerTotalAset: BASE_URL + 'dashboard/grafik_unker_totalaset',
             readGrafikKategoriBarangTotalAset : BASE_URL + 'dashboard/grafik_kategoribarang_totalaset',
-
+            readAlertPemeliharaan: BASE_URL + 'dashboard/alert_pemeliharaan'
             };
 
             Dashboard.readerGrafikUnkerTotalAset = new Ext.create('Ext.data.JsonReader', {
@@ -70,20 +70,15 @@
             Dashboard.readerGrafikKategoriBarangTotalAset = new Ext.create('Ext.data.JsonReader', {
                 id: 'ReaderGrafikKategoriBarang_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
             });
+            
+            Dashboard.readerAlertPemeliharaan = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderAlertPemeliharaan_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
 
             Dashboard.proxyGrafikUnkerTotalAset = new Ext.create('Ext.data.AjaxProxy', {
                 id: 'ProxyGrafikUnkerTotalAset_Dashboard',
                 url: Dashboard.URL.readGrafikUnkerTotalAset, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
                 reader: Dashboard.readerGrafikUnkerTotalAset,
-            });
-            
-            Dashboard.modelGrafikUnkerTotalAset = Ext.define('MGrafikUnkerTotalAset', {extend: 'Ext.data.Model',
-                fields: ['kd_lokasi','ur_upb','totalAset']
-            });
-
-            Dashboard.DataGrafikUnkerTotalAset = new Ext.create('Ext.data.Store', {
-                id: 'Data_GrafikUnkerTotalAset', storeId: 'DataGrafikUnkerTotalAset', model: Dashboard.modelGrafikUnkerTotalAset, noCache: false, autoLoad: true,
-                proxy: Dashboard.proxyGrafikUnkerTotalAset, groupField: 'tipe'
             });
             
             Dashboard.proxyGrafikKategoriBarangTotalAset = new Ext.create('Ext.data.AjaxProxy', {
@@ -92,13 +87,38 @@
                 reader: Dashboard.readerGrafikKategoriBarangTotalAset,
             });
             
+            Dashboard.proxyAlertPemeliharaan = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyAlertPemeliharaan _Dashboard',
+                url: Dashboard.URL.readAlertPemeliharaan , actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerAlertPemeliharaan ,
+            });
+            
+            
+            Dashboard.modelGrafikUnkerTotalAset = Ext.define('MGrafikUnkerTotalAset', {extend: 'Ext.data.Model',
+                fields: ['kd_lokasi','ur_upb','totalAset']
+            });
+            
             Dashboard.modelGrafikKategoriBarangTotalAset = Ext.define('MGrafikKategoriBarangTotalAset', {extend: 'Ext.data.Model',
                 fields: ['nama','totalAset']
             });
+            
+            Dashboard.modelAlertPemeliharaan = Ext.define('MAlertPemeliharaan', {extend: 'Ext.data.Model',
+                fields: ['ur_upb','nama','tanggal_kadaluarsa']
+            });
 
+            Dashboard.DataGrafikUnkerTotalAset = new Ext.create('Ext.data.Store', {
+                id: 'Data_GrafikUnkerTotalAset', storeId: 'DataGrafikUnkerTotalAset', model: Dashboard.modelGrafikUnkerTotalAset, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyGrafikUnkerTotalAset, groupField: 'tipe'
+            });
+            
             Dashboard.DataGrafikKategoriBarangTotalAset = new Ext.create('Ext.data.Store', {
                 id: 'Data_GrafikKategoriBarangTotalAset', storeId: 'DataGrafikKategoriBarangTotalAset', model: Dashboard.modelGrafikKategoriBarangTotalAset, noCache: false, autoLoad: true,
                 proxy: Dashboard.proxyGrafikKategoriBarangTotalAset, groupField: 'tipe'
+            });
+            
+            Dashboard.DataAlertPemeliharaan = new Ext.create('Ext.data.Store', {
+                id: 'Data_AlertPemeliharaan', storeId: 'DataAlertPemeliharaan', model: Dashboard.modelAlertPemeliharaan, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyAlertPemeliharaan, groupField: 'tipe'
             });
             
             Ext.onReady(function() {
@@ -250,7 +270,18 @@
 
                 var Layout_Header = {id: 'layout-header', region: 'north', split: false, collapsible: false, border: false, items: [Content_Header, Content_MainMenu]};
                 
-
+                var GridAlertPemeliharaan = Ext.create('Ext.grid.Panel', {
+                    title: 'Alert Pemeliharaan',
+                    store: Dashboard.DataAlertPemeliharaan,
+                    columns: [
+                        { text: 'Unit Kerja',  dataIndex: 'ur_upb', width:200 },
+                        { text: 'Nama Aset', dataIndex: 'nama', width:300},
+                        { text: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
+                    ],
+                    height: 200,
+//                    width: 400,
+//                    renderTo: Ext.getBody()
+                });
                     
                 var GrafikUnkerTotalAset = Ext.create('Ext.chart.Chart', {
                             width:800,
@@ -342,6 +373,15 @@
                     title: "Grafik Total Aset/Unit Kerja", 
                     autoScroll: true, 
                     height: 600,
+                    layout:{
+                        type:'table',
+                        tableAttrs:{
+                            style:'width:99%'
+                        },
+                        tdAttrs:{
+                            align:'center'
+                        },
+                    },
                     items:[GrafikUnkerTotalAset],
                     });
                     
@@ -350,6 +390,15 @@
                     title: "Grafik Total Aset/Kategori Barang", 
                     autoScroll: true, 
                     height: 600,
+                    layout:{
+                        type:'table',
+                        tableAttrs:{
+                            style:'width:99%'
+                        },
+                        tdAttrs:{
+                            align:'center'
+                        },
+                    },
                     items:[GrafikKategoriBarangTotalAset],
                     });
                         
@@ -357,8 +406,8 @@
                     id: 'Content_Body_Tabs', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
                     defaults: {autoScroll: true},
                     items: [{
-                            id: 'dashboard', title: 'Dashboard', bodyPadding: 10, iconCls: 'icon-gnome', closable: false,layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}}, tdAttrs : {align : 'center',},},
-                            items:[GrafikUnkerTotalAsetContainer, GrafikKategoriBarangTotalAsetContainer]
+                            id: 'dashboard', title: 'Dashboard', bodyPadding: 10, iconCls: 'icon-gnome', closable: false,layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}},},
+                            items:[GridAlertPemeliharaan,GrafikUnkerTotalAsetContainer, GrafikKategoriBarangTotalAsetContainer]
                         }],
                     listeners: {
                         'tabchange': function(tabPanel, tab) {
