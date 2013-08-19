@@ -37,6 +37,14 @@
             reader: Perairan.reader,
             afterRequest: function(request, success) {
                 Params_M_Perairan = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Perairan.Data.clearFilter();
+                    Perairan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 

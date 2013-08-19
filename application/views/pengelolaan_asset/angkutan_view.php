@@ -36,6 +36,14 @@
             reader: Angkutan.reader,
             afterRequest: function(request, success) {
                 //Params_M_Angkutan = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Angkutan.Data.clearFilter();
+                    Angkutan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 

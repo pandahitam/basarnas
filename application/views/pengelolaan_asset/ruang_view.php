@@ -35,6 +35,14 @@
             reader: Ruang.reader,
             afterRequest: function(request, success) {
                 Params_M_Ruang = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Ruang.Data.clearFilter();
+                    Ruang.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 

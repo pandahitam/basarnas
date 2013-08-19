@@ -37,6 +37,14 @@
             reader: Alatbesar.reader,
             afterRequest: function(request, success) {
                 Params_M_Alatbesar = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Alatbesar.Data.clearFilter();
+                    Alatbesar.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 

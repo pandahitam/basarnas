@@ -4,7 +4,6 @@
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
 <script>
 //////////////////
-        var Params_M_Tanah = null;
 
         Ext.namespace('Tanah', 'Tanah.reader', 'Tanah.proxy', 'Tanah.Data', 'Tanah.Grid', 'Tanah.Window', 'Tanah.Form', 'Tanah.Action', 'Tanah.URL');
 
@@ -35,6 +34,15 @@
             reader: Tanah.reader,
             afterRequest: function(request, success) {
                 Params_M_TB = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Tanah.Data.clearFilter();
+                    Tanah.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
+                
             }
         });
 

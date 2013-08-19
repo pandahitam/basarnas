@@ -210,7 +210,7 @@
                             handler: function() {
                                 Load_TabPage('map_id', BASE_URL + 'global_map');
                             }
-                        }, '-', {
+                        },'-', {
                             text: 'LAPORAN', iconCls: 'icon-menu_laporan', id: 'm_laporan',
                                     menu:{
                                 items:[{
@@ -238,7 +238,13 @@
                             text: 'Logout', iconCls: 'icon-minus-circle', handler: function() {
                                 do_logout();
                             }
-                        }
+                        },
+                        {
+                            text: 'MAP SEARCH', iconCls: 'icon-menu_diklat', id: 'm_map_search',
+                            handler: function() {
+                                Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah','Surabaya');
+                            }
+                        },
                     ]
                 };
 
@@ -786,6 +792,82 @@
             //Load_Variabel(BASE_URL + 'profil_func');
             //Load_Variabel(BASE_URL + 'arsip_digital_func');
             //Load_Variabel(BASE_URL + 'user/set_var_access');
+            
+            
+            function Load_MapSearch(tab_id,tab_url,dataStoreId,searchValue)
+            {
+                //LOAD ASSET INVENTARIS TAB
+                Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
+                var new_tab_id = Ext.getCmp('pengelolaan_asset');
+                if (new_tab_id) {
+                    Ext.getCmp('items-body').getLayout().setActiveItem(0);
+                    Ext.getCmp('items-body').doLayout();
+                    Ext.getCmp('Content_Body_Tabs').setActiveTab('pengelolaan_asset');
+                    Ext.getCmp('layout-body').body.unmask();
+                } else {
+                    Ext.Ajax.timeout = Time_Out;
+                    Ext.Ajax.request({
+                        url: BASE_URL + 'pengelolaan_asset', method: 'POST', params: {id_open: 1}, scripts: true, renderer: 'data',
+                        success: function(response) {
+                            var jsonData = response.responseText.substring(14);
+                            var aHeadNode = document.getElementsByTagName('head')[0];
+                            var aScript = document.createElement('script');
+                            aScript.text = jsonData;
+                            aHeadNode.appendChild(aScript);
+                            var new_tab = Ext.getCmp('Content_Body_Tabs');
+                            if (new_tabpanel != "GAGAL") {
+                                Ext.getCmp('items-body').getLayout().setActiveItem(0);
+                                Ext.getCmp('items-body').doLayout();
+                                new_tab.add(new_tabpanel).show();
+                            } else {
+                                Ext.MessageBox.show({title: 'Peringatan !', msg: 'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
+                            }
+
+                        },
+                        failure: function(response) {
+                            Ext.MessageBox.show({title: 'Peringatan !', msg: 'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
+                        },
+                        callback: function(response) {
+                            Ext.getCmp('layout-body').body.unmask();
+                            //LOAD SELECTED ASSET INVENTARIS
+                            Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
+                            var new_tab_id = Ext.getCmp(tab_id);
+                            if(new_tab_id){
+                                    Ext.getCmp('Tab_PA').setActiveTab(tab_id);
+                                    Ext.getCmp('layout-body').body.unmask(); 
+                            }else{
+                                    Ext.Ajax.timeout = Time_Out;
+                                    Ext.Ajax.request({
+                                    url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
+                            success: function(response){
+                                    var jsonData = response.responseText.substring(13);   
+                                            var aHeadNode = document.getElementsByTagName('head')[0]; 
+                                            var aScript = document.createElement('script'); 
+                                            aScript.text = jsonData; 
+                                            aHeadNode.appendChild(aScript);
+                                    if(new_tabpanel_Asset != "GAGAL"){
+                                            Ext.getCmp('Tab_PA').add(new_tabpanel_Asset).show();
+
+                                    }else{
+                                            Ext.MessageBox.show({title:'Peringatan !', msg:'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});    			
+                                    }
+                                    },
+                            failure: function(response){ Ext.MessageBox.show({title:'Peringatan !', msg:'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR}); }, 
+                            callback: function(response){ Ext.getCmp('layout-body').body.unmask(); 
+                                    //FILTER DATA
+                                   Ext.getStore(dataStoreId).getProxy().extraParams = {'searchUnker':searchValue}; 
+                            },
+                            scope : this
+                                    });
+                            }
+                        },
+                        scope: this
+                    });
+                }
+                
+                
+                
+            }
         </script>
     </head>
     <body>

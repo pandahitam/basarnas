@@ -35,6 +35,14 @@
             reader: Senjata.reader,
             afterRequest: function(request, success) {
                 Params_M_Senjata = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Senjata.Data.clearFilter();
+                    Senjata.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 
