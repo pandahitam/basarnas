@@ -37,12 +37,12 @@ function Layer(name, longname, group, status) {
 }
 
 var mapLayers =  new Array();
-mapLayers[mapLayers.length] = new Layer('Batas_Negara', 'Batas Negara', 'layers', true);
+mapLayers[mapLayers.length] = new Layer('Batas_Negara', 'Batas Negara', 'layers', false);
 mapLayers[mapLayers.length] = new Layer('Batas_Provinsi', 'Batas Provinsi', 'layers', false);
 mapLayers[mapLayers.length] = new Layer('Batas_Kabupaten', 'Batas Kabupaten', 'layers', true);
 mapLayers[mapLayers.length] = new Layer('Batas_Kecamatan', 'Batas Kecamatan', 'layers', false);
 mapLayers[mapLayers.length] = new Layer('Kantor_SAR', 'Kantor SAR', 'layers', true);
-mapLayers[mapLayers.length] = new Layer('Pos_SAR', 'Pos SAR', 'layers', true);
+mapLayers[mapLayers.length] = new Layer('Pos_SAR', 'Pos SAR', 'layers', false);
 mapLayers[mapLayers.length] = new Layer('Jalan_Lokal', 'Jalan Lokal', 'layers', false);
 
 function buildLayer() {
@@ -168,7 +168,7 @@ function mapInit() {
 };
 
 function applyQuery() {
-	var queryUrl = '/cgi-bin/mapserv?mode=query&map=MAP_FILE&imgext='+mapExtent.join('+')+'&imgxy='+mapQueryPoint.join('+')+'&imgsize='+mapWidth+'+'+mapHeight+'&layers='+buildLayer()+'&qlayer=Batas_Kabupaten';
+	var queryUrl = '/cgi-bin/mapserv?mode=query&map=MAP_FILE&imgext='+mapExtent.join('+')+'&imgxy='+mapQueryPoint.join('+')+'&imgsize='+mapWidth+'+'+mapHeight+'&layers='+buildLayer()+'&qlayer=Kantor_SAR';
 	Ext.Ajax.timeout = Time_Out;
 	Ext.Ajax.request({
 		url: queryUrl, 
@@ -176,17 +176,17 @@ function applyQuery() {
 		success: function(response){
 			var rslt = new Ext.JSON.decode(response.responseText, true);
 			var imageName = baseUrl+'assets/map/tmp/';
-			imageName += 'basarnas'+rslt.batasWilayah[0].imageId+'.png';
+			imageName += 'basarnas'+rslt.kansar[0].imageId+'.png';
 			document.mainImage.src = imageName;
-			var data = rslt.batasWilayah[0];
+			var data = rslt.kansar[0];
 			propsGrid.setSource({
 				'1. Kode PSE': data.kodePse,
 				'2. Kode Provinsi': data.kodeProv,
 				'3. Nama Provinsi': data.namaProv,
-				'4. Kode Kabupaten': data.kodeKab,
-				'5. Nama Kabupaten': data.namaKab,
-				'6. Pemekaran': data.pemekaran,
-				'7. Sumber Data': data.sumberData
+				'4. Kantor SAR': data.kantorSar,
+				'5. Jenis': data.jenis,
+				'6. Easting (Long.)': data.easting,
+				'7. Northing (Lat.)': data.northing
 			});
 			Ext.getCmp('kode_pse').setValue(data.kodePse);
 		}
@@ -227,6 +227,24 @@ function refClick(event) {
 	propsGrid.setSource({});
 };
 
+function calculateExtent(arrExtents)
+{
+	var xMin = 360;
+	var xMax = -360;
+	var yMin = 90;
+	var yMax = -90;
+	var i;
+	for(i=0; i<arrExtents.length; i++)
+	{
+		if(xMin>arrExtents[i][0]) xMin = arrExtents[i][0];
+		if(xMax<arrExtents[i][0]) xMax = arrExtents[i][0];
+		if(yMin>arrExtents[i][1]) yMin = arrExtents[i][1];
+		if(yMax<arrExtents[i][1]) yMax = arrExtents[i][1];
+	}
+	var xy = new Array( xMin+((xMax-xMin)/2), yMin+((yMax-yMin)/2) );
+	return xy;
+}
+
 function applyItemQuery(kodeWilayah) {
 	
 	if(kodeWilayah!=null)
@@ -236,37 +254,52 @@ function applyItemQuery(kodeWilayah) {
 		{
 			var kode = '';
 			var queryUrl = '';
-			kode = kodeWilayah.substr(2,2);
-			if(kode=='00'){
-				queryUrl = '/cgi-bin/mapserv?mode=itemquery&map=MAP_FILE&qstring='+kodeWilayah+'&qitem=KODEPSE&qlayer=Batas_Provinsi';
-			} else {
-				queryUrl = '/cgi-bin/mapserv?mode=itemquery&map=MAP_FILE&qstring='+kodeWilayah+'&qitem=KODEPSE&qlayer=Batas_Kabupaten';
-			}
+			queryUrl = '/cgi-bin/mapserv?mode=itemnquery&map=MAP_FILE&qstring='+kodeWilayah+'&qitem=KODEPSE&qlayer=Kantor_SAR';
 			Ext.Ajax.timeout = Time_Out;
 			Ext.Ajax.request({
 				url: queryUrl, 
 				method: 'GET',
 				success: function(response){
 					var rslt = new Ext.JSON.decode(response.responseText, true);
-					var extTmp = rslt.batasWilayah[0].extent.split(' ');
-					if(extTmp.length==4)
+					var eLength = rslt.kansar.length; 
+					if(eLength)
 					{
-						setExtent(parseFloat(extTmp[0]), parseFloat(extTmp[1]), parseFloat(extTmp[2]), parseFloat(extTmp[3]));
+						var x = 0;
+						var y = 0;
+						var extTmp = new Array();
+						if(eLength==1)
+						{
+							extTmp = rslt.kansar[0].extent.split(' ');
+							x = parseFloat(extTmp[0]);
+							y = parseFloat(extTmp[1]);
+						} else
+						{
+							var i = 0;
+							for(i=0; i<eLength; i++) 
+							{
+								var aTmp = new Array(parseFloat(rslt.kansar[i].easting), parseFloat(rslt.kansar[i].northing));
+								extTmp[i] = aTmp; 
+							}
+							var xy = calculateExtent(extTmp);
+							x = xy[0];
+							y = xy[1];
+						}
+						setExtentFromScale(x, y, getScale());
 						var oldMode = mapMode;
 						mapMode = 'map';
 						mapDraw();
 						mapMode = oldMode;
+						var data = rslt.kansar[0];
+						propsGrid.setSource({
+							'1. Kode PSE': data.kodePse,
+							'2. Kode Provinsi': data.kodeProv,
+							'3. Nama Provinsi': data.namaProv,
+							'4. Kantor SAR': data.kantorSar,
+							'5. Jenis': data.jenis,
+							'6. Easting (Long.)': data.easting,
+							'7. Northing (Lat.)': data.northing
+						});
 					}
-					var data = rslt.batasWilayah[0];
-					propsGrid.setSource({
-						'1. Kode PSE': data.kodePse,
-						'2. Kode Provinsi': data.kodeProv,
-						'3. Nama Provinsi': data.namaProv,
-						'4. Kode Kabupaten': data.kodeKab,
-						'5. Nama Kabupaten': data.namaKab,
-						'6. Pemekaran': data.pemekaran,
-						'7. Sumber Data': data.sumberData
-					});			
 				}
 			});
 		}
