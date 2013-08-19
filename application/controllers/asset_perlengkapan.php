@@ -23,6 +23,11 @@ class Asset_Perlengkapan extends MY_Controller {
 	function modifyPerlengkapan(){
 
                 $dataSimak = array();
+                $dataKlasifikasiAset = array();
+                
+                $klasifikasiAsetFields = array(
+                    'kd_lvl1','kd_lvl2','kd_lvl3'
+                );
                 //$dataExt = array();
 //                $dataKode = array();
                 
@@ -36,7 +41,7 @@ class Asset_Perlengkapan extends MY_Controller {
                         'no_aset','kondisi', 'kuantitas', 'dari',
                         'tanggal_perolehan','no_dana','penggunaan_waktu',
                         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
-                        'dihapus','image_url','document_url');
+                        'dihapus','image_url','document_url','kd_klasifikasi_aset');
                 
 //                $extFields = array(
 //                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
@@ -60,6 +65,13 @@ class Asset_Perlengkapan extends MY_Controller {
                 
                 $partNumberDetails = $this->model->get_partNumberDetails($dataSimak['part_number']);
                 $dataSimak['kd_brg'] = $partNumberDetails->kd_brg;
+                
+                foreach($klasifikasiAsetFields as $field)
+                {
+                    $dataKlasifikasiAset[$field] =  $this->input->post($field);
+                }
+                
+                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
                 
                 //GENERATE NO ASET
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")

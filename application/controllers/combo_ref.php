@@ -65,6 +65,24 @@ class Combo_Ref extends CI_Controller {
             }
 
             echo json_encode($data);
+//            $this->db->select('kd_lvl2,nama');
+//            $this->db->from('ref_klasifikasiaset_lvl2');
+//
+//            if ($this->input->get_post('query')) {
+//                $this->db->like('nama', $this->input->get_post('query'));
+//            }
+//
+//            if ($this->input->post('kd_lvl1') > 0) {
+//                $this->db->where('kd_lvl1', $this->input->post('kd_lvl1'));
+//            }
+//
+//            $this->db->order_by('nama', 'ASC');
+//            $Q = $this->db->get('');
+//            foreach ($Q->result() as $obj) {
+//                $data[] = $obj;
+//            }
+//
+//            echo json_encode($data);
         }
     }
     
@@ -82,6 +100,25 @@ class Combo_Ref extends CI_Controller {
             }
 
             echo json_encode($data);
+//            $this->db->select('kd_lvl3,nama');
+//            $this->db->from('ref_klasifikasiaset_lvl3');
+//
+//            if ($this->input->get_post('query')) {
+//                $this->db->like('nama', $this->input->get_post('query'));
+//            }
+//
+//            if ($this->input->post('kd_lvl1') > 0 && $this->input->post('kd_lvl2') > 0) {
+//                $this->db->where('kd_lvl1', $this->input->post('kd_lvl1'));
+//                $this->db->where('kd_lvl2', $this->input->post('kd_lvl2'));
+//            }
+//
+//            $this->db->order_by('nama', 'ASC');
+//            $Q = $this->db->get('');
+//            foreach ($Q->result() as $obj) {
+//                $data[] = $obj;
+//            }
+//
+//            echo json_encode($data);
         }
     }
     

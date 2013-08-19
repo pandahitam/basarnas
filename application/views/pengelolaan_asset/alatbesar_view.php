@@ -49,10 +49,11 @@
             var form = Form.asset(Alatbesar.URL.createUpdate, Alatbesar.Data, edit);
             form.insert(0, Form.Component.unit(edit,form));
             form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.basicAsset(edit));
-            form.insert(3, Form.Component.mechanical());
-            form.insert(4, Form.Component.alatbesar());
-            form.insert(5, Form.Component.fileUpload());
+            form.insert(2, Form.Component.klasifikasiAset(edit))
+            form.insert(3, Form.Component.basicAsset(edit));
+            form.insert(4, Form.Component.mechanical());
+            form.insert(5, Form.Component.alatbesar());
+            form.insert(6, Form.Component.fileUpload());
             if (data !== null)
             {
                 form.getForm().setValues(data);
@@ -395,6 +396,8 @@
                 title: 'DAFTAR ASSET ALAT ALAT BESAR',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},

@@ -166,6 +166,201 @@
             })
         };
         
+        Region.filterPanelAsetPerlengkapan = function(data) {
+            var panel = {
+                region: 'west',
+                title: 'Filter',
+                width: 200,
+                split: true,
+                collapsible: true,
+                floatable: false,
+                frame: true,
+                items: [{
+                        xtype: 'label',
+                        text: 'Filter By Kode Barang',
+                        height: 30,
+                        style: 'font-weight:bold; display:block',
+                        
+                    },{
+                        xtype: 'label',
+                        text: 'Part',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Part',
+                        name: 'aset-part',
+                        id: 'aset-part',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.partNumber,
+                        valueField: 'kd_brg',
+                        displayField: 'nama', emptyText: 'Part',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Part',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        data.filter([{property: 'kd_brg', value: value}]);
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: '   ',
+                        height: 20,
+                        style: 'display:block',
+                        
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Filter By Klasifikasi Aset',
+                        height: 30,
+                        style: 'font-weight:bold; display:block',
+                        
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Level 1',
+                        height: 30,
+                        
+                    },
+                    {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Level1',
+                        name: 'aset-klasifikasiAset-lvl1',
+                        id: 'aset-klasifikasiAset-lvl1',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.klasifikasiAset_lvl1,
+                        valueField: 'kd_lvl1',
+                        displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        data.filter([{property: 'kd_klasifikasi_aset', value: value}]);
+                                        var filterByLevel1 = value;
+                                        var filterByLevel2 = Ext.getCmp('aset-klasifikasiAset-lvl2');
+                                                if (filterByLevel1 !== null && filterByLevel2 !== null) {
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        filterByLevel2.enable();
+                                                        Reference.Data.klasifikasiAset_lvl2.changeParams({params: {id_open: 1, kd_lvl1: value}});
+                                                    }
+                                                    else {
+                                                        filterByLevel2.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('error');
+                                                }
+                                        
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Level 2',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Level 2',
+                        name: 'aset-klasifikasiAset-lvl2',
+                        id: 'aset-klasifikasiAset-lvl2',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        disabled:true,
+                        store: Reference.Data.klasifikasiAset_lvl2,
+                        valueField: 'kd_lvl2',
+                        displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
+                                        data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+value});
+                                        
+                                            var filterByLevel3 = Ext.getCmp('aset-klasifikasiAset-lvl3');
+                                            var filterByLevel2 = value;
+                                            if (filterByLevel3 !== null && filterByLevel2 !== null) {
+                                                if (!isNaN(value) && value.length > 0) {
+                                                    filterByLevel3.enable();
+                                                    Reference.Data.klasifikasiAset_lvl3.changeParams({params: {id_open: 1, kd_lvl1: filterByLevel1Value, kd_lvl2: value}});
+                                                }
+                                                else {
+                                                    filterByLevel3.disable();
+                                                }
+                                            }
+                                            else {
+                                                console.error('error');
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        xtype: 'label',
+                        text: 'Level 3',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Level 3',
+                        name: 'aset-klasifikasiAset-lvl3',
+                        id: 'aset-klasifikasiAset-lvl3',
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.klasifikasiAset_lvl3,
+                        disabled:true,
+                        valueField: 'kd_lvl3',
+                        displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                        editable: false,
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
+                                        var filterByLevel2Value = Ext.getCmp('aset-klasifikasiAset-lvl2').value;
+                                        data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+filterByLevel2Value+value});
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    ]
+            };
+
+            return panel;
+        };
+        
         Region.filterPanelAset = function(data) {
             var panel = {
                 region: 'west',
@@ -478,8 +673,8 @@
                         layout: 'anchor',
                         anchor: '100%',
                         width: 190,
-                        store: Reference.Data.klasifikasiAset_lvl2,
                         disabled:true,
+                        store: Reference.Data.klasifikasiAset_lvl2,
                         valueField: 'kd_lvl2',
                         displayField: 'nama', emptyText: 'Klasifikasi Aset',
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',

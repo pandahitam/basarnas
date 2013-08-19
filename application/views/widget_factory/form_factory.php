@@ -382,8 +382,9 @@
             
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, Form.Component.kode(setting.isEditing));
-            form.insert(2, Form.Component.ruang(form));
-            form.insert(3, Form.Component.fileUpload(setting.isEditing));
+            form.insert(2, Form.Component.klasifikasiAset(setting.isEditing))
+            form.insert(3, Form.Component.ruang(form));
+            form.insert(4, Form.Component.fileUpload(setting.isEditing));
             
             return form;
         }
@@ -1066,6 +1067,198 @@
                                 hidden: cmpSetting.noAsetHidden,
                                 disabled: cmpSetting.noAsetHidden,
                                 editable: false
+                            }]
+                    }]
+            };
+
+
+            return component;
+        };
+        
+        Form.Component.klasifikasiAset = function(edit) {
+
+            var component = {
+                xtype: 'fieldset',
+                title: 'KLASIFIKASI ASET',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lvl1',
+                                id: 'kd_lvl1',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboLvl1 = Ext.getCmp('combo_kd_lvl1');
+                                            if (comboLvl1 !== null)
+                                            {
+                                                comboLvl.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_lvl2',
+                                id: 'kd_lvl2',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboLvl2 = Ext.getCmp('combo_kd_lvl2');
+                                            if (comboLvl2 !== null)
+                                            {
+                                                comboLvl2.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_lvl3',
+                                id: 'kd_lvl3',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboLvl3 = Ext.getCmp('combo_kd_lvl3');
+                                            if (comboLvl3 !== null)
+                                            {
+                                                comboLvl3.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Level 1 *',
+                                name: 'combo_kd_lvl1',
+                                id: 'combo_kd_lvl1',
+                                hideLabel: false,
+                                allowBlank: false,
+                                store: Reference.Data.klasifikasiAset_lvl1,
+                                valueField: 'kd_lvl1',
+                                displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var Lvl3Field = Ext.getCmp('combo_kd_lvl3'); 
+                                                var Lvl2Field = Ext.getCmp('combo_kd_lvl2');
+                                                Lvl2Field.disable();
+                                                Lvl3Field.disable();
+                                                var Lvl1Field = Ext.getCmp('kd_lvl1');
+                                                if (Lvl1Field !== null && Lvl2Field !== null) {
+                                                    if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                        Lvl2Field.enable();
+                                                        Lvl1Field.setValue(value);
+                                                        Reference.Data.klasifikasiAset_lvl2.changeParams({params: {id_open: 1, kd_lvl1: value}});
+                                                    }
+                                                    else {
+                                                        Lvl2Field.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('error');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'Level 2 *',
+                                name: 'combo_kd_lvl2',
+                                id: 'combo_kd_lvl2',
+                                disabled: true,
+                                allowBlank: false,
+                                store: Reference.Data.klasifikasiAset_lvl2,
+                                valueField: 'kd_lvl2',
+                                displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var Lvl3Field = Ext.getCmp('combo_kd_lvl3');
+                                            var Lvl2Field = Ext.getCmp('kd_lvl2');
+                                            var Lvl1Field = Ext.getCmp('kd_lvl1').getValue();
+                                            if (Lvl3Field !== null && Lvl2Field !== null) {
+                                                if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                    Lvl3Field.enable();
+                                                    Lvl2Field.setValue(value);
+                                                    Reference.Data.klasifikasiAset_lvl3.changeParams({params: {id_open: 1, kd_lvl1: Lvl1Field, kd_lvl2: value}});
+                                                }
+                                                else {
+                                                    Lvl3Field.disable();
+                                                }
+                                            }
+                                            else {
+                                                console.error('error');
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Level 3 *',
+                                name: 'combo_kd_lvl3',
+                                id: 'combo_kd_lvl3',
+                                disabled: true,
+                                allowBlank: false,
+                                labelWidth : 110,
+                                store: Reference.Data.klasifikasiAset_lvl3,
+                                valueField: 'kd_lvl3',
+                                displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var Lvl3Field = Ext.getCmp('kd_lvl3');
+
+                                            if (Lvl3Field !== null && !isNaN(value)) {
+                                                Lvl3Field.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
                             }]
                     }]
             };
