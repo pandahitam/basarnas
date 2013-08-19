@@ -10,7 +10,8 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'no_aset','kondisi', 'kuantitas', 'dari',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
-        'dihapus','image_url','document_url']
+        'dihapus','image_url','document_url'
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset']
 });
 
 Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
@@ -35,6 +36,7 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kode_unor','image_url','document_url',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+            ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
         ]
 });
 
@@ -62,6 +64,7 @@ Ext.define('MAngkutan', {extend: 'Ext.data.Model',
         'id','nama_unker', 'nama_unor', // Field from ext bangunan
         'kode_unor','image_url','document_url',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
     ]
 });
 
@@ -89,6 +92,7 @@ Ext.define('MAlatbesar', {extend: 'Ext.data.Model',
         'id','nama_unker', 'nama_unor', // Field from ext alatbesar
         'kode_unor','image_url','document_url',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
      ]
 });
 
@@ -113,6 +117,7 @@ Ext.define('MSenjata', {extend: 'Ext.data.Model',
         'id','nama_unker', 'nama_unor', // Field from ext bangunan
         'kode_unor','image_url','document_url',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
     ]
 });
 
@@ -131,6 +136,7 @@ Ext.define('MTanah', {extend: 'Ext.data.Model',
             'kode_unor','image_url','document_url',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+            ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
         ]
 });
 
@@ -158,6 +164,7 @@ Ext.define('MPerairan', {extend: 'Ext.data.Model',
             'id','nama_unker', 'nama_unor', // Field from ext bangunan
             'kode_unor','image_url','document_url',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+            ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
         ]
 });
 
@@ -173,6 +180,7 @@ Ext.define('MRuang', {extend: 'Ext.data.Model',
             'lok_fisik','nama_unker',
             'nama_unor',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' 
+            ,'kd_klasifikasi_aset','nama_klasifikasi_aset'
         ]
 });
 

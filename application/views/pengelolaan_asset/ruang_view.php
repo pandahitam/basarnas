@@ -35,6 +35,14 @@
             reader: Ruang.reader,
             afterRequest: function(request, success) {
                 Params_M_Ruang = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Ruang.Data.clearFilter();
+                    Ruang.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 
@@ -353,9 +361,11 @@
         var setting = {
             grid: {
                 id: 'grid_bangunan',
-                title: 'DAFTAR ASSET BANGUNAN',
+                title: 'DAFTAR ASSET RUANG',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},
@@ -401,8 +411,8 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'ruang_panel', title: 'Ruang', iconCls: 'icon-tanah_bangunan', closable: true, border: false,
-            items: [Ruang.Grid.grid]
+            id: 'ruang_panel', title: 'Ruang', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAset(Ruang.Data),Ruang.Grid.grid]
         };
 
     <?php } else {

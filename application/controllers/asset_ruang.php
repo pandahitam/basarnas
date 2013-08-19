@@ -21,9 +21,19 @@ class Asset_Ruang extends MY_Controller {
 	}
 	
 	function modifyRuang(){
+                
+            $dataKlasifikasiAset = array();
+                
+                $klasifikasiAsetFields = array(
+                    'kd_lvl1','kd_lvl2','kd_lvl3'
+                );
             
-            
-            
+             foreach($klasifikasiAsetFields as $field)
+                {
+                    $dataKlasifikasiAset[$field] =  $this->input->post($field);
+                }
+                
+                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
                 /*
                  * as of this time of writing this controller seems not yet updated
                  * with the latest structure like the others in asset inventaris

@@ -35,6 +35,14 @@
             reader: Perlengkapan.reader,
             afterRequest: function(request, success) {
                 Params_M_Perlengkapan = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Perlengkapan.Data.clearFilter();
+                    Perlengkapan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
             }
         });
 
@@ -50,6 +58,7 @@
 //            form.insert(3, Form.Component.address());
 //            form.insert(4, Form.Component.perlengkapan());
 //            form.insert(5, Form.Component.tambahanPerlengkapanTanah());
+            form.insert(1, Form.Component.klasifikasiAset(edit))
             form.insert(2, Form.Component.perlengkapan(edit));
             form.insert(3, Form.Component.fileUpload(edit));
             if (data !== null)
@@ -355,6 +364,8 @@
                 title: 'DAFTAR ASSET PERLENGKAPAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Serial Number', dataIndex: 'serial_number', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 90, groupable: false, filter: {type: 'string'}},
@@ -407,8 +418,8 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'perlengkapan_panel', title: 'Perlengkapan', iconCls: 'icon-tanah_perlengkapan', closable: true, border: false,
-            items: [Perlengkapan.Grid.grid]
+            id: 'perlengkapan_panel', title: 'Perlengkapan', iconCls: 'icon-tanah_perlengkapan', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAsetPerlengkapan(Perlengkapan.Data),Perlengkapan.Grid.grid]
         };
 
     <?php } else {

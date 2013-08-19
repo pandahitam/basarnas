@@ -25,6 +25,11 @@ class asset_bangunan extends MY_Controller {
                 $dataSimak = array();
                 $dataExt = array();
                 $dataKode = array();
+                $dataKlasifikasiAset = array();
+                
+                $klasifikasiAsetFields = array(
+                    'kd_lvl1','kd_lvl2','kd_lvl3'
+                );
                 
                 $kodeFields = array(
                         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
@@ -39,7 +44,7 @@ class asset_bangunan extends MY_Controller {
                         'dari', 'kondisi', 'unit_pmk', 
                         'alm_pmk', 'catatan', 'rphwajar', 
                         'rphnjop', 'status', 'luas_dsr', 
-                        'luas_bdg', 'jml_lt', 
+                        'luas_bdg', 'jml_lt','kd_klasifikasi_aset', 
                 );
                 
                 $extFields = array(
@@ -62,6 +67,13 @@ class asset_bangunan extends MY_Controller {
 			$dataExt[$field] = $this->input->post($field);
 		} 
                 $dataExt['kd_brg'] = $kd_brg;
+                
+                foreach($klasifikasiAsetFields as $field)
+                {
+                    $dataKlasifikasiAset[$field] =  $this->input->post($field);
+                }
+                
+                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
                 
                 //GENERASI NO_ASET 
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")

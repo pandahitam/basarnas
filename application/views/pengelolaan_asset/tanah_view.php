@@ -4,7 +4,6 @@
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
 <script>
 //////////////////
-        var Params_M_Tanah = null;
 
         Ext.namespace('Tanah', 'Tanah.reader', 'Tanah.proxy', 'Tanah.Data', 'Tanah.Grid', 'Tanah.Window', 'Tanah.Form', 'Tanah.Action', 'Tanah.URL');
 
@@ -35,6 +34,15 @@
             reader: Tanah.reader,
             afterRequest: function(request, success) {
                 Params_M_TB = request.operation.params;
+                
+                //USED FOR MAP SEARCH
+                var paramsUnker = request.params.searchUnker;
+                if(paramsUnker != null ||paramsUnker != undefined)
+                {
+                    Tanah.Data.clearFilter();
+                    Tanah.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                }
+                
             }
         });
 
@@ -47,11 +55,12 @@
             var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit);
             form.insert(0, Form.Component.unit(edit,form));
             form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.basicAsset(edit));
-            form.insert(3, Form.Component.address());
-            form.insert(4, Form.Component.tanah());
-            form.insert(5, Form.Component.tambahanBangunanTanah());
-            form.insert(6, Form.Component.fileUpload());
+            form.insert(2, Form.Component.klasifikasiAset(edit))
+            form.insert(3, Form.Component.basicAsset(edit));
+            form.insert(4, Form.Component.address());
+            form.insert(5, Form.Component.tanah());
+            form.insert(6, Form.Component.tambahanBangunanTanah());
+            form.insert(7, Form.Component.fileUpload());
             if (data !== null)
             {
                 form.getForm().setValues(data);
@@ -370,6 +379,8 @@
                 title: 'DAFTAR ASSET TANAH',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},
@@ -447,8 +458,8 @@
         Tanah.Grid.grid = Grid.inventarisGrid(setting, Tanah.Data);
 
         var new_tabpanel_Asset = {
-            id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,
-            items: [Tanah.Grid.grid]
+            id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAset(Tanah.Data),Tanah.Grid.grid]
         };
 <?php
 
