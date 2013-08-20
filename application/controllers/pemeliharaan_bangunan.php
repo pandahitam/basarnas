@@ -31,7 +31,7 @@ class Pemeliharaan_Bangunan extends MY_Controller {
 	  	$fields = array(
                    'id','kd_brg', 'kd_lokasi', 'no_aset', 'kode_unor', 
                     'jenis', 'subjenis', 'pelaksana_nama', 'pelaksana_startdate', 
-                    'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url'
+                    'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url','nama','kondisi'
                 );
                 
                 foreach ($fields as $field) {

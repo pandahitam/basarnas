@@ -335,7 +335,7 @@
         Form.pemeliharaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
             form.insert(3, Form.Component.fileUpload());
             
@@ -416,7 +416,6 @@
                             var form = _form.getForm();
                             var imageField = form.findField('image_url');
                             var documentField = form.findField('document_url');
-                            
                             if (imageField !== null)
                             {
                                 var arrayPhoto = [];
@@ -450,12 +449,12 @@
                                 form.submit({
                                     success: function(form) {
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        
+//                                        debugger;
                                         if (data !== null)
                                         {
                                             data.load();
                                         }
-                                        
+                                        Modal.closeProcessWindow();
                                         if (edit)
                                         {
                                             Modal.closeProcessWindow();
@@ -464,6 +463,7 @@
                                         {
                                             form.reset();
                                         }
+
 
 
                                     },
@@ -553,7 +553,7 @@
             return _form;
         };
 
-        Form.Component.unit = function(edit,form) {
+        Form.Component.unit = function(edit,form,isReadOnly) {
             var component = {
                 xtype: 'fieldset',
                 itemId : 'unit_selection',
@@ -569,14 +569,14 @@
                                 id: 'kd_lokasi',
                                 listeners: {
                                     change: function(ob, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboUnker = Ext.getCmp('nama_unker');
                                             if (comboUnker !== null)
                                             {
                                                 comboUnker.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -584,14 +584,14 @@
                                 id: 'kode_unor',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboUnor = Ext.getCmp('nama_unor');
                                             if (comboUnor !== null)
                                             {
                                                 comboUnor.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -611,7 +611,8 @@
                                 name: 'nama_unker',
                                 id: 'nama_unker',
                                 itemId: 'unker',
-                                allowBlank: false,
+                                allowBlank: true,
+                                readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unker,
                                 valueField: 'kdlok',
                                 displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
@@ -619,7 +620,11 @@
                                 listeners: {
                                     'focus': {
                                         fn: function(comboField) {
-                                            comboField.expand();
+                                            if(isReadOnly != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
                                         },
                                         scope: this
                                     },
@@ -663,6 +668,7 @@
                                 id: 'nama_unor',
                                 disabled: false,
                                 allowBlank: true,
+                                readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unor,
                                 valueField: 'kode_unor',
                                 displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
@@ -670,7 +676,9 @@
                                 listeners: {
                                     'focus': {
                                         fn: function(comboField) {
-                                            var dataStore = comboField.getStore();
+                                            if(isReadOnly != true)
+                                            {
+                                                var dataStore = comboField.getStore();
                                             var kd_lokasi = Utils.getUnkerCombo(form).getValue();
                                             if (kd_lokasi !== null)
                                             {
@@ -679,6 +687,8 @@
                                                 dataStore.filter({property:"kd_lokasi", value:kd_lokasi});
                                             }
                                             comboField.expand();
+                                            }
+                                            
                                             
                                         },
                                         scope: this
@@ -2534,7 +2544,8 @@
                                     editable: false,
                                     listeners: {
                                         change: function(obj, value) {
-                                            var subjenis = form.findField('subjenis');
+//                                            var subjenis = form.findField('subjenis');
+                                            var subjenis = Ext.getCmp('pemeliharaan_subjenis');
                                             subjenis.clearValue();
                                             subjenis.applyEmptyText();
                                             if (value !== -1)
@@ -2557,6 +2568,7 @@
                                     xtype: 'combo',
                                     fieldLabel: 'Sub Jenis',
                                     name: 'subjenis',
+                                    id:'pemeliharaan_subjenis',
                                     allowBlank: true,
                                     valueField: 'id',
                                     displayField: 'nama', emptyText: 'SubJenis',
@@ -2633,7 +2645,11 @@
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
                                     listeners: {
                                         change: function(obj, value) {
+                                           var selWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selPengunaan = Ext.getCmp('unit_pengunaan').value;
                                            var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
+                                           
+                                           
                                             if (value === 1)
                                             {
                                                 pilihUnit.enable();
@@ -2651,6 +2667,15 @@
                                             {
                                                 pilihUnit.disable();
                                             }
+                                            
+                                            if(selWaktu != 0 && selWaktu != null)
+                                            {
+                                                pilihUnit.setValue(1);
+                                            }
+                                            else if(selPengunaan != 0 && selPengunaan != null)
+                                            {
+                                                 pilihUnit.setValue(2);
+                                            }
                                         }
                                     }
 
@@ -2659,7 +2684,34 @@
                                     fieldLabel: 'Tanggal Pelaksana',
                                     name: 'pelaksana_tgl',
                                     id: 'pelaksana_tgl',
-                                    format: 'Y-m-d'
+                                    format: 'Y-m-d',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                           var selectedUnitWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selectedRencanaWaktu = Ext.getCmp('rencana_waktu');
+                                           var selectedTglPelaksana = Ext.getCmp('pelaksana_tgl').value;
+                                           var selectedFreqWaktu = Ext.getCmp('freq_waktu').value;
+                                           if(selectedFreqWaktu != null && selectedUnitWaktu != null)
+                                           {
+                                                if (selectedUnitWaktu === 1) //day
+                                                {
+                                                      selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.DAY,selectedFreqWaktu));                                            
+                                                }
+                                                else if (selectedUnitWaktu === 2) //month
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.MONTH,selectedFreqWaktu)); 
+                                                }
+                                                else if (selectedUnitWaktu === 3) //year
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.YEAR,selectedFreqWaktu));
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                           }
+                                        }
+                                    }
                                 }, {
                                     fieldLabel: 'Pelaksana',
                                     name: 'pelaksana_nama'

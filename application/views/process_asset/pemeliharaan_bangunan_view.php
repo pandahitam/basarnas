@@ -194,6 +194,8 @@ var setting = {
                     {header: 'Pelaksanaan Tgl End', dataIndex: 'pelaksana_endate',     width: 120,groupable : false,filter:{type:'string'}},
                     {header: 'Deskripsi',       dataIndex: 'deskripsi',         width: 100, hidden:false,groupable : false,filter:{type:'string'}},
                     {header: 'Biaya',         dataIndex: 'biaya',           width: 100, hidden:false,groupable : false,filter:{type:'string'}},
+                    {header: 'Nama',      dataIndex: 'nama',    width: 70,  hidden:false,groupable : false,filter:{type:'string'}},
+                    {header: 'Kondisi',      dataIndex: 'kondisi',    width: 70,  hidden:false,groupable : false,filter:{type:'string'}},
                     {header: 'Jenis',           dataIndex: 'jenis',             width: 100,hidden:false, groupable: false,filter:{type:'string'},
                         renderer:function(value){
                             if (value === '1')

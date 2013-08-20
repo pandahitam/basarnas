@@ -17,7 +17,7 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
 Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
     fields: ['id','kd_brg', 'kd_lokasi', 'no_aset',
                             'kode_unor', 'jenis', 'subjenis', 'pelaksana_nama', 'pelaksana_startdate', 
-							'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url']
+							'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url','nama','kondisi']
 });
 
 
@@ -203,7 +203,7 @@ Ext.define('MPemeliharaan', {extend: 'Ext.data.Model',
 Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
     fields: ['id','kd_brg', 'kd_lokasi', 'no_aset', 'kode_unor', 'nama_unker', 'nama_unor', 
             'jenis', 'subjenis', 'pelaksana_nama', 'pelaksana_startdate', 
-            'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url']
+            'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url','nama','kondisi']
 });
 
 Ext.define('MPengadaan', {extend: 'Ext.data.Model',
