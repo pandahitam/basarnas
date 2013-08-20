@@ -188,7 +188,7 @@ function applyQuery() {
 				'6. Easting (Long.)': data.easting,
 				'7. Northing (Lat.)': data.northing
 			});
-			Ext.getCmp('kode_pse').setValue(data.kodePse);
+			Ext.getCmp('map_nama_kansar').setValue(data.kantorSar);
 		}
 	});
 };
@@ -299,6 +299,7 @@ function applyItemQuery(kodeWilayah) {
 							'6. Easting (Long.)': data.easting,
 							'7. Northing (Lat.)': data.northing
 						});
+						Ext.getCmp('map_nama_kansar').setValue(data.kantorSar);
 					}
 				}
 			});
@@ -537,20 +538,39 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
     items: [
 		{
 			xtype: 'textfield',
-			id: 'kode_pse',
-			fieldLabel: 'Kode PSE'
+			id: 'map_nama_kansar',
+			fieldLabel: 'Kantor SAR'
 		},
 		{
 			xtype: 'button', 
-			name: 'map_query_btn', 
-			id: 'map_query_btn', 
-			text: 'Locate Map',
+			name: 'map_show_tanah', 
+			id: 'map_show_tanah', 
+			text: 'Asset Tanah',
 			listeners: {
 				click : function(){
-					var oldMode = mapMode;
-					mapMode = 'itemquery';
-					applyItemQuery(Ext.getCmp('kode_pse').value);
-					mapMode = oldMode;
+					Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', Ext.getCmp('map_nama_kansar').value);
+				}
+			}
+		},
+		{
+			xtype: 'button', 
+			name: 'map_show_bangunan', 
+			id: 'map_show_bangunan', 
+			text: 'Asset Bangunan',
+			listeners: {
+				click : function(){
+					Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', Ext.getCmp('map_nama_kansar').value);
+				}
+			}
+		},
+		{
+			xtype: 'button', 
+			name: 'map_show_alatbesar', 
+			id: 'map_show_alatbesar', 
+			text: 'Asset Alat Besar',
+			listeners: {
+				click : function(){
+					Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', Ext.getCmp('map_nama_kansar').value);
 				}
 			}
 		},

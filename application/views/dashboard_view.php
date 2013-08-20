@@ -228,7 +228,7 @@
                         }, '-', {
                             text: 'MAP', iconCls: 'icon-menu_diklat', id: 'm_global_map',
                             handler: function() {
-                                Load_TabPage('map_id', BASE_URL + 'global_map');
+								Load_TabPage('map_asset', BASE_URL + 'global_map');
                             }
                         },'-', {
                             text: 'LAPORAN', iconCls: 'icon-menu_laporan', id: 'm_laporan',
