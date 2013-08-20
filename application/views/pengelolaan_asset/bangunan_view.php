@@ -47,7 +47,7 @@
         });
 
         Bangunan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Bangunan', storeId: 'DataBangunan', model: 'MBangunan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Bangunan', storeId: 'DataBangunan', model: 'MBangunan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Bangunan.proxy, groupField: 'tipe'
         });
 
@@ -366,6 +366,9 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},

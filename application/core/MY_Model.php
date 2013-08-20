@@ -71,8 +71,11 @@ class MY_Model extends CI_Model{
 	}
 	
 	function get_CountData(){
-		$this->db->get($this->table);
-		return $this->db->count_all_results();
+//		$this->db->get("$this->table");
+//                
+//                var_dump($this->db->count_all_results("$this->table"));
+//                die;
+		return $this->db->count_all_results("$this->table");
 	}
 	
 	

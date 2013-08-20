@@ -49,6 +49,7 @@ class Dashboard extends CI_Controller{
                 FROM pemeliharaan AS a
                 INNER JOIN ref_unker AS b ON a.kd_lokasi = b.kdlok
                 WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE( ) ) <=0
+                AND alert = 1
                 AND
                 NOT EXISTS
                 (
@@ -62,7 +63,7 @@ class Dashboard extends CI_Controller{
                         DATEDIFF( DATE( rencana_waktu ) , CURDATE( ) ) >=0
                 )
                 GROUP BY kd_lokasi, kd_brg, no_aset";
-      $this->Get_By_Query($query);
+      //$this->Get_By_Query($query);
       $data = $this->Get_By_Query($query);
       $dataSend['results'] = $data;
       echo json_encode($dataSend);
@@ -93,7 +94,7 @@ class Dashboard extends CI_Controller{
         group by kd_lokasi
         ";
       
-      $this->Get_By_Query($query);
+      //$this->Get_By_Query($query);
       $data = $this->Get_By_Query($query);
       $dataSend['results'] = $data;
       echo json_encode($dataSend);

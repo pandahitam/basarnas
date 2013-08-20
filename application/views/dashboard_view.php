@@ -238,7 +238,7 @@
                                         iconCls: 'icon-menu_impasing',
                                         id: 'm_laporan_aset_unker',
                                         handler: function() {
-                                            Load_TabPage('laporan_aset_unker', BASE_URL + 'laporan_aset_unker');
+                                            Load_TabPage('laporan_aset_unitkerja', BASE_URL + 'laporan_aset_unitkerja');
                                         }
                                     },
                                     {
@@ -274,9 +274,9 @@
                     title: 'Alert Pemeliharaan',
                     store: Dashboard.DataAlertPemeliharaan,
                     columns: [
-                        { text: 'Unit Kerja',  dataIndex: 'ur_upb', width:200 },
-                        { text: 'Nama Aset', dataIndex: 'nama', width:300},
-                        { text: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
+                        { header: 'Unit Kerja',  dataIndex: 'ur_upb', width:200 },
+                        { header: 'Nama Aset', dataIndex: 'nama', width:300},
+                        { header: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
                     ],
                     height: 200,
 //                    width: 400,

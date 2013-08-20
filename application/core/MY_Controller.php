@@ -8,7 +8,17 @@ class MY_Controller extends CI_Controller{
 	}
 	
 	function getAllData(){
-		$data = $this->model->get_AllData();
+                $start = null;
+                $limit = null;
+                if(isset($_POST['start']) && isset($_POST['limit']))
+                {
+                    $start = $_POST['start'];
+                    $limit = $_POST['limit'];
+                }
+                
+		$data = $this->model->get_AllData($start,$limit);
+                $total = $this->model->get_CountData();
+                $dataSend['total'] = $total;
 		$dataSend['results'] = $data;
 		echo json_encode($dataSend);
 	}

@@ -33,6 +33,7 @@
             klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
         };
         
+        
         Reference.Data.klasifikasiAset_lvl1 = new Ext.create('Ext.data.Store', {
             fields: ['kd_lvl1', 'nama'], storeId: 'DataKlasifikasiAset_lvl1 ',
             proxy: new Ext.data.AjaxProxy({
@@ -114,6 +115,11 @@
                 url: Reference.URL.ruang, actionMethods: {read: 'POST'}, extraParams: {kd_lokasi: 0}
             }),
             autoLoad: true
+        });
+        
+        Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan = new Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
+            data: [{text: 'Waktu', value: 1}, {text: 'Penggunaan', value: 2}]
         });
         
         Reference.Data.kondisiPerlengkapan = new Ext.create('Ext.data.Store', {
@@ -329,10 +335,12 @@
         Form.pemeliharaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
             form.insert(3, Form.Component.fileUpload());
-
+            
+//            Ext.getCmp('nama_unker').setDisabled(true);
+//            Ext.getCmp('nama_unor').setDisabled(true);
             if (setting.isBangunan)
             {
                 form.insert(2, Form.Component.pemeliharaanBangunan());
@@ -1038,7 +1046,8 @@
                         defaultType: 'textfield',
                         items: [{
                                 fieldLabel: 'Kode Barang*',
-                                name: 'kd_brg'
+                                name: 'kd_brg',
+                                readOnly:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -1051,7 +1060,8 @@
                         items: [{
                                 fieldLabel: 'Nama',
                                 name: 'nama',
-                                editable: false
+                                editable: false,
+                                readOnly:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -1066,7 +1076,8 @@
                                 name: 'no_aset',
                                 hidden: cmpSetting.noAsetHidden,
                                 disabled: cmpSetting.noAsetHidden,
-                                editable: false
+                                editable: false,
+                                readOnly:true,
                             }]
                     }]
             };
@@ -1096,7 +1107,7 @@
                                             var comboLvl1 = Ext.getCmp('combo_kd_lvl1');
                                             if (comboLvl1 !== null)
                                             {
-                                                comboLvl.setValue(value);
+                                                comboLvl1.setValue(value);
                                             }
                                         }
                                     }
@@ -2622,58 +2633,23 @@
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
                                     listeners: {
                                         change: function(obj, value) {
-                                            var unitWaktu = Ext.getCmp('unit_waktu');
-                                            var unitPengunaan = Ext.getCmp('unit_pengunaan');
-                                            var freqwaktu = Ext.getCmp('freq_waktu');
-                                            var freqpengunaan = Ext.getCmp('freq_pengunaan');
-                                            var renwaktu = Ext.getCmp('rencana_waktu');
-                                            var renpengunaan = Ext.getCmp('rencana_pengunaan');
-                                            var renketerangan = Ext.getCmp('rencana_keterangan');
-                                            var alert = Ext.getCmp('alert');
+                                           var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
                                             if (value === 1)
                                             {
-                                                unitWaktu.enable();
-                                                unitPengunaan.enable();
-                                                freqwaktu.enable();
-                                                freqpengunaan.enable();
-                                                renwaktu.enable();
-                                                renpengunaan.enable();
-                                                renketerangan.enable();
-                                                alert.enable();
+                                                pilihUnit.enable();
                                                 
                                             }
                                             else if (value === 2)
                                             {
-                                                unitWaktu.enable();
-                                                unitPengunaan.enable();
-                                                freqwaktu.enable();
-                                                freqpengunaan.enable();
-                                                renwaktu.enable();
-                                                renpengunaan.enable();
-                                                renketerangan.enable();
-                                                alert.enable();
+                                                pilihUnit.enable();
                                             }
                                             else if (value === 3)
                                             {
-                                                unitWaktu.disable();
-                                                unitPengunaan.disable();
-                                                freqwaktu.disable();
-                                                freqpengunaan.disable();
-                                                renwaktu.disable();
-                                                renpengunaan.disable();
-                                                renketerangan.disable();
-                                                alert.disable();
+                                                pilihUnit.disable();
                                             }
                                             else
                                             {
-                                                unitWaktu.disable();
-                                                unitPengunaan.disable();
-                                                freqwaktu.disable();
-                                                freqpengunaan.disable();
-                                                renwaktu.disable();
-                                                renpengunaan.disable();
-                                                renketerangan.disable();
-                                                alert.disable();
+                                                pilihUnit.disable();
                                             }
                                         }
                                     }
@@ -2682,6 +2658,7 @@
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Pelaksana',
                                     name: 'pelaksana_tgl',
+                                    id: 'pelaksana_tgl',
                                     format: 'Y-m-d'
                                 }, {
                                     fieldLabel: 'Pelaksana',
@@ -2711,6 +2688,7 @@
                                     fieldLabel: 'Kondisi',
                                     name: 'kondisi'
                                 }, {
+                                    xtype: 'textarea',
                                     fieldLabel: 'Deskripsi',
                                     name: 'deskripsi'
                                 }, {
@@ -2731,8 +2709,67 @@
                                 anchor: '100%',
                                 labelWidth: 120
                             },
+                            
                             defaultType: 'textfield',
                             items: [{
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Pilih Unit',
+                                    name: 'comboUnitWaktuOrUnitPenggunaan',
+                                    id : 'comboUnitWaktuOrUnitPenggunaan',
+                                    allowBlank: true,
+                                    store: Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Unit',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                            var unitWaktu = Ext.getCmp('unit_waktu');
+                                            var unitPengunaan = Ext.getCmp('unit_pengunaan');
+                                            var freqwaktu = Ext.getCmp('freq_waktu');
+                                            var freqpengunaan = Ext.getCmp('freq_pengunaan');
+                                            var renwaktu = Ext.getCmp('rencana_waktu');
+                                            var renpengunaan = Ext.getCmp('rencana_pengunaan');
+                                            var renketerangan = Ext.getCmp('rencana_keterangan');
+                                            var alert = Ext.getCmp('alert');
+                                            if (value === 1)
+                                            {
+                                                unitWaktu.enable();
+                                                unitPengunaan.disable();
+                                                freqwaktu.enable();
+                                                freqpengunaan.disable();
+                                                renwaktu.enable();
+                                                renpengunaan.disable();
+                                                renketerangan.enable();
+                                                alert.enable();
+                                                
+                                            }
+                                            else if (value === 2)
+                                            {
+                                                unitWaktu.disable();
+                                                unitPengunaan.enable();
+                                                freqwaktu.disable();
+                                                freqpengunaan.enable();
+                                                renwaktu.disable();
+                                                renpengunaan.enable();
+                                                renketerangan.enable();
+                                                alert.enable();
+                                            }
+                                            else
+                                            {
+                                                unitWaktu.disable();
+                                                unitPengunaan.disable();
+                                                freqwaktu.disable();
+                                                freqpengunaan.disable();
+                                                renwaktu.disable();
+                                                renpengunaan.disable();
+                                                renketerangan.disable();
+                                                alert.disable();
+                                            }
+                                        }
+                                    }
+                                },
+                                {
                                     xtype: 'combo',
                                     disabled: true,
                                     fieldLabel: 'Unit Waktu',
@@ -2743,7 +2780,34 @@
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Unit Waktu',
                                     value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu'
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                           var selectedUnitWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selectedRencanaWaktu = Ext.getCmp('rencana_waktu');
+                                           var selectedTglPelaksana = Ext.getCmp('pelaksana_tgl').value;
+                                           var selectedFreqWaktu = Ext.getCmp('freq_waktu').value;
+                                           if(selectedFreqWaktu != null && selectedTglPelaksana != null)
+                                           {
+                                                if (selectedUnitWaktu === 1) //day
+                                                {
+                                                      selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.DAY,selectedFreqWaktu));                                            
+                                                }
+                                                else if (selectedUnitWaktu === 2) //month
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.MONTH,selectedFreqWaktu)); 
+                                                }
+                                                else if (selectedUnitWaktu === 3) //year
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.YEAR,selectedFreqWaktu));
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                           }
+                                        }
+                                    }
                                 },{
                                     xtype: 'combo',
                                     disabled:true,
@@ -2757,11 +2821,39 @@
                                     value: 1,
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Pengunaan'
                                 },{
+                                    xtype:'numberfield',
                                     fieldLabel: 'Frequncy Waktu',
                                     name: 'freq_waktu',
                                     id: 'freq_waktu',
-                                    disabled: true
+                                    disabled: true,
+                                    listeners: {
+                                        change: function(obj, value) {
+                                           var selectedUnitWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selectedRencanaWaktu = Ext.getCmp('rencana_waktu');
+                                           var selectedTglPelaksana = Ext.getCmp('pelaksana_tgl').value;
+                                           if(selectedTglPelaksana != null)
+                                           {
+                                                if (selectedUnitWaktu === 1) //day
+                                                {
+                                                      selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.DAY,value));                                            
+                                                }
+                                                else if (selectedUnitWaktu === 2) //month
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.MONTH,value)); 
+                                                }
+                                                else if (selectedUnitWaktu === 3) //year
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.YEAR,value));
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                          }
+                                        }
+                                    }
                                 },{
+                                    xtype:'numberfield',
                                     fieldLabel: 'Frequncy Pengunaan',
                                     name: 'freq_pengunaan',
                                     id: 'freq_pengunaan',
@@ -2772,7 +2864,8 @@
                                     name: 'rencana_waktu',
                                     id: 'rencana_waktu',
                                     format : 'Y-m-d',
-                                    disabled: true
+                                    disabled: true,
+                                    readOnly: true,
                                 },{
                                     fieldLabel: 'Rencana Pengunaan',
                                     name: 'rencana_pengunaan',
