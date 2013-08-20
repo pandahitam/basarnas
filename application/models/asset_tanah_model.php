@@ -20,7 +20,8 @@ class Asset_Tanah_Model extends MY_Model{
                         b.nop, b.njkp, b.waktu_pembayaran, b.setoran_pajak, b.keterangan,
                         c.ur_upb as nama_unker, d.nama_unor,
                         e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
-                        ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset";
+                        ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
+                        f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
 	}
 	
 	function get_AllData(){

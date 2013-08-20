@@ -12,7 +12,8 @@ class Asset_Perlengkapan_Model extends MY_Model{
                             t.tanggal_perolehan,t.no_dana,t.penggunaan_waktu,
                             t.penggunaan_freq,t.unit_waktu,t.unit_freq,t.disimpan, 
                             t.dihapus,t.image_url,t.document_url
-                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset";
+                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
+                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
                             }
 	
 	function get_AllData(){
