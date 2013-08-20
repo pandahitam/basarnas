@@ -47,7 +47,7 @@
         });
 
         Ruang.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Ruang', storeId: 'DataRuang', model: 'MRuang', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Ruang', storeId: 'DataRuang', model: 'MRuang', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Ruang.proxy, groupField: 'tipe'
         });
 

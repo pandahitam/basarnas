@@ -49,7 +49,7 @@
         });
 
         Perairan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Perairan', storeId: 'DataPerairan', model: 'MPerairan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Perairan', storeId: 'DataPerairan', model: 'MPerairan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Perairan.proxy, groupField: 'tipe'
         });
 

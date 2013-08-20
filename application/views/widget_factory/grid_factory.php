@@ -7,7 +7,6 @@
         Ext.namespace('Grid', 'ToolbarGrid');
 
         Grid.baseGrid = function(setting, data, feature_list) {
-
             var grid = new Ext.create('Ext.grid.Panel', {
                 id: setting.grid.id,
                 store: data,

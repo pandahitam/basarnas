@@ -47,7 +47,7 @@
         });
 
         Perlengkapan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Perlengkapan', storeId: 'DataPerlengkapan', model: 'MPerlengkapan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Perlengkapan', storeId: 'DataPerlengkapan', model: 'MPerlengkapan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Perlengkapan.proxy, groupField: 'tipe'
         });
 

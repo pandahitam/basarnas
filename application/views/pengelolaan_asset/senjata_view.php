@@ -47,7 +47,7 @@
         });
 
         Senjata.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Senjata', storeId: 'DataSenjata', model: 'MSenjata', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Senjata', storeId: 'DataSenjata', model: 'MSenjata', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Senjata.proxy, groupField: 'tipe'
         });
 

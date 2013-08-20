@@ -48,7 +48,7 @@
         });
 
         Angkutan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Angkutan', storeId: 'DataAngkutan', model: 'MAngkutan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Angkutan', storeId: 'DataAngkutan', model: 'MAngkutan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Angkutan.proxy, groupField: 'tipe'
         });
 

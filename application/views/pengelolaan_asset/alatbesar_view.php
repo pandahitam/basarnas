@@ -49,7 +49,7 @@
         });
 
         Alatbesar.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Alatbesar', storeId: 'DataAlatbesar', model: 'MAlatbesar', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Alatbesar', storeId: 'DataAlatbesar', model: 'MAlatbesar', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Alatbesar.proxy, groupField: 'tipe'
         });
 

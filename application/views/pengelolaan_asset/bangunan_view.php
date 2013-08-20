@@ -47,7 +47,7 @@
         });
 
         Bangunan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Bangunan', storeId: 'DataBangunan', model: 'MBangunan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Bangunan', storeId: 'DataBangunan', model: 'MBangunan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Bangunan.proxy, groupField: 'tipe'
         });
 

@@ -47,7 +47,7 @@
         });
 
         Tanah.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Tanah', storeId: 'DataTanah', model: 'MTanah', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Tanah', storeId: 'DataTanah', model: 'MTanah', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Tanah.proxy
         });
 
