@@ -69,13 +69,11 @@
             return form;
         };
 
-        Tanah.Form.createPemeliharaan = function(data, kode, edit) {
+        Tanah.Form.createPemeliharaan = function(data, dataForm, edit) {
             var setting = {
                 url: Tanah.URL.createUpdatePemeliharaan,
                 data: data,
-                kode: kode,
                 isEditing: edit,
-                isPemeliharaanAssetInventaris: true,
                 isBangunan: false,
                 addBtn: {
                     isHidden: true,
@@ -88,11 +86,11 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.pemeliharaanInAsset(setting);
 
-            if (data !== null)
+            if (dataForm !== null)
             {
-                form.getForm().setValues(data);
+                form.getForm().setValues(dataForm);
             }
             return form;
         };
@@ -120,7 +118,7 @@
                     var tabpanels = _tab.getComponent('tanah-pemeliharaan');
                     if (tabpanels === undefined)
                     {
-                        Tanah.Action.list_pemeliharaan();
+                        Tanah.Action.pemeliharaanList();
                     }
                 }
             };
@@ -183,78 +181,75 @@
         };
 
 
-        Tanah.Action.edit_pemeliharaan = function() {
+        Tanah.Action.pemeliharaanEdit = function() {
             var selected = Ext.getCmp('tanah_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-                var data = selected[0].data;
-                delete data.nama_unker;
-
-                var form = Tanah.Form.createPemeliharaan(data, null, true);
-                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Ubah Pemeliharaan');
+                var dataForm = selected[0].data;
+                var form = Tanah.Form.createPemeliharaan(Tanah.dataStorePemeliharaan, dataForm, true);
+                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
         };
 
-        Tanah.Action.remove_pemeliharaan = function() {
+        Tanah.Action.pemeliharaanRemove = function() {
             var selected = Ext.getCmp('tanah_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length > 0)
             {
-                var selectedData = selected[0].data;
-                var dataStore = Tanah.dataStorePemeliharaan.load({params: {kd_lokasi: selectedData.kd_lokasi, kd_brg: selectedData.kd_brg, no_aset: selectedData.no_aset}});
                 var arrayDeleted = [];
                 _.each(selected, function(obj) {
                     var data = {
-                        kd_lokasi: obj.data.kd_lokasi,
-                        kd_brg: obj.data.kd_brg,
-                        no_aset: obj.data.no_aset,
                         id: obj.data.id
                     };
                     arrayDeleted.push(data);
                 });
                 console.log(arrayDeleted);
-                Modal.deleteAlert(arrayDeleted, Tanah.URL.removePemeliharaan, dataStore);
+                Modal.deleteAlert(arrayDeleted, Tanah.URL.removePemeliharaan, Tanah.dataStorePemeliharaan);
             }
         };
 
 
-        Tanah.Action.add_pemeliharaan = function()
+        Tanah.Action.pemeliharaanAdd = function()
         {
-
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             var data = selected[0].data;
-            var kode = {
+            var dataForm = {
                 kd_lokasi: data.kd_lokasi,
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
 
-            var form = Tanah.Form.createPemeliharaan(null, kode, false);
-            Tab.addToForm(form, 'tanah-add-pemeliharaan', 'Tambah Pemeliharaan');
-            Modal.assetEdit.show();
+            var form = Tanah.Form.createPemeliharaan(Tanah.dataStorePemeliharaan, dataForm, false);
+            Tab.addToForm(form, 'tanah-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
-        Tanah.Action.list_pemeliharaan = function() {
+        Tanah.Action.pemeliharaanList = function() {
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
-                var dataStore = Tanah.dataStorePemeliharaan.load({params: {kd_lokasi: data.kd_lokasi, kd_brg: data.kd_brg, no_aset: data.no_aset}});
-                var toolbarIDs = {};
-                toolbarIDs.idGrid = "tanah_grid_pemeliharaan";
-                toolbarIDs.add = Tanah.Action.add_pemeliharaan;
-                toolbarIDs.remove = Tanah.Action.remove_pemeliharaan;
-                toolbarIDs.edit = Tanah.Action.edit_pemeliharaan;
+                
+                Tanah.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Tanah.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Tanah.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                Tanah.dataStorePemeliharaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "tanah_grid_pemeliharaan",
+                    add : Tanah.Action.pemeliharaanAdd,
+                    remove : Tanah.Action.pemeliharaanRemove,
+                    edit : Tanah.Action.pemeliharaanEdit
+                };
+
                 var setting = {
                     data: data,
-                    dataStore: dataStore,
+                    dataStore: Tanah.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
                     isBangunan: false
                 };
-
+                
                 var _tanahPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
-                Tab.addToForm(_tanahPemeliharaanGrid, 'tanah-pemeliharaan', 'Simak Pemeliharaan');
-                Modal.assetEdit.show();
+                Tab.addToForm(_tanahPemeliharaanGrid, 'tanah-pemeliharaan', 'Pemeliharaan');
             }
         };
 

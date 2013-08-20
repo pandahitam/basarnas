@@ -70,13 +70,11 @@
             return form;
         };
 
-        Perairan.Form.createPemeliharaan = function(data, kode, edit) {
+        Perairan.Form.createPemeliharaan = function(data, dataForm, edit) {
             var setting = {
                 url: Perairan.URL.createUpdatePemeliharaan,
                 data: data,
-                kode: kode,
                 isEditing: edit,
-                isPemeliharaanAssetInventaris: true,
                 isBangunan: false,
                 addBtn: {
                     isHidden: true,
@@ -89,11 +87,11 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.pemeliharaanInAsset(setting);
 
-            if (data !== null)
+            if (dataForm !== null)
             {
-                form.getForm().setValues(data);
+                form.getForm().setValues(dataForm);
             }
             return form;
         };
@@ -121,7 +119,7 @@
                     var tabpanels = _tab.getComponent('perairan-pemeliharaan');
                     if (tabpanels === undefined)
                     {
-                        Perairan.Action.list_pemeliharaan();
+                        Perairan.Action.pemeliharaanList();
                     }
                 }
             };
@@ -180,25 +178,21 @@
             }
         };
 
-        Perairan.Action.edit_pemeliharaan = function() {
-            var selected = Ext.getCmp('perairan_grid_pemeliharaan').getSelectionModel().getSelection();
+        Alatbesar.Action.pemeliharaanEdit = function() {
+            var selected = Ext.getCmp('alatbesar_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-                var data = selected[0].data;
-                delete data.nama_unker;
-                var form = Perairan.Form.createPemeliharaan(data, null, true);
-                Tab.addToForm(form, 'perairan-edit-pemeliharaan', 'Ubah Pemeliharaan');
+                var dataForm = selected[0].data;
+                var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, true);
+                Tab.addToForm(form, 'alatbesar-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
         };
 
-        Perairan.Action.remove_pemeliharaan = function() {
-            debugger;
-            var selected = Ext.getCmp('perairan_grid_pemeliharaan').getSelectionModel().getSelection();
+        Alatbesar.Action.pemeliharaanRemove = function() {
+            var selected = Ext.getCmp('alatbesar_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length > 0)
             {
-                var selectedData = selected[0].data;
-                var dataStore = Perairan.dataStorePemeliharaan.load({params: {kd_lokasi: selectedData.kd_lokasi, kd_brg: selectedData.kd_brg, no_aset: selectedData.no_aset}});
                 var arrayDeleted = [];
                 _.each(selected, function(obj) {
                     var data = {
@@ -207,46 +201,52 @@
                     arrayDeleted.push(data);
                 });
                 console.log(arrayDeleted);
-                Modal.deleteAlert(arrayDeleted, Perairan.URL.removePemeliharaan, dataStore);
+                Modal.deleteAlert(arrayDeleted, Alatbesar.URL.removePemeliharaan, Alatbesar.dataStorePemeliharaan);
             }
         };
 
 
-        Perairan.Action.add_pemeliharaan = function()
+        Alatbesar.Action.pemeliharaanAdd = function()
         {
-            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
+            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
             var data = selected[0].data;
-            var kode = {
+            var dataForm = {
                 kd_lokasi: data.kd_lokasi,
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
-            var form = Perairan.Form.createPemeliharaan(null, kode, false);
-            Tab.addToForm(form, 'perairan-add-pemeliharaan', 'Tambah Pemeliharaan');
-            Modal.assetEdit.show();
+
+            var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, false);
+            Tab.addToForm(form, 'alatbesar-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
-        Perairan.Action.list_pemeliharaan = function() {
-            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
+        Alatbesar.Action.pemeliharaanList = function() {
+            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
-                var dataStore = Perairan.dataStorePemeliharaan.load({params: {kd_lokasi: data.kd_lokasi, kd_brg: data.kd_brg, no_aset: data.no_aset}});
-                var toolbarIDs = {};
-                toolbarIDs.idGrid = "perairan_grid_pemeliharaan";
-                toolbarIDs.add = Perairan.Action.add_pemeliharaan;
-                toolbarIDs.remove = Perairan.Action.remove_pemeliharaan;
-                toolbarIDs.edit = Perairan.Action.edit_pemeliharaan;
+                
+                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                Alatbesar.dataStorePemeliharaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "alatbesar_grid_pemeliharaan",
+                    add : Alatbesar.Action.pemeliharaanAdd,
+                    remove : Alatbesar.Action.pemeliharaanRemove,
+                    edit : Alatbesar.Action.pemeliharaanEdit
+                };
+
                 var setting = {
                     data: data,
-                    dataStore: dataStore,
+                    dataStore: Alatbesar.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
                     isBangunan: false
                 };
-
-                var _perairanPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
-                Tab.addToForm(_perairanPemeliharaanGrid, 'perairan-pemeliharaan', 'Simak Pemeliharaan');
-                Modal.assetEdit.show();
+                
+                var _alatbesarPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
+                Tab.addToForm(_alatbesarPemeliharaanGrid, 'alatbesar-pemeliharaan', 'Pemeliharaan');
             }
         };
 
