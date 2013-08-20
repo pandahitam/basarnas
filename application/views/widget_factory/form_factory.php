@@ -117,6 +117,13 @@
             autoLoad: true
         });
         
+        Reference.Data.kategoriAset = new Ext.create('Ext.data.Store', {
+            fields: ['kategori', 'value'],
+            data: [{kategori: 'Alat Besar', value: 1}, {kategori: 'Angkutan', value: 2},
+                    {kategori: 'Bangunan', value: 3}, {kategori: 'Perairan', value: 4},
+                    {kategori: 'Senjata', value: 5}, {kategori: 'Tanah', value: 6}]
+        });
+        
         Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
             data: [{text: 'Waktu', value: 1}, {text: 'Penggunaan', value: 2}]
