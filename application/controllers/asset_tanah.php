@@ -47,13 +47,13 @@ class Asset_Tanah extends MY_Controller {
                         'no_dana', 'tgl_dana', 'surat1', 'surat2', 
                         'surat3', 'rph_m2', 'unit_pmk', 'alm_pmk', 
                         'catatan', 'tgl_prl', 'tgl_buku', 'rphwajar', 
-                        'rphnjop', 'status', 'smilik','kd_klasifikasi_aset'
+                        'rphnjop', 'status', 'smilik'
                 );
                 
                 $extFields = array(
                         'kd_lokasi', 'kd_brg', 'no_aset', 'id','kode_unor',
                         'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
-                        'image_url','document_url'
+                        'image_url','document_url','kd_klasifikasi_aset'
                 );
 		
 		foreach ($kodeFields as $field) {
@@ -79,7 +79,7 @@ class Asset_Tanah extends MY_Controller {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);
                 }
                 
-                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
+                $dataExt['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
 
                 //GENERASI NO_ASET 
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")

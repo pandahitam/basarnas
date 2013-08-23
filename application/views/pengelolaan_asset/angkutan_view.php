@@ -170,7 +170,7 @@
                         {
                             form.getForm().setValues(jsonData);
                         }
-                        Tab.addToForm(form, 'bangunan-pengadaan', 'Pengadaan');
+                        Tab.addToForm(form, 'angkutan-pengadaan', 'Pengadaan');
                         Modal.assetEdit.show();
                     }
                 });

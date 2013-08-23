@@ -12,7 +12,7 @@ class Asset_Perairan_Model extends MY_Model{
                             b.id, b.kode_unor, b.image_url, b.document_url,  
                             c.ur_upb as nama_unker, d.nama_unor,
                             e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
-                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
+                            ,f.nama as nama_klasifikasi_aset, b.kd_klasifikasi_aset,
                             f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
 	}
 	
@@ -26,7 +26,7 @@ class Asset_Perairan_Model extends MY_Model{
                             LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                             LIMIT $start, $limit";
             }
             else
@@ -37,7 +37,7 @@ class Asset_Perairan_Model extends MY_Model{
                             LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                             ";
             }
 		

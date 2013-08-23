@@ -617,7 +617,7 @@
                         url: page_url, method: 'POST', params: {id_open: 1}, scripts: true, renderer: 'data',
                         success: function(response) {
                             // Start Register Javacript On Fly
-                            var jsonData = response.responseText;
+                            var jsonData = response.responseText.substring(14);
                             var aHeadNode = document.getElementsByTagName('head')[0];
                             var aScript = document.createElement('script');
                             aScript.text = jsonData;

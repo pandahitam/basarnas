@@ -4,6 +4,15 @@
 <script>
 ////// Model In View
 
+Ext.define('MLuar', {extend: 'Ext.data.Model',
+    fields: ['kd_lokasi','kd_brg','no_aset','lok_fisik',
+        'id', 'kode_unor','image_url','document_url',
+        'nama_unker','nama_unor', 'nama',
+        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+        'kd_lvl1','kd_lvl2','kd_lvl3',]
+});
+
 Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id','warehouse_id','ruang_id','rak_id',
         'serial_number', 'part_number','kd_brg','kd_lokasi',

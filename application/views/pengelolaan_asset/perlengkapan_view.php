@@ -314,7 +314,7 @@
             }
             var serverSideModelName = "Asset_Perlengkapan_Model";
             var title = "Perlengkapan";
-            var primaryKeys = "kd_lokasi,kd_brg,no_aset";
+            var primaryKeys = "id";
 
             var my_form = document.createElement('FORM');
             my_form.name = 'myForm';

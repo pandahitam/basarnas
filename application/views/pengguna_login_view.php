@@ -2,7 +2,8 @@
 <?php header("Content-Type: application/x-javascript"); ?>
 	
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
-
+<script>
+///////////
 // TABEL PENGGUNA LOGIN  --------------------------------------------------------- START
 var win_popup, newpanel;
 var Params_User = null;
@@ -34,11 +35,11 @@ var searchUsers = new Ext.create('Ext.ux.form.SearchField', {
 	
 var tbUsers = new Ext.create('Ext.toolbar.Toolbar', { 
   	items:[
-  		{text: 'Tambah', id: 'tambah_user', iconCls: 'icon-useradd', handler: addUsers, disabled: pl_insert},'-', 
-  		{text: 'Ubah', id: 'ubah_user', iconCls: 'icon-useredit', handler: updateUsers, disabled: pl_update},'-', 
-  		{text: 'Hapus', iconCls: 'icon-userdel', handler: deleteUsers, disabled: pl_delete},'-', 
-  		{text: 'Ubah Kata Sandi', iconCls: 'icon-key', handler: changePass, disabled: pl_update},'-', 
-  		{text: 'Akses Menu', id: 'Btn_Akses_Menu', iconCls: 'icon-gears', handler: show_form_Akses_Menu, disabled: pl_update},'-', 
+  		{text: 'Tambah', id: 'tambah_user', iconCls: 'icon-useradd', handler: addUsers, disabled: false},'-', 
+  		{text: 'Ubah', id: 'ubah_user', iconCls: 'icon-useredit', handler: updateUsers, disabled: false},'-', 
+  		{text: 'Hapus', iconCls: 'icon-userdel', handler: deleteUsers, disabled: false},'-', 
+  		{text: 'Ubah Kata Sandi', iconCls: 'icon-key', handler: changePass, disabled: false},'-', 
+  		{text: 'Akses Menu', id: 'Btn_Akses_Menu', iconCls: 'icon-gears', handler: show_form_Akses_Menu, disabled: false},'-', 
   		{tooltip: 'Cetak', iconCls: 'icon-printer', handler: function(){Load_Popup('win_print_pd_no_ttd', BASE_URL + 'pengguna_login/print_dialog_dnp', 'Cetak Pengguna Login');}},'->', 
   		{text: 'Clear Filter', iconCls: 'icon-cross', handler: function () {gridUsers.filters.clearFilters();}}, 
   		searchUsers
@@ -53,7 +54,7 @@ var filtersCfg = new Ext.create('Ext.ux.grid.filter.Filter', {
     	{type: 'string', dataIndex: 'user'},
     	{type: 'string', dataIndex: 'fullname'},
     	{type: 'string', dataIndex: 'email'},
-    	{type: 'list', dataIndex: 'type', options: ['SUPER ADMIN', 'ADMIN', 'PENGELOLA SIMPEG', 'OPD'], phpMode: true},
+    	{type: 'list', dataIndex: 'type', options: ['SUPER ADMIN', 'ADMIN', 'PENGELOLA ASSET', 'UNIT KERJA'], phpMode: true},
     	{type: 'string', dataIndex: 'registerDate'},
     	{type: 'string', dataIndex: 'lastvisitDate'},
     	{type: 'list', dataIndex: 'status', options: ['Active', 'Inactive']}
@@ -153,7 +154,7 @@ function show_formUsers(mode,value_form) {
     	{fieldLabel: 'E-Mail', name: 'email', id: 'email_user', vtype:'email', allowBlank: true}, 
     	{xtype: 'combobox', fieldLabel: 'Tipe', name: 'type', value: 'OPD',
     	 store: new Ext.data.SimpleStore({
-       		data: [['SUPER ADMIN'],['ADMIN'],['PENGELOLA SIMPEG'],['OPD']], fields: ['type']
+       		data: [['SUPER ADMIN'],['ADMIN'],['PENGELOLA ASSET'],['UNIT KERJA']], fields: ['type']
 			 }),
        valueField: 'type', displayField: 'type', emptyText: 'Pilih Tipe',
        queryMode: 'local', typeAhead: true, forceSelection: true,

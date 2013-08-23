@@ -2313,6 +2313,36 @@
             return component;
         };
         
+        Form.Component.luar = function(form){
+            var Component = {
+                xtype:'fieldset',
+                anchor: '100%',
+                title: 'LUAR',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items:[{
+                    xtype: 'textfield',
+                    fieldLabel: 'Lokasi Fisik',
+                    name: 'lok_fisik',
+                    anchor: '50%',
+                    allowBlank: false,
+                },
+                {
+                    xtype:'hidden',
+                    fieldLabel:'Kode Pemilik',
+                    name:'kd_pemilik',
+                    value:'1',
+                }
+                ]
+            };
+            
+            return Component;
+        }
+        
         Form.Component.ruang = function(form){
             var Component = {
                 xtype:'fieldset',

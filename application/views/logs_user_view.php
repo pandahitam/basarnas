@@ -2,7 +2,8 @@
 <?php header("Content-Type: application/x-javascript"); ?>
 	
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
-
+<script>
+///////////
 // START - TABEL LOG
 Ext.define('MLogs_User', {extend: 'Ext.data.Model',
   fields: ['ID_Log', 'logIP', 'logDateTime', 'logUser', 'Description']

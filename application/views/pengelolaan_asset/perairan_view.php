@@ -2,8 +2,8 @@
 <?php header("Content-Type: application/x-javascript"); ?>
 
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
-    <script>
-    ////////////
+<script>
+//////////////////
         var Params_M_Perairan = null;
 
         Ext.namespace('Perairan', 'Perairan.reader', 'Perairan.proxy', 'Perairan.Data', 'Perairan.Grid', 'Perairan.Window', 'Perairan.Form', 'Perairan.Action', 'Perairan.URL');
@@ -178,19 +178,19 @@
             }
         };
 
-        Alatbesar.Action.pemeliharaanEdit = function() {
-            var selected = Ext.getCmp('alatbesar_grid_pemeliharaan').getSelectionModel().getSelection();
+        Perairan.Action.pemeliharaanEdit = function() {
+            var selected = Ext.getCmp('perairan_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var dataForm = selected[0].data;
-                var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, true);
-                Tab.addToForm(form, 'alatbesar-edit-pemeliharaan', 'Edit Pemeliharaan');
+                var form = Perairan.Form.createPemeliharaan(Perairan.dataStorePemeliharaan, dataForm, true);
+                Tab.addToForm(form, 'perairan-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
         };
 
-        Alatbesar.Action.pemeliharaanRemove = function() {
-            var selected = Ext.getCmp('alatbesar_grid_pemeliharaan').getSelectionModel().getSelection();
+        Perairan.Action.pemeliharaanRemove = function() {
+            var selected = Ext.getCmp('perairan_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length > 0)
             {
                 var arrayDeleted = [];
@@ -201,14 +201,14 @@
                     arrayDeleted.push(data);
                 });
                 console.log(arrayDeleted);
-                Modal.deleteAlert(arrayDeleted, Alatbesar.URL.removePemeliharaan, Alatbesar.dataStorePemeliharaan);
+                Modal.deleteAlert(arrayDeleted, Perairan.URL.removePemeliharaan, Perairan.dataStorePemeliharaan);
             }
         };
 
 
-        Alatbesar.Action.pemeliharaanAdd = function()
+        Perairan.Action.pemeliharaanAdd = function()
         {
-            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
+            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
             var data = selected[0].data;
             var dataForm = {
                 kd_lokasi: data.kd_lokasi,
@@ -216,37 +216,37 @@
                 no_aset: data.no_aset
             };
 
-            var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, false);
-            Tab.addToForm(form, 'alatbesar-add-pemeliharaan', 'Add Pemeliharaan');
+            var form = Perairan.Form.createPemeliharaan(Perairan.dataStorePemeliharaan, dataForm, false);
+            Tab.addToForm(form, 'perairan-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
-        Alatbesar.Action.pemeliharaanList = function() {
-            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
+        Perairan.Action.pemeliharaanList = function() {
+            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
                 
-                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
-                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
-                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
-                Alatbesar.dataStorePemeliharaan.load();
+                Perairan.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perairan.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perairan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                Perairan.dataStorePemeliharaan.load();
                 
                 var toolbarIDs = {
-                    idGrid : "alatbesar_grid_pemeliharaan",
-                    add : Alatbesar.Action.pemeliharaanAdd,
-                    remove : Alatbesar.Action.pemeliharaanRemove,
-                    edit : Alatbesar.Action.pemeliharaanEdit
+                    idGrid : "perairan_grid_pemeliharaan",
+                    add : Perairan.Action.pemeliharaanAdd,
+                    remove : Perairan.Action.pemeliharaanRemove,
+                    edit : Perairan.Action.pemeliharaanEdit
                 };
 
                 var setting = {
                     data: data,
-                    dataStore: Alatbesar.dataStorePemeliharaan,
+                    dataStore: Perairan.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
                     isBangunan: false
                 };
                 
-                var _alatbesarPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
-                Tab.addToForm(_alatbesarPemeliharaanGrid, 'alatbesar-pemeliharaan', 'Pemeliharaan');
+                var _perairanPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
+                Tab.addToForm(_perairanPemeliharaanGrid, 'perairan-pemeliharaan', 'Pemeliharaan');
             }
         };
 
