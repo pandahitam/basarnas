@@ -11,12 +11,12 @@ class Asset_Perlengkapan_Model extends MY_Model{
                             t.no_aset,t.kondisi, t.kuantitas, t.dari,
                             t.tanggal_perolehan,t.no_dana,t.penggunaan_waktu,
                             t.penggunaan_freq,t.unit_waktu,t.unit_freq,t.disimpan, 
-                            t.dihapus,t.image_url,t.document_url
+                            t.dihapus,t.image_url,t.document_url,t.kode_unor
                             ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
                             f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
                             }
 	
-	function get_AllData($start,$limit){
+	function get_AllData($start=null,$limit=null){
 //		$query = "$this->selectColumn
 //                            FROM $this->table AS t
 //                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset

@@ -16,7 +16,7 @@ class Asset_Senjata_Model extends MY_Model{
                             f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
 	}
 	
-	function get_AllData($start, $limit){
+	function get_AllData($start=null, $limit=null){
             if($start !=null && $limit != null)
             {
 		$query = "$this->selectColumn
@@ -37,7 +37,7 @@ class Asset_Senjata_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LIMIT $start, $limit";
+                            ";
             }
 		return $this->Get_By_Query($query);	
 	}

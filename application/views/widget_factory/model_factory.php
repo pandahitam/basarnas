@@ -4,6 +4,18 @@
 <script>
 ////// Model In View
 
+Ext.define('MRiwayatPajakTanahDanBangunan', {extend: 'Ext.data.Model',
+    fields: ['id','id_ext_asset','tahun_pajak','tanggal_pembayaran','jumlah_setoran',
+        'file_setoran']
+});
+
+Ext.define('MInventoryPenerimaan', {extend: 'Ext.data.Model',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+        'no_aset', 'part_number','serial_number','date_created',
+        'nama_unker','nama_unor', 'keterangan',
+        'status_barang','qty','tgl_penerimaan','asal_barang','kode_unor']
+});
+
 Ext.define('MLuar', {extend: 'Ext.data.Model',
     fields: ['kd_lokasi','kd_brg','no_aset','lok_fisik',
         'id', 'kode_unor','image_url','document_url',
@@ -20,7 +32,7 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
         'dihapus','image_url','document_url'
-        ,'kd_klasifikasi_aset','nama_klasifikasi_aset']
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor']
 });
 
 Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',

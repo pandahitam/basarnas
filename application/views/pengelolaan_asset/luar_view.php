@@ -353,7 +353,7 @@
                 }
             }
             var serverSideModelName = "Asset_Luar_Model";
-            var title = "Alat Besar";
+            var title = "Luar";
             var primaryKeys = "kd_lokasi,kd_brg,no_aset";
 
             var my_form = document.createElement('FORM');

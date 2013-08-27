@@ -306,7 +306,16 @@
             return dataStore;
         }
 
+        
+        Form.inventorypenerimaan = function(setting)
+        {
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(1, Form.Component.perlengkapan());
+            form.insert(2, Form.Component.inventorypenerimaan());
 
+            return form;
+        }
         Form.pengadaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
@@ -1730,6 +1739,23 @@
 
             return component;
         };
+        
+        
+        Form.Component.riwayatPajakTanahDanBangunan = function(setting,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'fit',
+                height: (edit == true)?'100%':'25%',
+                title: 'Riwayat Pajak',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [(edit==true)?Grid.riwayatPajak(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+            };
+
+            return component;
+        };
+        
 
         Form.Component.tambahanBangunanTanah = function() {
             var component = {
@@ -3554,6 +3580,68 @@
                                     name: 'dihapus',
                                     boxLabel: 'Ya'
                                 },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.inventorypenerimaan = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENERIMAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Berita Acara',
+                                    name: 'tgl_berita_acara',
+                                    id : 'tgl_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    disabled: false,
+                                    fieldLabel: 'No Berita Acara',
+                                    name: 'nomor_berita_acara',
+                                    id : 'nomor_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Penerimaan',
+                                    name: 'tgl_penerimaan',
+                                    id : 'tgl_penerimaan',
+                                    allowBlank: false,
+                                },{
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id : 'asal_barang',
+                                    allowBlank: false,
+                                },
+                                {
+                                    xtype:'hidden',
+                                    disabled: false,
+                                    fieldLabel: 'Date Created',
+                                    name: 'date_created',
+                                    id : 'date_created',
+                                    value: new Date()
+                                }
                                 
                             ]
                         }]

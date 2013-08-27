@@ -15,6 +15,15 @@
                     root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
         });
+        
+        Tanah.dataStoreRiwayatPajak = new Ext.create('Ext.data.Store', {
+            model: MRiwayatPajakTanahDanBangunan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'Tanah/getSpecificRiwayatPajak', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
 
         Tanah.URL = {
             read: BASE_URL + 'asset_tanah/getAllData',
@@ -45,13 +54,32 @@
                 
             }
         });
-
+        
+        
         Tanah.Data = new Ext.create('Ext.data.Store', {
             id: 'Data_Tanah', storeId: 'DataTanah', model: 'MTanah', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Tanah.proxy
         });
-
+        
+        Tanah.addRiwayatPajak = function()
+        {
+        };
+        Tanah.editRiwayatPajak = function()
+        {
+        };
+        Tanah.removeRiwayatPajak = function()
+        {
+        };
         Tanah.Form.create = function(data, edit) {
+            var setting_grid_riwayat_pajak = {
+                id:'tanah_riwayat_pajak',
+                toolbar:{
+                    add: Tanah.addRiwayatPajak,
+                    edit: Tanah.editRiwayatPajak,
+                    remove: Tanah.removeRiwayatPajak
+                },
+                dataStore:Tanah.dataStoreRiwayatPajak
+            };
             var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit);
             form.insert(0, Form.Component.unit(edit,form));
             form.insert(1, Form.Component.kode(edit));
@@ -60,7 +88,8 @@
             form.insert(4, Form.Component.address());
             form.insert(5, Form.Component.tanah());
             form.insert(6, Form.Component.tambahanBangunanTanah());
-            form.insert(7, Form.Component.fileUpload());
+            form.insert(7, Form.Component.riwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
+            form.insert(8, Form.Component.fileUpload());
             if (data !== null)
             {
                 form.getForm().setValues(data);

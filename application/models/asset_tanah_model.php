@@ -24,7 +24,7 @@ class Asset_Tanah_Model extends MY_Model{
                         f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
 	}
 	
-	function get_AllData($start, $limit){
+	function get_AllData($start=null, $limit=null){
                 if($start != null && $limit !=null)
                 {
                     $query = "$this->selectColumn

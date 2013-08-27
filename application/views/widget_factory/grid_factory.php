@@ -33,6 +33,83 @@
 
             return grid;
         };
+        
+        Grid.riwayatPajak = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.toolbar.idGrid,
+                        
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'Tahun Pajak', dataIndex: 'tahun_pajak', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tanggal Pembayaran', dataIndex: 'tanggal_pembayaran', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Jumlah Setoran', dataIndex: 'jumlah_setoran', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'File Setoran', dataIndex: 'file_setoran', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_ext_asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_riwayat_pajak'
+                    },
+                    toolbar: {
+                        id: 'toolbar_riwayat_pajak',
+                        add: {
+                            id: 'button_add_riwayat_pajak',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_riwayat_pajak',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_riwayat_pajak',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+                
+                 var search = new Ext.create('Ext.ux.form.SearchField', {
+                id: settingGrid.search.id, store: setting.dataStore, width: 180
+                });
+                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+                        }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+                        
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        }
 
     // use in inventaris asset, 
         Grid.pemeliharaanGrid = function(setting) {
