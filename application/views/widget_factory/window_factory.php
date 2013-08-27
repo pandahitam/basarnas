@@ -99,6 +99,27 @@
                 }
             }
         });
+        
+        //used when adding/editing data with a grid inside a form
+        Modal.assetSecondaryWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: {
+                type: 'hbox',
+                pack: 'start',
+                align: 'stretch'
+            },
+            width: Measurement.windowWidth, height: Measurement.windowHeight, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.assetSecondaryWindow.removeAll(true);
+
+                }
+            }
+        });
 
         Modal.closeAssetWindow = function() {
             if (Modal.assetEdit.isVisible(true))

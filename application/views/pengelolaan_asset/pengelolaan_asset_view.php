@@ -56,9 +56,35 @@ var Center_PA = {
 				}
 		},
 	  	{text: 'Angkutan', iconCls: 'icon-book', 
-				handler: function(){
-					Load_TabPage_Asset('angkutan_panel',BASE_URL+'asset_angkutan/angkutan')
-				}, 
+                                menu:{
+                                    items:[
+                                        {
+                                            text:"Angkutan Darat", iconCls: 'icon-book',
+                                            handler: function(){
+                                                Load_TabPage_Asset('angkutan_darat_panel',BASE_URL+'asset_angkutan_darat/angkutan_darat')
+                                            },
+                                        },
+                                        {
+                                            text:"Angkutan Laut", iconCls: 'icon-book',
+                                            handler: function(){
+                                                Load_TabPage_Asset('angkutan_laut_panel',BASE_URL+'asset_angkutan_laut/angkutan_laut')
+                                            },
+                                        },
+                                        {
+                                            text:"Angkutan Udara", iconCls: 'icon-book',
+                                            handler: function(){
+                                                Load_TabPage_Asset('angkutan_udara_panel',BASE_URL+'asset_angkutan_udara/angkutan_udara')
+                                            },
+                                        },
+                                        {
+                                            text:"Semua", iconCls: 'icon-book',
+                                            handler: function(){
+                                                Load_TabPage_Asset('angkutan_panel',BASE_URL+'asset_angkutan/angkutan')
+                                            },
+                                        },
+                                    ]
+                            
+                                },
 				tooltip: {
 					text: 'Inventaris Asset - Angkutan'
 				}

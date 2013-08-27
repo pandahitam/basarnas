@@ -157,7 +157,7 @@ Ext.define('MTanah', {extend: 'Ext.data.Model',
             'surat2', 'surat3', 'rph_m2', 'unit_pmk', 
             'alm_pmk', 'catatan', 'tgl_prl', 'tgl_buku', 
             'rphwajar', 'rphnjop', 'status', 'smilik',
-            'id','nama_unker', 'nama_unor', // Field from ext tanah
+            'id_ext_asset','nama_unker', 'nama_unor', // Field from ext tanah
             'kode_unor','image_url','document_url',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang

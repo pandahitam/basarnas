@@ -215,7 +215,7 @@
                                                             {
                                                                 text: 'Pemeliharaan Peralatan Lainnya',
                                                                 iconCls: 'icon-menu_impasing',
-                                                                id: 'm_pemeliharaan_umum_kendaraan_udara',
+                                                                id: 'm_pemeliharaan_umum_peralatan_lainnya',
                                                                 handler: function() {
                                                                    // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
                                                                 },

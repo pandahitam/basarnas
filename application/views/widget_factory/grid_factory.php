@@ -73,15 +73,42 @@
                  var search = new Ext.create('Ext.ux.form.SearchField', {
                 id: settingGrid.search.id, store: setting.dataStore, width: 180
                 });
-                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: settingGrid.toolbar.id,
                 items: [{
-                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
-                        }, '-', {
-                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
                     }, '-', {
-                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
-                        
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
                     }, '->', {
                         text: 'Clear Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
@@ -90,11 +117,6 @@
                     }, search
                 ]
             });
-            
-            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
-                ftype: 'filters', autoReload: true, local: true, encode: true
-            });
-
            
             
             var selMode = new Ext.create('Ext.selection.CheckboxModel');

@@ -21,6 +21,7 @@ class Asset_Angkutan extends MY_Controller {
 	}
 	
 	function modifyAngkutan(){
+
 		$dataSimak = array();
                 $dataExt = array();
                 

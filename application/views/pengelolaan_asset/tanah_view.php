@@ -63,7 +63,26 @@
         
         Tanah.addRiwayatPajak = function()
         {
+            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+//                debugger;
+                delete data.nama_unker;
+                delete data.nama_unor;
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
+                }
+                var form = Form.asset(null, false, false);
+                form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan);
+//                var _form = Tanah.Form.create(null, false);
+                Modal.assetSecondaryWindow.add(form);
+            }
+                Modal.assetSecondaryWindow.show();
         };
+        
         Tanah.editRiwayatPajak = function()
         {
         };
@@ -88,7 +107,7 @@
             form.insert(4, Form.Component.address());
             form.insert(5, Form.Component.tanah());
             form.insert(6, Form.Component.tambahanBangunanTanah());
-            form.insert(7, Form.Component.riwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
+            form.insert(7, Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
             form.insert(8, Form.Component.fileUpload());
             if (data !== null)
             {
@@ -403,6 +422,7 @@
                 title: 'DAFTAR ASSET TANAH',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                    {header: 'Id Ext Asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},

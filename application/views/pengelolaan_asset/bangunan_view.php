@@ -92,7 +92,7 @@
             form.insert(4, Form.Component.address());
             form.insert(5, Form.Component.bangunan());
             form.insert(6, Form.Component.tambahanBangunanTanah());
-            form.insert(7, Form.Component.riwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
+            form.insert(7, Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
             form.insert(8, Form.Component.fileUpload(edit));
             if (data !== null)
             {

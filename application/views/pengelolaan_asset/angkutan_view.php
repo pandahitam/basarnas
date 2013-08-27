@@ -325,7 +325,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Angkutan.URL.remove, Angkutan.Data);
+            Modal.deleteAlert(arrayDeleted, Angkutan.URL.remove, Angkutan.Data);
         };
 
         Angkutan.Action.print = function() {

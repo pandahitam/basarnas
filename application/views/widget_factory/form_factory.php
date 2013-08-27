@@ -1740,8 +1740,57 @@
             return component;
         };
         
+        Form.Component.dataRiwayatPajakTanahDanBangunan = function(edit)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Riwayat Pajak',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'numberfield',
+                        items: [{
+                                fieldLabel: 'Tahun Pajak',
+                                name: 'tahun_pajak'
+                            }, {
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal Pembayaran',
+                                name: 'tanggal_pembayaran'
+                            },
+                            {
+                                fieldLabel: 'Jumlah Setoran',
+                                name: 'tanggal_pembayaran'
+                            }]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textarea',
+                        items: [{
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            }]
+                    }]
+            };
+
+            return component;
         
-        Form.Component.riwayatPajakTanahDanBangunan = function(setting,edit) {
+        }
+        
+        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
             var component = {
                 xtype: 'fieldset',
                 layout: 'fit',
@@ -2042,7 +2091,7 @@
                     layout: 'anchor'
                 },
                 items: [{
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%'
@@ -2051,21 +2100,15 @@
                         items: [{
                                 fieldLabel: 'STNK',
                                 name: 'stnk'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        defaultType: 'datefield',
-                        items: [{
+                            },
+                            {
+                                xtype:'datefield',
                                 fieldLabel: 'STNK Berlaku',
                                 name: 'stnk_berlaku',
                                 format: 'Y-m-d'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%'
@@ -2074,19 +2117,24 @@
                         items: [{
                                 fieldLabel: 'Pajak',
                                 name: 'pajak'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '100%'
-                        },
-                        defaultType: 'datefield',
-                        items: [{
+                            },
+                            {
+                                xtype:'datefield',
                                 fieldLabel: 'Pajak Berlaku',
                                 name: 'pajak_berlaku',
                                 format: 'Y-m-d'
                             }]
+                    },{
+                        columnWidth: .34,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textarea',
+                        items: [{
+                                fieldLabel:'Keterangan',
+                                name: 'keterangan_angkutan_darat',
+                        }]
                     }]
             };
 
