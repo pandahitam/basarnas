@@ -19,10 +19,12 @@
         Bangunan.dataStoreRiwayatPajak = new Ext.create('Ext.data.Store', {
             model: MRiwayatPajakTanahDanBangunan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Bangunan/getSpecificRiwayatPajak', actionMethods: {read: 'POST'},
+                url: BASE_URL + 'asset_bangunan/getSpecificRiwayatPajak', actionMethods: {read: 'POST'},
                 reader: new Ext.data.JsonReader({
-                    root: 'results', totalProperty: 'total', idProperty: 'id'})
-            })
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+            autoLoad: false,
         });
 
 
@@ -31,7 +33,9 @@
             createUpdate: BASE_URL + 'asset_bangunan/modifyBangunan',
             remove: BASE_URL + 'asset_bangunan/deleteBangunan',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan_Bangunan/modifyPemeliharaanBangunan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan_Bangunan/deletePemeliharaanBangunan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan_Bangunan/deletePemeliharaanBangunan',
+            createUpdateRiwayatPajak: BASE_URL + 'asset_bangunan/modifyRiwayatPajak',
+            removeRiwayatPajak: BASE_URL + 'asset_bangunan/deleteRiwayatPajak',
 
         };
 
@@ -62,19 +66,11 @@
         });
         
         
-        Bangunan.addRiwayatPajak = function()
-        {
-        };
-        Bangunan.editRiwayatPajak = function()
-        {
-        };
-        Bangunan.removeRiwayatPajak = function()
-        {
-        };
+
         
         Bangunan.Form.create = function(data, edit) {
             var setting_grid_riwayat_pajak = {
-                id:'bangunan_riwayat_pajak',
+                id:'grid_bangunan_riwayat_pajak',
                 toolbar:{
                     add: Bangunan.addRiwayatPajak,
                     edit: Bangunan.editRiwayatPajak,
@@ -82,6 +78,7 @@
                 },
                 dataStore:Bangunan.dataStoreRiwayatPajak
             };
+            
             
             var form = Form.asset(Bangunan.URL.createUpdate, Bangunan.Data, edit);
             
@@ -275,6 +272,68 @@
                 Modal.assetEdit.show();
             }
         };
+        
+        Bangunan.addRiwayatPajak = function()
+        {
+            var selected = Bangunan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
+                }
+                    var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, false);
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        Bangunan.editRiwayatPajak = function()
+        {
+            var selected = Ext.getCmp('grid_bangunan_riwayat_pajak').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Riwayat Pajak');
+                }
+                    var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, true);
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        Bangunan.removeRiwayatPajak = function()
+        {
+            var selected = Ext.getCmp('grid_bangunan_riwayat_pajak').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Bangunan.URL.removeRiwayatPajak,Bangunan.dataStoreRiwayatPajak);
+        };
 
         Bangunan.Action.add = function() {
             var _form = Bangunan.Form.create(null, false);
@@ -287,6 +346,7 @@
             var selected = Bangunan.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
+                var flagExtAsset = false;
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
@@ -297,10 +357,35 @@
                     Modal.assetEdit.insert(0, Region.createSidePanel(Bangunan.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
-
-                var _form = Bangunan.Form.create(data, true);
-                Tab.addToForm(_form, 'bangunan-details', 'Simak Details');
-                Modal.assetEdit.show();
+                
+                if(data.id_ext_asset == null || data.id_ext_asset == undefined)
+                {   
+                    $.ajax({
+                       url:BASE_URL + 'asset_bangunan/requestIdExtAsset',
+                       type: "POST",
+                       dataType:'json',
+                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            flagExtAsset = true;
+                            data.id_ext_asset = response.idExt;
+                        }
+                           
+                       }
+                    });
+                }
+                else
+                {
+                    flagExtAsset = true;
+                }
+                if(flagExtAsset == true)
+                {
+                    var _form = Bangunan.Form.create(data, true);
+                    Tab.addToForm(_form, 'bangunan-details', 'Simak Details');
+                    Modal.assetEdit.show();
+                    Bangunan.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id_ext_asset}});
+                }
             }
         };
 
@@ -318,7 +403,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Bangunan.URL.remove, Bangunan.Data);
+            Modal.deleteAlert(arrayDeleted, Bangunan.URL.remove, Bangunan.Data);
         };
 
         Bangunan.Action.print = function() {
@@ -398,6 +483,7 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id Ext Asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},

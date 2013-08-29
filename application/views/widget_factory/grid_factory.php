@@ -39,14 +39,16 @@
  
             var settingGrid = {
                     grid: {
-                        id: setting.toolbar.idGrid,
+                        id: setting.id,
                         
                         column: [
                             {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'Tahun Pajak', dataIndex: 'tahun_pajak', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Tanggal Pembayaran', dataIndex: 'tanggal_pembayaran', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Jumlah Setoran', dataIndex: 'jumlah_setoran', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'File Setoran', dataIndex: 'file_setoran', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'id_ext_asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                         ]
                     },

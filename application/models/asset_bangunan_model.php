@@ -14,7 +14,7 @@ class Asset_Bangunan_Model extends MY_Model{
                         tgl_dana, unit_pmk, alm_pmk, catatan, tgl_buku, 
                         rphwajar, rphnjop, status, cad1, luas_dsr, 
                         luas_bdg, jml_lt, 
-                        b.id, b.kode_unor, b.image_url, b.document_url,
+                        b.id as id_ext_asset, b.kode_unor, b.image_url, b.document_url,
                         b.nop, b.njkp, b.waktu_pembayaran, b.setoran_pajak, b.keterangan,
                         c.ur_upb as nama_unker, d.nama_unor,
                         e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
@@ -71,5 +71,15 @@ class Asset_Bangunan_Model extends MY_Model{
 
             return $this->Get_By_Query($query);
 	}
+        
+        function getSpecificRiwayatPajak($id_ext_asset)
+        {
+            if($_POST['open'] == 1)
+            {
+                $query = "select id,id_ext_asset,tahun_pajak,tanggal_pembayaran,jumlah_setoran,file_setoran,keterangan 
+                        FROM ext_asset_bangunan_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
+                return $this->Get_By_Query($query);
+            }
+        }
 }
 ?>

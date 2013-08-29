@@ -292,7 +292,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Perairan.URL.remove, Perairan.Data);
+            Modal.deleteAlert(arrayDeleted, Perairan.URL.remove, Perairan.Data);
         };
 
         Perairan.Action.print = function() {

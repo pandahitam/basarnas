@@ -294,7 +294,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Senjata.URL.remove, Senjata.Data);
+            Modal.deleteAlert(arrayDeleted, Senjata.URL.remove, Senjata.Data);
         };
 
         Senjata.Action.print = function() {

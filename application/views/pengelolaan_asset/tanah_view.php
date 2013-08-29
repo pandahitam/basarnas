@@ -19,10 +19,12 @@
         Tanah.dataStoreRiwayatPajak = new Ext.create('Ext.data.Store', {
             model: MRiwayatPajakTanahDanBangunan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Tanah/getSpecificRiwayatPajak', actionMethods: {read: 'POST'},
+                url: BASE_URL + 'asset_tanah/getSpecificRiwayatPajak', actionMethods: {read: 'POST'},
                 reader: new Ext.data.JsonReader({
-                    root: 'results', totalProperty: 'total', idProperty: 'id'})
-            })
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+            autoLoad: false,
         });
 
         Tanah.URL = {
@@ -30,7 +32,9 @@
             remove: BASE_URL + 'asset_tanah/deleteTanah',
             createUpdate: BASE_URL + 'asset_tanah/modifyTanah',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdateRiwayatPajak: BASE_URL + 'asset_tanah/modifyRiwayatPajak',
+            removeRiwayatPajak: BASE_URL + 'asset_tanah/deleteRiwayatPajak',
         };
 
         Tanah.reader = new Ext.create('Ext.data.JsonReader', {
@@ -61,37 +65,10 @@
             proxy: Tanah.proxy
         });
         
-        Tanah.addRiwayatPajak = function()
-        {
-            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
-            if (selected.length === 1)
-            {
-                var data = selected[0].data;
-//                debugger;
-                delete data.nama_unker;
-                delete data.nama_unor;
-
-                if (Modal.assetSecondaryWindow.items.length === 0)
-                {
-                    Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
-                }
-                var form = Form.asset(null, false, false);
-                form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan);
-//                var _form = Tanah.Form.create(null, false);
-                Modal.assetSecondaryWindow.add(form);
-            }
-                Modal.assetSecondaryWindow.show();
-        };
         
-        Tanah.editRiwayatPajak = function()
-        {
-        };
-        Tanah.removeRiwayatPajak = function()
-        {
-        };
         Tanah.Form.create = function(data, edit) {
             var setting_grid_riwayat_pajak = {
-                id:'tanah_riwayat_pajak',
+                id:'grid_tanah_riwayat_pajak',
                 toolbar:{
                     add: Tanah.addRiwayatPajak,
                     edit: Tanah.editRiwayatPajak,
@@ -300,6 +277,71 @@
                 Tab.addToForm(_tanahPemeliharaanGrid, 'tanah-pemeliharaan', 'Pemeliharaan');
             }
         };
+        
+        Tanah.addRiwayatPajak = function()
+        {
+            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
+                }
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false);
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+                
+        };
+        
+        Tanah.editRiwayatPajak = function()
+        {
+            var selected = Ext.getCmp('grid_tanah_riwayat_pajak').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Riwayat Pajak');
+                }
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true);
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        Tanah.removeRiwayatPajak = function()
+        {
+            var selected = Ext.getCmp('grid_tanah_riwayat_pajak').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Tanah.URL.removeRiwayatPajak,Tanah.dataStoreRiwayatPajak);
+        };
 
         Tanah.Action.add = function() {
             var _form = Tanah.Form.create(null, false);
@@ -312,6 +354,7 @@
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
+                 var flagExtAsset = false;
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
@@ -322,10 +365,36 @@
                     Modal.assetEdit.add(Region.createSidePanel(Tanah.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
-
-                var _form = Tanah.Form.create(data, true);
-                Tab.addToForm(_form, 'tanah-details', 'Simak Details');
-                Modal.assetEdit.show();
+                
+                if(data.id_ext_asset == null || data.id_ext_asset == undefined)
+                {   
+                    $.ajax({
+                       url:BASE_URL + 'asset_tanah/requestIdExtAsset',
+                       type: "POST",
+                       dataType:'json',
+                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            flagExtAsset = true;
+                            data.id_ext_asset = response.idExt;
+                        }
+                           
+                       }
+                    });
+                }
+                else
+                {
+                    flagExtAsset = true;
+                }
+                
+                if(flagExtAsset == true)
+                {
+                    var _form = Tanah.Form.create(data, true);
+                    Tab.addToForm(_form, 'tanah-details', 'Simak Details');
+                    Modal.assetEdit.show();
+                    Tanah.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id_ext_asset}});
+                }
             }
         };
 
@@ -343,7 +412,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Tanah.URL.remove, Tanah.Data);
+            Modal.deleteAlert(arrayDeleted, Tanah.URL.remove, Tanah.Data);
         };
 
         Tanah.Action.print = function() {

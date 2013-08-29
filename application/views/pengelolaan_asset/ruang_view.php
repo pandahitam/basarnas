@@ -285,7 +285,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Ruang.URL.remove, Ruang.Data);
+            Modal.deleteAlert(arrayDeleted, Ruang.URL.remove, Ruang.Data);
         };
 
         Ruang.Action.print = function() {

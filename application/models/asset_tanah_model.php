@@ -70,6 +70,16 @@ class Asset_Tanah_Model extends MY_Model{
                         ORDER BY kd_lokasi ASC';
 		return $this->Get_By_Query($query);
 	}
+        
+        function getSpecificRiwayatPajak($id_ext_asset)
+        {
+            if($_POST['open'] == 1)
+            {
+                $query = "select id,id_ext_asset,tahun_pajak,tanggal_pembayaran,jumlah_setoran,file_setoran,keterangan 
+                        FROM ext_asset_tanah_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
+                return $this->Get_By_Query($query);
+            }
+        }
 	
 	
 	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){

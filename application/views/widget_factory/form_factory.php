@@ -465,7 +465,6 @@
                                 form.submit({
                                     success: function(form) {
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-//                                        debugger;
                                         if (data !== null)
                                         {
                                             data.load();
@@ -499,7 +498,7 @@
 
             return _form;
         };
-
+        
         Form.asset = function(url, data, edit) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -553,6 +552,67 @@
                                         if (!edit)
                                         {
                                             Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.riwayatPajak = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+
+                            var documentField = form.findField('file_setoran');
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        debugger;
+                                        if (!edit)
+                                        {
+                                            if (Modal.assetSecondaryWindow.isVisible(true))
+                                            {
+                                                Modal.assetSecondaryWindow.close();
+                                            }
                                         }
                                     },
                                     failure: function() {
@@ -726,7 +786,7 @@
 
             return component;
         };
-
+        
         Form.Component.fileUpload = function(edit) {
             
             var photoStore = new Ext.create('Ext.data.Store', {
@@ -884,6 +944,129 @@
                             }]//IMAGE END
                     }, {// DOCUMENT START
                         columnWidth: .5,
+                        layout: 'anchor',
+                        itemId: 'documentColumn',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [{// DOCUMENT START
+                                xtype: 'gridpanel',
+                                itemId : 'documentGrid',
+                                store: documentStore,
+                                columnWidth: .5,
+                                width: '100%',
+                                height: 90,
+                                style: {
+                                    marginBottom: '10px'
+                                },
+                                columns: [{
+                                        text: 'Document Name',
+                                        dataIndex: 'name',
+                                        width: 200
+                                    }, {
+                                        xtype: 'actioncolumn',
+                                        width: 50,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/delete.png',
+                                                tooltipe: 'Remove Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    var dataSend = {
+                                                        file: record.data.name
+                                                    };
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        dataType: 'json',
+                                                        data: dataSend,
+                                                        url: Reference.URL.deleteDocument,
+                                                        success: function(res) {
+                                                            if (res.success)
+                                                            {
+                                                                console.log(res);
+                                                                documentStore.remove(record);
+                                                            }
+                                                            else
+                                                            {
+                                                                console.error('failed to remove');
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                }
+                                            }]
+                                    }]
+                            }, {
+                                xtype: 'filefield',
+                                name: 'userfile',
+                                width: 100,
+                                buttonOnly: true,
+                                buttonText: 'Add Document',
+                                listeners: {
+                                    'change': {
+                                        fn: function() {
+                                            var tempForm = Ext.create('Ext.form.Panel', {
+                                                url: Reference.URL.upDocument,
+                                                items: this
+                                            });
+
+                                            tempForm.getForm().submit({
+                                                waitMsg: 'Uploading your document...',
+                                                success: function(response, action) {
+                                                    var res = action.result.upload_data;
+                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
+                                                    documentStore.add({url:fullPath, name: res.file_name});
+                                                },
+                                                failure: function(response, action) {
+                                                    console.error('fail');
+                                                    console.log(action);
+                                                    Ext.Msg.alert('Fail',action.result.error);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }]
+                    }]// DOCUMENT END
+            };
+
+            return component;
+        };
+
+        Form.Component.fileUploadRiwayatPajak = function(edit) {
+            
+            var documentStore = new Ext.create('Ext.data.Store', {
+                                        fields: ['url', 'name']
+                                    })
+            
+            var component = {
+                xtype: 'fieldset',
+                itemId: 'fileUpload',
+                layout: 'column',
+                border: false,
+                title: 'FILE UPLOAD',
+                defaultType: 'container',
+                style: {
+                    marginTop: '10px'
+                },
+                items: [{
+                        xtype: 'hidden',
+                        name: 'file_setoran',
+                        listeners: {
+                            change: function(obj, value) {
+                                if (value !== null && value.length > 0)
+                                {
+                                    _.each(value.split(','), function(doc) {
+                                        var fullPath = Reference.URL.documentBasePath + doc;
+                                        documentStore.add({url: fullPath, name: doc});
+                                    });
+                                }
+                            }
+                        }
+                    }, {// DOCUMENT START
+                        columnWidth: .99,
                         layout: 'anchor',
                         itemId: 'documentColumn',
                         defaults: {
@@ -1740,8 +1923,10 @@
             return component;
         };
         
-        Form.Component.dataRiwayatPajakTanahDanBangunan = function(edit)
+        Form.Component.dataRiwayatPajakTanahDanBangunan = function(id_ext_asset)
         {
+            
+            
             var component = {
                 xtype: 'fieldset',
                 layout: 'column',
@@ -1760,17 +1945,29 @@
                             anchor: '95%'
                         },
                         defaultType: 'numberfield',
-                        items: [{
+                        items: [
+                             {
+                                xtype:'hidden',
+                                name:'id',
+                                value:'',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
                                 fieldLabel: 'Tahun Pajak',
                                 name: 'tahun_pajak'
                             }, {
                                 xtype:'datefield',
                                 fieldLabel: 'Tanggal Pembayaran',
-                                name: 'tanggal_pembayaran'
+                                name: 'tanggal_pembayaran',
+                                format: 'Y-m-d'
                             },
                             {
                                 fieldLabel: 'Jumlah Setoran',
-                                name: 'tanggal_pembayaran'
+                                name: 'jumlah_setoran'
                             }]
                     }, {
                         columnWidth: .50,
