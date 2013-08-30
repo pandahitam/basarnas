@@ -22,6 +22,7 @@ class asset_bangunan extends MY_Controller {
       
 	
 	function modifyBangunan(){
+
                 $dataSimak = array();
                 $dataExt = array();
                 $dataKode = array();

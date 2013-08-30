@@ -1312,13 +1312,15 @@
             }
         };
 
-        Tab.tempcreate = function() {
+        Tab.formTabs = function() {
             var _tab = Ext.create('Ext.tab.Panel', {
-                title: 'Navigation',
+                title: '',
                 border: 0,
                 split: true,
                 floatable: true,
                 frame: true,
+                deferredRender: false,
+                id:'form_tabs',
                 defaults: {
                     autoScroll: true,
                 }

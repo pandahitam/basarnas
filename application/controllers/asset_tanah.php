@@ -22,8 +22,6 @@ class Asset_Tanah extends MY_Controller {
 	
 	
 	function modifyTanah(){
-                
-  
                 $dataSimak = array();
                 $dataExt = array();
                 $dataKode = array();
@@ -104,15 +102,12 @@ class Asset_Tanah extends MY_Controller {
 //                    $dataExt['no_aset'] = $dataSimak['no_aset'];
 //                }
                 
-                
-                		
 		$this->modifyData($dataSimak,$dataExt);
 	}
 	
 	function deleteTanah()
 	{
 		$data = $this->input->post('data');
-                
 		return $this->deleteData($data);
 	}
         

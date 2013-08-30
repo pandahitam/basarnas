@@ -274,6 +274,7 @@
         
         // use to get data store for photo view in form
         Utils.getPhotoStore = function(form){
+        
             var dataStore = null;
             if (form !== null)
             {
@@ -499,7 +500,7 @@
             return _form;
         };
         
-        Form.asset = function(url, data, edit) {
+        Form.asset = function(url, data, edit, hasTabs) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
                 url: url,
@@ -513,13 +514,29 @@
                 buttons: [{
                         text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
                         handler: function() {
+                           
                             var form = _form.getForm();
                             var imageField = form.findField('image_url');
                             var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+//                           debugger;
                             if (imageField !== null)
                             {
                                 var arrayPhoto = [];
-                                var photoStore = Utils.getPhotoStore(_form);
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
                                 
                                 _.each(photoStore.data.items, function(obj) {
                                     arrayPhoto.push(obj.data.name);
@@ -531,8 +548,16 @@
                             if (documentField !== null)
                             {
                                 var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
                                 
-                                var documentStore = Utils.getDocumentStore(_form);
                                 
                                 _.each(documentStore.data.items, function(obj) {
                                     arrayDoc.push(obj.data.name);
@@ -585,7 +610,6 @@
                             var form = _form.getForm();
 
                             var documentField = form.findField('file_setoran');
-                            
                             if (documentField !== null)
                             {
                                 var arrayDoc = [];
@@ -606,7 +630,6 @@
                                     success: function() {
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        debugger;
                                         if (!edit)
                                         {
                                             if (Modal.assetSecondaryWindow.isVisible(true))
@@ -1946,11 +1969,6 @@
                         },
                         defaultType: 'numberfield',
                         items: [
-                             {
-                                xtype:'hidden',
-                                name:'id',
-                                value:'',
-                            },
                             {
                                 xtype:'hidden',
                                 name:'id_ext_asset',
@@ -1990,8 +2008,9 @@
         Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
             var component = {
                 xtype: 'fieldset',
-                layout: 'fit',
-                height: (edit == true)?'100%':'25%',
+                layout:'fit',
+                height: (edit == true)?300:150,
+                width: '100%',
                 title: 'Riwayat Pajak',
                 border: false,
                 frame: true,

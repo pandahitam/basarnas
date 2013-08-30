@@ -53,10 +53,21 @@ class MY_Controller extends CI_Controller{
                                             'kd_brg' => $keys['kd_brg'],
                                             'no_aset'=> $keys['no_aset']);
                         
-			if($this->model->Delete_Data($smkDeleted,$keys['id']) == FALSE)
-			{
-				$success = false;
-			}
+                        if(isset($keys['id']))
+                        {
+                            if($this->model->Delete_Data($smkDeleted,$keys['id']) == FALSE)
+                            {
+                                    $success = false;
+                            }
+                        }
+                        else
+                        {
+                            if($this->model->Delete_Data($smkDeleted) == FALSE)
+                            {
+                                    $success = false;
+                            }
+                        }
+			
 		}
 		
 		$result = array('fail' => $fail,

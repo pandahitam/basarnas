@@ -52,7 +52,7 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'alm_pmk', 'catatan', 'rphwajar', 
             'rphnjop', 'status', 'luas_dsr', 
             'luas_bdg', 'jml_lt',
-            'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',// Field from ext bangunan
+            'id','nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',// Field from ext bangunan
             'id_ext_asset','nama_unker', 'nama_unor', 
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kode_unor','image_url','document_url',
@@ -157,8 +157,8 @@ Ext.define('MTanah', {extend: 'Ext.data.Model',
             'surat2', 'surat3', 'rph_m2', 'unit_pmk', 
             'alm_pmk', 'catatan', 'tgl_prl', 'tgl_buku', 
             'rphwajar', 'rphnjop', 'status', 'smilik',
-            'id_ext_asset','nama_unker', 'nama_unor', // Field from ext tanah
-            'kode_unor','image_url','document_url',
+            'id','nama_unker', 'nama_unor', // Field from ext tanah
+            'kode_unor','image_url','document_url','id_ext_asset',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
             ,'kd_klasifikasi_aset','nama_klasifikasi_aset',

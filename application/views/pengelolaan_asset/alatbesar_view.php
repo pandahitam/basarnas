@@ -298,7 +298,7 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
-
+                debugger;
                 if (Modal.assetEdit.items.length === 0)
                 {
                     Modal.assetEdit.setTitle('Edit Alatbesar');

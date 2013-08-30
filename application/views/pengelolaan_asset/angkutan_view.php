@@ -257,7 +257,7 @@
             form.insert(1, Form.Component.tambahanAngkutanLaut());
             form.insert(2, Form.Component.tambahanAngkutanUdara());
 
-            var tab = Tab.tempcreate();
+            var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
                 closable: true,

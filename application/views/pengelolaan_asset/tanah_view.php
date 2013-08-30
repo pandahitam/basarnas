@@ -76,16 +76,65 @@
                 },
                 dataStore:Tanah.dataStoreRiwayatPajak
             };
-            var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit);
-            form.insert(0, Form.Component.unit(edit,form));
-            form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
-            form.insert(3, Form.Component.basicAsset(edit));
-            form.insert(4, Form.Component.address());
-            form.insert(5, Form.Component.tanah());
-            form.insert(6, Form.Component.tambahanBangunanTanah());
-            form.insert(7, Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
-            form.insert(8, Form.Component.fileUpload());
+            var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit,true);
+            var tab = Tab.formTabs();
+            tab.add({
+                title: 'Utama',
+                closable: true,
+                border: false,
+                deferredRender: false,
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.unit(edit,form),
+                        Form.Component.kode(edit),
+                        Form.Component.klasifikasiAset(edit),
+                        Form.Component.basicAsset(edit),
+                        Form.Component.address(),
+                        Form.Component.tanah(),
+                        Form.Component.fileUpload(),
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+            
+            tab.add({
+                title: 'Tambahan',
+                closable: true,
+                border: false,
+                layout: 'column',
+                anchor: '100%',
+                deferredRender: false,
+                defaults: {
+                    layout: 'anchor'
+                },
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.tambahanBangunanTanah(),
+                        Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit),
+            
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+
+            tab.setActiveTab(0);
+            
+            form.insert(0,tab);
+//            form.insert(0, Form.Component.unit(edit,form));
+//            form.insert(1, Form.Component.kode(edit));
+//            form.insert(2, Form.Component.klasifikasiAset(edit))
+//            form.insert(3, Form.Component.basicAsset(edit));
+//            form.insert(4, Form.Component.address());
+//            form.insert(5, Form.Component.tanah());
+//            form.insert(6, Form.Component.tambahanBangunanTanah());
+//            form.insert(7, Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
+//            form.insert(8, Form.Component.fileUpload());
             if (data !== null)
             {
                 form.getForm().setValues(data);
@@ -319,6 +368,7 @@
                     var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true);
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
                     form.insert(1, Form.Component.fileUploadRiwayatPajak());
+//                    form.insert(1, Form.Component.fileUpload());
                     
                     if (data !== null)
                     {
@@ -372,11 +422,13 @@
                        url:BASE_URL + 'asset_tanah/requestIdExtAsset',
                        type: "POST",
                        dataType:'json',
+                       async:false,
                        data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
                        success:function(response, status){
                         if(response.status == 'success')
                         {
                             flagExtAsset = true;
+                            data.id = response.idExt;
                             data.id_ext_asset = response.idExt;
                         }
                            
@@ -385,6 +437,7 @@
                 }
                 else
                 {
+                    data.id= data.id_ext_asset;
                     flagExtAsset = true;
                 }
                 
@@ -402,12 +455,13 @@
             console.log('remove tanah');
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             var arrayDeleted = [];
+            
             _.each(selected, function(obj) {
                 var data = {
                     kd_lokasi: obj.data.kd_lokasi,
                     kd_brg: obj.data.kd_brg,
                     no_aset: obj.data.no_aset,
-                    id: obj.data.id
+                    id: obj.data.id_ext_asset
                 };
                 arrayDeleted.push(data);
             });
