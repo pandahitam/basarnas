@@ -2,8 +2,8 @@
 <?php header("Content-Type: application/x-javascript"); ?>
 
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
-    <script>
-    ////////////
+<script>
+//////////////////
         var Params_M_Perairan = null;
 
         Ext.namespace('Perairan', 'Perairan.reader', 'Perairan.proxy', 'Perairan.Data', 'Perairan.Grid', 'Perairan.Window', 'Perairan.Form', 'Perairan.Action', 'Perairan.URL');
@@ -49,7 +49,7 @@
         });
 
         Perairan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Perairan', storeId: 'DataPerairan', model: 'MPerairan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Perairan', storeId: 'DataPerairan', model: 'MPerairan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Perairan.proxy, groupField: 'tipe'
         });
 
@@ -70,13 +70,11 @@
             return form;
         };
 
-        Perairan.Form.createPemeliharaan = function(data, kode, edit) {
+        Perairan.Form.createPemeliharaan = function(data, dataForm, edit) {
             var setting = {
                 url: Perairan.URL.createUpdatePemeliharaan,
                 data: data,
-                kode: kode,
                 isEditing: edit,
-                isPemeliharaanAssetInventaris: true,
                 isBangunan: false,
                 addBtn: {
                     isHidden: true,
@@ -89,11 +87,11 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.pemeliharaanInAsset(setting);
 
-            if (data !== null)
+            if (dataForm !== null)
             {
-                form.getForm().setValues(data);
+                form.getForm().setValues(dataForm);
             }
             return form;
         };
@@ -121,7 +119,7 @@
                     var tabpanels = _tab.getComponent('perairan-pemeliharaan');
                     if (tabpanels === undefined)
                     {
-                        Perairan.Action.list_pemeliharaan();
+                        Perairan.Action.pemeliharaanList();
                     }
                 }
             };
@@ -180,25 +178,21 @@
             }
         };
 
-        Perairan.Action.edit_pemeliharaan = function() {
+        Perairan.Action.pemeliharaanEdit = function() {
             var selected = Ext.getCmp('perairan_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-                var data = selected[0].data;
-                delete data.nama_unker;
-                var form = Perairan.Form.createPemeliharaan(data, null, true);
-                Tab.addToForm(form, 'perairan-edit-pemeliharaan', 'Ubah Pemeliharaan');
+                var dataForm = selected[0].data;
+                var form = Perairan.Form.createPemeliharaan(Perairan.dataStorePemeliharaan, dataForm, true);
+                Tab.addToForm(form, 'perairan-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
         };
 
-        Perairan.Action.remove_pemeliharaan = function() {
-            debugger;
+        Perairan.Action.pemeliharaanRemove = function() {
             var selected = Ext.getCmp('perairan_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length > 0)
             {
-                var selectedData = selected[0].data;
-                var dataStore = Perairan.dataStorePemeliharaan.load({params: {kd_lokasi: selectedData.kd_lokasi, kd_brg: selectedData.kd_brg, no_aset: selectedData.no_aset}});
                 var arrayDeleted = [];
                 _.each(selected, function(obj) {
                     var data = {
@@ -207,46 +201,52 @@
                     arrayDeleted.push(data);
                 });
                 console.log(arrayDeleted);
-                Modal.deleteAlert(arrayDeleted, Perairan.URL.removePemeliharaan, dataStore);
+                Modal.deleteAlert(arrayDeleted, Perairan.URL.removePemeliharaan, Perairan.dataStorePemeliharaan);
             }
         };
 
 
-        Perairan.Action.add_pemeliharaan = function()
+        Perairan.Action.pemeliharaanAdd = function()
         {
             var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
             var data = selected[0].data;
-            var kode = {
+            var dataForm = {
                 kd_lokasi: data.kd_lokasi,
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
-            var form = Perairan.Form.createPemeliharaan(null, kode, false);
-            Tab.addToForm(form, 'perairan-add-pemeliharaan', 'Tambah Pemeliharaan');
-            Modal.assetEdit.show();
+
+            var form = Perairan.Form.createPemeliharaan(Perairan.dataStorePemeliharaan, dataForm, false);
+            Tab.addToForm(form, 'perairan-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
-        Perairan.Action.list_pemeliharaan = function() {
+        Perairan.Action.pemeliharaanList = function() {
             var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
-                var dataStore = Perairan.dataStorePemeliharaan.load({params: {kd_lokasi: data.kd_lokasi, kd_brg: data.kd_brg, no_aset: data.no_aset}});
-                var toolbarIDs = {};
-                toolbarIDs.idGrid = "perairan_grid_pemeliharaan";
-                toolbarIDs.add = Perairan.Action.add_pemeliharaan;
-                toolbarIDs.remove = Perairan.Action.remove_pemeliharaan;
-                toolbarIDs.edit = Perairan.Action.edit_pemeliharaan;
+                
+                Perairan.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perairan.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perairan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                Perairan.dataStorePemeliharaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "perairan_grid_pemeliharaan",
+                    add : Perairan.Action.pemeliharaanAdd,
+                    remove : Perairan.Action.pemeliharaanRemove,
+                    edit : Perairan.Action.pemeliharaanEdit
+                };
+
                 var setting = {
                     data: data,
-                    dataStore: dataStore,
+                    dataStore: Perairan.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
                     isBangunan: false
                 };
-
+                
                 var _perairanPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
-                Tab.addToForm(_perairanPemeliharaanGrid, 'perairan-pemeliharaan', 'Simak Pemeliharaan');
-                Modal.assetEdit.show();
+                Tab.addToForm(_perairanPemeliharaanGrid, 'perairan-pemeliharaan', 'Pemeliharaan');
             }
         };
 
@@ -292,7 +292,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Perairan.URL.remove, Perairan.Data);
+            Modal.deleteAlert(arrayDeleted, Perairan.URL.remove, Perairan.Data);
         };
 
         Perairan.Action.print = function() {
@@ -372,6 +372,9 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},

@@ -22,8 +22,6 @@ class Asset_Tanah extends MY_Controller {
 	
 	
 	function modifyTanah(){
-                
-  
                 $dataSimak = array();
                 $dataExt = array();
                 $dataKode = array();
@@ -47,13 +45,13 @@ class Asset_Tanah extends MY_Controller {
                         'no_dana', 'tgl_dana', 'surat1', 'surat2', 
                         'surat3', 'rph_m2', 'unit_pmk', 'alm_pmk', 
                         'catatan', 'tgl_prl', 'tgl_buku', 'rphwajar', 
-                        'rphnjop', 'status', 'smilik','kd_klasifikasi_aset'
+                        'rphnjop', 'status', 'smilik'
                 );
                 
                 $extFields = array(
                         'kd_lokasi', 'kd_brg', 'no_aset', 'id','kode_unor',
                         'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
-                        'image_url','document_url'
+                        'image_url','document_url','kd_klasifikasi_aset'
                 );
 		
 		foreach ($kodeFields as $field) {
@@ -79,7 +77,7 @@ class Asset_Tanah extends MY_Controller {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);
                 }
                 
-                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
+                $dataExt['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
 
                 //GENERASI NO_ASET 
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
@@ -104,16 +102,71 @@ class Asset_Tanah extends MY_Controller {
 //                    $dataExt['no_aset'] = $dataSimak['no_aset'];
 //                }
                 
-                
-                		
 		$this->modifyData($dataSimak,$dataExt);
 	}
 	
 	function deleteTanah()
 	{
 		$data = $this->input->post('data');
-                
 		return $this->deleteData($data);
 	}
+        
+        function getSpecificRiwayatPajak()
+        {
+            if($_POST['open'] == 1)
+            {
+                $data = $this->model->getSpecificRiwayatPajak($_POST['id_ext_asset']);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+                
+            }
+        }
+        
+        function modifyRiwayatPajak()
+        {
+            $dataRiwayatPajak = array();
+            $dataRiwayatPajakFields = array(
+                'id','id_ext_asset','tahun_pajak','tanggal_pembayaran','jumlah_setoran','file_setoran','keterangan'
+            );
+            
+            foreach ($dataRiwayatPajakFields as $field) {
+			$dataRiwayatPajak[$field] = $this->input->post($field);
+            }
+                $this->db->set($dataRiwayatPajak);
+                $this->db->replace('ext_asset_tanah_riwayat_pajak');
+               
+        }
+        
+        function deleteRiwayatPajak()
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                foreach($data as $deleted)
+                {
+                    $deletedArray[] =$deleted['id'];
+                }
+                $this->db->where_in('id',$deletedArray);
+                
+		$this->db->delete('ext_asset_tanah_riwayat_pajak');
+	}
+        
+        function requestIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $this->db->insert('ext_asset_tanah',$receivedData);
+            $idExt = $this->db->insert_id();
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
 }
 ?>

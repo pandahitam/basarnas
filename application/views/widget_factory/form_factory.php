@@ -33,6 +33,7 @@
             klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
         };
         
+        
         Reference.Data.klasifikasiAset_lvl1 = new Ext.create('Ext.data.Store', {
             fields: ['kd_lvl1', 'nama'], storeId: 'DataKlasifikasiAset_lvl1 ',
             proxy: new Ext.data.AjaxProxy({
@@ -114,6 +115,18 @@
                 url: Reference.URL.ruang, actionMethods: {read: 'POST'}, extraParams: {kd_lokasi: 0}
             }),
             autoLoad: true
+        });
+        
+        Reference.Data.kategoriAset = new Ext.create('Ext.data.Store', {
+            fields: ['kategori', 'value'],
+            data: [{kategori: 'Alat Besar', value: 1}, {kategori: 'Angkutan', value: 2},
+                    {kategori: 'Bangunan', value: 3}, {kategori: 'Perairan', value: 4},
+                    {kategori: 'Senjata', value: 5}, {kategori: 'Tanah', value: 6}]
+        });
+        
+        Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan = new Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
+            data: [{text: 'Waktu', value: 1}, {text: 'Penggunaan', value: 2}]
         });
         
         Reference.Data.kondisiPerlengkapan = new Ext.create('Ext.data.Store', {
@@ -261,6 +274,7 @@
         
         // use to get data store for photo view in form
         Utils.getPhotoStore = function(form){
+        
             var dataStore = null;
             if (form !== null)
             {
@@ -293,7 +307,16 @@
             return dataStore;
         }
 
+        
+        Form.inventorypenerimaan = function(setting)
+        {
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(1, Form.Component.perlengkapan());
+            form.insert(2, Form.Component.inventorypenerimaan());
 
+            return form;
+        }
         Form.pengadaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
@@ -329,10 +352,12 @@
         Form.pemeliharaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
             form.insert(3, Form.Component.fileUpload());
-
+            
+//            Ext.getCmp('nama_unker').setDisabled(true);
+//            Ext.getCmp('nama_unor').setDisabled(true);
             if (setting.isBangunan)
             {
                 form.insert(2, Form.Component.pemeliharaanBangunan());
@@ -408,7 +433,6 @@
                             var form = _form.getForm();
                             var imageField = form.findField('image_url');
                             var documentField = form.findField('document_url');
-                            
                             if (imageField !== null)
                             {
                                 var arrayPhoto = [];
@@ -442,12 +466,11 @@
                                 form.submit({
                                     success: function(form) {
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        
                                         if (data !== null)
                                         {
                                             data.load();
                                         }
-                                        
+                                        Modal.closeProcessWindow();
                                         if (edit)
                                         {
                                             Modal.closeProcessWindow();
@@ -456,6 +479,7 @@
                                         {
                                             form.reset();
                                         }
+
 
 
                                     },
@@ -475,8 +499,8 @@
 
             return _form;
         };
-
-        Form.asset = function(url, data, edit) {
+        
+        Form.asset = function(url, data, edit, hasTabs) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
                 url: url,
@@ -490,13 +514,29 @@
                 buttons: [{
                         text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
                         handler: function() {
+                           
                             var form = _form.getForm();
                             var imageField = form.findField('image_url');
                             var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+//                           debugger;
                             if (imageField !== null)
                             {
                                 var arrayPhoto = [];
-                                var photoStore = Utils.getPhotoStore(_form);
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
                                 
                                 _.each(photoStore.data.items, function(obj) {
                                     arrayPhoto.push(obj.data.name);
@@ -508,8 +548,16 @@
                             if (documentField !== null)
                             {
                                 var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
                                 
-                                var documentStore = Utils.getDocumentStore(_form);
                                 
                                 _.each(documentStore.data.items, function(obj) {
                                     arrayDoc.push(obj.data.name);
@@ -544,8 +592,67 @@
 
             return _form;
         };
+        
+        Form.riwayatPajak = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
 
-        Form.Component.unit = function(edit,form) {
+                            var documentField = form.findField('file_setoran');
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (!edit)
+                                        {
+                                            if (Modal.assetSecondaryWindow.isVisible(true))
+                                            {
+                                                Modal.assetSecondaryWindow.close();
+                                            }
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+
+        Form.Component.unit = function(edit,form,isReadOnly) {
             var component = {
                 xtype: 'fieldset',
                 itemId : 'unit_selection',
@@ -561,14 +668,14 @@
                                 id: 'kd_lokasi',
                                 listeners: {
                                     change: function(ob, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboUnker = Ext.getCmp('nama_unker');
                                             if (comboUnker !== null)
                                             {
                                                 comboUnker.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -576,14 +683,14 @@
                                 id: 'kode_unor',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboUnor = Ext.getCmp('nama_unor');
                                             if (comboUnor !== null)
                                             {
                                                 comboUnor.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -603,7 +710,8 @@
                                 name: 'nama_unker',
                                 id: 'nama_unker',
                                 itemId: 'unker',
-                                allowBlank: false,
+                                allowBlank: true,
+                                readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unker,
                                 valueField: 'kdlok',
                                 displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
@@ -611,7 +719,11 @@
                                 listeners: {
                                     'focus': {
                                         fn: function(comboField) {
-                                            comboField.expand();
+                                            if(isReadOnly != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
                                         },
                                         scope: this
                                     },
@@ -655,6 +767,7 @@
                                 id: 'nama_unor',
                                 disabled: false,
                                 allowBlank: true,
+                                readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unor,
                                 valueField: 'kode_unor',
                                 displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
@@ -662,7 +775,9 @@
                                 listeners: {
                                     'focus': {
                                         fn: function(comboField) {
-                                            var dataStore = comboField.getStore();
+                                            if(isReadOnly != true)
+                                            {
+                                                var dataStore = comboField.getStore();
                                             var kd_lokasi = Utils.getUnkerCombo(form).getValue();
                                             if (kd_lokasi !== null)
                                             {
@@ -671,6 +786,8 @@
                                                 dataStore.filter({property:"kd_lokasi", value:kd_lokasi});
                                             }
                                             comboField.expand();
+                                            }
+                                            
                                             
                                         },
                                         scope: this
@@ -692,7 +809,7 @@
 
             return component;
         };
-
+        
         Form.Component.fileUpload = function(edit) {
             
             var photoStore = new Ext.create('Ext.data.Store', {
@@ -941,6 +1058,129 @@
             return component;
         };
 
+        Form.Component.fileUploadRiwayatPajak = function(edit) {
+            
+            var documentStore = new Ext.create('Ext.data.Store', {
+                                        fields: ['url', 'name']
+                                    })
+            
+            var component = {
+                xtype: 'fieldset',
+                itemId: 'fileUpload',
+                layout: 'column',
+                border: false,
+                title: 'FILE UPLOAD',
+                defaultType: 'container',
+                style: {
+                    marginTop: '10px'
+                },
+                items: [{
+                        xtype: 'hidden',
+                        name: 'file_setoran',
+                        listeners: {
+                            change: function(obj, value) {
+                                if (value !== null && value.length > 0)
+                                {
+                                    _.each(value.split(','), function(doc) {
+                                        var fullPath = Reference.URL.documentBasePath + doc;
+                                        documentStore.add({url: fullPath, name: doc});
+                                    });
+                                }
+                            }
+                        }
+                    }, {// DOCUMENT START
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId: 'documentColumn',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [{// DOCUMENT START
+                                xtype: 'gridpanel',
+                                itemId : 'documentGrid',
+                                store: documentStore,
+                                columnWidth: .5,
+                                width: '100%',
+                                height: 90,
+                                style: {
+                                    marginBottom: '10px'
+                                },
+                                columns: [{
+                                        text: 'Document Name',
+                                        dataIndex: 'name',
+                                        width: 200
+                                    }, {
+                                        xtype: 'actioncolumn',
+                                        width: 50,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/delete.png',
+                                                tooltipe: 'Remove Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    var dataSend = {
+                                                        file: record.data.name
+                                                    };
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        dataType: 'json',
+                                                        data: dataSend,
+                                                        url: Reference.URL.deleteDocument,
+                                                        success: function(res) {
+                                                            if (res.success)
+                                                            {
+                                                                console.log(res);
+                                                                documentStore.remove(record);
+                                                            }
+                                                            else
+                                                            {
+                                                                console.error('failed to remove');
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                }
+                                            }]
+                                    }]
+                            }, {
+                                xtype: 'filefield',
+                                name: 'userfile',
+                                width: 100,
+                                buttonOnly: true,
+                                buttonText: 'Add Document',
+                                listeners: {
+                                    'change': {
+                                        fn: function() {
+                                            var tempForm = Ext.create('Ext.form.Panel', {
+                                                url: Reference.URL.upDocument,
+                                                items: this
+                                            });
+
+                                            tempForm.getForm().submit({
+                                                waitMsg: 'Uploading your document...',
+                                                success: function(response, action) {
+                                                    var res = action.result.upload_data;
+                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
+                                                    documentStore.add({url:fullPath, name: res.file_name});
+                                                },
+                                                failure: function(response, action) {
+                                                    console.error('fail');
+                                                    console.log(action);
+                                                    Ext.Msg.alert('Fail',action.result.error);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }]
+                    }]// DOCUMENT END
+            };
+
+            return component;
+        };
+
         Form.Component.basicAsset = function() {
             var component = {
                 xtype: 'fieldset',
@@ -1038,7 +1278,8 @@
                         defaultType: 'textfield',
                         items: [{
                                 fieldLabel: 'Kode Barang*',
-                                name: 'kd_brg'
+                                name: 'kd_brg',
+                                readOnly:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -1051,7 +1292,8 @@
                         items: [{
                                 fieldLabel: 'Nama',
                                 name: 'nama',
-                                editable: false
+                                editable: false,
+                                readOnly:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -1066,7 +1308,8 @@
                                 name: 'no_aset',
                                 hidden: cmpSetting.noAsetHidden,
                                 disabled: cmpSetting.noAsetHidden,
-                                editable: false
+                                editable: false,
+                                readOnly:true,
                             }]
                     }]
             };
@@ -1096,7 +1339,7 @@
                                             var comboLvl1 = Ext.getCmp('combo_kd_lvl1');
                                             if (comboLvl1 !== null)
                                             {
-                                                comboLvl.setValue(value);
+                                                comboLvl1.setValue(value);
                                             }
                                         }
                                     }
@@ -1702,6 +1945,82 @@
 
             return component;
         };
+        
+        Form.Component.dataRiwayatPajakTanahDanBangunan = function(id_ext_asset)
+        {
+            
+            
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Riwayat Pajak',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'numberfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
+                                fieldLabel: 'Tahun Pajak',
+                                name: 'tahun_pajak'
+                            }, {
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal Pembayaran',
+                                name: 'tanggal_pembayaran',
+                                format: 'Y-m-d'
+                            },
+                            {
+                                fieldLabel: 'Jumlah Setoran',
+                                name: 'jumlah_setoran'
+                            }]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textarea',
+                        items: [{
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            }]
+                    }]
+            };
+
+            return component;
+        
+        }
+        
+        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'fit',
+                height: (edit == true)?300:150,
+                width: '100%',
+                title: 'Riwayat Pajak',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [(edit==true)?Grid.riwayatPajak(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+            };
+
+            return component;
+        };
+        
 
         Form.Component.tambahanBangunanTanah = function() {
             var component = {
@@ -1988,7 +2307,7 @@
                     layout: 'anchor'
                 },
                 items: [{
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%'
@@ -1997,21 +2316,15 @@
                         items: [{
                                 fieldLabel: 'STNK',
                                 name: 'stnk'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        defaultType: 'datefield',
-                        items: [{
+                            },
+                            {
+                                xtype:'datefield',
                                 fieldLabel: 'STNK Berlaku',
                                 name: 'stnk_berlaku',
                                 format: 'Y-m-d'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%'
@@ -2020,19 +2333,24 @@
                         items: [{
                                 fieldLabel: 'Pajak',
                                 name: 'pajak'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '100%'
-                        },
-                        defaultType: 'datefield',
-                        items: [{
+                            },
+                            {
+                                xtype:'datefield',
                                 fieldLabel: 'Pajak Berlaku',
                                 name: 'pajak_berlaku',
                                 format: 'Y-m-d'
                             }]
+                    },{
+                        columnWidth: .34,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textarea',
+                        items: [{
+                                fieldLabel:'Keterangan',
+                                name: 'keterangan_angkutan_darat',
+                        }]
                     }]
             };
 
@@ -2285,6 +2603,36 @@
             return component;
         };
         
+        Form.Component.luar = function(form){
+            var Component = {
+                xtype:'fieldset',
+                anchor: '100%',
+                title: 'LUAR',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items:[{
+                    xtype: 'textfield',
+                    fieldLabel: 'Lokasi Fisik',
+                    name: 'lok_fisik',
+                    anchor: '50%',
+                    allowBlank: false,
+                },
+                {
+                    xtype:'hidden',
+                    fieldLabel:'Kode Pemilik',
+                    name:'kd_pemilik',
+                    value:'1',
+                }
+                ]
+            };
+            
+            return Component;
+        }
+        
         Form.Component.ruang = function(form){
             var Component = {
                 xtype:'fieldset',
@@ -2523,7 +2871,8 @@
                                     editable: false,
                                     listeners: {
                                         change: function(obj, value) {
-                                            var subjenis = form.findField('subjenis');
+//                                            var subjenis = form.findField('subjenis');
+                                            var subjenis = Ext.getCmp('pemeliharaan_subjenis');
                                             subjenis.clearValue();
                                             subjenis.applyEmptyText();
                                             if (value !== -1)
@@ -2546,6 +2895,7 @@
                                     xtype: 'combo',
                                     fieldLabel: 'Sub Jenis',
                                     name: 'subjenis',
+                                    id:'pemeliharaan_subjenis',
                                     allowBlank: true,
                                     valueField: 'id',
                                     displayField: 'nama', emptyText: 'SubJenis',
@@ -2622,58 +2972,36 @@
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
                                     listeners: {
                                         change: function(obj, value) {
-                                            var unitWaktu = Ext.getCmp('unit_waktu');
-                                            var unitPengunaan = Ext.getCmp('unit_pengunaan');
-                                            var freqwaktu = Ext.getCmp('freq_waktu');
-                                            var freqpengunaan = Ext.getCmp('freq_pengunaan');
-                                            var renwaktu = Ext.getCmp('rencana_waktu');
-                                            var renpengunaan = Ext.getCmp('rencana_pengunaan');
-                                            var renketerangan = Ext.getCmp('rencana_keterangan');
-                                            var alert = Ext.getCmp('alert');
+                                           var selWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selPengunaan = Ext.getCmp('unit_pengunaan').value;
+                                           var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
+                                           
+                                           
                                             if (value === 1)
                                             {
-                                                unitWaktu.enable();
-                                                unitPengunaan.enable();
-                                                freqwaktu.enable();
-                                                freqpengunaan.enable();
-                                                renwaktu.enable();
-                                                renpengunaan.enable();
-                                                renketerangan.enable();
-                                                alert.enable();
+                                                pilihUnit.enable();
                                                 
                                             }
                                             else if (value === 2)
                                             {
-                                                unitWaktu.enable();
-                                                unitPengunaan.enable();
-                                                freqwaktu.enable();
-                                                freqpengunaan.enable();
-                                                renwaktu.enable();
-                                                renpengunaan.enable();
-                                                renketerangan.enable();
-                                                alert.enable();
+                                                pilihUnit.enable();
                                             }
                                             else if (value === 3)
                                             {
-                                                unitWaktu.disable();
-                                                unitPengunaan.disable();
-                                                freqwaktu.disable();
-                                                freqpengunaan.disable();
-                                                renwaktu.disable();
-                                                renpengunaan.disable();
-                                                renketerangan.disable();
-                                                alert.disable();
+                                                pilihUnit.disable();
                                             }
                                             else
                                             {
-                                                unitWaktu.disable();
-                                                unitPengunaan.disable();
-                                                freqwaktu.disable();
-                                                freqpengunaan.disable();
-                                                renwaktu.disable();
-                                                renpengunaan.disable();
-                                                renketerangan.disable();
-                                                alert.disable();
+                                                pilihUnit.disable();
+                                            }
+                                            
+                                            if(selWaktu != 0 && selWaktu != null)
+                                            {
+                                                pilihUnit.setValue(1);
+                                            }
+                                            else if(selPengunaan != 0 && selPengunaan != null)
+                                            {
+                                                 pilihUnit.setValue(2);
                                             }
                                         }
                                     }
@@ -2682,7 +3010,35 @@
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Pelaksana',
                                     name: 'pelaksana_tgl',
-                                    format: 'Y-m-d'
+                                    id: 'pelaksana_tgl',
+                                    format: 'Y-m-d',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                           var selectedUnitWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selectedRencanaWaktu = Ext.getCmp('rencana_waktu');
+                                           var selectedTglPelaksana = Ext.getCmp('pelaksana_tgl').value;
+                                           var selectedFreqWaktu = Ext.getCmp('freq_waktu').value;
+                                           if(selectedFreqWaktu != null && selectedUnitWaktu != null)
+                                           {
+                                                if (selectedUnitWaktu === 1) //day
+                                                {
+                                                      selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.DAY,selectedFreqWaktu));                                            
+                                                }
+                                                else if (selectedUnitWaktu === 2) //month
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.MONTH,selectedFreqWaktu)); 
+                                                }
+                                                else if (selectedUnitWaktu === 3) //year
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.YEAR,selectedFreqWaktu));
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                           }
+                                        }
+                                    }
                                 }, {
                                     fieldLabel: 'Pelaksana',
                                     name: 'pelaksana_nama'
@@ -2711,6 +3067,7 @@
                                     fieldLabel: 'Kondisi',
                                     name: 'kondisi'
                                 }, {
+                                    xtype: 'textarea',
                                     fieldLabel: 'Deskripsi',
                                     name: 'deskripsi'
                                 }, {
@@ -2731,8 +3088,67 @@
                                 anchor: '100%',
                                 labelWidth: 120
                             },
+                            
                             defaultType: 'textfield',
                             items: [{
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Pilih Unit',
+                                    name: 'comboUnitWaktuOrUnitPenggunaan',
+                                    id : 'comboUnitWaktuOrUnitPenggunaan',
+                                    allowBlank: true,
+                                    store: Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Unit',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                            var unitWaktu = Ext.getCmp('unit_waktu');
+                                            var unitPengunaan = Ext.getCmp('unit_pengunaan');
+                                            var freqwaktu = Ext.getCmp('freq_waktu');
+                                            var freqpengunaan = Ext.getCmp('freq_pengunaan');
+                                            var renwaktu = Ext.getCmp('rencana_waktu');
+                                            var renpengunaan = Ext.getCmp('rencana_pengunaan');
+                                            var renketerangan = Ext.getCmp('rencana_keterangan');
+                                            var alert = Ext.getCmp('alert');
+                                            if (value === 1)
+                                            {
+                                                unitWaktu.enable();
+                                                unitPengunaan.disable();
+                                                freqwaktu.enable();
+                                                freqpengunaan.disable();
+                                                renwaktu.enable();
+                                                renpengunaan.disable();
+                                                renketerangan.enable();
+                                                alert.enable();
+                                                
+                                            }
+                                            else if (value === 2)
+                                            {
+                                                unitWaktu.disable();
+                                                unitPengunaan.enable();
+                                                freqwaktu.disable();
+                                                freqpengunaan.enable();
+                                                renwaktu.disable();
+                                                renpengunaan.enable();
+                                                renketerangan.enable();
+                                                alert.enable();
+                                            }
+                                            else
+                                            {
+                                                unitWaktu.disable();
+                                                unitPengunaan.disable();
+                                                freqwaktu.disable();
+                                                freqpengunaan.disable();
+                                                renwaktu.disable();
+                                                renpengunaan.disable();
+                                                renketerangan.disable();
+                                                alert.disable();
+                                            }
+                                        }
+                                    }
+                                },
+                                {
                                     xtype: 'combo',
                                     disabled: true,
                                     fieldLabel: 'Unit Waktu',
@@ -2743,7 +3159,34 @@
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Unit Waktu',
                                     value: 1,
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu'
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                           var selectedUnitWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selectedRencanaWaktu = Ext.getCmp('rencana_waktu');
+                                           var selectedTglPelaksana = Ext.getCmp('pelaksana_tgl').value;
+                                           var selectedFreqWaktu = Ext.getCmp('freq_waktu').value;
+                                           if(selectedFreqWaktu != null && selectedTglPelaksana != null)
+                                           {
+                                                if (selectedUnitWaktu === 1) //day
+                                                {
+                                                      selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.DAY,selectedFreqWaktu));                                            
+                                                }
+                                                else if (selectedUnitWaktu === 2) //month
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.MONTH,selectedFreqWaktu)); 
+                                                }
+                                                else if (selectedUnitWaktu === 3) //year
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.YEAR,selectedFreqWaktu));
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                           }
+                                        }
+                                    }
                                 },{
                                     xtype: 'combo',
                                     disabled:true,
@@ -2757,11 +3200,39 @@
                                     value: 1,
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Pengunaan'
                                 },{
+                                    xtype:'numberfield',
                                     fieldLabel: 'Frequncy Waktu',
                                     name: 'freq_waktu',
                                     id: 'freq_waktu',
-                                    disabled: true
+                                    disabled: true,
+                                    listeners: {
+                                        change: function(obj, value) {
+                                           var selectedUnitWaktu = Ext.getCmp('unit_waktu').value;
+                                           var selectedRencanaWaktu = Ext.getCmp('rencana_waktu');
+                                           var selectedTglPelaksana = Ext.getCmp('pelaksana_tgl').value;
+                                           if(selectedTglPelaksana != null)
+                                           {
+                                                if (selectedUnitWaktu === 1) //day
+                                                {
+                                                      selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.DAY,value));                                            
+                                                }
+                                                else if (selectedUnitWaktu === 2) //month
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.MONTH,value)); 
+                                                }
+                                                else if (selectedUnitWaktu === 3) //year
+                                                {
+                                                    selectedRencanaWaktu.setValue(Ext.Date.add(selectedTglPelaksana, Ext.Date.YEAR,value));
+                                                }
+                                                else
+                                                {
+
+                                                }
+                                          }
+                                        }
+                                    }
                                 },{
+                                    xtype:'numberfield',
                                     fieldLabel: 'Frequncy Pengunaan',
                                     name: 'freq_pengunaan',
                                     id: 'freq_pengunaan',
@@ -2772,7 +3243,8 @@
                                     name: 'rencana_waktu',
                                     id: 'rencana_waktu',
                                     format : 'Y-m-d',
-                                    disabled: true
+                                    disabled: true,
+                                    readOnly: true,
                                 },{
                                     fieldLabel: 'Rencana Pengunaan',
                                     name: 'rencana_pengunaan',
@@ -3372,6 +3844,68 @@
                                     name: 'dihapus',
                                     boxLabel: 'Ya'
                                 },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.inventorypenerimaan = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENERIMAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Berita Acara',
+                                    name: 'tgl_berita_acara',
+                                    id : 'tgl_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    disabled: false,
+                                    fieldLabel: 'No Berita Acara',
+                                    name: 'nomor_berita_acara',
+                                    id : 'nomor_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Penerimaan',
+                                    name: 'tgl_penerimaan',
+                                    id : 'tgl_penerimaan',
+                                    allowBlank: false,
+                                },{
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id : 'asal_barang',
+                                    allowBlank: false,
+                                },
+                                {
+                                    xtype:'hidden',
+                                    disabled: false,
+                                    fieldLabel: 'Date Created',
+                                    name: 'date_created',
+                                    id : 'date_created',
+                                    value: new Date()
+                                }
                                 
                             ]
                         }]

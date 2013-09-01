@@ -38,11 +38,11 @@ var search_UK = new Ext.create('Ext.ux.form.SearchField', {
 
 var tb_UK = new Ext.create('Ext.toolbar.Toolbar', { id: 'tb_UK',
 	items:[{
-  	text: 'Tambah', iconCls: 'icon-add', disabled: uk_insert, handler: Master_Data_Tambah_UnitKerja
+  	text: 'Tambah', iconCls: 'icon-add', disabled: false, handler: Master_Data_Tambah_UnitKerja
   },'-', {
-  	text: 'Ubah', id: 'Btn_Ubah_M_UK', iconCls: 'icon-edit', disabled: uk_update, handler: Master_Data_Ubah_UnitKerja
+  	text: 'Ubah', id: 'Btn_Ubah_M_UK', iconCls: 'icon-edit', disabled: false, handler: Master_Data_Ubah_UnitKerja
   },'-', {
-  	text: 'Hapus', iconCls: 'icon-delete', disabled: uk_delete, handler: Master_Data_Hapus_UnitKerja
+  	text: 'Hapus', iconCls: 'icon-delete', disabled: false, handler: Master_Data_Hapus_UnitKerja
   },'-', {
   	text: 'Cetak', iconCls: 'icon-printer', handler: print_UnitKerja
   },'->', {
@@ -167,7 +167,7 @@ function showForm_UnitKerja(mode,value_form) {
         store: new Ext.data.Store({
         		fields: ['kode_kec','nama_kec'], idProperty: 'ID_Kec',
         		proxy: new Ext.data.AjaxProxy({
-    				url: BASE_URL + 'combo_ref/combo_kecamatan', 
+    				url: BASE_URL + 'combo_ref/combo_kec', 
       			method: 'POST', extraParams :{id_open: '1'}
     				}), autoLoad: true
         }),

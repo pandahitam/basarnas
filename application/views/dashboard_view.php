@@ -186,23 +186,63 @@
                                             items: [{
                                                     text: 'Pemeliharaan Umum ',
                                                     iconCls: 'icon-menu_impasing',
-                                                    id: 'm_pengelolaan_alat',
-                                                    handler: function() {
-
-                                                        Load_TabPage('pemeliharaan_asset', BASE_URL + 'pemeliharaan');
-                                                    }
+                                                    id: 'm_pemeliharaan_umum',
+                                                    menu:{
+                                                        items:[{
+                                                                text: 'Pemeliharaan Kendaraan Darat',
+                                                                iconCls: 'icon-menu_impasing',
+                                                                id: 'm_pemeliharaan_umum_kendaraan_darat',
+                                                                handler: function() {
+                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                },
+                                                            },
+                                                            {
+                                                                text: 'Pemeliharaan Kendaraan Udara',
+                                                                iconCls: 'icon-menu_impasing',
+                                                                id: 'm_pemeliharaan_umum_kendaraan_udara',
+                                                                handler: function() {
+                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                },
+                                                            },
+                                                            {
+                                                                text: 'Pemeliharaan Kendaraan Laut',
+                                                                iconCls: 'icon-menu_impasing',
+                                                                id: 'm_pemeliharaan_umum_kendaraan_laut',
+                                                                handler: function() {
+                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                },
+                                                            },
+                                                            {
+                                                                text: 'Pemeliharaan Peralatan Lainnya',
+                                                                iconCls: 'icon-menu_impasing',
+                                                                id: 'm_pemeliharaan_umum_peralatan_lainnya',
+                                                                handler: function() {
+                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                },
+                                                            },
+                                                            ]
+                                                    },
+//                                                    handler: function() {
+//
+//                                                        Load_TabPage('pemeliharaan_asset', BASE_URL + 'pemeliharaan');
+//                                                    }
                                                 },
                                                 {
                                                     text: 'Pemeliharaan Bangunan',
                                                     iconCls: 'icon-menu_impasing',
-                                                    id: 'm_pengelolaan_bangunan',
+                                                    id: 'm_pemeliharaan_bangunan',
                                                     handler: function() {
                                                         Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
                                                     }
                                                 }]
                                         }
                                     },
-                                    {text: 'Pendayagunaan', iconCls: 'icon-menu_impasing', id: 'm_pendayagunaan'},
+                                    {text: 'Pendayagunaan', iconCls: 'icon-menu_impasing', id: 'm_pendayagunaan',
+                                        handler: function()
+                                            {
+                                                Load_TabPage('pendayagunaan_asset', BASE_URL + 'pendayagunaan');
+                                            }
+                                    },
                                     {text: 'Mutasi', iconCls: 'icon-menu_impasing', id: 'm_mutasi',
                                         handler: function()
                                         {
@@ -222,6 +262,44 @@
                                         {
                                             Load_TabPage('pengelolaan', BASE_URL + 'pengelolaan')
                                         }
+                                    },
+                                            
+                                    {text: 'Inventory', iconCls: 'icon-menu_impasing', id: 'm_inventory',
+                                        menu: {
+                                            items: [{
+                                                    text: 'Penerimaan ',
+                                                    iconCls: 'icon-menu_impasing',
+                                                    id: 'm_inventory_penerimaan',
+                                                    handler: function() {
+
+                                                        Load_TabPage('inventory_penerimaan', BASE_URL + 'inventory_penerimaan');
+                                                    }
+                                                },
+                                                {
+                                                    text: 'Pemeriksaan',
+                                                    iconCls: 'icon-menu_impasing',
+                                                    id: 'm_inventory_pemeriksaan',
+                                                    handler: function() {
+                                                        Load_TabPage('inventory_pemeriksaan', BASE_URL + 'inventory_pemeriksaan');
+                                                    }
+                                                },
+                                                {
+                                                    text: 'Penyimpanan',
+                                                    iconCls: 'icon-menu_impasing',
+                                                    id: 'm_inventory_penyimpanan',
+                                                    handler: function() {
+                                                        Load_TabPage('inventory_penyimpanan', BASE_URL + 'inventory_penyimpanan');
+                                                    }
+                                                },
+                                                {
+                                                    text: 'Pengeluaran',
+                                                    iconCls: 'icon-menu_impasing',
+                                                    id: 'm_inventory_pengeluaran',
+                                                    handler: function() {
+                                                        Load_TabPage('inventory_pengeluaran', BASE_URL + 'inventory_pengeluaran');
+                                                    }
+                                                }]
+                                        }
                                     }
                                 ]
                             }
@@ -238,7 +316,7 @@
                                         iconCls: 'icon-menu_impasing',
                                         id: 'm_laporan_aset_unker',
                                         handler: function() {
-                                            Load_TabPage('laporan_aset_unker', BASE_URL + 'laporan_aset_unker');
+                                            Load_TabPage('laporan_aset_unitkerja', BASE_URL + 'laporan_aset_unitkerja');
                                         }
                                     },
                                     {
@@ -274,9 +352,9 @@
                     title: 'Alert Pemeliharaan',
                     store: Dashboard.DataAlertPemeliharaan,
                     columns: [
-                        { text: 'Unit Kerja',  dataIndex: 'ur_upb', width:200 },
-                        { text: 'Nama Aset', dataIndex: 'nama', width:300},
-                        { text: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
+                        { header: 'Unit Kerja',  dataIndex: 'ur_upb', width:200 },
+                        { header: 'Nama Aset', dataIndex: 'nama', width:300},
+                        { header: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
                     ],
                     height: 200,
 //                    width: 400,
@@ -617,7 +695,7 @@
                         url: page_url, method: 'POST', params: {id_open: 1}, scripts: true, renderer: 'data',
                         success: function(response) {
                             // Start Register Javacript On Fly
-                            var jsonData = response.responseText;
+                            var jsonData = response.responseText.substring(14);
                             var aHeadNode = document.getElementsByTagName('head')[0];
                             var aScript = document.createElement('script');
                             aScript.text = jsonData;

@@ -41,6 +41,23 @@ class Pemeliharaan extends MY_Controller {
 			$data[$field] = $this->input->post($field);
 		} 
                 
+                if($data['nama'] == null || $data['nama'] == '')
+                {
+                    if($data['kd_brg'] != null || $data['kd_brg'] != '')
+                    {
+                        $this->db->where('kd_brg',$data['kd_brg']);
+                        $query = $this->db->get('ref_subsubkel');
+                        $result = $query->row();
+//                        var_dump($result);
+//                        die;
+                        if($query->num_rows > 0)
+                        {
+                            $data['nama'] = $result->ur_sskel;
+                        }
+                    }
+                    
+                }
+                
                 /*
                  * as of this time of writing this controller seems not yet updated
                  * with the latest structure like the one in asset inventaris

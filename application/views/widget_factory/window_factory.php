@@ -99,6 +99,27 @@
                 }
             }
         });
+        
+        //used when adding/editing data with a grid inside a form
+        Modal.assetSecondaryWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: {
+                type: 'hbox',
+                pack: 'start',
+                align: 'stretch'
+            },
+            width: Measurement.windowWidth, height: Measurement.windowHeight, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.assetSecondaryWindow.removeAll(true);
+
+                }
+            }
+        });
 
         Modal.closeAssetWindow = function() {
             if (Modal.assetEdit.isVisible(true))
@@ -1291,13 +1312,15 @@
             }
         };
 
-        Tab.tempcreate = function() {
+        Tab.formTabs = function() {
             var _tab = Ext.create('Ext.tab.Panel', {
-                title: 'Navigation',
+                title: '',
                 border: 0,
                 split: true,
                 floatable: true,
                 frame: true,
+                deferredRender: false,
+                id:'form_tabs',
                 defaults: {
                     autoScroll: true,
                 }

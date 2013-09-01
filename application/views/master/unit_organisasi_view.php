@@ -33,11 +33,11 @@ var searchUnor = new Ext.create('Ext.ux.form.SearchField', {
 
 var tbUnor = new Ext.create('Ext.toolbar.Toolbar', { 
 	items:[{
-  	text: 'Tambah', iconCls: 'icon-add', disabled: unor_insert, handler: Master_Data_Tambah_Unor
+  	text: 'Tambah', iconCls: 'icon-add', disabled: false, handler: Master_Data_Tambah_Unor
   },'-', {
-  	text: 'Ubah', id: 'Btn_Ubah_M_Unor', iconCls: 'icon-edit', disabled: unor_update, handler: Master_Data_Ubah_Unor
+  	text: 'Ubah', id: 'Btn_Ubah_M_Unor', iconCls: 'icon-edit', disabled: false, handler: Master_Data_Ubah_Unor
   },'-', {
-  	text: 'Hapus', iconCls: 'icon-delete', disabled: unor_delete, handler: Master_Data_Hapus_Unor
+  	text: 'Hapus', iconCls: 'icon-delete', disabled: false, handler: Master_Data_Hapus_Unor
   },'-', {
   	text: 'Cetak', iconCls: 'icon-printer', handler: print_Unor
   },'->', {
@@ -196,7 +196,7 @@ function showForm_Unor(mode,value_form) {
       {xtype: 'combobox', fieldLabel: 'Eselon', name: 'kode_eselon', hiddenName: 'kode_eselon',
        store: new Ext.data.Store({
         		fields: ['kode_eselon','nama_eselon'], idProperty: 'ID_Eselon',
-        		proxy: new Ext.data.AjaxProxy({url: BASE_URL + 'combo_ref/combo_eselon', actionMethods: {read:'POST'}, extraParams :{id_open: '1'}}), 
+        		proxy: new Ext.data.AjaxProxy({url: BASE_URL + 'combo_ref/combo_eselon_2', actionMethods: {read:'POST'}, extraParams :{id_open: '1'}}), 
         		autoLoad: true
        }),
        valueField: 'kode_eselon', displayField: 'nama_eselon', emptyText: 'Pilih Eselon',

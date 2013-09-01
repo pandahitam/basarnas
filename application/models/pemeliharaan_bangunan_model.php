@@ -8,7 +8,7 @@ class Pemeliharaan_Bangunan_Model extends MY_Model{
                 
                 $this->selectColumn = "SELECT id, nama_unker, nama_unor,kd_brg, kd_lokasi, no_aset,
                             kode_unor, jenis, subjenis, pelaksana_nama, pelaksana_startdate, 
-                            pelaksana_endate, deskripsi, biaya, image_url, document_url";
+                            pelaksana_endate, deskripsi, biaya, image_url, document_url,nama,kondisi";
 	}
 	
 	

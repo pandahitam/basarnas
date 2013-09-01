@@ -15,13 +15,26 @@
                     root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
         });
+        
+        Tanah.dataStoreRiwayatPajak = new Ext.create('Ext.data.Store', {
+            model: MRiwayatPajakTanahDanBangunan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'asset_tanah/getSpecificRiwayatPajak', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+            autoLoad: false,
+        });
 
         Tanah.URL = {
             read: BASE_URL + 'asset_tanah/getAllData',
             remove: BASE_URL + 'asset_tanah/deleteTanah',
             createUpdate: BASE_URL + 'asset_tanah/modifyTanah',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdateRiwayatPajak: BASE_URL + 'asset_tanah/modifyRiwayatPajak',
+            removeRiwayatPajak: BASE_URL + 'asset_tanah/deleteRiwayatPajak',
         };
 
         Tanah.reader = new Ext.create('Ext.data.JsonReader', {
@@ -45,22 +58,83 @@
                 
             }
         });
-
+        
+        
         Tanah.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Tanah', storeId: 'DataTanah', model: 'MTanah', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Tanah', storeId: 'DataTanah', model: 'MTanah', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Tanah.proxy
         });
-
+        
+        
         Tanah.Form.create = function(data, edit) {
-            var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit);
-            form.insert(0, Form.Component.unit(edit,form));
-            form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
-            form.insert(3, Form.Component.basicAsset(edit));
-            form.insert(4, Form.Component.address());
-            form.insert(5, Form.Component.tanah());
-            form.insert(6, Form.Component.tambahanBangunanTanah());
-            form.insert(7, Form.Component.fileUpload());
+            var setting_grid_riwayat_pajak = {
+                id:'grid_tanah_riwayat_pajak',
+                toolbar:{
+                    add: Tanah.addRiwayatPajak,
+                    edit: Tanah.editRiwayatPajak,
+                    remove: Tanah.removeRiwayatPajak
+                },
+                dataStore:Tanah.dataStoreRiwayatPajak
+            };
+            var form = Form.asset(Tanah.URL.createUpdate, Tanah.Data, edit,true);
+            var tab = Tab.formTabs();
+            tab.add({
+                title: 'Utama',
+                closable: true,
+                border: false,
+                deferredRender: false,
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.unit(edit,form),
+                        Form.Component.kode(edit),
+                        Form.Component.klasifikasiAset(edit),
+                        Form.Component.basicAsset(edit),
+                        Form.Component.address(),
+                        Form.Component.tanah(),
+                        Form.Component.fileUpload(),
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+            
+            tab.add({
+                title: 'Tambahan',
+                closable: true,
+                border: false,
+                layout: 'column',
+                anchor: '100%',
+                deferredRender: false,
+                defaults: {
+                    layout: 'anchor'
+                },
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.tambahanBangunanTanah(),
+                        Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit),
+            
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+
+            tab.setActiveTab(0);
+            
+            form.insert(0,tab);
+//            form.insert(0, Form.Component.unit(edit,form));
+//            form.insert(1, Form.Component.kode(edit));
+//            form.insert(2, Form.Component.klasifikasiAset(edit))
+//            form.insert(3, Form.Component.basicAsset(edit));
+//            form.insert(4, Form.Component.address());
+//            form.insert(5, Form.Component.tanah());
+//            form.insert(6, Form.Component.tambahanBangunanTanah());
+//            form.insert(7, Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit));
+//            form.insert(8, Form.Component.fileUpload());
             if (data !== null)
             {
                 form.getForm().setValues(data);
@@ -69,13 +143,11 @@
             return form;
         };
 
-        Tanah.Form.createPemeliharaan = function(data, kode, edit) {
+        Tanah.Form.createPemeliharaan = function(data, dataForm, edit) {
             var setting = {
                 url: Tanah.URL.createUpdatePemeliharaan,
                 data: data,
-                kode: kode,
                 isEditing: edit,
-                isPemeliharaanAssetInventaris: true,
                 isBangunan: false,
                 addBtn: {
                     isHidden: true,
@@ -88,11 +160,11 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.pemeliharaanInAsset(setting);
 
-            if (data !== null)
+            if (dataForm !== null)
             {
-                form.getForm().setValues(data);
+                form.getForm().setValues(dataForm);
             }
             return form;
         };
@@ -120,7 +192,7 @@
                     var tabpanels = _tab.getComponent('tanah-pemeliharaan');
                     if (tabpanels === undefined)
                     {
-                        Tanah.Action.list_pemeliharaan();
+                        Tanah.Action.pemeliharaanList();
                     }
                 }
             };
@@ -183,79 +255,142 @@
         };
 
 
-        Tanah.Action.edit_pemeliharaan = function() {
+        Tanah.Action.pemeliharaanEdit = function() {
             var selected = Ext.getCmp('tanah_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-                var data = selected[0].data;
-                delete data.nama_unker;
-
-                var form = Tanah.Form.createPemeliharaan(data, null, true);
-                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Ubah Pemeliharaan');
+                var dataForm = selected[0].data;
+                var form = Tanah.Form.createPemeliharaan(Tanah.dataStorePemeliharaan, dataForm, true);
+                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
         };
 
-        Tanah.Action.remove_pemeliharaan = function() {
+        Tanah.Action.pemeliharaanRemove = function() {
             var selected = Ext.getCmp('tanah_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length > 0)
             {
-                var selectedData = selected[0].data;
-                var dataStore = Tanah.dataStorePemeliharaan.load({params: {kd_lokasi: selectedData.kd_lokasi, kd_brg: selectedData.kd_brg, no_aset: selectedData.no_aset}});
                 var arrayDeleted = [];
                 _.each(selected, function(obj) {
                     var data = {
-                        kd_lokasi: obj.data.kd_lokasi,
-                        kd_brg: obj.data.kd_brg,
-                        no_aset: obj.data.no_aset,
                         id: obj.data.id
                     };
                     arrayDeleted.push(data);
                 });
                 console.log(arrayDeleted);
-                Modal.deleteAlert(arrayDeleted, Tanah.URL.removePemeliharaan, dataStore);
+                Modal.deleteAlert(arrayDeleted, Tanah.URL.removePemeliharaan, Tanah.dataStorePemeliharaan);
             }
         };
 
 
-        Tanah.Action.add_pemeliharaan = function()
+        Tanah.Action.pemeliharaanAdd = function()
         {
-
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             var data = selected[0].data;
-            var kode = {
+            var dataForm = {
                 kd_lokasi: data.kd_lokasi,
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
 
-            var form = Tanah.Form.createPemeliharaan(null, kode, false);
-            Tab.addToForm(form, 'tanah-add-pemeliharaan', 'Tambah Pemeliharaan');
-            Modal.assetEdit.show();
+            var form = Tanah.Form.createPemeliharaan(Tanah.dataStorePemeliharaan, dataForm, false);
+            Tab.addToForm(form, 'tanah-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
-        Tanah.Action.list_pemeliharaan = function() {
+        Tanah.Action.pemeliharaanList = function() {
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
-                var dataStore = Tanah.dataStorePemeliharaan.load({params: {kd_lokasi: data.kd_lokasi, kd_brg: data.kd_brg, no_aset: data.no_aset}});
-                var toolbarIDs = {};
-                toolbarIDs.idGrid = "tanah_grid_pemeliharaan";
-                toolbarIDs.add = Tanah.Action.add_pemeliharaan;
-                toolbarIDs.remove = Tanah.Action.remove_pemeliharaan;
-                toolbarIDs.edit = Tanah.Action.edit_pemeliharaan;
+                
+                Tanah.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Tanah.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Tanah.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                Tanah.dataStorePemeliharaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "tanah_grid_pemeliharaan",
+                    add : Tanah.Action.pemeliharaanAdd,
+                    remove : Tanah.Action.pemeliharaanRemove,
+                    edit : Tanah.Action.pemeliharaanEdit
+                };
+
                 var setting = {
                     data: data,
-                    dataStore: dataStore,
+                    dataStore: Tanah.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
                     isBangunan: false
                 };
-
+                
                 var _tanahPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
-                Tab.addToForm(_tanahPemeliharaanGrid, 'tanah-pemeliharaan', 'Simak Pemeliharaan');
-                Modal.assetEdit.show();
+                Tab.addToForm(_tanahPemeliharaanGrid, 'tanah-pemeliharaan', 'Pemeliharaan');
             }
+        };
+        
+        Tanah.addRiwayatPajak = function()
+        {
+            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
+                }
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false);
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+                
+        };
+        
+        Tanah.editRiwayatPajak = function()
+        {
+            var selected = Ext.getCmp('grid_tanah_riwayat_pajak').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Riwayat Pajak');
+                }
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true);
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+//                    form.insert(1, Form.Component.fileUpload());
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        Tanah.removeRiwayatPajak = function()
+        {
+            var selected = Ext.getCmp('grid_tanah_riwayat_pajak').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Tanah.URL.removeRiwayatPajak,Tanah.dataStoreRiwayatPajak);
         };
 
         Tanah.Action.add = function() {
@@ -269,6 +404,7 @@
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
+                 var flagExtAsset = false;
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
@@ -279,10 +415,39 @@
                     Modal.assetEdit.add(Region.createSidePanel(Tanah.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
-
-                var _form = Tanah.Form.create(data, true);
-                Tab.addToForm(_form, 'tanah-details', 'Simak Details');
-                Modal.assetEdit.show();
+                
+                if(data.id_ext_asset == null || data.id_ext_asset == undefined)
+                {   
+                    $.ajax({
+                       url:BASE_URL + 'asset_tanah/requestIdExtAsset',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            flagExtAsset = true;
+                            data.id = response.idExt;
+                            data.id_ext_asset = response.idExt;
+                        }
+                           
+                       }
+                    });
+                }
+                else
+                {
+                    data.id= data.id_ext_asset;
+                    flagExtAsset = true;
+                }
+                
+                if(flagExtAsset == true)
+                {
+                    var _form = Tanah.Form.create(data, true);
+                    Tab.addToForm(_form, 'tanah-details', 'Simak Details');
+                    Modal.assetEdit.show();
+                    Tanah.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id_ext_asset}});
+                }
             }
         };
 
@@ -290,17 +455,18 @@
             console.log('remove tanah');
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             var arrayDeleted = [];
+            
             _.each(selected, function(obj) {
                 var data = {
                     kd_lokasi: obj.data.kd_lokasi,
                     kd_brg: obj.data.kd_brg,
                     no_aset: obj.data.no_aset,
-                    id: obj.data.id
+                    id: obj.data.id_ext_asset
                 };
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Tanah.URL.remove, Tanah.Data);
+            Modal.deleteAlert(arrayDeleted, Tanah.URL.remove, Tanah.Data);
         };
 
         Tanah.Action.print = function() {
@@ -379,7 +545,11 @@
                 title: 'DAFTAR ASSET TANAH',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                    {header: 'Id Ext Asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},

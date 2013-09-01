@@ -48,7 +48,7 @@
         });
 
         Angkutan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Angkutan', storeId: 'DataAngkutan', model: 'MAngkutan', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Angkutan', storeId: 'DataAngkutan', model: 'MAngkutan', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Angkutan.proxy, groupField: 'tipe'
         });
 
@@ -170,7 +170,7 @@
                         {
                             form.getForm().setValues(jsonData);
                         }
-                        Tab.addToForm(form, 'bangunan-pengadaan', 'Pengadaan');
+                        Tab.addToForm(form, 'angkutan-pengadaan', 'Pengadaan');
                         Modal.assetEdit.show();
                     }
                 });
@@ -257,7 +257,7 @@
             form.insert(1, Form.Component.tambahanAngkutanLaut());
             form.insert(2, Form.Component.tambahanAngkutanUdara());
 
-            var tab = Tab.tempcreate();
+            var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
                 closable: true,
@@ -325,7 +325,7 @@
                 arrayDeleted.push(data);
             });
             console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Angkutan.URL.remove, Angkutan.Data);
+            Modal.deleteAlert(arrayDeleted, Angkutan.URL.remove, Angkutan.Data);
         };
 
         Angkutan.Action.print = function() {
@@ -405,6 +405,9 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},

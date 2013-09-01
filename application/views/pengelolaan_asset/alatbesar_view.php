@@ -49,7 +49,7 @@
         });
 
         Alatbesar.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Alatbesar', storeId: 'DataAlatbesar', model: 'MAlatbesar', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Alatbesar', storeId: 'DataAlatbesar', model: 'MAlatbesar', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Alatbesar.proxy, groupField: 'tipe'
         });
 
@@ -70,13 +70,11 @@
             return form;
         };
 
-        Alatbesar.Form.createPemeliharaan = function(data, kode, edit) {
+        Alatbesar.Form.createPemeliharaan = function(data, dataForm, edit) {
             var setting = {
-                url: Angkutan.URL.createUpdatePemeliharaan,
+                url: Alatbesar.URL.createUpdatePemeliharaan,
                 data: data,
-                kode: kode,
                 isEditing: edit,
-                isPemeliharaanAssetInventaris: true,
                 isBangunan: false,
                 addBtn: {
                     isHidden: true,
@@ -89,11 +87,11 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.pemeliharaanInAsset(setting);
 
-            if (data !== null)
+            if (dataForm !== null)
             {
-                form.getForm().setValues(data);
+                form.getForm().setValues(dataForm);
             }
             return form;
         };
@@ -121,7 +119,7 @@
                     var tabpanels = _tab.getComponent('alatbesar-pemeliharaan');
                     if (tabpanels === undefined)
                     {
-                        Alatbesar.Action.list_pemeliharaan();
+                        Alatbesar.Action.pemeliharaanList();
                     }
                 },
                 perencanaan: function() {
@@ -214,71 +212,75 @@
             }
         };
 
-        Alatbesar.Action.edit_pemeliharaan = function() {
+        Alatbesar.Action.pemeliharaanEdit = function() {
             var selected = Ext.getCmp('alatbesar_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-                var data = selected[0].data;
-                delete data.nama_unker;
-                var form = Alatbesar.Form.createPemeliharaan(data, null, true);
-                Tab.addToForm(form, 'alatbesar-edit-pemeliharaan', 'Ubah Pemeliharaan');
+                var dataForm = selected[0].data;
+                var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, true);
+                Tab.addToForm(form, 'alatbesar-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
         };
 
-        Alatbesar.Action.remove_pemeliharaan = function() {
+        Alatbesar.Action.pemeliharaanRemove = function() {
             var selected = Ext.getCmp('alatbesar_grid_pemeliharaan').getSelectionModel().getSelection();
-            var selectedData = selected[0].data;
-            var dataStore =
-                    Alatbesar.dataStorePemeliharaan.load({params: {kd_lokasi: selectedData.kd_lokasi, kd_brg: selectedData.kd_brg, no_aset: selectedData.no_aset}});
-            var arrayDeleted = [];
-            _.each(selected, function(obj) {
-                var data = {
-                    id: obj.data.id
-                };
-                arrayDeleted.push(data);
-            });
-            console.log(arrayDeleted);
-            Asset.Window.createDeleteAlert(arrayDeleted, Alatbesar.URL.removePemeliharaan, dataStore);
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                console.log(arrayDeleted);
+                Modal.deleteAlert(arrayDeleted, Alatbesar.URL.removePemeliharaan, Alatbesar.dataStorePemeliharaan);
+            }
         };
 
 
-        Alatbesar.Action.add_pemeliharaan = function()
+        Alatbesar.Action.pemeliharaanAdd = function()
         {
             var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
             var data = selected[0].data;
-            var kode = {
+            var dataForm = {
                 kd_lokasi: data.kd_lokasi,
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
-            var form = Alatbesar.Form.createPemeliharaan(null, kode, false);
-            Tab.addToForm(form, 'alatbesar-add-pemeliharaan', 'Tambah Pemeliharaan');
-            Modal.assetEdit.show();
+
+            var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, false);
+            Tab.addToForm(form, 'alatbesar-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
-        Alatbesar.Action.list_pemeliharaan = function() {
-
+        Alatbesar.Action.pemeliharaanList = function() {
             var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
-                var dataStore = Alatbesar.dataStorePemeliharaan.load({params: {kd_lokasi: data.kd_lokasi, kd_brg: data.kd_brg, no_aset: data.no_aset}});
-                var toolbarIDs = {};
-                toolbarIDs.idGrid = "alatbesar_grid_pemeliharaan";
-                toolbarIDs.add = Alatbesar.Action.add_pemeliharaan;
-                toolbarIDs.remove = Alatbesar.Action.remove_pemeliharaan;
-                toolbarIDs.edit = Alatbesar.Action.edit_pemeliharaan;
+                
+                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Alatbesar.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                Alatbesar.dataStorePemeliharaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "alatbesar_grid_pemeliharaan",
+                    add : Alatbesar.Action.pemeliharaanAdd,
+                    remove : Alatbesar.Action.pemeliharaanRemove,
+                    edit : Alatbesar.Action.pemeliharaanEdit
+                };
+
                 var setting = {
                     data: data,
-                    dataStore: dataStore,
+                    dataStore: Alatbesar.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
                     isBangunan: false
                 };
-
-                var _alatBesarPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
-                Tab.addToForm(_alatBesarPemeliharaanGrid, 'alatbesar-pemeliharaan', 'Simak Pemeliharaan');
-                Modal.assetEdit.show();
+                
+                var _alatbesarPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
+                Tab.addToForm(_alatbesarPemeliharaanGrid, 'alatbesar-pemeliharaan', 'Pemeliharaan');
             }
         };
 
@@ -296,7 +298,7 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
-
+                debugger;
                 if (Modal.assetEdit.items.length === 0)
                 {
                     Modal.assetEdit.setTitle('Edit Alatbesar');
@@ -324,7 +326,7 @@
                     arrayDeleted.push(data);
                 });
                 console.log(arrayDeleted);
-                Asset.Window.createDeleteAlert(arrayDeleted, Alatbesar.URL.remove, Alatbesar.Data);
+                Modal.deleteAlert(arrayDeleted, Alatbesar.URL.remove, Alatbesar.Data);
             }
         };
 
@@ -405,6 +407,9 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},

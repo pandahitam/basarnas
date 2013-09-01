@@ -33,7 +33,7 @@ class Asset_Ruang extends MY_Controller {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);
                 }
                 
-                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
+                $dataExt['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
                 /*
                  * as of this time of writing this controller seems not yet updated
                  * with the latest structure like the others in asset inventaris

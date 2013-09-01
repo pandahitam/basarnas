@@ -38,12 +38,12 @@ class Asset_Perairan extends MY_Controller {
 			'kd_lokasi', 'kd_brg', 'no_aset', 'kuantitas', 'rph_aset', 'no_kib', 'luas_bdg', 'luas_dsr', 'kapasitas', 'thn_sls', 'thn_pakai', 
 			'no_imb', 'tgl_imb', 'kd_prov', 'kd_kab', 'kd_kec', 'kd_kel', 'alamat', 'kd_rtrw', 'no_kibtnh', 'jns_trn', 'dari', 'tgl_prl', 
 			'kondisi', 'rph_wajar', 'dasar_hrg', 'sumber', 'no_dana', 'tgl_dana', 'unit_pmk', 'alm_pmk', 'catatan', 'tgl_buku', 'kons_sist', 
-			'rphwajar', 'status','kd_klasifikasi_aset'
+			'rphwajar', 'status'
                 );
                 
                 $extFields = array(
                         'kd_lokasi', 'kd_brg', 'no_aset', 'id',
-                        'kode_unor','image_url','document_url'
+                        'kode_unor','image_url','document_url','kd_klasifikasi_aset'
                 );
 		
 		foreach ($kodeFields as $field) {
@@ -69,7 +69,7 @@ class Asset_Perairan extends MY_Controller {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);
                 }
                 
-                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
+                $dataExt['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
                 
                                 //GENERASI NO_ASET 
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
