@@ -304,7 +304,7 @@
                                 ]
                             }
                         }, '-', {
-                            text: 'MAP', iconCls: 'icon-menu_diklat', id: 'm_global_map',
+                            text: 'MAP', icon: '../basarnas/assets/images/icons/map1.png', id: 'm_global_map',
                             handler: function() {
 								Load_TabPage('map_asset', BASE_URL + 'global_map');
                             }
