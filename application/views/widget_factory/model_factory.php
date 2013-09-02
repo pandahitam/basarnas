@@ -4,6 +4,34 @@
 <script>
 ////// Model In View
 
+Ext.define('MKlasifikasiAsetLvl1', {extend: 'Ext.data.Model',
+    fields: ['kd_lvl1', 
+             'nama'
+    ]
+});
+
+Ext.define('MKlasifikasiAsetLvl2', {extend: 'Ext.data.Model',
+    fields: ['kd_lvl1', 'kd_lvl2', 'kd_lvl2_brg', 
+             'nama'
+    ]
+});
+
+Ext.define('MKlasifikasiAsetLvl3', {extend: 'Ext.data.Model',
+    fields: ['kd_lvl1', 'kd_lvl2', 'kd_lvl3', 
+             'nama','kd_klasifikasi_aset'
+    ]
+});
+
+Ext.define('MPendayagunaan', {extend: 'Ext.data.Model',
+    fields: ['kd_lokasi', 'kd_brg', 'no_aset', 
+             'part_number','serial_number','mode_pendayagunaan','tanggal_start',
+              'tanggal_end','document','nama_unker',
+              'kd_gol','kd_bid','kd_kelompok','kd_skel', 'kd_sskel',
+              'nama_klasifikasi_aset', 'kd_klasifikasi_aset',
+              'kd_lvl1','kd_lvl2','kd_lvl3'
+    ]
+});
+
 Ext.define('MRiwayatPajakTanahDanBangunan', {extend: 'Ext.data.Model',
     fields: ['id','id_ext_asset','tahun_pajak','tanggal_pembayaran','jumlah_setoran',
         'file_setoran','keterangan']
@@ -14,6 +42,27 @@ Ext.define('MInventoryPenerimaan', {extend: 'Ext.data.Model',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
         'status_barang','qty','tgl_penerimaan','asal_barang','kode_unor']
+});
+
+Ext.define('MInventoryPemeriksaan', {extend: 'Ext.data.Model',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+        'no_aset', 'part_number','serial_number','date_created',
+        'nama_unker','nama_unor', 'keterangan',
+        'status_barang','qty','tgl_pemeriksaan','asal_barang','kode_unor']
+});
+
+Ext.define('MInventoryPenyimpanan', {extend: 'Ext.data.Model',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+        'no_aset', 'part_number','serial_number','date_created',
+        'nama_unker','nama_unor', 'keterangan',
+        'status_barang','qty','tgl_penyimpanan','asal_barang','kode_unor']
+});
+
+Ext.define('MInventoryPengeluaran', {extend: 'Ext.data.Model',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+        'no_aset', 'part_number','serial_number','date_created',
+        'nama_unker','nama_unor', 'keterangan',
+        'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor']
 });
 
 Ext.define('MLuar', {extend: 'Ext.data.Model',
@@ -53,7 +102,7 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'rphnjop', 'status', 'luas_dsr', 
             'luas_bdg', 'jml_lt',
             'id','nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',// Field from ext bangunan
-            'id_ext_asset','nama_unker', 'nama_unor', 
+            'nama_unker', 'nama_unor', 
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kode_unor','image_url','document_url',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
@@ -61,6 +110,104 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'kd_lvl1','kd_lvl2','kd_lvl3',
         ]
 });
+
+Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_lokasi', 
+        'kd_brg', 'no_aset', 
+        'kuantitas', 'no_kib', 
+        'merk', 'type', 
+        'pabrik', 'thn_rakit', 
+        'thn_buat', 'negara', 
+        'muat', 'bobot', 
+        'daya', 'msn_gerak', 
+        'jml_msn', 'bhn_bakar', 
+        'no_mesin', 'no_rangka', 
+        'no_polisi', 'no_bpkb', 
+        'lengkap1', 'lengkap2', 
+        'lengkap3', 'jns_trn', 
+        'dari', 'tgl_prl', 
+        'rph_aset', 'dasar_hrg', 
+        'sumber', 'no_dana', 
+        'tgl_dana', 'unit_pmk', 
+        'alm_pmk', 'catatan', 
+        'kondisi', 'tgl_buku', 
+        'rphwajar', 'status', 
+        'id','nama_unker', 'nama_unor', // Field from ext bangunan
+        'kode_unor','image_url','document_url',
+        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+        'kd_lvl1','kd_lvl2','kd_lvl3',
+         'id_ext_angkutan','darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
+         'darat_jumlah_pajak', 'darat_keterangan_lainnya'
+    ]
+});
+
+Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_lokasi', 
+        'kd_brg', 'no_aset', 
+        'kuantitas', 'no_kib', 
+        'merk', 'type', 
+        'pabrik', 'thn_rakit', 
+        'thn_buat', 'negara', 
+        'muat', 'bobot', 
+        'daya', 'msn_gerak', 
+        'jml_msn', 'bhn_bakar', 
+        'no_mesin', 'no_rangka', 
+        'no_polisi', 'no_bpkb', 
+        'lengkap1', 'lengkap2', 
+        'lengkap3', 'jns_trn', 
+        'dari', 'tgl_prl', 
+        'rph_aset', 'dasar_hrg', 
+        'sumber', 'no_dana', 
+        'tgl_dana', 'unit_pmk', 
+        'alm_pmk', 'catatan', 
+        'kondisi', 'tgl_buku', 
+        'rphwajar', 'status', 
+        'id','nama_unker', 'nama_unor', // Field from ext bangunan
+        'kode_unor','image_url','document_url',
+        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+        'kd_lvl1','kd_lvl2','kd_lvl3',
+        'id_ext_angkutan','laut_stkk_no','laut_stkk_keterangan','laut_stkk_masa_berlaku','laut_stkk_file',
+        'laut_surat_ukur_no','laut_surat_ukur_keterangan','laut_surat_ukur_masa_berlaku',
+        'laut_sertifikasi_keselamatan_no','laut_sertifikasi_keselamatan_keterangan','laut_sertifikasi_keselamatan_masa_berlaku','laut_sertifikasi_keselamatan_file',
+        'laut_sertifikasi_radio_no','laut_sertifikasi_radio_keterangan','laut_sertifikasi_radio_masa_berlaku','laut_sertifikasi_radio_file',
+        'laut_surat_ijin_berlayar_no','laut_surat_ijin_berlayar_keterangan','laut_surat_ijin_berlayar_masa_berlaku','laut_surat_ijin_berlayar_file'
+    ]
+});
+
+Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_lokasi', 
+        'kd_brg', 'no_aset', 
+        'kuantitas', 'no_kib', 
+        'merk', 'type', 
+        'pabrik', 'thn_rakit', 
+        'thn_buat', 'negara', 
+        'muat', 'bobot', 
+        'daya', 'msn_gerak', 
+        'jml_msn', 'bhn_bakar', 
+        'no_mesin', 'no_rangka', 
+        'no_polisi', 'no_bpkb', 
+        'lengkap1', 'lengkap2', 
+        'lengkap3', 'jns_trn', 
+        'dari', 'tgl_prl', 
+        'rph_aset', 'dasar_hrg', 
+        'sumber', 'no_dana', 
+        'tgl_dana', 'unit_pmk', 
+        'alm_pmk', 'catatan', 
+        'kondisi', 'tgl_buku', 
+        'rphwajar', 'status', 
+        'id','nama_unker', 'nama_unor', // Field from ext bangunan
+        'kode_unor','image_url','document_url',
+        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+        'kd_lvl1','kd_lvl2','kd_lvl3',
+        'id_ext_angkutan','udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
+        'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',
+        'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file'
+    ]
+});
+  
 
 Ext.define('MAngkutan', {extend: 'Ext.data.Model',
     fields: ['id', 'kd_lokasi', 
@@ -83,7 +230,7 @@ Ext.define('MAngkutan', {extend: 'Ext.data.Model',
         'alm_pmk', 'catatan', 
         'kondisi', 'tgl_buku', 
         'rphwajar', 'status', 
-        'id','nama_unker', 'nama_unor', // Field from ext bangunan
+        'id','nama_unker', 'nama_unor','jenis', // Field from ext Angkutan
         'kode_unor','image_url','document_url',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
@@ -158,7 +305,7 @@ Ext.define('MTanah', {extend: 'Ext.data.Model',
             'alm_pmk', 'catatan', 'tgl_prl', 'tgl_buku', 
             'rphwajar', 'rphnjop', 'status', 'smilik',
             'id','nama_unker', 'nama_unor', // Field from ext tanah
-            'kode_unor','image_url','document_url','id_ext_asset',
+            'kode_unor','image_url','document_url',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
             ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
@@ -213,6 +360,33 @@ Ext.define('MRuang', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPemeliharaan', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset',
+        'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
+        'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
+        'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
+        'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
+        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url']
+});
+
+Ext.define('MPemeliharaanDarat', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset',
+        'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
+        'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
+        'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
+        'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
+        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url']
+});
+
+Ext.define('MPemeliharaanLaut', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset',
+        'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
+        'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
+        'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
+        'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
+        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url']
+});
+
+Ext.define('MPemeliharaanUdara', {extend: 'Ext.data.Model',
     fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset',
         'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
         'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 

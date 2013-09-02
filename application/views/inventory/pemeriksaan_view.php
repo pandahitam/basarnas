@@ -4,41 +4,41 @@
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
     <script>
     /////////
-        var Params_M_InventoryPenerimaan = null;
+        var Params_M_InventoryPemeriksaan = null;
 
-        Ext.namespace('InventoryPenerimaan', 'InventoryPenerimaan.reader', 'InventoryPenerimaan.proxy', 'InventoryPenerimaan.Data', 'InventoryPenerimaan.Grid', 'InventoryPenerimaan.Window', 'InventoryPenerimaan.Form', 'InventoryPenerimaan.Action', 'InventoryPenerimaan.URL');
-        InventoryPenerimaan.URL = {
-            read: BASE_URL + 'inventory_penerimaan/getAllData',
-            createUpdate: BASE_URL + 'inventory_penerimaan/modifyInventoryPenerimaan',
-            remove: BASE_URL + 'inventory_penerimaan/deleteInventoryPenerimaan'
+        Ext.namespace('InventoryPemeriksaan', 'InventoryPemeriksaan.reader', 'InventoryPemeriksaan.proxy', 'InventoryPemeriksaan.Data', 'InventoryPemeriksaan.Grid', 'InventoryPemeriksaan.Window', 'InventoryPemeriksaan.Form', 'InventoryPemeriksaan.Action', 'InventoryPemeriksaan.URL');
+        InventoryPemeriksaan.URL = {
+            read: BASE_URL + 'inventory_pemeriksaan/getAllData',
+            createUpdate: BASE_URL + 'inventory_pemeriksaan/modifyInventoryPemeriksaan',
+            remove: BASE_URL + 'inventory_pemeriksaan/deleteInventoryPemeriksaan'
         };
 
-        InventoryPenerimaan.reader = new Ext.create('Ext.data.JsonReader', {
-            id: 'Reader.InventoryPenerimaan', root: 'results', totalProperty: 'total', idProperty: 'id'
+        InventoryPemeriksaan.reader = new Ext.create('Ext.data.JsonReader', {
+            id: 'Reader.InventoryPemeriksaan', root: 'results', totalProperty: 'total', idProperty: 'id'
         });
 
-        InventoryPenerimaan.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
+        InventoryPemeriksaan.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
             allowSingle: false});
 
-        InventoryPenerimaan.proxy = new Ext.create('Ext.data.AjaxProxy', {
-            id: 'Proxy_InventoryPenerimaan',
-            url: InventoryPenerimaan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
-            reader: InventoryPenerimaan.reader,
-            writer: InventoryPenerimaan.writer,
+        InventoryPemeriksaan.proxy = new Ext.create('Ext.data.AjaxProxy', {
+            id: 'Proxy_InventoryPemeriksaan',
+            url: InventoryPemeriksaan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+            reader: InventoryPemeriksaan.reader,
+            writer: InventoryPemeriksaan.writer,
             afterRequest: function(request, success) {
-                Params_M_InventoryPenerimaan = request.operation.params;
+                Params_M_InventoryPemeriksaan = request.operation.params;
             }
         });
 
-        InventoryPenerimaan.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_InventoryPenerimaan', storeId: 'DataInventoryPenerimaan', model: 'MInventoryPenerimaan', pageSize: 20, noCache: false, autoLoad: true,
-            proxy: InventoryPenerimaan.proxy, groupField: 'tipe'
+        InventoryPemeriksaan.Data = new Ext.create('Ext.data.Store', {
+            id: 'Data_InventoryPemeriksaan', storeId: 'DataInventoryPemeriksaan', model: 'MInventoryPemeriksaan', pageSize: 20, noCache: false, autoLoad: true,
+            proxy: InventoryPemeriksaan.proxy, groupField: 'tipe'
         });
 
-        InventoryPenerimaan.Form.create = function(data, edit) {
+        InventoryPemeriksaan.Form.create = function(data, edit) {
             var setting = {
-                url: InventoryPenerimaan.URL.createUpdate,
-                data: InventoryPenerimaan.Data,
+                url: InventoryPemeriksaan.URL.createUpdate,
+                data: InventoryPemeriksaan.Data,
                 isEditing: edit,
                 addBtn: {
                     isHidden: edit,
@@ -52,7 +52,7 @@
                         }
                         else
                         {
-                            console.error('There is existing grid in the popup selection - inventorypenerimaan');
+                            console.error('There is existing grid in the popup selection - inventorypemeriksaan');
                         }
                     }
                 },
@@ -61,7 +61,7 @@
                 }
             };
 
-            var form = Form.inventorypenerimaan(setting);
+            var form = Form.inventorypemeriksaan(setting);
 
             if (data !== null)
             {
@@ -70,15 +70,15 @@
             return form;
         };
 
-        InventoryPenerimaan.Action.add = function() {
-            var _form = InventoryPenerimaan.Form.create(null, false);
-            Modal.processCreate.setTitle('Create Inventory Penerimaan');
+        InventoryPemeriksaan.Action.add = function() {
+            var _form = InventoryPemeriksaan.Form.create(null, false);
+            Modal.processCreate.setTitle('Create Inventory Pemeriksaan');
             Modal.processCreate.add(_form);
             Modal.processCreate.show();
         };
 
-        InventoryPenerimaan.Action.edit = function() {
-            var selected = InventoryPenerimaan.Grid.grid.getSelectionModel().getSelection();
+        InventoryPemeriksaan.Action.edit = function() {
+            var selected = InventoryPemeriksaan.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
@@ -86,16 +86,16 @@
 
                 if (Modal.processEdit.items.length === 0)
                 {
-                    Modal.processEdit.setTitle('Edit Inventory Penerimaan');
+                    Modal.processEdit.setTitle('Edit Inventory Pemeriksaan');
                 }
-                var _form = InventoryPenerimaan.Form.create(data, true);
+                var _form = InventoryPemeriksaan.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
             }
         };
 
-        InventoryPenerimaan.Action.remove = function() {
-            var selected = InventoryPenerimaan.Grid.grid.getSelectionModel().getSelection();
+        InventoryPemeriksaan.Action.remove = function() {
+            var selected = InventoryPemeriksaan.Grid.grid.getSelectionModel().getSelection();
             var arrayDeleted = [];
             _.each(selected, function(obj) {
                 var data = {
@@ -103,11 +103,11 @@
                 };
                 arrayDeleted.push(data);
             });
-            Modal.deleteAlert(arrayDeleted, InventoryPenerimaan.URL.remove, InventoryPenerimaan.Data);
+            Modal.deleteAlert(arrayDeleted, InventoryPemeriksaan.URL.remove, InventoryPemeriksaan.Data);
         };
 
-        InventoryPenerimaan.Action.print = function() {
-            var selected = InventoryPenerimaan.Grid.grid.getSelectionModel().getSelection();
+        InventoryPemeriksaan.Action.print = function() {
+            var selected = InventoryPemeriksaan.Grid.grid.getSelectionModel().getSelection();
             var selectedData = "";
             if (selected.length > 0)
             {
@@ -116,7 +116,7 @@
                     selectedData += selected[i].data.id + ",";
                 }
             }
-            var gridHeader = InventoryPenerimaan.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+            var gridHeader = InventoryPemeriksaan.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
             var gridHeaderList = "";
             //index starts at 2 to exclude the No. column
             for (var i = 2; i < gridHeader.length; i++)
@@ -131,8 +131,8 @@
                 }
             }
 
-            var serverSideModelName = "Inventory_Penerimaan_Model";
-            var title = "Inventory Penerimaan";
+            var serverSideModelName = "Inventory_Pemeriksaan_Model";
+            var title = "Inventory Pemeriksaan";
             var primaryKeys = "id";
 
             my_form = document.createElement('FORM');
@@ -179,8 +179,8 @@
 
         var setting = {
             grid: {
-                id: 'grid_InventoryPenerimaan',
-                title: 'DAFTAR INVENTORY PENERIMAAN',
+                id: 'grid_InventoryPemeriksaan',
+                title: 'DAFTAR INVENTORY PEMERIKSAAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'ID', dataIndex: 'id', width: 50, hidden: true, groupable: false, filter: {type: 'number'}},
@@ -197,40 +197,40 @@
                     {header: 'Keterangan', dataIndex: 'keterangan', width: 120, hidden: false, filter: {type: 'string'}},
                     {header: 'Status Barang', dataIndex: 'status_barang', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Qty', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Tanggal Penerimaan', dataIndex: 'tgl_penerimaan', width: 90, hidden: false, filter: {type: 'string'}},
+                    {header: 'Tanggal Pemeriksaan', dataIndex: 'tgl_pemeriksaan', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Asal Barang', dataIndex: 'asal_barang', width: 90, hidden: false, filter: {type: 'string'}},
                 ]
             },
             search: {
-                id: 'search_InventoryPenerimaan'
+                id: 'search_InventoryPemeriksaan'
             },
             toolbar: {
-                id: 'toolbar_InventoryPenerimaan',
+                id: 'toolbar_InventoryPemeriksaan',
                 add: {
-                    id: 'button_add_InventoryPenerimaan',
-                    action: InventoryPenerimaan.Action.add
+                    id: 'button_add_InventoryPemeriksaan',
+                    action: InventoryPemeriksaan.Action.add
                 },
                 edit: {
-                    id: 'button_edit_InventoryPenerimaan',
-                    action: InventoryPenerimaan.Action.edit
+                    id: 'button_edit_InventoryPemeriksaan',
+                    action: InventoryPemeriksaan.Action.edit
                 },
                 remove: {
-                    id: 'button_remove_InventoryPenerimaan',
-                    action: InventoryPenerimaan.Action.remove
+                    id: 'button_remove_InventoryPemeriksaan',
+                    action: InventoryPemeriksaan.Action.remove
                 },
                 print: {
-                    id: 'button_print_InventoryPenerimaan',
-                    action: InventoryPenerimaan.Action.print
+                    id: 'button_print_InventoryPemeriksaan',
+                    action: InventoryPemeriksaan.Action.print
                 }
             }
         };
 
-        InventoryPenerimaan.Grid.grid = Grid.processGrid(setting, InventoryPenerimaan.Data);
+        InventoryPemeriksaan.Grid.grid = Grid.processGrid(setting, InventoryPemeriksaan.Data);
 
         var new_tabpanel = {
             xtype: 'panel',
-            id: 'inventorypenerimaan_asset', title: 'Inventory - Penerimaan', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [InventoryPenerimaan.Grid.grid]
+            id: 'inventorypemeriksaan_asset', title: 'Inventory - Pemeriksaan', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            layout: 'border', items: [InventoryPemeriksaan.Grid.grid]
         };
      
 <?php } else {

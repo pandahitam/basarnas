@@ -224,7 +224,7 @@
 
                         var setting = {
                             url: BASE_URL + 'Pengadaan/modifyPengadaan',
-                            data: null,
+                            data: jsonData,
                             isEditing: false,
                             addBtn: {
                                 isHidden: true,
@@ -330,7 +330,7 @@
                     Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
                 }
                     var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, false);
-                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
                     form.insert(1, Form.Component.fileUploadRiwayatPajak());
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
@@ -412,7 +412,6 @@
                         {
                             flagExtAsset = true;
                             data.id = response.idExt;
-                            data.id_ext_asset = response.idExt;
                         }
                            
                        }
@@ -420,7 +419,6 @@
                 }
                 else
                 {
-                    data.id = data.id_ext_asset;
                     flagExtAsset = true;
                 }
                 if(flagExtAsset == true)
@@ -428,7 +426,7 @@
                     var _form = Bangunan.Form.create(data, true);
                     Tab.addToForm(_form, 'bangunan-details', 'Simak Details');
                     Modal.assetEdit.show();
-                    Bangunan.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id_ext_asset}});
+                    Bangunan.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id}});
                 }
             }
         };
@@ -442,7 +440,7 @@
                     kd_lokasi: obj.data.kd_lokasi,
                     kd_brg: obj.data.kd_brg,
                     no_aset: obj.data.no_aset,
-                    id: obj.data.id_ext_asset
+                    id: obj.data.id
                 };
                 arrayDeleted.push(data);
             });
@@ -527,7 +525,7 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Id Ext Asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id Ext Asset', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},

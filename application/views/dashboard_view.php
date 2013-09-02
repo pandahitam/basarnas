@@ -193,7 +193,7 @@
                                                                 iconCls: 'icon-menu_impasing',
                                                                 id: 'm_pemeliharaan_umum_kendaraan_darat',
                                                                 handler: function() {
-                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                    Load_TabPage('pemeliharaan_asset_kendaraan_darat', BASE_URL + 'pemeliharaan_darat');
                                                                 },
                                                             },
                                                             {
@@ -201,7 +201,7 @@
                                                                 iconCls: 'icon-menu_impasing',
                                                                 id: 'm_pemeliharaan_umum_kendaraan_udara',
                                                                 handler: function() {
-                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                    Load_TabPage('pemeliharaan_asset_kendaraan_udara', BASE_URL + 'pemeliharaan_udara');
                                                                 },
                                                             },
                                                             {
@@ -209,7 +209,7 @@
                                                                 iconCls: 'icon-menu_impasing',
                                                                 id: 'm_pemeliharaan_umum_kendaraan_laut',
                                                                 handler: function() {
-                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                    Load_TabPage('pemeliharaan_asset_kendaraan_laut', BASE_URL + 'pemeliharaan_laut');
                                                                 },
                                                             },
                                                             {
@@ -217,7 +217,7 @@
                                                                 iconCls: 'icon-menu_impasing',
                                                                 id: 'm_pemeliharaan_umum_peralatan_lainnya',
                                                                 handler: function() {
-                                                                   // Load_TabPage('pemeliharaan_asset_bangunan', BASE_URL + 'pemeliharaan_bangunan');
+                                                                    Load_TabPage('pemeliharaan_asset', BASE_URL + 'pemeliharaan');
                                                                 },
                                                             },
                                                             ]

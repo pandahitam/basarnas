@@ -33,13 +33,16 @@ var Center_MD = {
 	  layout: {overflowHandler: 'Menu'},
 		items: [
 	  	{text: 'Unit Kerja', iconCls: 'icon-course', disabled: false, handler: function(){Load_TabPage_MD('master_unit_kerja', BASE_URL + 'master_data/unit_kerja');}, tooltip: {text: 'Referensi Unit Kerja'}},
-	  	{text: 'Jabatan', iconCls: 'icon-spam', disabled: false, handler: function(){Load_TabPage_MD('master_jabatan', BASE_URL + 'master_data/jabatan');}, tooltip: {text: 'Referensi Jabatan'}},
+	  	//{text: 'Jabatan', iconCls: 'icon-spam', disabled: false, handler: function(){Load_TabPage_MD('master_jabatan', BASE_URL + 'master_data/jabatan');}, tooltip: {text: 'Referensi Jabatan'}},
 	  	{text: 'Unit Organisasi', iconCls: 'icon-spell', disabled: false, handler: function(){Load_TabPage_MD('master_unit_organisasi', BASE_URL + 'master_data/unit_organisasi');}, tooltip: {text: 'Referensi Unit Organisasi'}},
-	  	{text: 'TTD', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_ttd', BASE_URL + 'master_data/ttd');}, tooltip: {text: 'Referensi Pejabat Penandatangan'}},
-	  	{text: 'Provinsi', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_prov', BASE_URL + 'master_data/prov');}, tooltip: {text: 'Referensi Provinsi'}},
-	  	{text: 'Kabupaten', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kabkota', BASE_URL + 'master_data/kabkota');}, tooltip: {text: 'Referensi Kabupaten / Kota'}},
-	  	{text: 'Kecamatan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kec', BASE_URL + 'master_data/kec');}, tooltip: {text: 'Referensi Kecamatan'}},
-	  	{text: 'Satuan', iconCls: 'icon-templates'},
+                {text: 'Klasifikasi Aset Lvl 1', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset', BASE_URL + 'master_data/klasifikasi_aset_lvl1');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl1'}},
+                {text: 'Klasifikasi Aset Lvl 2', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset', BASE_URL + 'master_data/klasifikasi_aset_lvl2');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl2'}},
+                {text: 'Klasifikasi Aset Lvl 3', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset', BASE_URL + 'master_data/klasifikasi_aset_lvl3');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl3'}},
+	  	//{text: 'TTD', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_ttd', BASE_URL + 'master_data/ttd');}, tooltip: {text: 'Referensi Pejabat Penandatangan'}},
+	  	//{text: 'Provinsi', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_prov', BASE_URL + 'master_data/prov');}, tooltip: {text: 'Referensi Provinsi'}},
+	  	//{text: 'Kabupaten', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kabkota', BASE_URL + 'master_data/kabkota');}, tooltip: {text: 'Referensi Kabupaten / Kota'}},
+	  	//{text: 'Kecamatan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kec', BASE_URL + 'master_data/kec');}, tooltip: {text: 'Referensi Kecamatan'}},
+	  	//{text: 'Satuan', iconCls: 'icon-templates'},
 	  ]
   })
 };
@@ -66,7 +69,7 @@ function Load_TabPage_MD(tab_id,tab_url){
 		Ext.Ajax.request({
   		url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
     	success: function(response){    	
-    		var jsonData = response.responseText; var aHeadNode = document.getElementsByTagName('head')[0]; var aScript = document.createElement('script'); aScript.text = jsonData; aHeadNode.appendChild(aScript);
+    		var jsonData = response.responseText.substring(14); var aHeadNode = document.getElementsByTagName('head')[0]; var aScript = document.createElement('script'); aScript.text = jsonData; aHeadNode.appendChild(aScript);
     		if(new_tabpanel_MD != "GAGAL"){
     			Ext.getCmp('Tab_MD').add(new_tabpanel_MD).show();
     		}else{

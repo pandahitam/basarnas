@@ -178,7 +178,7 @@ Perencanaan.Action.print = function (){
 var setting = {
         grid : {
             id : 'grid_Perencanaan',
-            title : 'DAFTAR ASSET ALAT ALAT BESAR',
+            title : 'DAFTAR PERENCANAAN',
             column : [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'ID',              dataIndex: 'id',                width: 50, groupable: false, filter:{type:'number'}},
