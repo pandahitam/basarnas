@@ -605,10 +605,10 @@
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan', id: 'save_riwayat_pajak', iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
-
+                            
                             var documentField = form.findField('file_setoran');
                             if (documentField !== null)
                             {
@@ -1060,6 +1060,10 @@
 
         Form.Component.fileUploadRiwayatPajak = function(edit) {
             
+            var photoStore = new Ext.create('Ext.data.Store', {
+                                        fields: ['url', 'name']
+                                    });
+                                    
             var documentStore = new Ext.create('Ext.data.Store', {
                                         fields: ['url', 'name']
                                     })
@@ -1075,6 +1079,23 @@
                     marginTop: '10px'
                 },
                 items: [{
+                        xtype: 'hidden',
+                        name: 'image_url',
+                        listeners: {
+                            change: function(obj, value) {
+                                
+                                if (value !== null & value.length > 0)
+                                {
+                                    
+                                    _.each(value.split(','), function(img) {
+                                        var fullPath = Reference.URL.imageBasePath + img;
+                                        photoStore.add({url: fullPath, name: img});
+
+                                    });
+                                }
+                            }
+                        }
+                    },{
                         xtype: 'hidden',
                         name: 'file_setoran',
                         listeners: {
@@ -1387,7 +1408,7 @@
                                 name: 'combo_kd_lvl1',
                                 id: 'combo_kd_lvl1',
                                 hideLabel: false,
-                                allowBlank: false,
+                                allowBlank: true,
                                 store: Reference.Data.klasifikasiAset_lvl1,
                                 valueField: 'kd_lvl1',
                                 displayField: 'nama', emptyText: 'Klasifikasi Aset',
@@ -3523,7 +3544,7 @@
                             items: [{
                                     xtype: 'combo',
                                     disabled: false,
-                                    fieldLabel: 'Warehouse',
+                                    fieldLabel: 'Warehouse *',
                                     name: 'combo_warehouse_id',
                                     id : 'combo_warehouse_id',
                                     allowBlank: true,
@@ -3568,7 +3589,7 @@
                                 }, {
                                     xtype: 'combo',
                                     disabled: true,
-                                    fieldLabel: 'Ruang',
+                                    fieldLabel: 'Ruang *',
                                     name: 'combo_ruang_id',
                                     id : 'combo_ruang_id',
                                     allowBlank: false,
@@ -3613,7 +3634,7 @@
                                 }, {
                                     xtype: 'combo',
                                     disabled: true,
-                                    fieldLabel: 'Rak',
+                                    fieldLabel: 'Rak *',
                                     name: 'combo_rak_id',
                                     id : 'combo_rak_id',
                                     allowBlank: false,
@@ -3659,14 +3680,11 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                    fieldLabel: 'Serial Number',
-                                    name: 'serial_number'
-                                },
+                            items: [
                                 {
                                     xtype: 'combo',
                                     disabled: false,
-                                    fieldLabel: 'Part Number',
+                                    fieldLabel: 'Part Number *',
                                     name: 'combo_part_number',
                                     id : 'combo_part_number',
                                     allowBlank: false,
@@ -3702,7 +3720,11 @@
                                             scope: this
                                         }
                                     }
-                                },   
+                                },
+                                {
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number'
+                                },
                                 {
                                     xtype: 'combo',
                                     disabled: false,

@@ -16,7 +16,7 @@ class Asset_Tanah_Model extends MY_Model{
                         surat2, surat3, rph_m2, unit_pmk, 
                         alm_pmk, catatan, tgl_prl, tgl_buku, 
                         rphwajar, rphnjop, status, smilik,
-                        b.id as id_ext_asset, b.kode_unor, b.image_url, b.document_url,
+                        b.id, b.kode_unor, b.image_url, b.document_url,
                         b.nop, b.njkp, b.waktu_pembayaran, b.setoran_pajak, b.keterangan,
                         c.ur_upb as nama_unker, d.nama_unor,
                         e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel

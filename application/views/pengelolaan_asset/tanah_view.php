@@ -229,7 +229,7 @@
 
                         var setting = {
                             url: BASE_URL + 'Pengadaan/modifyPengadaan',
-                            data: null,
+                            data: jsonData,
                             isEditing: false,
                             addBtn: {
                                 isHidden: true,
@@ -336,14 +336,14 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
-                
+                debugger;
                 
                 if (Modal.assetSecondaryWindow.items.length === 0)
                 {
                     Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
                 }
                     var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false);
-                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
+                    form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
                     form.insert(1, Form.Component.fileUploadRiwayatPajak());
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
@@ -416,7 +416,7 @@
                     Modal.assetEdit.add(Tab.create());
                 }
                 
-                if(data.id_ext_asset == null || data.id_ext_asset == undefined)
+                if(data.id == null || data.id == undefined)
                 {   
                     $.ajax({
                        url:BASE_URL + 'asset_tanah/requestIdExtAsset',
@@ -429,7 +429,6 @@
                         {
                             flagExtAsset = true;
                             data.id = response.idExt;
-                            data.id_ext_asset = response.idExt;
                         }
                            
                        }
@@ -437,7 +436,6 @@
                 }
                 else
                 {
-                    data.id= data.id_ext_asset;
                     flagExtAsset = true;
                 }
                 
@@ -446,7 +444,7 @@
                     var _form = Tanah.Form.create(data, true);
                     Tab.addToForm(_form, 'tanah-details', 'Simak Details');
                     Modal.assetEdit.show();
-                    Tanah.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id_ext_asset}});
+                    Tanah.dataStoreRiwayatPajak.changeParams({params:{open:'1',id_ext_asset:data.id}});
                 }
             }
         };
@@ -461,7 +459,7 @@
                     kd_lokasi: obj.data.kd_lokasi,
                     kd_brg: obj.data.kd_brg,
                     no_aset: obj.data.no_aset,
-                    id: obj.data.id_ext_asset
+                    id: obj.data.id
                 };
                 arrayDeleted.push(data);
             });
@@ -545,7 +543,7 @@
                 title: 'DAFTAR ASSET TANAH',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Id Ext Asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id Ext Asset', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},

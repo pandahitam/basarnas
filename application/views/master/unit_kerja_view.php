@@ -2,6 +2,8 @@
 <?php header("Content-Type: application/x-javascript"); ?>
 	
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
+<script>
+//////////////////
 var Params_M_UK = null;
 
 // TABEL UNIT KERJA  --------------------------------------------------------- START

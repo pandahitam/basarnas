@@ -7,14 +7,18 @@ class Master_Data extends CI_Controller {
  			exit;
     }
 		$this->load->model('Unit_Kerja_Model','',TRUE);
-		$this->load->model('Jabatan_Model','',TRUE);
-		$this->load->model('Unit_Organisasi_Model','',TRUE);
-		$this->load->model('TTD_Model','',TRUE);
-		$this->load->model('Prov_Model','',TRUE);
-		$this->load->model('KabKota_Model','',TRUE);
-		$this->load->model('Kec_Model','',TRUE);
-		$this->load->model('Tasset_tanah_Model','',TRUE);		
-		$this->load->model('Tasset_bangunan_Model','',TRUE);
+                $this->load->model('Unit_Organisasi_Model','',TRUE);
+                $this->load->model('Klasifikasi_Aset_Lvl1_Model','',TRUE);
+                $this->load->model('Klasifikasi_Aset_Lvl2_Model','',TRUE);
+                $this->load->model('Klasifikasi_Aset_Lvl3_Model','',TRUE);
+//		$this->load->model('Jabatan_Model','',TRUE);
+		
+//		$this->load->model('TTD_Model','',TRUE);
+//		$this->load->model('Prov_Model','',TRUE);
+//		$this->load->model('KabKota_Model','',TRUE);
+//		$this->load->model('Kec_Model','',TRUE);
+//		$this->load->model('Tasset_tanah_Model','',TRUE);		
+//		$this->load->model('Tasset_bangunan_Model','',TRUE);
 	}
 	
 	function index(){
@@ -767,5 +771,71 @@ class Master_Data extends CI_Controller {
 	function petunjuk(){
 		$this->load->view('petunjuk/master_data_petunjuk');
 	}
+        
+        //MASTER KLASIFIKASI ASET LVL3
+        function klasifikasi_aset_lvl3()
+        {
+            if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$this->load->view('master/klasifikasi_aset_lvl3_view',$data);
+            }else{
+                    $this->load->view('master/klasifikasi_aset_lvl3_view');
+            }
+        }
+        
+        function klasifikasi_aset_lvl3_getAllData()
+        {
+            if($this->input->get_post("id_open"))
+            {
+		$data = $this->Klasifikasi_Aset_Lvl3_Model->get_AllData();
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+                echo '({results:'.json_encode($data).'})';
+            }
+        }
+        
+        //MASTER KLASIFIKASI ASET LVL2
+        function klasifikasi_aset_lvl2()
+        {
+            if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$this->load->view('master/klasifikasi_aset_lvl2_view',$data);
+            }else{
+                    $this->load->view('master/klasifikasi_aset_lvl2_view');
+            }
+        }
+        
+        function klasifikasi_aset_lvl2_getAllData()
+        {
+            if($this->input->get_post("id_open"))
+            {
+		$data = $this->Klasifikasi_Aset_Lvl2_Model->get_AllData();
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+                echo '({results:'.json_encode($data).'})';
+            }
+        }
+        
+        //MASTER KLASIFIKASI ASET LVL1
+        function klasifikasi_aset_lvl1()
+        {
+            if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$this->load->view('master/klasifikasi_aset_lvl1_view',$data);
+            }else{
+                    $this->load->view('master/klasifikasi_aset_lvl1_view');
+            }
+        }
+        
+        function klasifikasi_aset_lvl1_getAllData()
+        {
+            if($this->input->get_post("id_open"))
+            {
+		$data = $this->Klasifikasi_Aset_Lvl1_Model->get_AllData();
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+                echo '({results:'.json_encode($data).'})';
+            }
+        }
 }
 ?>
