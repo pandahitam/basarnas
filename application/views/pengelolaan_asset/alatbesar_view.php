@@ -43,7 +43,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Alatbesar.Data.clearFilter();
-                    Alatbesar.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Alatbesar.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });

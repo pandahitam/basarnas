@@ -43,7 +43,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Luar.Data.clearFilter();
-                    Luar.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Luar.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });

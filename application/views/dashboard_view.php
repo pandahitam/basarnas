@@ -304,7 +304,7 @@
                                 ]
                             }
                         }, '-', {
-                            text: 'MAP', iconCls: 'icon-menu_diklat', id: 'm_global_map',
+                            text: 'MAP', icon: '../basarnas/assets/images/icons/map1.png', id: 'm_global_map',
                             handler: function() {
 								Load_TabPage('map_asset', BASE_URL + 'global_map');
                             }
@@ -337,12 +337,14 @@
                                 do_logout();
                             }
                         },
+						/*
                         {
                             text: 'MAP SEARCH', iconCls: 'icon-menu_diklat', id: 'm_map_search',
                             handler: function() {
-                                Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah','Surabaya');
+                                Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah','107012500414500000KP');
                             }
                         },
+						*/
                     ]
                 };
 

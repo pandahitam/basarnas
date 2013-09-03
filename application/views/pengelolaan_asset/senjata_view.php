@@ -41,7 +41,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Senjata.Data.clearFilter();
-                    Senjata.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Senjata.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });
