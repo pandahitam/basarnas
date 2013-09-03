@@ -1,11 +1,11 @@
 <?php
-class Klasifikasi_Aset_Lvl2_Model extends MY_Model{
+class Rak_Model extends MY_Model{
 	
 	function __construct(){
             parent::__construct();
-            $this->table = 'ref_klasifikasiaset_lvl2';
+            $this->table = 'ref_warehouserak';
             
-            $this->selectColumn = "SELECT t.kd_lvl1, t.kd_lvl2, t.kd_lvl2_brg, t.nama, b.nama as nama_lvl1";
+            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.nama, c.nama as nama_ruang";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -14,14 +14,14 @@ class Klasifikasi_Aset_Lvl2_Model extends MY_Model{
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
-                        LEFT JOIN ref_klasifikasiaset_lvl1 as b on t.kd_lvl1 = b.kd_lvl1
+                        LEFT JOIN ref_warehouseruang as c on t.warehouseruang_id = c.id
                         LIMIT $start, $limit";
             }
             else
             {
                 $query = "$this->selectColumn 
-                        FROM $this->table AS t 
-                        LEFT JOIN ref_klasifikasiaset_lvl1 as b on t.kd_lvl1 = b.kd_lvl1
+                        FROM $this->table AS t
+                        LEFT JOIN ref_warehouseruang as c on t.warehouseruang_id = c.id
                         ";
             }
             

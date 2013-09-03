@@ -179,8 +179,9 @@ function applyQuery() {
 			imageName += 'basarnas'+rslt.kansar[0].imageId+'.png';
 			document.mainImage.src = imageName;
 			var data = rslt.kansar[0];
+			/*
 			propsGrid.setSource({
-				'1. Kode PSE': data.kodePse,
+				'1. Kode Kansar': data.kodePse,
 				'2. Kode Provinsi': data.kodeProv,
 				'3. Nama Provinsi': data.namaProv,
 				'4. Kantor SAR': data.kantorSar,
@@ -188,7 +189,8 @@ function applyQuery() {
 				'6. Easting (Long.)': data.easting,
 				'7. Northing (Lat.)': data.northing
 			});
-			Ext.getCmp('map_nama_kansar').setValue(data.kantorSar);
+			*/
+			Ext.getCmp('map_nama_kansar').setValue('10701' + data.kodePse.substr(0,2));
 		}
 	});
 };
@@ -290,8 +292,9 @@ function applyItemQuery(kodeWilayah) {
 						mapDraw();
 						mapMode = oldMode;
 						var data = rslt.kansar[0];
+						/*
 						propsGrid.setSource({
-							'1. Kode PSE': data.kodePse,
+							'1. Kode Kansar': data.kodePse,
 							'2. Kode Provinsi': data.kodeProv,
 							'3. Nama Provinsi': data.namaProv,
 							'4. Kantor SAR': data.kantorSar,
@@ -299,7 +302,8 @@ function applyItemQuery(kodeWilayah) {
 							'6. Easting (Long.)': data.easting,
 							'7. Northing (Lat.)': data.northing
 						});
-						Ext.getCmp('map_nama_kansar').setValue(data.kantorSar);
+						*/
+						Ext.getCmp('map_nama_kansar').setValue('10701' + data.kodePse.substr(0,2));
 					}
 				}
 			});

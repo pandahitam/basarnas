@@ -42,7 +42,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     AngkutanUdara.Data.clearFilter();
-                    AngkutanUdara.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    AngkutanUdara.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });
@@ -53,14 +53,55 @@
         });
 
         AngkutanUdara.Form.create = function(data, edit) {
-            var form = Form.asset(AngkutanUdara.URL.createUpdate, AngkutanUdara.Data, edit);
-            form.insert(0, Form.Component.unit(edit,form));
-            form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
-            form.insert(3, Form.Component.basicAsset(edit));
-            form.insert(4, Form.Component.mechanical());
-            form.insert(5, Form.Component.angkutan());
-            form.insert(6, Form.Component.fileUpload());
+           var form = Form.asset(AngkutanUdara.URL.createUpdate, AngkutanUdara.Data, edit, true);
+             var tab = Tab.formTabs();
+            tab.add({
+                title: 'Utama',
+                closable: true,
+                border: false,
+                deferredRender: false,
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.unit(edit,form),
+                        Form.Component.kode(edit),
+                        Form.Component.klasifikasiAset(edit),
+                        Form.Component.basicAsset(edit),
+                        Form.Component.mechanical(),
+                        Form.Component.angkutan(),
+                        Form.Component.fileUpload(),
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+            
+            tab.add({
+                title: 'Tambahan',
+                closable: true,
+                border: false,
+                layout: 'column',
+                anchor: '100%',
+                deferredRender: false,
+                defaults: {
+                    layout: 'anchor'
+                },
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.tambahanAngkutanUdara(),
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+
+            tab.setActiveTab(0);
+            
+            form.insert(0,tab);
+            
             if (data !== null)
             {
                 form.getForm().setValues(data);
@@ -319,8 +360,8 @@
                     gridHeaderList += gridHeader[i].text + "&&" + gridHeader[i].dataIndex + "^^";
                 }
             }
-            var serverSideModelName = "Asset_AngkutanUdara_Model";
-            var title = "AngkutanUdara";
+            var serverSideModelName = "Asset_Angkutan_Udara_Model";
+            var title = "Angkutan Udara";
             var primaryKeys = "kd_lokasi,kd_brg,no_aset";
 
             my_form = document.createElement('FORM');

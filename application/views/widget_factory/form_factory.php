@@ -6,7 +6,7 @@
     ///////////
 
         Ext.namespace('Reference', 'Reference.URL', 'Reference.Data', 'Reference.Properties');
-        Ext.namespace('Form', 'Form.Component', 'Modal');
+        Ext.namespace('Form', 'Form.Component', 'Modal','Form.SubComponent');
         Ext.namespace('Utils');
 
         Reference.URL = {
@@ -2335,13 +2335,17 @@
                         },
                         defaultType: 'textfield',
                         items: [{
-                                fieldLabel: 'STNK',
-                                name: 'stnk'
+                                xtype:'hidden',
+                                name:'id_ext_angkutan'
+                            },
+                            {
+                                fieldLabel: 'No STNK',
+                                name: 'darat_no_stnk'
                             },
                             {
                                 xtype:'datefield',
-                                fieldLabel: 'STNK Berlaku',
-                                name: 'stnk_berlaku',
+                                fieldLabel: 'Masa Berlaku STNK',
+                                name: 'darat_masa_berlaku_stnk',
                                 format: 'Y-m-d'
                             }]
                     }, {
@@ -2352,13 +2356,13 @@
                         },
                         defaultType: 'numberfield',
                         items: [{
-                                fieldLabel: 'Pajak',
-                                name: 'pajak'
+                                fieldLabel: 'Jumlah Pajak',
+                                name: 'darat_jumlah_pajak'
                             },
                             {
                                 xtype:'datefield',
-                                fieldLabel: 'Pajak Berlaku',
-                                name: 'pajak_berlaku',
+                                fieldLabel: 'Masa Berlaku Pajak',
+                                name: 'darat_masa_berlaku_pajak',
                                 format: 'Y-m-d'
                             }]
                     },{
@@ -2370,93 +2374,193 @@
                         defaultType: 'textarea',
                         items: [{
                                 fieldLabel:'Keterangan',
-                                name: 'keterangan_angkutan_darat',
+                                name: 'darat_keterangan_lainnya',
                         }]
                     }]
             };
 
             return component;
         };
-
-        Form.Component.tambahanAngkutanLaut = function() {
-            var component = {
+        
+        Form.SubComponent.tambahanAngkutanLautSTKK = function(){
+            var subcomponent = {
                 xtype: 'fieldset',
                 layout: 'column',
-                anchor: '100%',
-                title: 'Laut',
+                anchor:'100%',
+                title: 'STKK',
                 border: false,
                 frame: true,
                 defaultType: 'container',
                 defaults: {
                     layout: 'anchor'
                 },
-                items: [{
-                        columnWidth: .33,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{
+                        items: [
+                    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
                                 xtype: 'textfield',
-                                fieldLabel: 'STKK',
-                                name: 'stkk'
-                            }, {
+                                fieldLabel: 'No STKK',
+                                name: 'laut_stkk_no'
+                            },
+                                    {
                                 xtype: 'datefield',
-                                fieldLabel: 'STKK Ex',
-                                name: 'stkk_berlaku',
+                                fieldLabel: 'Masa Berlaku STKK',
+                                name: 'laut_stkk_masa_berlaku',
                                 format: 'Y-m-d'
-                            }, {
-                                xtype: 'textfield',
-                                fieldLabel: 'Sertifikat Radio',
-                                name: 'sertifikat_radio'
-                            }, {
-                                xtype: 'datefield',
-                                fieldLabel: 'Sertifikat Radio Ex',
-                                name: 'sertifikat_radio_berlaku',
-                                format: 'Y-m-d'
-                            }]
-                    }, {
-                        columnWidth: .33,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Surat Ukur',
-                                name: 'surat_ukur'
-                            }, {
-                                xtype: 'datefield',
-                                fieldLabel: 'Surat Ukur Ex',
-                                name: 'surat_ukur_berlaku',
-                                format: 'Y-m-d'
-                            }, {
-                                xtype: 'textfield',
-                                fieldLabel: 'Ijin Berlayar',
-                                name: 'ijin_berlayar'
-                            }, {
-                                xtype: 'datefield',
-                                fieldLabel: 'Ijin Berlayar Ex',
-                                name: 'ijin_berlayar_berlaku',
+                            },
+                                   {
+                                xtype: 'filefield',
+                                fieldLabel: 'File STKK',
+                                name: 'laut_stkk_file',
                                 format: 'Y-m-d'
                             }]
-                    }, {
-                        columnWidth: .34,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Sertifikat Keselamatan',
-                                name: 'sertifikat_keselamatan'
+                                
                             }, {
-                                xtype: 'datefield',
-                                fieldLabel: 'Sertifikat Keselamatan Ex',
-                                name: 'sertifikat_keselamatan_berlaku',
-                                format: 'Y-m-d'
-                            }]
-                    }]
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[  
+                                    {
+                                xtype: 'textarea',
+                                fieldLabel: 'Keterangan STKK',
+                                name: 'laut_stkk_keterangan'
+                            },   ]
+                              
+                            },  
+                    ]};
+            return subcomponent;
+        };
+        
+        Form.SubComponent.tambahanAngkutanLautSuratUkur = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor:'100%',
+                title: 'Surat Ukur',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [ {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[
+                                        {
+                                            xtype: 'textfield',
+                                            fieldLabel: 'No Surat Ukur',
+                                            name: 'laut_surat_ukur_no'
+                                        },
+                                        {
+                                            xtype: 'datefield',
+                                            fieldLabel: 'Masa Berlaku Surat Ukur',
+                                            name: 'laut_surat_ukur_masa_berlaku',
+                                            format: 'Y-m-d'
+                                        },
+                                    ]
+                                
+                            },
+                            {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[  
+                                    {
+                                            xtype: 'textarea',
+                                            fieldLabel: 'Keterangan Surat Ukur',
+                                            name: 'laut_surat_ukur_keterangan'
+                                    }   ]
+                              
+                            },
+                       
+                    ]};
+                
+            return subcomponent;
+        };
+        
+        Form.SubComponent.tambahanAngkutanLautSertifikasiKeselamatan = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Sertifikasi Keselamatan',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textfield',
+                                        fieldLabel: 'No Sertifikasi Keselamatan',
+                                        name: 'laut_sertifikasi_keselamatan_no'
+                                    },
+                                    {
+                                        xtype: 'datefield',
+                                        fieldLabel: 'Masa Berlaku Sertifikasi Keselamatan',
+                                        name: 'laut_sertifikasi_keselamatan_masa_berlaku',
+                                        format: 'Y-m-d'
+                                    },
+                                    {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File Sertifikasi Keselamatan',
+                                            name: 'laut_sertifikasi_keselamatan_file',
+                                            format: 'Y-m-d'
+                                    }]
+                                
+                            }, {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan Sertifikasi Keselamatan',
+                                        name: 'laut_sertifikasi_keselamatan_keterangan'
+                                }]
+                              
+                            },
+                ]};
+                
+            return subcomponent;
+        };
+
+        Form.Component.tambahanAngkutanLaut = function() {
+            var component = {
+                xtype: 'fieldset',
+                layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}}},
+//                anchor: '100%',
+                title: 'Laut',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+//                defaults: {
+//                    layout: 'anchor'
+//                },
+                items: [
+                            Form.SubComponent.tambahanAngkutanLautSTKK(),
+                            Form.SubComponent.tambahanAngkutanLautSuratUkur(),
+                            Form.SubComponent.tambahanAngkutanLautSertifikasiKeselamatan(),
+                       ]
             };
 
             return component;

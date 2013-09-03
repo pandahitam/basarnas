@@ -41,7 +41,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Perlengkapan.Data.clearFilter();
-                    Perlengkapan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Perlengkapan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });

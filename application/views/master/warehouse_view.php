@@ -4,41 +4,41 @@
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
     <script>
     /////////
-        var Params_M_KlasifikasiAsetLvl2 = null;
+        var Params_M_Warehouse = null;
 
-        Ext.namespace('KlasifikasiAsetLvl2', 'KlasifikasiAsetLvl2.reader', 'KlasifikasiAsetLvl2.proxy', 'KlasifikasiAsetLvl2.Data', 'KlasifikasiAsetLvl2.Grid', 'KlasifikasiAsetLvl2.Window', 'KlasifikasiAsetLvl2.Form', 'KlasifikasiAsetLvl2.Action', 'KlasifikasiAsetLvl2.URL');
-        KlasifikasiAsetLvl2.URL = {
-            read: BASE_URL + 'master_data/klasifikasi_aset_lvl2_getAllData',
-            createUpdate: BASE_URL + 'master_data/klasifikasi_aset_lvl2_modifyKlasifikasiAsetLvl2',
-            remove: BASE_URL + 'master_data/klasifikasi_aset_lvl2_deleteKlasifikasiAsetLvl2'
+        Ext.namespace('Warehouse', 'Warehouse.reader', 'Warehouse.proxy', 'Warehouse.Data', 'Warehouse.Grid', 'Warehouse.Window', 'Warehouse.Form', 'Warehouse.Action', 'Warehouse.URL');
+        Warehouse.URL = {
+            read: BASE_URL + 'master_data/warehouse_getAllData',
+            createUpdate: BASE_URL + 'master_data/warehouse_modifyWarehouse',
+            remove: BASE_URL + 'master_data/warehouse_deleteWarehouse'
         };
 
-        KlasifikasiAsetLvl2.reader = new Ext.create('Ext.data.JsonReader', {
-            id: 'Reader.KlasifikasiAsetLvl2', root: 'results', totalProperty: 'total', idProperty: 'id'
+        Warehouse.reader = new Ext.create('Ext.data.JsonReader', {
+            id: 'Reader.Warehouse', root: 'results', totalProperty: 'total', idProperty: 'id'
         });
 
-        KlasifikasiAsetLvl2.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
+        Warehouse.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
             allowSingle: false});
 
-        KlasifikasiAsetLvl2.proxy = new Ext.create('Ext.data.AjaxProxy', {
-            id: 'Proxy_KlasifikasiAsetLvl2',
-            url: KlasifikasiAsetLvl2.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
-            reader: KlasifikasiAsetLvl2.reader,
-            writer: KlasifikasiAsetLvl2.writer,
+        Warehouse.proxy = new Ext.create('Ext.data.AjaxProxy', {
+            id: 'Proxy_Warehouse',
+            url: Warehouse.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+            reader: Warehouse.reader,
+            writer: Warehouse.writer,
             afterRequest: function(request, success) {
-                Params_M_KlasifikasiAsetLvl2 = request.operation.params;
+                Params_M_Warehouse = request.operation.params;
             }
         });
 
-        KlasifikasiAsetLvl2.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_KlasifikasiAsetLvl2', storeId: 'DataKlasifikasiAsetLvl2', model: 'MKlasifikasiAsetLvl2', pageSize: 20, noCache: false, autoLoad: true,
-            proxy: KlasifikasiAsetLvl2.proxy, groupField: 'tipe'
+        Warehouse.Data = new Ext.create('Ext.data.Store', {
+            id: 'Data_Warehouse', storeId: 'DataWarehouse', model: 'MWarehouse', pageSize: 20, noCache: false, autoLoad: true,
+            proxy: Warehouse.proxy, groupField: 'tipe'
         });
 
-        KlasifikasiAsetLvl2.Form.create = function(data, edit) {
+        Warehouse.Form.create = function(data, edit) {
             var setting = {
-                url: KlasifikasiAsetLvl2.URL.createUpdate,
-                data: KlasifikasiAsetLvl2.Data,
+                url: Warehouse.URL.createUpdate,
+                data: Warehouse.Data,
                 isEditing: edit,
                 addBtn: {
                     isHidden: edit,
@@ -70,15 +70,15 @@
             return form;
         };
 
-        KlasifikasiAsetLvl2.Action.add = function() {
-//            var _form = KlasifikasiAsetLvl2.Form.create(null, false);
-//            Modal.processCreate.setTitle('Create KlasifikasiAsetLvl2');
+        Warehouse.Action.add = function() {
+//            var _form = Warehouse.Form.create(null, false);
+//            Modal.processCreate.setTitle('Create Warehouse');
 //            Modal.processCreate.add(_form);
 //            Modal.processCreate.show();
         };
 
-        KlasifikasiAsetLvl2.Action.edit = function() {
-//            var selected = KlasifikasiAsetLvl2.Grid.grid.getSelectionModel().getSelection();
+        Warehouse.Action.edit = function() {
+//            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
 //            if (selected.length === 1)
 //            {
 //                var data = selected[0].data;
@@ -86,16 +86,16 @@
 //
 //                if (Modal.processEdit.items.length === 0)
 //                {
-//                    Modal.processEdit.setTitle('Edit KlasifikasiAsetLvl2');
+//                    Modal.processEdit.setTitle('Edit Warehouse');
 //                }
-//                var _form = KlasifikasiAsetLvl2.Form.create(data, true);
+//                var _form = Warehouse.Form.create(data, true);
 //                Modal.processEdit.add(_form);
 //                Modal.processEdit.show();
 //            }
         };
 
-        KlasifikasiAsetLvl2.Action.remove = function() {
-//            var selected = KlasifikasiAsetLvl2.Grid.grid.getSelectionModel().getSelection();
+        Warehouse.Action.remove = function() {
+//            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
 //            var arrayDeleted = [];
 //            _.each(selected, function(obj) {
 //                var data = {
@@ -103,11 +103,11 @@
 //                };
 //                arrayDeleted.push(data);
 //            });
-//            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl2.URL.remove, KlasifikasiAsetLvl2.Data);
+//            Modal.deleteAlert(arrayDeleted, Warehouse.URL.remove, Warehouse.Data);
         };
 
-        KlasifikasiAsetLvl2.Action.print = function() {
-//            var selected = KlasifikasiAsetLvl2.Grid.grid.getSelectionModel().getSelection();
+        Warehouse.Action.print = function() {
+//            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
 //            var selectedData = "";
 //            if (selected.length > 0)
 //            {
@@ -116,7 +116,7 @@
 //                    selectedData += selected[i].data.id + ",";
 //                }
 //            }
-//            var gridHeader = KlasifikasiAsetLvl2.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+//            var gridHeader = Warehouse.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
 //            var gridHeaderList = "";
 //            //index starts at 2 to exclude the No. column
 //            for (var i = 2; i < gridHeader.length; i++)
@@ -131,8 +131,8 @@
 //                }
 //            }
 //
-//            var serverSideModelName = "KlasifikasiAsetLvl2_Model";
-//            var title = "KlasifikasiAsetLvl2 Umum";
+//            var serverSideModelName = "Warehouse_Model";
+//            var title = "Warehouse Umum";
 //            var primaryKeys = "id";
 //
 //            my_form = document.createElement('FORM');
@@ -179,46 +179,47 @@
 
         var setting = {
             grid: {
-                id: 'grid_KlasifikasiAsetLvl2',
-                title: 'KLASIFIKASI ASET LEVEL 2',
+                id: 'grid_Warehouse',
+                title: 'WAREHOUSE',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Kode Lvl1', dataIndex: 'kd_lvl1', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Nama Lvl1', dataIndex: 'nama_lvl1', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Lvl2', dataIndex: 'kd_lvl2', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Lokasi', dataIndex: 'nama_unker', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+             
                 ]
             },
             search: {
-                id: 'search_KlasifikasiAsetLvl2'
+                id: 'search_Warehouse'
             },
             toolbar: {
-                id: 'toolbar_KlasifikasiAsetLvl2',
+                id: 'toolbar_Warehouse',
                 add: {
-                    id: 'button_add_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.add
+                    id: 'button_add_Warehouse',
+                    action: Warehouse.Action.add
                 },
                 edit: {
-                    id: 'button_edit_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.edit
+                    id: 'button_edit_Warehouse',
+                    action: Warehouse.Action.edit
                 },
                 remove: {
-                    id: 'button_remove_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.remove
+                    id: 'button_remove_Warehouse',
+                    action: Warehouse.Action.remove
                 },
                 print: {
-                    id: 'button_print_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.print
+                    id: 'button_print_Warehouse',
+                    action: Warehouse.Action.print
                 }
             }
         };
 
-        KlasifikasiAsetLvl2.Grid.grid = Grid.processGrid(setting, KlasifikasiAsetLvl2.Data);
+        Warehouse.Grid.grid = Grid.processGrid(setting, Warehouse.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',
-            id: 'master_klasifikasi_asset_lvl2', title: 'Klasifikasi Aset Lvl2', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [KlasifikasiAsetLvl2.Grid.grid]
+            id: 'master_warehouse', title: 'Warehouse', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            layout: 'border', items: [Warehouse.Grid.grid]
         };
      
 <?php } else {

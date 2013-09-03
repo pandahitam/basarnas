@@ -5,7 +5,7 @@ class Klasifikasi_Aset_Lvl3_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_klasifikasiaset_lvl3';
             
-            $this->selectColumn = "SELECT t.kd_lvl1, t.kd_lvl2, t.kd_lvl3, t.nama, t.kd_klasifikasi_aset";
+            $this->selectColumn = "SELECT t.kd_lvl1, t.kd_lvl2, t.kd_lvl3, t.nama, t.kd_klasifikasi_aset, b.nama as nama_lvl2";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -13,13 +13,15 @@ class Klasifikasi_Aset_Lvl3_Model extends MY_Model{
             if($start !=null && $limit !=null)
             {
                 $query = "$this->selectColumn 
-                        FROM $this->table AS t 
+                        FROM $this->table AS t
+                        LEFT JOIN ref_klasifikasiaset_lvl2 as b on t.kd_lvl2 = b.kd_lvl2
                         LIMIT $start, $limit";
             }
             else
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
+                        LEFT JOIN ref_klasifikasiaset_lvl2 as b on t.kd_lvl2 = b.kd_lvl2
                         ";
             }
             

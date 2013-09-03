@@ -337,12 +337,14 @@
                                 do_logout();
                             }
                         },
+						/*
                         {
                             text: 'MAP SEARCH', iconCls: 'icon-menu_diklat', id: 'm_map_search',
                             handler: function() {
-                                Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah','Surabaya');
+                                Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah','107012500414500000KP');
                             }
                         },
+						*/
                     ]
                 };
 

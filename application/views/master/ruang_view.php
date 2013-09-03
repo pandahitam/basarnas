@@ -4,41 +4,41 @@
 <?php if (isset($jsscript) && $jsscript == TRUE) { ?>
     <script>
     /////////
-        var Params_M_KlasifikasiAsetLvl2 = null;
+        var Params_M_MasterRuang = null;
 
-        Ext.namespace('KlasifikasiAsetLvl2', 'KlasifikasiAsetLvl2.reader', 'KlasifikasiAsetLvl2.proxy', 'KlasifikasiAsetLvl2.Data', 'KlasifikasiAsetLvl2.Grid', 'KlasifikasiAsetLvl2.Window', 'KlasifikasiAsetLvl2.Form', 'KlasifikasiAsetLvl2.Action', 'KlasifikasiAsetLvl2.URL');
-        KlasifikasiAsetLvl2.URL = {
-            read: BASE_URL + 'master_data/klasifikasi_aset_lvl2_getAllData',
-            createUpdate: BASE_URL + 'master_data/klasifikasi_aset_lvl2_modifyKlasifikasiAsetLvl2',
-            remove: BASE_URL + 'master_data/klasifikasi_aset_lvl2_deleteKlasifikasiAsetLvl2'
+        Ext.namespace('MasterRuang', 'MasterRuang.reader', 'MasterRuang.proxy', 'MasterRuang.Data', 'MasterRuang.Grid', 'MasterRuang.Window', 'MasterRuang.Form', 'MasterRuang.Action', 'MasterRuang.URL');
+        MasterRuang.URL = {
+            read: BASE_URL + 'master_data/ruang_getAllData',
+            createUpdate: BASE_URL + 'master_data/ruang_modifyRuang',
+            remove: BASE_URL + 'master_data/ruang_deleteRuang'
         };
 
-        KlasifikasiAsetLvl2.reader = new Ext.create('Ext.data.JsonReader', {
-            id: 'Reader.KlasifikasiAsetLvl2', root: 'results', totalProperty: 'total', idProperty: 'id'
+        MasterRuang.reader = new Ext.create('Ext.data.JsonReader', {
+            id: 'Reader.MasterRuang', root: 'results', totalProperty: 'total', idProperty: 'id'
         });
 
-        KlasifikasiAsetLvl2.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
+        MasterRuang.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
             allowSingle: false});
 
-        KlasifikasiAsetLvl2.proxy = new Ext.create('Ext.data.AjaxProxy', {
-            id: 'Proxy_KlasifikasiAsetLvl2',
-            url: KlasifikasiAsetLvl2.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
-            reader: KlasifikasiAsetLvl2.reader,
-            writer: KlasifikasiAsetLvl2.writer,
+        MasterRuang.proxy = new Ext.create('Ext.data.AjaxProxy', {
+            id: 'Proxy_MasterRuang',
+            url: MasterRuang.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+            reader: MasterRuang.reader,
+            writer: MasterRuang.writer,
             afterRequest: function(request, success) {
-                Params_M_KlasifikasiAsetLvl2 = request.operation.params;
+                Params_M_MasterRuang = request.operation.params;
             }
         });
 
-        KlasifikasiAsetLvl2.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_KlasifikasiAsetLvl2', storeId: 'DataKlasifikasiAsetLvl2', model: 'MKlasifikasiAsetLvl2', pageSize: 20, noCache: false, autoLoad: true,
-            proxy: KlasifikasiAsetLvl2.proxy, groupField: 'tipe'
+        MasterRuang.Data = new Ext.create('Ext.data.Store', {
+            id: 'Data_MasterRuang', storeId: 'DataMasterRuang', model: 'MMasterRuang', pageSize: 20, noCache: false, autoLoad: true,
+            proxy: MasterRuang.proxy, groupField: 'tipe'
         });
 
-        KlasifikasiAsetLvl2.Form.create = function(data, edit) {
+        MasterRuang.Form.create = function(data, edit) {
             var setting = {
-                url: KlasifikasiAsetLvl2.URL.createUpdate,
-                data: KlasifikasiAsetLvl2.Data,
+                url: MasterRuang.URL.createUpdate,
+                data: MasterRuang.Data,
                 isEditing: edit,
                 addBtn: {
                     isHidden: edit,
@@ -70,15 +70,15 @@
             return form;
         };
 
-        KlasifikasiAsetLvl2.Action.add = function() {
-//            var _form = KlasifikasiAsetLvl2.Form.create(null, false);
-//            Modal.processCreate.setTitle('Create KlasifikasiAsetLvl2');
+        MasterRuang.Action.add = function() {
+//            var _form = MasterRuang.Form.create(null, false);
+//            Modal.processCreate.setTitle('Create MasterRuang');
 //            Modal.processCreate.add(_form);
 //            Modal.processCreate.show();
         };
 
-        KlasifikasiAsetLvl2.Action.edit = function() {
-//            var selected = KlasifikasiAsetLvl2.Grid.grid.getSelectionModel().getSelection();
+        MasterRuang.Action.edit = function() {
+//            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
 //            if (selected.length === 1)
 //            {
 //                var data = selected[0].data;
@@ -86,16 +86,16 @@
 //
 //                if (Modal.processEdit.items.length === 0)
 //                {
-//                    Modal.processEdit.setTitle('Edit KlasifikasiAsetLvl2');
+//                    Modal.processEdit.setTitle('Edit MasterRuang');
 //                }
-//                var _form = KlasifikasiAsetLvl2.Form.create(data, true);
+//                var _form = MasterRuang.Form.create(data, true);
 //                Modal.processEdit.add(_form);
 //                Modal.processEdit.show();
 //            }
         };
 
-        KlasifikasiAsetLvl2.Action.remove = function() {
-//            var selected = KlasifikasiAsetLvl2.Grid.grid.getSelectionModel().getSelection();
+        MasterRuang.Action.remove = function() {
+//            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
 //            var arrayDeleted = [];
 //            _.each(selected, function(obj) {
 //                var data = {
@@ -103,11 +103,11 @@
 //                };
 //                arrayDeleted.push(data);
 //            });
-//            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl2.URL.remove, KlasifikasiAsetLvl2.Data);
+//            Modal.deleteAlert(arrayDeleted, MasterRuang.URL.remove, MasterRuang.Data);
         };
 
-        KlasifikasiAsetLvl2.Action.print = function() {
-//            var selected = KlasifikasiAsetLvl2.Grid.grid.getSelectionModel().getSelection();
+        MasterRuang.Action.print = function() {
+//            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
 //            var selectedData = "";
 //            if (selected.length > 0)
 //            {
@@ -116,7 +116,7 @@
 //                    selectedData += selected[i].data.id + ",";
 //                }
 //            }
-//            var gridHeader = KlasifikasiAsetLvl2.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+//            var gridHeader = MasterRuang.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
 //            var gridHeaderList = "";
 //            //index starts at 2 to exclude the No. column
 //            for (var i = 2; i < gridHeader.length; i++)
@@ -131,8 +131,8 @@
 //                }
 //            }
 //
-//            var serverSideModelName = "KlasifikasiAsetLvl2_Model";
-//            var title = "KlasifikasiAsetLvl2 Umum";
+//            var serverSideModelName = "MasterRuang_Model";
+//            var title = "MasterRuang Umum";
 //            var primaryKeys = "id";
 //
 //            my_form = document.createElement('FORM');
@@ -179,46 +179,47 @@
 
         var setting = {
             grid: {
-                id: 'grid_KlasifikasiAsetLvl2',
-                title: 'KLASIFIKASI ASET LEVEL 2',
+                id: 'grid_MasterRuang',
+                title: 'RUANG',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Kode Lvl1', dataIndex: 'kd_lvl1', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Nama Lvl1', dataIndex: 'nama_lvl1', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Lvl2', dataIndex: 'kd_lvl2', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id Warehouse', dataIndex: 'warehouse_id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Warehouse', dataIndex: 'nama_warehouse', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+             
                 ]
             },
             search: {
-                id: 'search_KlasifikasiAsetLvl2'
+                id: 'search_MasterRuang'
             },
             toolbar: {
-                id: 'toolbar_KlasifikasiAsetLvl2',
+                id: 'toolbar_MasterRuang',
                 add: {
-                    id: 'button_add_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.add
+                    id: 'button_add_MasterRuang',
+                    action: MasterRuang.Action.add
                 },
                 edit: {
-                    id: 'button_edit_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.edit
+                    id: 'button_edit_MasterRuang',
+                    action: MasterRuang.Action.edit
                 },
                 remove: {
-                    id: 'button_remove_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.remove
+                    id: 'button_remove_MasterRuang',
+                    action: MasterRuang.Action.remove
                 },
                 print: {
-                    id: 'button_print_KlasifikasiAsetLvl2',
-                    action: KlasifikasiAsetLvl2.Action.print
+                    id: 'button_print_MasterRuang',
+                    action: MasterRuang.Action.print
                 }
             }
         };
 
-        KlasifikasiAsetLvl2.Grid.grid = Grid.processGrid(setting, KlasifikasiAsetLvl2.Data);
+        MasterRuang.Grid.grid = Grid.processGrid(setting, MasterRuang.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',
-            id: 'master_klasifikasi_asset_lvl2', title: 'Klasifikasi Aset Lvl2', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [KlasifikasiAsetLvl2.Grid.grid]
+            id: 'master_ruang', title: 'Ruang', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            layout: 'border', items: [MasterRuang.Grid.grid]
         };
      
 <?php } else {

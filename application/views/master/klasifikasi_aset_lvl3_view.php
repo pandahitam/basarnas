@@ -71,110 +71,110 @@
         };
 
         KlasifikasiAsetLvl3.Action.add = function() {
-            var _form = KlasifikasiAsetLvl3.Form.create(null, false);
-            Modal.processCreate.setTitle('Create KlasifikasiAsetLvl3');
-            Modal.processCreate.add(_form);
-            Modal.processCreate.show();
+//            var _form = KlasifikasiAsetLvl3.Form.create(null, false);
+//            Modal.processCreate.setTitle('Create KlasifikasiAsetLvl3');
+//            Modal.processCreate.add(_form);
+//            Modal.processCreate.show();
         };
 
         KlasifikasiAsetLvl3.Action.edit = function() {
-            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
-            if (selected.length === 1)
-            {
-                var data = selected[0].data;
-                delete data.nama_unker;
-
-                if (Modal.processEdit.items.length === 0)
-                {
-                    Modal.processEdit.setTitle('Edit KlasifikasiAsetLvl3');
-                }
-                var _form = KlasifikasiAsetLvl3.Form.create(data, true);
-                Modal.processEdit.add(_form);
-                Modal.processEdit.show();
-            }
+//            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
+//            if (selected.length === 1)
+//            {
+//                var data = selected[0].data;
+//                delete data.nama_unker;
+//
+//                if (Modal.processEdit.items.length === 0)
+//                {
+//                    Modal.processEdit.setTitle('Edit KlasifikasiAsetLvl3');
+//                }
+//                var _form = KlasifikasiAsetLvl3.Form.create(data, true);
+//                Modal.processEdit.add(_form);
+//                Modal.processEdit.show();
+//            }
         };
 
         KlasifikasiAsetLvl3.Action.remove = function() {
-            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
-            var arrayDeleted = [];
-            _.each(selected, function(obj) {
-                var data = {
-                    id: obj.data.id
-                };
-                arrayDeleted.push(data);
-            });
-            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl3.URL.remove, KlasifikasiAsetLvl3.Data);
+//            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
+//            var arrayDeleted = [];
+//            _.each(selected, function(obj) {
+//                var data = {
+//                    id: obj.data.id
+//                };
+//                arrayDeleted.push(data);
+//            });
+//            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl3.URL.remove, KlasifikasiAsetLvl3.Data);
         };
 
         KlasifikasiAsetLvl3.Action.print = function() {
-            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
-            var selectedData = "";
-            if (selected.length > 0)
-            {
-                for (var i = 0; i < selected.length; i++)
-                {
-                    selectedData += selected[i].data.id + ",";
-                }
-            }
-            var gridHeader = KlasifikasiAsetLvl3.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
-            var gridHeaderList = "";
-            //index starts at 2 to exclude the No. column
-            for (var i = 2; i < gridHeader.length; i++)
-            {
-                if (gridHeader[i].dataIndex == undefined || gridHeader[i].dataIndex == "") //filter the action columns in grid
-                {
-                    //do nothing
-                }
-                else
-                {
-                    gridHeaderList += gridHeader[i].text + "&&" + gridHeader[i].dataIndex + "^^";
-                }
-            }
-
-            var serverSideModelName = "KlasifikasiAsetLvl3_Model";
-            var title = "KlasifikasiAsetLvl3 Umum";
-            var primaryKeys = "id";
-
-            my_form = document.createElement('FORM');
-            my_form.name = 'myForm';
-            my_form.method = 'POST';
-            my_form.action = BASE_URL + 'excel_management/exportToExcel/';
-
-            my_tb = document.createElement('INPUT');
-            my_tb.type = 'HIDDEN';
-            my_tb.name = 'serverSideModelName';
-            my_tb.value = serverSideModelName;
-            my_form.appendChild(my_tb);
-
-            my_tb = document.createElement('INPUT');
-            my_tb.type = 'HIDDEN';
-            my_tb.name = 'title';
-            my_tb.value = title;
-            my_form.appendChild(my_tb);
-            document.body.appendChild(my_form);
-
-            my_tb = document.createElement('INPUT');
-            my_tb.type = 'HIDDEN';
-            my_tb.name = 'primaryKeys';
-            my_tb.value = primaryKeys;
-            my_form.appendChild(my_tb);
-            document.body.appendChild(my_form);
-
-            my_tb = document.createElement('INPUT');
-            my_tb.type = 'HIDDEN';
-            my_tb.name = 'gridHeaderList';
-            my_tb.value = gridHeaderList;
-            my_form.appendChild(my_tb);
-            document.body.appendChild(my_form);
-
-            my_tb = document.createElement('INPUT');
-            my_tb.type = 'HIDDEN';
-            my_tb.name = 'selectedData';
-            my_tb.value = selectedData;
-            my_form.appendChild(my_tb);
-            document.body.appendChild(my_form);
-
-            my_form.submit();
+//            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
+//            var selectedData = "";
+//            if (selected.length > 0)
+//            {
+//                for (var i = 0; i < selected.length; i++)
+//                {
+//                    selectedData += selected[i].data.id + ",";
+//                }
+//            }
+//            var gridHeader = KlasifikasiAsetLvl3.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+//            var gridHeaderList = "";
+//            //index starts at 2 to exclude the No. column
+//            for (var i = 2; i < gridHeader.length; i++)
+//            {
+//                if (gridHeader[i].dataIndex == undefined || gridHeader[i].dataIndex == "") //filter the action columns in grid
+//                {
+//                    //do nothing
+//                }
+//                else
+//                {
+//                    gridHeaderList += gridHeader[i].text + "&&" + gridHeader[i].dataIndex + "^^";
+//                }
+//            }
+//
+//            var serverSideModelName = "KlasifikasiAsetLvl3_Model";
+//            var title = "KlasifikasiAsetLvl3 Umum";
+//            var primaryKeys = "id";
+//
+//            my_form = document.createElement('FORM');
+//            my_form.name = 'myForm';
+//            my_form.method = 'POST';
+//            my_form.action = BASE_URL + 'excel_management/exportToExcel/';
+//
+//            my_tb = document.createElement('INPUT');
+//            my_tb.type = 'HIDDEN';
+//            my_tb.name = 'serverSideModelName';
+//            my_tb.value = serverSideModelName;
+//            my_form.appendChild(my_tb);
+//
+//            my_tb = document.createElement('INPUT');
+//            my_tb.type = 'HIDDEN';
+//            my_tb.name = 'title';
+//            my_tb.value = title;
+//            my_form.appendChild(my_tb);
+//            document.body.appendChild(my_form);
+//
+//            my_tb = document.createElement('INPUT');
+//            my_tb.type = 'HIDDEN';
+//            my_tb.name = 'primaryKeys';
+//            my_tb.value = primaryKeys;
+//            my_form.appendChild(my_tb);
+//            document.body.appendChild(my_form);
+//
+//            my_tb = document.createElement('INPUT');
+//            my_tb.type = 'HIDDEN';
+//            my_tb.name = 'gridHeaderList';
+//            my_tb.value = gridHeaderList;
+//            my_form.appendChild(my_tb);
+//            document.body.appendChild(my_form);
+//
+//            my_tb = document.createElement('INPUT');
+//            my_tb.type = 'HIDDEN';
+//            my_tb.name = 'selectedData';
+//            my_tb.value = selectedData;
+//            my_form.appendChild(my_tb);
+//            document.body.appendChild(my_form);
+//
+//            my_form.submit();
         };
 
         var setting = {
@@ -183,11 +183,12 @@
                 title: 'KLASIFIKASI ASET LEVEL 3',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Kode Lvl1', dataIndex: 'kd_lvl1', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Lvl2', dataIndex: 'kd_lvl2', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Lvl1', dataIndex: 'kd_lvl1', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Lvl2', dataIndex: 'kd_lvl2', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Lvl2', dataIndex: 'nama_lvl2', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lvl3', dataIndex: 'kd_lvl3', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 90, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 90, hidden: true, groupable: false, filter: {type: 'string'}},
                 ]
             },
             search: {
