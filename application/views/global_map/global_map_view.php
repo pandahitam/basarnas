@@ -190,7 +190,7 @@ function applyQuery() {
 				'7. Northing (Lat.)': data.northing
 			});
 			*/
-			Ext.getCmp('map_nama_kansar').setValue('10701' + data.kodePse.substr(0,2));
+			Ext.getCmp('map_nama_kansar').setValue('10701' + data.kodePse + data.kpb);
 		}
 	});
 };
@@ -303,7 +303,7 @@ function applyItemQuery(kodeWilayah) {
 							'7. Northing (Lat.)': data.northing
 						});
 						*/
-						Ext.getCmp('map_nama_kansar').setValue('10701' + data.kodePse.substr(0,2));
+						Ext.getCmp('map_nama_kansar').setValue('10701' + data.kodePse + data.kpb);
 					}
 				}
 			});
@@ -549,7 +549,7 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			xtype: 'button', 
 			name: 'map_show_tanah', 
 			id: 'map_show_tanah', 
-			text: 'Asset Tanah',
+			text: 'Tanah',
 			listeners: {
 				click : function(){
 					Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', Ext.getCmp('map_nama_kansar').value);
@@ -560,7 +560,7 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			xtype: 'button', 
 			name: 'map_show_bangunan', 
 			id: 'map_show_bangunan', 
-			text: 'Asset Bangunan',
+			text: 'Bangunan',
 			listeners: {
 				click : function(){
 					Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', Ext.getCmp('map_nama_kansar').value);
@@ -571,10 +571,32 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			xtype: 'button', 
 			name: 'map_show_alatbesar', 
 			id: 'map_show_alatbesar', 
-			text: 'Asset Alat Besar',
+			text: 'Alat Besar',
 			listeners: {
 				click : function(){
 					Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', Ext.getCmp('map_nama_kansar').value);
+				}
+			}
+		},
+		{
+			xtype: 'button', 
+			name: 'map_show_angkutan', 
+			id: 'map_show_angkutan', 
+			text: 'Angkutan',
+			listeners: {
+				click : function(){
+					Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', Ext.getCmp('map_nama_kansar').value);
+				}
+			}
+		},
+		{
+			xtype: 'button', 
+			name: 'map_show_perairan', 
+			id: 'map_show_perairan', 
+			text: 'Perairan',
+			listeners: {
+				click : function(){
+					Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', Ext.getCmp('map_nama_kansar').value);
 				}
 			}
 		},

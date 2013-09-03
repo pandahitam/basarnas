@@ -462,7 +462,7 @@
                     {xtype: 'actioncolumn', width: 60, items: [{icon: '../basarnas/assets/images/icons/map1.png', tooltip: 'Map',
                                 handler: function(grid, rowindex, colindex, obj) {
                                     var kodeWilayah = AngkutanUdara.Data.getAt(rowindex).data.kd_lokasi.substring(5, 9);
-                                    console.log(kodeWilayah);
+                                    //console.log(kodeWilayah);
                                     Ext.getCmp('Content_Body_Tabs').setActiveTab('map_asset');
                                     applyItemQuery(kodeWilayah);
                                 }
