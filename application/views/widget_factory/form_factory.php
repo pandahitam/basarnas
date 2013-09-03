@@ -347,6 +347,108 @@
 
             return form;
         };
+        
+        //start form pendayagunaan
+        Form.pendayagunaan = function(setting)
+        {
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(2, Form.Component.pendayagunaan());
+            form.insert(3, Form.Component.fileUpload());
+
+            return form;
+        };
+        Form.Component.pendayagunaan = function() {
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENDAYAGUNAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [{
+                            columnWidth: .34,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel: 'Part Number',
+                                    name: 'part_number',
+                                }, {
+                                    xtype:'numberfield',
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number'
+                                }, {
+                                    xtype:'combobox',
+                                    fieldLabel: 'Mode Pendayagunaan',
+                                    name: 'mode_pendayagunaan',
+                                    store: Ext.create('Ext.data.Store', {
+                                        fields: ['name', 'value'],
+                                        data : [
+                                            {"name":"Mode Pendayagunaan", "value":"Mode Pendayagunaan"},
+                                            {"name":"Penyewaan", "value":"Penyewaan"},
+                                            {"name":"Sewa Guna", "value":"Sewa Guna"},
+                                            {"name":"KSO", "value":"KSO"},
+                                        ]
+                                    }),
+                                    queryMode: 'local',
+                                    displayField: 'name',
+                                    valueField: 'value',
+                                }
+                            ]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    fieldLabel: 'Pihak Ke-Tiga',
+                                    name: 'pihak_ketiga'
+                                }, {
+                                    xtype:'datefield',
+                                    fieldLabel: 'Tanggal Mulai',
+                                    name: 'tanggal_start',
+                                    format: 'Y-m-d'
+                                }, {
+                                    xtype:'datefield',
+                                    fieldLabel: 'Tanggal Selesai',
+                                    name: 'tanggal_end',
+                                    format: 'Y-m-d'
+                                }
+                            ]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '100%',
+                                labelWidth: 80,
+                                labelAlign:'bottom',
+                            },
+                            items: [
+                                {
+                                    fieldLabel: 'Deskripsi',
+                                    name: 'description',
+                                    xtype:'textarea',
+                                    anchor:'100%',
+                                }
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        //end form pendayagunaan
 
 
         Form.pemeliharaan = function(setting)
@@ -395,8 +497,10 @@
         Form.pengelolaan = function(setting)
         {
             var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
-            form.insert(0,Form.Component.pengelolaan(setting.isEditing));
-            form.insert(1,Form.Component.fileUpload(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(2, Form.Component.pengelolaan(setting.isEditing));
+            form.insert(3, Form.Component.fileUpload(setting.isEditing));
             
             return form;
         }
@@ -3188,10 +3292,23 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
+                            items: [
+                                /*{
                                     fieldLabel: 'Kondisi',
                                     name: 'kondisi'
-                                }, {
+                                },*/
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Kondisi',
+                                    name: 'kondisi',
+                                    id : 'kondisi',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Kondisi',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },{
                                     xtype: 'textarea',
                                     fieldLabel: 'Deskripsi',
                                     name: 'deskripsi'
@@ -3504,36 +3621,44 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
+                            items: [
+                                {
                                     xtype : 'hidden',
                                     name : 'id'
                                 }, {
-                                    fieldLabel: 'Nama',
-                                    name: 'nama',
+                                    fieldLabel: 'Nama Operasi SAR',
+                                    name: 'namaoperasisar',
                                 }, {
-                                    fieldLabel: 'Pembuat',
-                                    name: 'pembuat'
+                                    fieldLabel: 'PIC',
+                                    name: 'pic'
                                 }, {
-                                    fieldLabel: 'Perihal',
-                                    name: 'perihal'
-                                }]
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Tanggal Mulai',
+                                    name: 'start_date',
+                                    format : 'Y-m-d'
+                                }, {
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Tanggal Selesai',
+                                    name: 'end_date',
+                                    format : 'Y-m-d'
+                                }
+                            ]
                         }, {
                             columnWidth: .5,
                             layout: 'anchor',
                             defaults: {
                                 anchor: '95%',
-                                labelWidth: 120
+                                labelWidth: 80,
+                                labelAlign:'bottom',
                             },
-                            defaultType: 'textfield',
-                            items: [{
-                                    fieldLabel: 'No Document',
-                                    name: 'no_document'
-                                }, {
-                                    xtype: 'datefield',
-                                    fieldLabel: 'Tgl Document',
-                                    name: 'tanggal_document',
-                                    format : 'Y-m-d'
-                                }, ]
+                            items: [
+                                {
+                                    fieldLabel: 'Deskripsi',
+                                    name: 'description',
+                                    xtype:'textarea',
+                                    anchor:'100%',
+                                }
+                            ]
                         }]
                 }]
 
