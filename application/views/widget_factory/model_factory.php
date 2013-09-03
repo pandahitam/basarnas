@@ -4,6 +4,24 @@
 <script>
 ////// Model In View
 
+Ext.define('MWarehouse', {extend: 'Ext.data.Model',
+    fields: ['kd_lokasi','nama','id', 
+             'nama_unker'
+    ]
+});
+
+Ext.define('MMasterRuang', {extend: 'Ext.data.Model',
+    fields: ['id','warehouse_id', 
+             'nama', 'nama_warehouse'
+    ]
+});
+
+Ext.define('MRak', {extend: 'Ext.data.Model',
+    fields: ['id','warehouseruang_id', 
+             'nama_ruang','nama'
+    ]
+});
+
 Ext.define('MKlasifikasiAsetLvl1', {extend: 'Ext.data.Model',
     fields: ['kd_lvl1', 
              'nama'
@@ -11,13 +29,13 @@ Ext.define('MKlasifikasiAsetLvl1', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MKlasifikasiAsetLvl2', {extend: 'Ext.data.Model',
-    fields: ['kd_lvl1', 'kd_lvl2', 'kd_lvl2_brg', 
+    fields: ['kd_lvl1', 'kd_lvl2', 'kd_lvl2_brg', 'nama_lvl1',
              'nama'
     ]
 });
 
 Ext.define('MKlasifikasiAsetLvl3', {extend: 'Ext.data.Model',
-    fields: ['kd_lvl1', 'kd_lvl2', 'kd_lvl3', 
+    fields: ['kd_lvl1', 'kd_lvl2', 'kd_lvl3','nama_lvl2',
              'nama','kd_klasifikasi_aset'
     ]
 });

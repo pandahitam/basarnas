@@ -11,6 +11,9 @@ class Master_Data extends CI_Controller {
                 $this->load->model('Klasifikasi_Aset_Lvl1_Model','',TRUE);
                 $this->load->model('Klasifikasi_Aset_Lvl2_Model','',TRUE);
                 $this->load->model('Klasifikasi_Aset_Lvl3_Model','',TRUE);
+                $this->load->model('Warehouse_Model','',TRUE);
+                $this->load->model('Ruang_Model','',TRUE);
+                $this->load->model('Rak_Model','',TRUE);
 //		$this->load->model('Jabatan_Model','',TRUE);
 		
 //		$this->load->model('TTD_Model','',TRUE);
@@ -832,6 +835,72 @@ class Master_Data extends CI_Controller {
             if($this->input->get_post("id_open"))
             {
 		$data = $this->Klasifikasi_Aset_Lvl1_Model->get_AllData();
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+                echo '({results:'.json_encode($data).'})';
+            }
+        }
+        
+        //MASTER WAREHOUSE
+        function warehouse()
+        {
+            if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$this->load->view('master/warehouse_view',$data);
+            }else{
+                    $this->load->view('master/warehouse_view');
+            }
+        }
+        
+        function warehouse_getAllData()
+        {
+            if($this->input->get_post("id_open"))
+            {
+		$data = $this->Warehouse_Model->get_AllData();
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+                echo '({results:'.json_encode($data).'})';
+            }
+        }
+        
+        //MASTER RUANG
+        function ruang()
+        {
+            if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$this->load->view('master/ruang_view',$data);
+            }else{
+                    $this->load->view('master/ruang_view');
+            }
+        }
+        
+        function ruang_getAllData()
+        {
+            if($this->input->get_post("id_open"))
+            {
+		$data = $this->Ruang_Model->get_AllData();
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+                echo '({results:'.json_encode($data).'})';
+            }
+        }
+        
+        //MASTER RAK
+        function rak()
+        {
+            if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$this->load->view('master/rak_view',$data);
+            }else{
+                    $this->load->view('master/rak_view');
+            }
+        }
+        
+        function rak_getAllData()
+        {
+            if($this->input->get_post("id_open"))
+            {
+		$data = $this->Rak_Model->get_AllData();
 //			$total = $this->Unit_Kerja_Model->get_CountData();	  
 //   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
                 echo '({results:'.json_encode($data).'})';
