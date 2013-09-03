@@ -34,7 +34,7 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                             LEFT JOIN ext_asset_angkutan_laut AS g ON b.id = g.id_ext_angkutan
-                            where b.jenis = 'laut'
+                            where t.kd_brg like '30203%' or t.kd_brg like '30204%'
                             LIMIT $start,$limit";
 		
             }
@@ -48,7 +48,7 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                             LEFT JOIN ext_asset_angkutan_laut AS g ON b.id = g.id_ext_angkutan
-                            where b.jenis = 'laut'
+                            where t.kd_brg like '30203%' or t.kd_brg like '30204%'
                             ";
             }
             

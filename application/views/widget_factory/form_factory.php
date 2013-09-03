@@ -311,7 +311,7 @@
         Form.inventorypenerimaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, Form.Component.perlengkapan());
             form.insert(2, Form.Component.inventorypenerimaan());
 
@@ -320,7 +320,7 @@
         Form.pengadaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.fileUpload());
 
@@ -340,7 +340,7 @@
         Form.perencanaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
             form.insert(2, Form.Component.perencanaan());
             form.insert(3, Form.Component.fileUpload());
@@ -671,6 +671,8 @@
 //                                        if (edit)
 //                                        {
                                             var comboUnker = Ext.getCmp('nama_unker');
+                                            var unorField = Ext.getCmp('nama_unor');
+                                                unorField.setValue('');
                                             if (comboUnker !== null)
                                             {
                                                 comboUnker.setValue(value);
@@ -4049,6 +4051,82 @@
                                     id : 'date_created',
                                     value: new Date()
                                 }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.penghapusanDanMutasi = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'Detail',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    fieldLabel: 'NO SPPA',
+                                    name: 'no_sppa',
+                                    readOnly:true,
+                                },
+                                {
+                                    fieldLabel: 'Tahun Anggaran',
+                                    name: 'thn_ang',
+                                    readOnly:true,
+                                },
+                                {
+                                    fieldLabel: 'Kode Asset',
+                                    name: 'kd_brg',
+                                    readOnly:true,
+                                },{
+                                    fieldLabel: 'No Awal',
+                                    name: 'no_awal',
+                                    readOnly:true,
+                                },
+                                {
+                                    fieldLabel: 'No Akhir',
+                                    name: 'no_akhir',
+                                    readOnly:true,
+                                },{
+                                    xtype: 'datefield',
+                                    readOnly:true,
+                                    fieldLabel: 'Tanggal Perolehan',
+                                    name: 'tgl_perlh',
+                                },{
+                                    xtype: 'datefield',
+                                    readOnly:true,
+                                    fieldLabel: 'Tanggal Buku',
+                                    name: 'tgl_buku',
+                                },
+                                {
+                                    readOnly:true,
+                                    fieldLabel: 'No SK',
+                                    name: 'no_dsr_mts',
+                                },{
+                                    xtype: 'datefield',
+                                    readOnly:true,
+                                    fieldLabel: 'Tanggal SK',
+                                    name: 'tgl_dsr_mts',
+                                },
+                                {
+                                    readOnly:true,
+                                    fieldLabel: 'Keterangan',
+                                    name: 'keterangan',
+                                },
                                 
                             ]
                         }]

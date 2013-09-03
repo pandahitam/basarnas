@@ -248,7 +248,7 @@ Ext.define('MAngkutan', {extend: 'Ext.data.Model',
         'alm_pmk', 'catatan', 
         'kondisi', 'tgl_buku', 
         'rphwajar', 'status', 
-        'id','nama_unker', 'nama_unor','jenis', // Field from ext Angkutan
+        'id','nama_unker', 'nama_unor', // Field from ext Angkutan
         'kode_unor','image_url','document_url',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
@@ -437,8 +437,22 @@ Ext.define('MPerencanaan', {extend: 'Ext.data.Model',
                 'harga_satuan', 'harga_total', 'is_realisasi','image_url','document_url']
 });
 
+Ext.define('MMutasi', {extend: 'Ext.data.Model',
+    fields: ['ur_baru','no_awal','no_akhir','thn_ang','periode','kd_lokasi','no_sppa','kd_brg','no_aset',
+            'tgl_perlh','tercatat','kondisi','tgl_buku','jns_trn','dsr_hrg','kd_data','flag_sap','kuantitas',
+            'rph_sat','rph_aset','flag_kor','keterangan','merk_type','asal_perlh','no_bukti','no_dsr_mts',
+            'tgl_dsr_mts','flag_ttp','flag_krm','kdblu','setatus','noreg','kdbapel','kdkpknl','umeko','rph_res','kdkppn',
+            'jenis_transaksi',
+            ]
+});
+
 Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
-    fields: ['id']
+    fields: ['ur_baru','no_awal','no_akhir','thn_ang','periode','kd_lokasi','no_sppa','kd_brg','no_aset',
+            'tgl_perlh','tercatat','kondisi','tgl_buku','jns_trn','dsr_hrg','kd_data','flag_sap','kuantitas',
+            'rph_sat','rph_aset','flag_kor','keterangan','merk_type','asal_perlh','no_bukti','no_dsr_mts',
+            'tgl_dsr_mts','flag_ttp','flag_krm','kdblu','setatus','noreg','kdbapel','kdkpknl','umeko','rph_res','kdkppn',
+            'jenis_transaksi',
+            ]
 });
 
 Ext.define('MPengelolaan', {extend: 'Ext.data.Model',

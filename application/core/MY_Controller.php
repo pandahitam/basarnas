@@ -17,7 +17,9 @@ class MY_Controller extends CI_Controller{
                 }
                 
 		$data = $this->model->get_AllData($start,$limit);
+//                $countData = $this->model->get_AllData();
                 $total = $this->model->get_CountData();
+//                $total = count($countData);
                 $dataSend['total'] = $total;
 		$dataSend['results'] = $data;
 		echo json_encode($dataSend);

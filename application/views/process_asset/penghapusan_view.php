@@ -8,87 +8,92 @@ var Params_M_Penghapusan= null;
 
 Ext.namespace('Penghapusan','Penghapusan.reader', 'Penghapusan.proxy', 'Penghapusan.Data','Penghapusan.Grid','Penghapusan.Window','Penghapusan.Form','Penghapusan.Action','Penghapusan.URL');
 
-/*Penghapusan.URL = {
+Penghapusan.URL = {
     read : BASE_URL + 'Penghapusan/getAllData',
     createUpdate : BASE_URL + 'Penghapusan/modifyPenghapusan',
     remove : BASE_URL + 'Penghapusan/deletePenghapusan'
 };
 
-Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
-    fields: ['id', 'kd_brg', 'kd_lokasi', 'kd_register', 'no_aset',
-        'kode_unker', 'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
-        'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
-        'deskripsi', 'harga', 'kode_angaran', 'freq_waktu', 
-        'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
-        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url']
-});
 
 Penghapusan.reader = new Ext.create('Ext.data.JsonReader', {
-    id: 'Reader.Penghapusan', root: 'results', totalProperty: 'total', idProperty: 'id'    
-});
+            id: 'Reader_Penghapusan', root: 'results', totalProperty: 'total', idProperty: 'id'
+        });
 
 Penghapusan.proxy = new Ext.create('Ext.data.AjaxProxy', {
-    id: 'Proxy_Penghapusan', 
-    url: Penghapusan.URL.read, actionMethods: {read:'POST'},  extraParams :{id_open: '1'},
+    id: 'Proxy_Penghapusan',
+    timeout: 500000,
+    url: Penghapusan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
     reader: Penghapusan.reader,
     afterRequest: function(request, success) {
-        Params_M_Penghapusan = request.operation.params;
+        Params_M_TB = request.operation.params;
+
+        //USED FOR MAP SEARCH
+        var paramsUnker = request.params.searchUnker;
+        if(paramsUnker != null ||paramsUnker != undefined)
+        {
+            Penghapusan.Data.clearFilter();
+            Penghapusan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+        }
+
     }
 });
-
+        
+        
 Penghapusan.Data = new Ext.create('Ext.data.Store', {
-    id: 'Data_Penghapusan', storeId: 'DataPenghapusan', model: 'MPenghapusan', pageSize: 20,noCache: false, autoLoad: true,
-    proxy: Penghapusan.proxy, groupField: 'tipe'
+    id: 'Data_Penghapusan', storeId: 'DataPenghapusan', model: 'MPenghapusan', pageSize: 50, noCache: false, autoLoad: true,
+    proxy: Penghapusan.proxy
 });
 
 Penghapusan.Form.create = function(data,edit){
-	var form = Form.Penghapusan(Penghapusan.URL.createUpdate,Penghapusan.Data,false,true,data);
-	if (data !== null)
-	{
-		form.getForm().setValues(data);
-	}
-	return form;
+            var form = Form.asset(null, Penghapusan.Data, edit);
+            form.insert(0, Form.Component.penghapusanDanMutasi());
+            if (data !== null)
+            {
+                form.getForm().setValues(data);
+            }
+
+            return form;
 };
 
 Penghapusan.Action.add = function (){
-    var _form = Penghapusan.Form.create(null,false);
-    Modal.processCreate.setTitle('Create Penghapusan');
-    Modal.processCreate.add(_form);
-    Modal.processCreate.show();
+//    var _form = Penghapusan.Form.create(null,false);
+//    Modal.processCreate.setTitle('Create Penghapusan');
+//    Modal.processCreate.add(_form);
+//    Modal.processCreate.show();
 };
 
 Penghapusan.Action.edit = function (){
     var selected = Penghapusan.Grid.grid.getSelectionModel().getSelection();
-    if (selected.length === 1)
-    {
-        var data = selected[0].data;
-        delete data.nama_unker;
-        console.log(data);
-        if (Modal.processEdit.items.length === 0)
-        {
-                Modal.processEdit.setTitle('Edit Penghapusan');
-        }
-        var _form = Penghapusan.Form.create(data,true);
-        Modal.processEdit.add(_form);
-        Modal.processEdit.show();
-    }
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                delete data.nama_unker;
+
+                if (Modal.processEdit.items.length === 0)
+                {
+                    Modal.processEdit.setTitle('Penghapusan');
+                }
+                var _form = Penghapusan.Form.create(data, true);
+                Modal.processEdit.add(_form);
+                Modal.processEdit.show();
+            }
 };
 
 Penghapusan.Action.remove = function(){
-    var selected = Penghapusan.Grid.grid.getSelectionModel().getSelection();
-    var arrayDeleted = [];
-    _.each(selected, function(obj){
-            var data = {
-                id : obj.data.id
-            };
-            arrayDeleted.push(data);
-    });
-    Modal.deleteAlert(arrayDeleted,Penghapusan.URL.remove,Penghapusan.Data);
+//    var selected = Penghapusan.Grid.grid.getSelectionModel().getSelection();
+//    var arrayDeleted = [];
+//    _.each(selected, function(obj){
+//            var data = {
+//                id : obj.data.id
+//            };
+//            arrayDeleted.push(data);
+//    });
+//    Modal.deleteAlert(arrayDeleted,Penghapusan.URL.remove,Penghapusan.Data);
 };
 
-Penghapusan.Action.print - function (){
+Penghapusan.Action.print = function (){
     
-};*/
+};
     
 var setting = {
         grid : {
@@ -96,7 +101,44 @@ var setting = {
             title : 'DAFTAR PENGHAPUSAN',
             column : [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'ID',              dataIndex: 'id',                width: 50, groupable: false, filter:{type:'number'}},]
+                    {header: 'NO SPPA', dataIndex: 'no_sppa', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'KD BARANG', dataIndex: 'kd_brg', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'NAMA BARANG', dataIndex: 'ur_baru', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'No Awal', dataIndex: 'no_awal', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'No Akhir', dataIndex: 'no_akhir', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tahun Anggaran', dataIndex: 'thn_ang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tgl Peroleh', dataIndex: 'tgl_perlh', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kondisi', dataIndex: 'kondisi', width: 150, hidden: false, groupable: false, filter: {type: 'string'},renderer: function(value) {
+                            if (value === '1')
+                            {
+                                return "BAIK";
+                            }
+                            else if (value === '2')
+                            {
+                                return "RUSAK RINGAN";
+                            }
+                            else if (value === '3')
+                            {
+                                return "RUSAK BERAT";
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        }
+                    },
+                    {header: 'jns_trn', dataIndex: 'jns_trn', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Jenis Trn', dataIndex: 'jenis_transaksi', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Rph Aset', dataIndex: 'rph_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'},renderer: function(value) {
+                            return Math.abs(value);
+                        }
+                    },
+                    {header: 'Merk Type', dataIndex: 'merk_type', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Asal Perolehan', dataIndex: 'asal_perlh', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'No SK', dataIndex: 'no_dsr_mts', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tgl SK', dataIndex: 'tgl_dsr_mts', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+            ]
                     
         },
         search : {
@@ -110,7 +152,7 @@ var setting = {
             },
             edit : {
                 id : 'button_edit_Penghapusan',
-                /*action : Penghapusan.Action.edit*/
+                action : Penghapusan.Action.edit
             },
             remove : {
                 id : 'button_remove_Penghapusan',
@@ -123,7 +165,7 @@ var setting = {
         }
 };
 
-Penghapusan.Grid.grid = Grid.inventarisGrid(setting,'');
+Penghapusan.Grid.grid = Grid.inventarisGrid(setting,Penghapusan.Data);
 
 /*var new_tabpanel = {
     xtype:'panel',
