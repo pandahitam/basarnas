@@ -43,7 +43,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Perairan.Data.clearFilter();
-                    Perairan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Perairan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });

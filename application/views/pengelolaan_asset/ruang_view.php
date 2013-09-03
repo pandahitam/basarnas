@@ -41,7 +41,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Ruang.Data.clearFilter();
-                    Ruang.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Ruang.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });

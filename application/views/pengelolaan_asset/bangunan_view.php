@@ -55,7 +55,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Bangunan.Data.clearFilter();
-                    Bangunan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Bangunan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });

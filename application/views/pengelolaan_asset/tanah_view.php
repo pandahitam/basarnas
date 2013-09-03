@@ -53,7 +53,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Tanah.Data.clearFilter();
-                    Tanah.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+					Tanah.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
                 
             }

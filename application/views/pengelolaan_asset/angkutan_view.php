@@ -42,7 +42,7 @@
                 if(paramsUnker != null ||paramsUnker != undefined)
                 {
                     Angkutan.Data.clearFilter();
-                    Angkutan.Data.filter([{property: 'nama_unker', value: paramsUnker, anyMatch:true}]);
+                    Angkutan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
                 }
             }
         });
