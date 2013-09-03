@@ -63,7 +63,14 @@ Perencanaan.Form.create = function(data,edit){
 
 	if (data !== null)
 	{
-            form.getForm().setValues(data);
+            //form.getForm().setValues(data);
+	    var task = Ext.TaskManager.start({
+		run: function () {
+		    form.getForm().setValues(data)
+		},
+		interval: 1000,
+		repeat:2
+	    });
 	}
         
 	return form;

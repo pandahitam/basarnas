@@ -569,7 +569,8 @@
                         var data = record.data;
                         if (data !== null)
                         {
-                            var temp = Ext.getCmp('form-create');
+                            //var temp = Ext.getCmp('form-create');
+                            var temp = Ext.getCmp('form-process');
                             if (temp !== null)
                             {
                                 var form = temp.getForm();

@@ -256,6 +256,7 @@ class Combo_Ref extends CI_Controller {
             }
 
             $this->db->order_by('ur_gol', 'ASC');
+            $this->db->group_by('kd_gol');
             $Q = $this->db->get('');
 
             foreach ($Q->result() as $obj) {
@@ -281,6 +282,7 @@ class Combo_Ref extends CI_Controller {
             }
 
             $this->db->order_by('ur_bid', 'ASC');
+            $this->db->group_by('kd_bid');
             $Q = $this->db->get('');
             foreach ($Q->result() as $obj) {
                 $data[] = $obj;

@@ -3337,7 +3337,15 @@
                                 }, {
                                     xtype: 'numberfield',
                                     fieldLabel: 'Quantity',
-                                    name: 'quantity'
+                                    name: 'quantity',
+                                    listeners:{
+                                        change:function(v){
+                                            var o_form_p = Ext.getCmp('form-process').getForm()
+                                                , v_qu = v.getValue()
+                                                , v_satuan = o_form_p.findField('harga_satuan').getValue();
+                                            o_form_p.findField('harga_total').setValue((v_qu * v_satuan));
+                                        }
+                                    }
                                 }, ]
                         }, {
                             columnWidth: .33,
@@ -3349,9 +3357,18 @@
                             defaultType: 'numberfield',
                             items: [{
                                     fieldLabel: 'Harga Satuan',
-                                    name: 'harga_satuan'
+                                    name: 'harga_satuan',
+                                    listeners:{
+                                        change:function(v){
+                                            var o_form_p = Ext.getCmp('form-process').getForm()
+                                                , v_qu = o_form_p.findField('quantity').getValue()
+                                                , v_satuan = v.getValue();
+                                            o_form_p.findField('harga_total').setValue((v_qu * v_satuan));
+                                        }
+                                    }
                                 }, {
                                     fieldLabel: 'Harga Total',
+                                    readOnly:true,
                                     name: 'harga_total'
                                 }, {
                                     xtype: 'checkboxfield',
