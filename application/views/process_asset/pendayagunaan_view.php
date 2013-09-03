@@ -65,7 +65,14 @@
 
             if (data !== null)
             {
-                form.getForm().setValues(data);
+                //form.getForm().setValues(data);
+                var task = Ext.TaskManager.start({
+                    run: function () {
+                        form.getForm().setValues(data)
+                    },
+                    interval: 1000,
+                    repeat:2
+                });
             }
             return form;
         };
@@ -183,23 +190,25 @@
                 title: 'DAFTAR PENDAYAGUNAAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'ID', dataIndex: 'id', width: 50, hidden: false, groupable: false, filter: {type: 'number'}},
-                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 180, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Barang', dataIndex: 'kd_brg', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'No Aset', dataIndex: 'no_aset', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Part Number', dataIndex: 'part_number', width: 90, groupable: false, filter: {type: 'string'}},
-                    {header: 'Serial Number', dataIndex: 'serial_number', width: 90, groupable: false, filter: {type: 'string'}},
-                    {header: 'Mode Pendayagunaan', dataIndex: 'mode_pendayagunaan', width: 90, groupable: false, filter: {type: 'string'}},
-                    {header: 'Tanggal Start', dataIndex: 'tanggal_start', width: 120, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Tanggal End', dataIndex: 'tanggal_end', width: 70, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Document', dataIndex: 'document', width: 100, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'ID', dataIndex: 'id', flex:0.5, hidden: false, groupable: false, filter: {type: 'number'}},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Unit Kerja', dataIndex: 'nama_unker', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Unit Organisasi', dataIndex: 'nama_unor', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Barang', dataIndex: 'kd_brg', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'No Aset', dataIndex: 'no_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Part Number', dataIndex: 'part_number', flex:1, groupable: false, filter: {type: 'string'}},
+                    {header: 'Serial Number', dataIndex: 'serial_number', flex:1, groupable: false, filter: {type: 'string'}},
+                    {header: 'Mode Pendayagunaan', dataIndex: 'mode_pendayagunaan', flex:1.5, groupable: false, filter: {type: 'string'}},
+                    {header: 'Pihak Ke-Tiga', dataIndex: 'pihak_ketiga', flex:1, hidden: false, groupable: false},
+                    {header: 'Tanggal Mulai', dataIndex: 'tanggal_start', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tanggal Selesai', dataIndex: 'tanggal_end', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Deksiprisi', dataIndex: 'deskripsi', flex:1, hidden: false, groupable: false},
+                    {header: 'Document', dataIndex: 'document', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     
                     
                 ]
@@ -233,7 +242,7 @@
         var new_tabpanel = {
             xtype: 'panel',
             id: 'pendayagunaan_asset', title: 'Pendayagunaan ', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Pendayagunaan.Grid.grid]
+            layout: 'border', items: [Region.filterPanelPerencanaan(Pendayagunaan.Data), Pendayagunaan.Grid.grid]
         };
      
 <?php } else {

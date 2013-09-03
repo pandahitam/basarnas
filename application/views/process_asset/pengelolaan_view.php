@@ -38,7 +38,7 @@
                 data: Pengelolaan.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: true,
+                    isHidden: edit,
                     text: 'Add Reference',
                     fn: function() {
 
@@ -57,12 +57,19 @@
                     noAsetHidden: true
                 }
             };
-            debugger;
+            //debugger;
             var form = Form.pengelolaan(setting);
 
             if (data !== null)
             {
-                form.getForm().setValues(data);
+                //form.getForm().setValues(data);
+                var task = Ext.TaskManager.start({
+                    run: function () {
+                        form.getForm().setValues(data)
+                    },
+                    interval: 1000,
+                    repeat:2
+                });
             }
 
             return form;
@@ -181,13 +188,12 @@
                 title: 'DAFTAR PENGELOLAAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'ID', dataIndex: 'id', width: 50, groupable: false, filter: {type: 'number'}},
-                    {header: 'Nama', dataIndex: 'nama', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'No Document', dataIndex: 'no_document', width: 150, groupable: false, filter: {type: 'string'}},
-                    {header: 'Tanggal Document', dataIndex: 'tanggal_document', width: 150, groupable: false, filter: {type: 'date'}},
-                    {header: 'Pembuat', dataIndex: 'pembuat', width: 100, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Perihal', dataIndex: 'perihal', width: 150, groupable: false, filter: {type: 'string'}},
-                    {header: 'Date Upload', dataIndex: 'date_upload', width: 100, groupable: false, filter: {type: 'date'}},
+                    {header: 'ID', dataIndex: 'id', flex:0.5, groupable: false, filter: {type: 'number'}},
+                    {header: 'Nama Operasi SAR', dataIndex: 'namaoperasisar', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'PIC', dataIndex: 'pic', flex: 1, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tanggal Mulai', dataIndex: 'start_date', flex: 1, groupable: false, filter: {type: 'date'}},
+                    {header: 'Tanggal Mulai', dataIndex: 'end_date', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Deskripsi', dataIndex: 'deskripsi', flex: 1, groupable: false},
                 ]
             },
             search: {
@@ -217,8 +223,9 @@
         Pengelolaan.Grid.grid = Grid.processGrid(setting, Pengelolaan.Data);
 
         var new_tabpanel = {
+            xtype: 'panel',
             id: 'pengelolaan', title: 'Pengelolaan', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            items: [Pengelolaan.Grid.grid]
+            layout: 'border', items: [Region.filterPanelPerencanaan(Pengelolaan.Data), Pengelolaan.Grid.grid]
         };
 
         <?php
