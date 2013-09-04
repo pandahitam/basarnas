@@ -327,6 +327,18 @@
             return form;
         };
         
+        Form.penghapusanInAsset = function(setting)
+        {
+//            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+//            form.insert(1, Form.Component.hiddenIdentifier());
+//            form.insert(2, Form.Component.pengadaan());
+//            form.insert(3, Form.Component.fileUpload());
+              
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(1, Form.Component.penghapusanDanMutasi());
+            return form;
+        }
+        
         Form.pengadaanInAsset = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
@@ -2079,7 +2091,7 @@
             
             var component = {
                 xtype: 'fieldset',
-                layout: 'column',
+                layout: 'anchor',
                 anchor: '100%',
                 title: 'Riwayat Pajak',
                 border: false,
@@ -2135,9 +2147,9 @@
         Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
             var component = {
                 xtype: 'fieldset',
-                layout:'fit',
+                layout:'anchor',
                 height: (edit == true)?300:150,
-                width: '100%',
+                anchor: '100%',
                 title: 'Riwayat Pajak',
                 border: false,
                 frame: true,
@@ -2653,8 +2665,10 @@
         Form.Component.tambahanAngkutanLaut = function() {
             var component = {
                 xtype: 'fieldset',
-                layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}}},
-//                anchor: '100%',
+                layout:'anchor',
+//                layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}}},
+//                layout:'anchor',
+                anchor: '100%',
                 title: 'Laut',
                 border: false,
                 frame: true,

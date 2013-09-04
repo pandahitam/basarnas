@@ -81,12 +81,12 @@
                 title: 'Tambahan',
                 closable: true,
                 border: false,
-                layout: 'column',
-                anchor: '100%',
+                layout: 'fit',
+//                anchor: '100%',
                 deferredRender: false,
-                defaults: {
-                    layout: 'anchor'
-                },
+//                defaults: {
+//                    layout: 'anchor'
+//                },
                 bodyStyle:{background:'none'},
                 items: [
                         Form.Component.tambahanAngkutanLaut(),
@@ -161,10 +161,80 @@
                     {
                         AngkutanLaut.Action.pemeliharaanList();
                     }
-                }
+                }, 
+                penghapusan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-penghapusan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.penghapusanDetail();
+                    }
+                },
+
             };
 
             return actions;
+        };
+        
+         AngkutanLaut.Action.penghapusanDetail = function() {
+            var selected = AngkutanLaut.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var params = {
+                    kd_lokasi: data.kd_lokasi,
+                    kd_brg: data.kd_brg,
+                    no_aset: data.no_aset
+                };
+                Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
+                Ext.Ajax.request({
+                    url: BASE_URL + 'penghapusan/getSpecificPenghapusan/',
+                    params: params,
+                    timeout:500000,
+                    async:false,
+                    success: function(resp)
+                    {
+                        var jsonData = params;
+                        var response = Ext.decode(resp.responseText);
+
+                        if (response.length > 0)
+                        {
+                            var jsonData = response[0];
+                        }
+
+                        console.log(jsonData);
+
+                        var setting = {
+                            url: '',
+                            data: jsonData,
+                            isEditing: false,
+                            addBtn: {
+                                isHidden: true,
+                                text: '',
+                                fn: function() {
+                                }
+                            },
+                            selectionAsset: {
+                                noAsetHidden: false
+                            }
+                        };
+                        
+                        var form = Form.penghapusanInAsset(setting);
+
+                        if (jsonData !== null || jsonData !== undefined)
+                        {
+                            form.getForm().setValues(jsonData);
+                        }
+                        Tab.addToForm(form, 'angkutanLaut-penghapusan', 'Penghapusan');
+                        Modal.assetEdit.show();
+                        
+                    },
+                    callback: function()
+                    {
+                        Ext.getCmp('layout-body').body.unmask();
+                    },
+                });
+            }
         };
 
         AngkutanLaut.Action.detail_pengadaan = function() {

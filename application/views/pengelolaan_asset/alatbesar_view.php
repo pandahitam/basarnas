@@ -129,11 +129,80 @@
                     {
                         Alatbesar.Action.detail_perencanaan();
                     }
-                }
+                },
+               penghapusan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('alatbesar-penghapusan');
+                    if (tabpanels === undefined)
+                    {
+                        Alatbesar.Action.penghapusanDetail();
+                    }
+                },
 
             };
 
             return actions;
+        };
+        
+         Alatbesar.Action.penghapusanDetail = function() {
+            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var params = {
+                    kd_lokasi: data.kd_lokasi,
+                    kd_brg: data.kd_brg,
+                    no_aset: data.no_aset
+                };
+                Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
+                Ext.Ajax.request({
+                    url: BASE_URL + 'penghapusan/getSpecificPenghapusan/',
+                    params: params,
+                    timeout:500000,
+                    async:false,
+                    success: function(resp)
+                    {
+                        var jsonData = params;
+                        var response = Ext.decode(resp.responseText);
+
+                        if (response.length > 0)
+                        {
+                            var jsonData = response[0];
+                        }
+
+                        console.log(jsonData);
+
+                        var setting = {
+                            url: '',
+                            data: jsonData,
+                            isEditing: false,
+                            addBtn: {
+                                isHidden: true,
+                                text: '',
+                                fn: function() {
+                                }
+                            },
+                            selectionAsset: {
+                                noAsetHidden: false
+                            }
+                        };
+                        
+                        var form = Form.penghapusanInAsset(setting);
+
+                        if (jsonData !== null || jsonData !== undefined)
+                        {
+                            form.getForm().setValues(jsonData);
+                        }
+                        Tab.addToForm(form, 'alatbesar-penghapusan', 'Penghapusan');
+                        Modal.assetEdit.show();
+                        
+                    },
+                    callback: function()
+                    {
+                        Ext.getCmp('layout-body').body.unmask();
+                    },
+                });
+            }
         };
 
         Alatbesar.Action.detail_perencanaan = function() {
@@ -205,7 +274,7 @@
                         {
                             form.getForm().setValues(jsonData);
                         }
-                        Tab.addToForm(form, 'tanah-pengadaan', 'Pengadaan');
+                        Tab.addToForm(form, 'alatbesar-pengadaan', 'Pengadaan');
                         Modal.assetEdit.show();
                     }
                 });
@@ -488,7 +557,7 @@
         Alatbesar.Grid.grid = Grid.inventarisGrid(setting, Alatbesar.Data);
 
         var new_tabpanel_Asset = {
-            id: 'alatbesar_panel', title: 'Alatbesar', iconCls: 'icon-tanah_Alatbesar', closable: true, border: false,layout:'border',
+            id: 'alatbesar_panel', title: 'Alatbesar', iconCls: 'icon-alatbesar_Alatbesar', closable: true, border: false,layout:'border',
             items: [Region.filterPanelAset(Alatbesar.Data),Alatbesar.Grid.grid]
         };
 

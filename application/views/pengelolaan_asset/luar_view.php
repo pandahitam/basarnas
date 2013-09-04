@@ -127,11 +127,80 @@
                     {
                         Luar.Action.detail_perencanaan();
                     }
-                }
+                },
+                penghapusan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('luar-penghapusan');
+                    if (tabpanels === undefined)
+                    {
+                        Luar.Action.penghapusanDetail();
+                    }
+                },
 
             };
 
             return actions;
+        };
+        
+         Luar.Action.penghapusanDetail = function() {
+            var selected = Luar.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var params = {
+                    kd_lokasi: data.kd_lokasi,
+                    kd_brg: data.kd_brg,
+                    no_aset: data.no_aset
+                };
+                Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
+                Ext.Ajax.request({
+                    url: BASE_URL + 'penghapusan/getSpecificPenghapusan/',
+                    params: params,
+                    timeout:500000,
+                    async:false,
+                    success: function(resp)
+                    {
+                        var jsonData = params;
+                        var response = Ext.decode(resp.responseText);
+
+                        if (response.length > 0)
+                        {
+                            var jsonData = response[0];
+                        }
+
+                        console.log(jsonData);
+
+                        var setting = {
+                            url: '',
+                            data: jsonData,
+                            isEditing: false,
+                            addBtn: {
+                                isHidden: true,
+                                text: '',
+                                fn: function() {
+                                }
+                            },
+                            selectionAsset: {
+                                noAsetHidden: false
+                            }
+                        };
+                        
+                        var form = Form.penghapusanInAsset(setting);
+
+                        if (jsonData !== null || jsonData !== undefined)
+                        {
+                            form.getForm().setValues(jsonData);
+                        }
+                        Tab.addToForm(form, 'luar-penghapusan', 'Penghapusan');
+                        Modal.assetEdit.show();
+                        
+                    },
+                    callback: function()
+                    {
+                        Ext.getCmp('layout-body').body.unmask();
+                    },
+                });
+            }
         };
 
         Luar.Action.detail_perencanaan = function() {

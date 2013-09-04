@@ -48,5 +48,15 @@ class Penghapusan extends MY_Controller {
                 
 		return $this->deleteProcess($data);*/
 	}
+        
+        function getSpecificPenghapusan()
+        {
+            	$kd_lokasi = $this->input->post("kd_lokasi");
+		$kd_brg = $this->input->post("kd_brg");
+		$no_aset = $this->input->post("no_aset");
+		$data = $this->model->get_Penghapusan($kd_lokasi, $kd_brg, $no_aset);
+		$datasend["results"] = $data;
+		echo json_encode($datasend);
+        }
 }
 ?>

@@ -1256,9 +1256,7 @@
                     }, '-', {
                         text: 'Penghapusan',
                         textAlign: 'left',
-                        handler: function() {
-                            console.log('Button Press');
-                        }
+                        handler: actions.penghapusan
                     }, '-', {
                         text: 'Pendayagunaan',
                         textAlign: 'left',
