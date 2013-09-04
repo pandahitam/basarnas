@@ -14,9 +14,9 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
                             ,f.nama as nama_klasifikasi_aset, b.kd_klasifikasi_aset,
                             f.kd_lvl1,f.kd_lvl2,f.kd_lvl3,
-                            g.id_ext_angkutan,g.udara_surat_bukti_kepemilikan_no,g.udara_surat_bukti_kepemilikan_keterangan,g.udara_surat_bukti_kepemilikan_file,
-                            g.udara_sertifikat_pendaftaran_pesawat_udara_no,g.udara_sertifikat_pendaftaran_pesawat_udara_keterangan,g.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku,g.udara_sertifikat_pendaftaran_pesawat_udara_file,
-                            g.udara_sertifikat_kelaikan_udara_no,g.udara_sertifikat_kelaikan_udara_keterangan,g.udara_sertifikat_kelaikan_udara_masa_berlaku,g.udara_sertifikat_kelaikan_udara_file
+                            b.udara_surat_bukti_kepemilikan_no,b.udara_surat_bukti_kepemilikan_keterangan,b.udara_surat_bukti_kepemilikan_file,
+                            b.udara_sertifikat_pendaftaran_pesawat_udara_no,b.udara_sertifikat_pendaftaran_pesawat_udara_keterangan,b.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku,b.udara_sertifikat_pendaftaran_pesawat_udara_file,
+                            b.udara_sertifikat_kelaikan_udara_no,b.udara_sertifikat_kelaikan_udara_keterangan,b.udara_sertifikat_kelaikan_udara_masa_berlaku,b.udara_sertifikat_kelaikan_udara_file
                             ";
 	}
 	
@@ -31,7 +31,6 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_udara AS g ON b.id = g.id_ext_angkutan
                             where t.kd_brg like '30205%'
                             LIMIT $start,$limit";
 		
@@ -45,7 +44,6 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_udara AS g ON b.id = g.id_ext_angkutan
                             where t.kd_brg like '30205%'
                             ";
             }

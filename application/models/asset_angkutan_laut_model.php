@@ -14,11 +14,11 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
                             e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
                             ,f.nama as nama_klasifikasi_aset, b.kd_klasifikasi_aset,
                             f.kd_lvl1,f.kd_lvl2,f.kd_lvl3,
-                            g.id_ext_angkutan,g.laut_stkk_no,g.laut_stkk_keterangan,g.laut_stkk_masa_berlaku,g.laut_stkk_file,
-                            g.laut_surat_ukur_no,g.laut_surat_ukur_keterangan,g.laut_surat_ukur_masa_berlaku,
-                            g.laut_sertifikasi_keselamatan_no,g.laut_sertifikasi_keselamatan_keterangan,g.laut_sertifikasi_keselamatan_masa_berlaku,g.laut_sertifikasi_keselamatan_file,
-                            g.laut_sertifikasi_radio_no,g.laut_sertifikasi_radio_keterangan,g.laut_sertifikasi_radio_masa_berlaku,g.laut_sertifikasi_radio_file,
-                            g.laut_surat_ijin_berlayar_no,g.laut_surat_ijin_berlayar_keterangan,g.laut_surat_ijin_berlayar_masa_berlaku,g.laut_surat_ijin_berlayar_file
+                            b.laut_stkk_no,b.laut_stkk_keterangan,b.laut_stkk_masa_berlaku,b.laut_stkk_file,
+                            b.laut_surat_ukur_no,b.laut_surat_ukur_keterangan,b.laut_surat_ukur_masa_berlaku,
+                            b.laut_sertifikasi_keselamatan_no,b.laut_sertifikasi_keselamatan_keterangan,b.laut_sertifikasi_keselamatan_masa_berlaku,b.laut_sertifikasi_keselamatan_file,
+                            b.laut_sertifikasi_radio_no,b.laut_sertifikasi_radio_keterangan,b.laut_sertifikasi_radio_masa_berlaku,b.laut_sertifikasi_radio_file,
+                            b.laut_surat_ijin_berlayar_no,b.laut_surat_ijin_berlayar_keterangan,b.laut_surat_ijin_berlayar_masa_berlaku,b.laut_surat_ijin_berlayar_file
                             ";
 	}
 	
@@ -33,7 +33,6 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_laut AS g ON b.id = g.id_ext_angkutan
                             where t.kd_brg like '30203%' or t.kd_brg like '30204%'
                             LIMIT $start,$limit";
 		
@@ -47,7 +46,6 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_laut AS g ON b.id = g.id_ext_angkutan
                             where t.kd_brg like '30203%' or t.kd_brg like '30204%'
                             ";
             }

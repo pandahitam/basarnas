@@ -492,7 +492,7 @@
 
         var new_tabpanel_Asset = {
             id: 'perlengkapan_panel', title: 'Perlengkapan', iconCls: 'icon-tanah_perlengkapan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAsetPerlengkapan(Perlengkapan.Data),Perlengkapan.Grid.grid]
+            items: [Region.filterPanelAsetPerlengkapan(Perlengkapan.Data,'perlengkapan'),Perlengkapan.Grid.grid]
         };
 
     <?php } else {

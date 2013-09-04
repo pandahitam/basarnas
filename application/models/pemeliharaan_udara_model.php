@@ -16,9 +16,10 @@ class Pemeliharaan_Udara_Model extends MY_Model{
 	}
 	
 	function get_AllData(){
-//		$query = "$this->selectColumn FROM $this->viewTable";
-//
-//		return $this->Get_By_Query($query);	
+		$query = "$this->selectColumn FROM $this->viewTable
+                        where kd_brg like '30205%";
+
+		return $this->Get_By_Query($query);	
 	}
 	
 	function get_Pemeliharaan($kd_lokasi, $kd_barang, $no_aset)

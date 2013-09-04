@@ -14,8 +14,8 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
                             e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
                             ,f.nama as nama_klasifikasi_aset, b.kd_klasifikasi_aset,
                             f.kd_lvl1,f.kd_lvl2,f.kd_lvl3,
-                            g.id_ext_angkutan,g.darat_no_stnk,g.darat_masa_berlaku_stnk,g.darat_masa_berlaku_pajak,
-                            g.darat_jumlah_pajak, g.darat_keterangan_lainnya";
+                            b.darat_no_stnk,b.darat_masa_berlaku_stnk,b.darat_masa_berlaku_pajak,
+                            b.darat_jumlah_pajak, b.darat_keterangan_lainnya";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -29,7 +29,6 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_darat AS g ON b.id = g.id_ext_angkutan
                             where t.kd_brg like '30201%' or t.kd_brg like '30202%'
                             LIMIT $start,$limit";
 		
@@ -43,7 +42,6 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
                             LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_darat AS g ON b.id = g.id_ext_angkutan
                             where t.kd_brg like '30201%' or t.kd_brg like '30202%'
                             ";
             }

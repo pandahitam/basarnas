@@ -187,7 +187,7 @@
             })
         };
         
-        Region.filterPanelAsetPerlengkapan = function(data) {
+        Region.filterPanelAsetPerlengkapan = function(data,id) {
             var panel = {
                 region: 'west',
                 title: 'Filter',
@@ -209,8 +209,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Part',
-                        name: 'aset-part',
-                        id: 'aset-part',
+                        name: 'aset-part' +id,
+                        id: 'aset-part'+id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -256,8 +256,8 @@
                     {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Level1',
-                        name: 'aset-klasifikasiAset-lvl1',
-                        id: 'aset-klasifikasiAset-lvl1',
+                        name: 'aset-klasifikasiAset-lvl1'+id,
+                        id: 'aset-klasifikasiAset-lvl1'+id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -275,7 +275,7 @@
                                     {
                                         data.filter([{property: 'kd_klasifikasi_aset', value: value}]);
                                         var filterByLevel1 = value;
-                                        var filterByLevel2 = Ext.getCmp('aset-klasifikasiAset-lvl2');
+                                        var filterByLevel2 = Ext.getCmp('aset-klasifikasiAset-lvl2'+id);
                                                 if (filterByLevel1 !== null && filterByLevel2 !== null) {
                                                     if (!isNaN(value) && value.length > 0) {
                                                         filterByLevel2.enable();
@@ -301,8 +301,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Level 2',
-                        name: 'aset-klasifikasiAset-lvl2',
-                        id: 'aset-klasifikasiAset-lvl2',
+                        name: 'aset-klasifikasiAset-lvl2'+id,
+                        id: 'aset-klasifikasiAset-lvl2'+id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -320,10 +320,10 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1'+id).value;
                                         data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+value});
                                         
-                                            var filterByLevel3 = Ext.getCmp('aset-klasifikasiAset-lvl3');
+                                            var filterByLevel3 = Ext.getCmp('aset-klasifikasiAset-lvl3'+id);
                                             var filterByLevel2 = value;
                                             if (filterByLevel3 !== null && filterByLevel2 !== null) {
                                                 if (!isNaN(value) && value.length > 0) {
@@ -349,8 +349,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Level 3',
-                        name: 'aset-klasifikasiAset-lvl3',
-                        id: 'aset-klasifikasiAset-lvl3',
+                        name: 'aset-klasifikasiAset-lvl3'+id,
+                        id: 'aset-klasifikasiAset-lvl3'+id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -368,8 +368,8 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
-                                        var filterByLevel2Value = Ext.getCmp('aset-klasifikasiAset-lvl2').value;
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1'+id).value;
+                                        var filterByLevel2Value = Ext.getCmp('aset-klasifikasiAset-lvl2'+id).value;
                                         data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+filterByLevel2Value+value});
                                     }
                                 }

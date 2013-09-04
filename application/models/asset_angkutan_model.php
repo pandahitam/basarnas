@@ -13,7 +13,18 @@ class Asset_Angkutan_Model extends MY_Model{
                             c.ur_upb as nama_unker, d.nama_unor,
                             e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
                             ,f.nama as nama_klasifikasi_aset, b.kd_klasifikasi_aset,
-                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
+                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3,
+                            b.darat_no_stnk,b.darat_masa_berlaku_stnk,b.darat_masa_berlaku_pajak,
+                            b.darat_jumlah_pajak, b.darat_keterangan_lainnya,
+                            b.laut_stkk_no,b.laut_stkk_keterangan,b.laut_stkk_masa_berlaku,b.laut_stkk_file,
+                            b.laut_surat_ukur_no,b.laut_surat_ukur_keterangan,b.laut_surat_ukur_masa_berlaku,
+                            b.laut_sertifikasi_keselamatan_no,b.laut_sertifikasi_keselamatan_keterangan,b.laut_sertifikasi_keselamatan_masa_berlaku,b.laut_sertifikasi_keselamatan_file,
+                            b.laut_sertifikasi_radio_no,b.laut_sertifikasi_radio_keterangan,b.laut_sertifikasi_radio_masa_berlaku,b.laut_sertifikasi_radio_file,
+                            b.laut_surat_ijin_berlayar_no,b.laut_surat_ijin_berlayar_keterangan,b.laut_surat_ijin_berlayar_masa_berlaku,b.laut_surat_ijin_berlayar_file,
+                            b.udara_surat_bukti_kepemilikan_no,b.udara_surat_bukti_kepemilikan_keterangan,b.udara_surat_bukti_kepemilikan_file,
+                            b.udara_sertifikat_pendaftaran_pesawat_udara_no,b.udara_sertifikat_pendaftaran_pesawat_udara_keterangan,b.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku,b.udara_sertifikat_pendaftaran_pesawat_udara_file,
+                            b.udara_sertifikat_kelaikan_udara_no,b.udara_sertifikat_kelaikan_udara_keterangan,b.udara_sertifikat_kelaikan_udara_masa_berlaku,b.udara_sertifikat_kelaikan_udara_file
+                            ";
 	}
 	
 	function get_AllData($start=null, $limit=null){

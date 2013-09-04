@@ -155,7 +155,7 @@ Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
         'kd_lvl1','kd_lvl2','kd_lvl3',
-         'id_ext_angkutan','darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
+         'darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
          'darat_jumlah_pajak', 'darat_keterangan_lainnya'
     ]
 });
@@ -186,7 +186,7 @@ Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
         'kd_lvl1','kd_lvl2','kd_lvl3',
-        'id_ext_angkutan','laut_stkk_no','laut_stkk_keterangan','laut_stkk_masa_berlaku','laut_stkk_file',
+        'laut_stkk_no','laut_stkk_keterangan','laut_stkk_masa_berlaku','laut_stkk_file',
         'laut_surat_ukur_no','laut_surat_ukur_keterangan','laut_surat_ukur_masa_berlaku',
         'laut_sertifikasi_keselamatan_no','laut_sertifikasi_keselamatan_keterangan','laut_sertifikasi_keselamatan_masa_berlaku','laut_sertifikasi_keselamatan_file',
         'laut_sertifikasi_radio_no','laut_sertifikasi_radio_keterangan','laut_sertifikasi_radio_masa_berlaku','laut_sertifikasi_radio_file',
@@ -220,7 +220,7 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
         'kd_lvl1','kd_lvl2','kd_lvl3',
-        'id_ext_angkutan','udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
+        'udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
         'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',
         'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file'
     ]
@@ -253,6 +253,16 @@ Ext.define('MAngkutan', {extend: 'Ext.data.Model',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
         'kd_lvl1','kd_lvl2','kd_lvl3',
+        'darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
+        'darat_jumlah_pajak', 'darat_keterangan_lainnya',
+        'laut_stkk_no','laut_stkk_keterangan','laut_stkk_masa_berlaku','laut_stkk_file',
+        'laut_surat_ukur_no','laut_surat_ukur_keterangan','laut_surat_ukur_masa_berlaku',
+        'laut_sertifikasi_keselamatan_no','laut_sertifikasi_keselamatan_keterangan','laut_sertifikasi_keselamatan_masa_berlaku','laut_sertifikasi_keselamatan_file',
+        'laut_sertifikasi_radio_no','laut_sertifikasi_radio_keterangan','laut_sertifikasi_radio_masa_berlaku','laut_sertifikasi_radio_file',
+        'laut_surat_ijin_berlayar_no','laut_surat_ijin_berlayar_keterangan','laut_surat_ijin_berlayar_masa_berlaku','laut_surat_ijin_berlayar_file',
+        'udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
+        'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',
+        'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file'
     ]
 });
 
