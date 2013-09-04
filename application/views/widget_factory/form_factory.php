@@ -2432,6 +2432,8 @@
 
             return component;
         };
+        
+        
 
         Form.Component.tambahanAngkutanDarat = function() {
             var component = {
@@ -2521,21 +2523,20 @@
                                 },
                                 items:[{
                                 xtype: 'textfield',
-                                fieldLabel: 'No STKK',
+                                fieldLabel: 'No',
                                 name: 'laut_stkk_no'
                             },
                                     {
                                 xtype: 'datefield',
-                                fieldLabel: 'Masa Berlaku STKK',
+                                fieldLabel: 'Masa Berlaku',
                                 name: 'laut_stkk_masa_berlaku',
                                 format: 'Y-m-d'
+                            },{
+                                xtype: 'textarea',
+                                fieldLabel: 'Keterangan',
+                                name: 'laut_stkk_keterangan'
                             },
-                                   {
-                                xtype: 'filefield',
-                                fieldLabel: 'File STKK',
-                                name: 'laut_stkk_file',
-                                format: 'Y-m-d'
-                            }]
+                                   ]
                                 
                             }, {
                                 columnWidth: .5,
@@ -2543,12 +2544,13 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[  
-                                    {
-                                xtype: 'textarea',
-                                fieldLabel: 'Keterangan STKK',
-                                name: 'laut_stkk_keterangan'
-                            },   ]
+                                items:[ {
+                                xtype: 'filefield',
+                                fieldLabel: 'File',
+                                name: 'laut_stkk_file',
+                                format: 'Y-m-d'
+                                } 
+                                      ]
                               
                             },  
                     ]};
@@ -2576,12 +2578,12 @@
                                 items:[
                                         {
                                             xtype: 'textfield',
-                                            fieldLabel: 'No Surat Ukur',
+                                            fieldLabel: 'No',
                                             name: 'laut_surat_ukur_no'
                                         },
                                         {
                                             xtype: 'datefield',
-                                            fieldLabel: 'Masa Berlaku Surat Ukur',
+                                            fieldLabel: 'Masa Berlaku',
                                             name: 'laut_surat_ukur_masa_berlaku',
                                             format: 'Y-m-d'
                                         },
@@ -2597,7 +2599,7 @@
                                 items:[  
                                     {
                                             xtype: 'textarea',
-                                            fieldLabel: 'Keterangan Surat Ukur',
+                                            fieldLabel: 'Keterangan',
                                             name: 'laut_surat_ukur_keterangan'
                                     }   ]
                               
@@ -2628,21 +2630,21 @@
                                 },
                                 items:[{
                                         xtype: 'textfield',
-                                        fieldLabel: 'No Sertifikasi Keselamatan',
+                                        fieldLabel: 'No',
                                         name: 'laut_sertifikasi_keselamatan_no'
                                     },
                                     {
                                         xtype: 'datefield',
-                                        fieldLabel: 'Masa Berlaku Sertifikasi Keselamatan',
+                                        fieldLabel: 'Masa Berlaku',
                                         name: 'laut_sertifikasi_keselamatan_masa_berlaku',
                                         format: 'Y-m-d'
                                     },
                                     {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File Sertifikasi Keselamatan',
-                                            name: 'laut_sertifikasi_keselamatan_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan',
+                                        name: 'laut_sertifikasi_keselamatan_keterangan'
+                                    }
+                                   ]
                                 
                             }, {
                                 columnWidth: .5,
@@ -2650,14 +2652,142 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[{
-                                        xtype: 'textarea',
-                                        fieldLabel: 'Keterangan Sertifikasi Keselamatan',
-                                        name: 'laut_sertifikasi_keselamatan_keterangan'
-                                }]
+                                items:[ {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File',
+                                            name: 'laut_sertifikasi_keselamatan_file',
+                                            format: 'Y-m-d'
+                                    }]
                               
                             },
                 ]};
+                
+            return subcomponent;
+        };
+        
+        Form.SubComponent.tambahanAngkutanLautSertifikasiRadio = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Sertifikasi Radio',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textfield',
+                                        fieldLabel: 'No',
+                                        name: 'laut_sertifikasi_radio_no'
+                                    },
+                                    {
+                                        xtype: 'datefield',
+                                        fieldLabel: 'Masa Berlaku',
+                                        name: 'laut_sertifikasi_radio_masa_berlaku',
+                                        format: 'Y-m-d'
+                                    },
+                                    {
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan',
+                                        name: 'laut_sertifikasi_radio_keterangan'
+                                    }
+                                   ]
+                                
+                            }, {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[ {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File',
+                                            name: 'laut_sertifikasi_radio_file',
+                                            format: 'Y-m-d'
+                                    }]
+                              
+                            },
+                ]};
+                
+            return subcomponent;
+        };
+        
+        Form.SubComponent.tambahanAngkutanLautSuratIjinBerlayar = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Surat Ijin Berlayar',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textfield',
+                                        fieldLabel: 'No',
+                                        name: 'laut_surat_ijin_berlayar_no'
+                                    },
+                                    {
+                                        xtype: 'datefield',
+                                        fieldLabel: 'Masa Berlaku',
+                                        name: 'laut_surat_ijin_berlayar_masa_berlaku',
+                                        format: 'Y-m-d'
+                                    },
+                                    {
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan',
+                                        name: 'laut_surat_ijin_berlayar_keterangan'
+                                    }
+                                   ]
+                                
+                            }, {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[ {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File',
+                                            name: 'laut_surat_ijin_berlayar_file',
+                                            format: 'Y-m-d'
+                                    }]
+                              
+                            },
+                ]};
+                
+            return subcomponent;
+        };
+        
+        Form.SubComponent.tambahanAngkutanLautPerlengkapan = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Laut',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: []};
                 
             return subcomponent;
         };
@@ -2680,68 +2810,211 @@
                             Form.SubComponent.tambahanAngkutanLautSTKK(),
                             Form.SubComponent.tambahanAngkutanLautSuratUkur(),
                             Form.SubComponent.tambahanAngkutanLautSertifikasiKeselamatan(),
+                            Form.SubComponent.tambahanAngkutanLautSertifikasiRadio(),
+                            Form.SubComponent.tambahanAngkutanLautSuratIjinBerlayar(),
+                            Form.SubComponent.tambahanAngkutanLautPerlengkapan()
+                            
                        ]
             };
 
             return component;
         };
-
-        Form.Component.tambahanAngkutanUdara = function() {
-            var component = {
+        
+         Form.SubComponent.tambahanAngkutanUdaraSuratBuktiKepemilikan = function(){
+            var subcomponent = {
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Udara',
+                title: 'Surat Bukti Kepemilikan',
                 border: false,
                 frame: true,
                 defaultType: 'container',
                 defaults: {
                     layout: 'anchor'
                 },
-                items: [{
-                        columnWidth: .33,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Sertifikat Pesawat',
-                                name: 'sertifikat_pesawat'
+                items: [    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textfield',
+                                        fieldLabel: 'No',
+                                        name: 'udara_surat_bukti_kepemilikan_no'
+                                    },
+                                    {
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan',
+                                        name: 'udara_surat_bukti_kepemilikan_keterangan'
+                                    }
+                                   ]
+                                
                             }, {
-                                xtype: 'datefield',
-                                fieldLabel: 'Sertifikat Pesawat Ex',
-                                name: 'sertifikat_pesawat_berlaku',
-                                format: 'Y-m-d'
-                            }]
-                    }, {
-                        columnWidth: .33,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Sertifikat Kelayakan',
-                                name: 'sertifikat_kelayakan'
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[ {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File',
+                                            name: 'udara_surat_bukti_kepemilikan_file',
+                                            format: 'Y-m-d'
+                                    }]
+                              
+                            },
+                ]};
+                
+            return subcomponent;
+        };
+        
+         Form.SubComponent.tambahanAngkutanUdaraSertifikatPendaftaranPesawatUdara = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Sertifikat Pendaftaran Pesawat Udara',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textfield',
+                                        fieldLabel: 'No',
+                                        name: 'udara_sertifikat_pendaftaran_pesawat_udara_no'
+                                    },
+                                    {
+                                        xtype: 'datefield',
+                                        fieldLabel: 'Masa Berlaku',
+                                        name: 'udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku',
+                                        format: 'Y-m-d'
+                                    },
+                                    {
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan',
+                                        name: 'udara_sertifikat_pendaftaran_pesawat_udara_keterangan'
+                                    }
+                                   ]
+                                
                             }, {
-                                xtype: 'datefield',
-                                fieldLabel: 'Sertifikat Kelayakan Ex',
-                                name: 'sertifikat_kelayakan_berlaku',
-                                format: 'Y-m-d'
-                            }]
-                    }, {
-                        columnWidth: .34,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{
-                                xtype: 'textfield',
-                                fieldLabel: 'Bukti Pemilik',
-                                name: 'bukti_pemilik'
-                            }]
-                    }]
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[ {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File',
+                                            name: 'udara_sertifikat_pendaftaran_pesawat_udara_file',
+                                            format: 'Y-m-d'
+                                    }]
+                              
+                            },
+                ]};
+                
+            return subcomponent;
+        };
+        
+        Form.SubComponent.tambahanAngkutanUdaraSertifikatKelaikanUdara = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Sertifikat Kelaikan Udara',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [    {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[{
+                                        xtype: 'textfield',
+                                        fieldLabel: 'No',
+                                        name: 'udara_sertifikat_kelaikan_udara_no'
+                                    },
+                                    {
+                                        xtype: 'datefield',
+                                        fieldLabel: 'Masa Berlaku',
+                                        name: 'udara_sertifikat_kelaikan_udara_masa_berlaku',
+                                        format: 'Y-m-d'
+                                    },
+                                    {
+                                        xtype: 'textarea',
+                                        fieldLabel: 'Keterangan',
+                                        name: 'udara_sertifikat_kelaikan_udara_keterangan'
+                                    }
+                                   ]
+                                
+                            }, {
+                                columnWidth: .5,
+                                layout: 'anchor',
+                                defaults: {
+                                    anchor: '95%'
+                                },
+                                items:[ {
+                                            xtype: 'filefield',
+                                            fieldLabel: 'File',
+                                            name: 'udara_sertifikat_kelaikan_udara_file',
+                                            format: 'Y-m-d'
+                                    }]
+                              
+                            },
+                ]};
+                
+            return subcomponent;
+        };
+        
+       Form.SubComponent.tambahanAngkutanUdaraPerlengkapan = function(){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Udara',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: []};
+                
+            return subcomponent;
+        };
+
+        Form.Component.tambahanAngkutanUdara = function() {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'Udara',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+//                defaults: {
+//                    layout: 'anchor'
+//                },
+                items: [
+                            Form.SubComponent.tambahanAngkutanUdaraSuratBuktiKepemilikan(),
+                            Form.SubComponent.tambahanAngkutanUdaraSertifikatPendaftaranPesawatUdara(),
+                            Form.SubComponent.tambahanAngkutanUdaraSertifikatKelaikanUdara(),
+                            Form.SubComponent.tambahanAngkutanUdaraPerlengkapan(),
+                            
+                ]
             };
 
             return component;

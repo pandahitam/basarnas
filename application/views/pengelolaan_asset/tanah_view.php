@@ -692,7 +692,7 @@
 
         var new_tabpanel_Asset = {
             id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Tanah.Data),Tanah.Grid.grid]
+            items: [Region.filterPanelAset(Tanah.Data,'tanah'),Tanah.Grid.grid]
         };
 <?php
 

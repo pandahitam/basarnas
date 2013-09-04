@@ -382,7 +382,7 @@
             return panel;
         };
         
-        Region.filterPanelAset = function(data) {
+        Region.filterPanelAset = function(data,id) {
             var panel = {
                 region: 'west',
                 title: 'Filter',
@@ -404,8 +404,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Golongan',
-                        name: 'aset-golongan',
-                        id: 'aset-golongan',
+                        name: 'aset-golongan' + id,
+                        id: 'aset-golongan' + id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -423,7 +423,7 @@
                                     {
                                         data.filter([{property: 'kd_brg', value: value}]);
                                         var filterByGolongan = value;
-                                        var filterByBidang = Ext.getCmp('aset-bidang');
+                                        var filterByBidang = Ext.getCmp('aset-bidang'+ id);
                                                 if (filterByGolongan !== null && filterByBidang !== null) {
                                                     if (!isNaN(value) && value.length > 0) {
                                                         filterByBidang.enable();
@@ -448,8 +448,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
-                        name: 'aset-bidang',
-                        id: 'aset-bidang',
+                        name: 'aset-bidang'+ id,
+                        id: 'aset-bidang'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -467,10 +467,10 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan'+ id).value;
                                         data.filter({property: 'kd_brg', value: filterByGolonganValue+value});
                                         
-                                            var filterByKelompok = Ext.getCmp('aset-kelompok');
+                                            var filterByKelompok = Ext.getCmp('aset-kelompok'+ id);
                                             var filterByBidang = value;
                                             if (filterByKelompok !== null && filterByBidang !== null) {
                                                 if (!isNaN(value) && value.length > 0) {
@@ -496,8 +496,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Kelompok',
-                        name: 'aset-kelompok',
-                        id: 'aset-kelompok',
+                        name: 'aset-kelompok'+ id,
+                        id: 'aset-kelompok'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -515,11 +515,11 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
-                                        var filterByBidangValue = Ext.getCmp('aset-bidang').value;
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan'+ id).value;
+                                        var filterByBidangValue = Ext.getCmp('aset-bidang'+ id).value;
                                         data.filter({property: 'kd_brg', value: filterByGolonganValue+filterByBidangValue+value});
                                         
-                                        var filterBySubKelompok = Ext.getCmp('aset-subkel');
+                                        var filterBySubKelompok = Ext.getCmp('aset-subkel'+ id);
                                         var filterByKelompok = value;
                                         if (filterByKelompok !== null && filterBySubKelompok !== null && !isNaN(value)) {
                                             filterBySubKelompok.enable();
@@ -541,8 +541,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Sub Kelompok',
-                        name: 'aset-subkel',
-                        id: 'aset-subkel',
+                        name: 'aset-subkel'+ id,
+                        id: 'aset-subkel'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -560,12 +560,12 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
-                                        var filterByBidangValue = Ext.getCmp('aset-bidang').value;
-                                        var filterByKelompokValue = Ext.getCmp('aset-kelompok').value;
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan'+ id).value;
+                                        var filterByBidangValue = Ext.getCmp('aset-bidang'+ id).value;
+                                        var filterByKelompokValue = Ext.getCmp('aset-kelompok'+ id).value;
                                         data.filter({property: 'kd_brg', value: filterByGolonganValue+filterByBidangValue+filterByKelompokValue+value});
                                         
-                                        var filterBySubSubKelompok = Ext.getCmp('aset-subsubkel');
+                                        var filterBySubSubKelompok = Ext.getCmp('aset-subsubkel'+ id);
                                         var filterBySubKelompok = value;
 
                                         if (filterBySubKelompok !== null && filterBySubSubKelompok !== null && !isNaN(value)) {
@@ -589,8 +589,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Sub Sub Kelompok',
-                        name: 'aset-subsubkel',
-                        id: 'aset-subsubkel',
+                        name: 'aset-subsubkel'+ id,
+                        id: 'aset-subsubkel'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -608,10 +608,10 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByGolonganValue = Ext.getCmp('aset-golongan').value;
-                                        var filterByBidangValue = Ext.getCmp('aset-bidang').value;
-                                        var filterByKelompokValue = Ext.getCmp('aset-kelompok').value;
-                                        var filterBySubKelompokValue = Ext.getCmp('aset-subkel').value;
+                                        var filterByGolonganValue = Ext.getCmp('aset-golongan'+ id).value;
+                                        var filterByBidangValue = Ext.getCmp('aset-bidang'+ id).value;
+                                        var filterByKelompokValue = Ext.getCmp('aset-kelompok'+ id).value;
+                                        var filterBySubKelompokValue = Ext.getCmp('aset-subkel'+ id).value;
                                         data.filter({property: 'kd_brg', value: filterByGolonganValue+filterByBidangValue+filterByKelompokValue+filterBySubKelompokValue+value});
                                         
                                     }
@@ -642,8 +642,8 @@
                     {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Level1',
-                        name: 'aset-klasifikasiAset-lvl1',
-                        id: 'aset-klasifikasiAset-lvl1',
+                        name: 'aset-klasifikasiAset-lvl1'+ id,
+                        id: 'aset-klasifikasiAset-lvl1'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -661,7 +661,7 @@
                                     {
                                         data.filter([{property: 'kd_klasifikasi_aset', value: value}]);
                                         var filterByLevel1 = value;
-                                        var filterByLevel2 = Ext.getCmp('aset-klasifikasiAset-lvl2');
+                                        var filterByLevel2 = Ext.getCmp('aset-klasifikasiAset-lvl2'+ id);
                                                 if (filterByLevel1 !== null && filterByLevel2 !== null) {
                                                     if (!isNaN(value) && value.length > 0) {
                                                         filterByLevel2.enable();
@@ -687,8 +687,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Level 2',
-                        name: 'aset-klasifikasiAset-lvl2',
-                        id: 'aset-klasifikasiAset-lvl2',
+                        name: 'aset-klasifikasiAset-lvl2'+ id,
+                        id: 'aset-klasifikasiAset-lvl2'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -706,10 +706,10 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1'+ id).value;
                                         data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+value});
                                         
-                                            var filterByLevel3 = Ext.getCmp('aset-klasifikasiAset-lvl3');
+                                            var filterByLevel3 = Ext.getCmp('aset-klasifikasiAset-lvl3'+ id);
                                             var filterByLevel2 = value;
                                             if (filterByLevel3 !== null && filterByLevel2 !== null) {
                                                 if (!isNaN(value) && value.length > 0) {
@@ -735,8 +735,8 @@
                     }, {
                         xtype: 'combo',
                         fieldLabel: 'Filter by Level 3',
-                        name: 'aset-klasifikasiAset-lvl3',
-                        id: 'aset-klasifikasiAset-lvl3',
+                        name: 'aset-klasifikasiAset-lvl3'+ id,
+                        id: 'aset-klasifikasiAset-lvl3'+ id,
                         allowBlank: true,
                         hideLabel: true,
                         layout: 'anchor',
@@ -754,8 +754,8 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1').value;
-                                        var filterByLevel2Value = Ext.getCmp('aset-klasifikasiAset-lvl2').value;
+                                        var filterByLevel1Value = Ext.getCmp('aset-klasifikasiAset-lvl1'+ id).value;
+                                        var filterByLevel2Value = Ext.getCmp('aset-klasifikasiAset-lvl2'+ id).value;
                                         data.filter({property: 'kd_klasifikasi_aset', value: filterByLevel1Value+filterByLevel2Value+value});
                                     }
                                 }

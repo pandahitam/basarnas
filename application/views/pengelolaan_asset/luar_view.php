@@ -516,7 +516,7 @@
 
         var new_tabpanel_Asset = {
             id: 'luar_panel', title: 'Luar', iconCls: 'icon-tanah_Luar', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Luar.Data),Luar.Grid.grid]
+            items: [Region.filterPanelAset(Luar.Data,'luar'),Luar.Grid.grid]
         };
 
 <?php

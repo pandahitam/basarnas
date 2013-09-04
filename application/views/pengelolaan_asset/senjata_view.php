@@ -516,7 +516,7 @@
 
         var new_tabpanel_Asset = {
             id: 'senjata_panel', title: 'Senjata', iconCls: 'icon-tanah_Senjata', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Senjata.Data),Senjata.Grid.grid]
+            items: [Region.filterPanelAset(Senjata.Data,'senjata'),Senjata.Grid.grid]
         }
 
 <?php

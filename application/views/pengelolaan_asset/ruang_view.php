@@ -485,7 +485,7 @@
 
         var new_tabpanel_Asset = {
             id: 'ruang_panel', title: 'Ruang', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Ruang.Data),Ruang.Grid.grid]
+            items: [Region.filterPanelAset(Ruang.Data,'ruang'),Ruang.Grid.grid]
         };
 
     <?php } else {

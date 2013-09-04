@@ -568,7 +568,7 @@
 
         var new_tabpanel_Asset = {
             id: 'angkutan_panel', title: 'Angkutan', iconCls: 'icon-tanah_Angkutan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Angkutan.Data),Angkutan.Grid.grid]
+            items: [Region.filterPanelAset(Angkutan.Data,'angkutan'),Angkutan.Grid.grid]
         };
 
 <?php } else {

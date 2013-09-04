@@ -363,7 +363,7 @@
         AngkutanLaut.Action.add = function() {
             var _form = AngkutanLaut.Form.create(null, false);
             Modal.assetCreate.add(_form);
-            Modal.assetCreate.setTitle('Create Angkutan Darat');
+            Modal.assetCreate.setTitle('Create Angkutan Laut');
             Modal.assetCreate.show();
         };
 
@@ -377,7 +377,7 @@
 
                 if (Modal.assetEdit.items.length === 0)
                 {
-                    Modal.assetEdit.setTitle('Edit Angkutan Darat');
+                    Modal.assetEdit.setTitle('Edit Angkutan Laut');
                     Modal.assetEdit.add(Region.createSidePanel(AngkutanLaut.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
@@ -568,7 +568,7 @@
 
         var new_tabpanel_Asset = {
             id: 'angkutan_laut_panel', title: 'Angkutan Laut', iconCls: 'icon-tanah_AngkutanLaut', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(AngkutanLaut.Data),AngkutanLaut.Grid.grid]
+            items: [Region.filterPanelAset(AngkutanLaut.Data,'angkutanLaut'),AngkutanLaut.Grid.grid]
         };
 
 <?php } else {
