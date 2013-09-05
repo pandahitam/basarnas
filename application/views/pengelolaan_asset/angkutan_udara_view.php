@@ -8,7 +8,16 @@
 
         Ext.namespace('AngkutanUdara', 'AngkutanUdara.reader', 'AngkutanUdara.proxy', 'AngkutanUdara.Data', 'AngkutanUdara.Grid', 'AngkutanUdara.Window',
                 'AngkutanUdara.Form', 'AngkutanUdara.Action', 'AngkutanUdara.URL');
-                
+        
+        AngkutanUdara.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanUdara.dataStorePerlengkapanAngkutanUdara = new Ext.create('Ext.data.Store', {
             model: MAngkutanUdaraPerlengkapan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -247,10 +256,83 @@
                         AngkutanUdara.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanUdara-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanUdara.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        AngkutanUdara.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('angkutanUdara_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        AngkutanUdara.Action.pemindahanList = function() {
+            var selected = AngkutanUdara.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                AngkutanUdara.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                AngkutanUdara.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                AngkutanUdara.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                AngkutanUdara.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "angkutanUdara_grid_pemindahan",
+                    edit : AngkutanUdara.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: AngkutanUdara.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _angkutanUdaraMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_angkutanUdaraMutasiGrid, 'angkutanUdara-pemindahan', 'Pemindahan');
+            }
         };
         
          AngkutanUdara.Action.penghapusanDetail = function() {
@@ -296,7 +378,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {

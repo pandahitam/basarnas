@@ -7,7 +7,16 @@
         var Params_M_Senjata = null;
 
         Ext.namespace('Senjata', 'Senjata.reader', 'Senjata.proxy', 'Senjata.Data', 'Senjata.Grid', 'Senjata.Window', 'Senjata.Form', 'Senjata.Action', 'Senjata.URL');
-
+        
+        Senjata.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Senjata.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -128,10 +137,83 @@
                         Senjata.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('senjata-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        Senjata.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Senjata.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('senjata_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        Senjata.Action.pemindahanList = function() {
+            var selected = Senjata.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Senjata.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Senjata.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                Senjata.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                Senjata.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "senjata_grid_pemindahan",
+                    edit : Senjata.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Senjata.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _senjataMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_senjataMutasiGrid, 'senjata-pemindahan', 'Pemindahan');
+            }
         };
         
          Senjata.Action.penghapusanDetail = function() {
@@ -177,7 +259,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {
@@ -242,7 +324,7 @@
                         {
                             form.getForm().setValues(jsonData);
                         }
-                        Tab.addToForm(form, 'tanah-pengadaan', 'Pengadaan');
+                        Tab.addToForm(form, 'senjata-pengadaan', 'Pengadaan');
                         Modal.assetEdit.show();
                     }
                 });
@@ -515,7 +597,7 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'senjata_panel', title: 'Senjata', iconCls: 'icon-tanah_Senjata', closable: true, border: false,layout:'border',
+            id: 'senjata_panel', title: 'Senjata', iconCls: 'icon-senjata_Senjata', closable: true, border: false,layout:'border',
             items: [Region.filterPanelAset(Senjata.Data,'senjata'),Senjata.Grid.grid]
         }
 

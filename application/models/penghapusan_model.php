@@ -59,7 +59,15 @@ class Penghapusan_Model extends MY_Model{
 	
 	function get_Penghapusan($kd_lokasi, $kd_barang, $no_aset)
 	{
-		$query = "$this->selectColumn from view_penghapusan where kd_lokasi = '$kd_lokasi' and kd_brg = '$kd_barang' and no_aset = '$no_aset'";
+//		$query = "$this->selectColumn from view_penghapusan where kd_lokasi = '$kd_lokasi' and kd_brg = '$kd_barang' and no_aset = '$no_aset'";
+                $query = "SELECT 
+                        u.thn_ang,u.periode,u.kd_lokasi,u.no_sppa,u.kd_brg,u.no_aset,
+                        u.tgl_perlh,u.tercatat,u.kondisi,u.tgl_buku,u.jns_trn,u.dsr_hrg,u.kd_data,u.flag_sap,u.kuantitas,
+                        u.rph_sat,u.rph_aset,u.flag_kor,u.keterangan,u.merk_type,u.asal_perlh,u.no_bukti,u.no_dsr_mts,
+                        u.tgl_dsr_mts,u.flag_ttp,u.flag_krm,u.kdblu,u.setatus,u.noreg,u.kdbapel,u.kdkpknl,u.umeko,u.rph_res,u.kdkppn 
+                        FROM t_masteru u
+                        WHERE u.jns_trn IN ('301','391')
+                        AND kd_lokasi = '$kd_lokasi' AND kd_brg = '$kd_barang' AND no_aset = '$no_aset' ";
 		return $this->Get_By_Query($query);
 	}
 	

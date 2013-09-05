@@ -8,7 +8,16 @@
 
         Ext.namespace('Ruang', 'Ruang.reader', 'Ruang.proxy', 'Ruang.Data', 'Ruang.Grid', 'Ruang.Window', 'Ruang.Form', 'Ruang.Action',
                 'Ruang.URL');
-
+                
+        Ruang.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Ruang.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: 'MPemeliharaanRuang', autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -129,10 +138,84 @@
                         Ruang.Action.penghapusanDetail();
                     }
                 },
-
+               
+                pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('ruang-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        Ruang.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Ruang.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('ruang_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        Ruang.Action.pemindahanList = function() {
+            var selected = Ruang.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Ruang.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Ruang.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                Ruang.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                Ruang.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "ruang_grid_pemindahan",
+                    edit : Ruang.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Ruang.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _ruangMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_ruangMutasiGrid, 'ruang-pemindahan', 'Pemindahan');
+            }
         };
         
          Ruang.Action.penghapusanDetail = function() {
@@ -178,7 +261,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {
@@ -484,7 +567,7 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'ruang_panel', title: 'Ruang', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            id: 'ruang_panel', title: 'Ruang', iconCls: 'icon-ruang_bangunan', closable: true, border: false,layout:'border',
             items: [Region.filterPanelAset(Ruang.Data,'ruang'),Ruang.Grid.grid]
         };
 

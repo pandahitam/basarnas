@@ -338,6 +338,121 @@
 
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         }
+        
+        Grid.mutasiGrid = function(setting) {
+                var settingGrid = {
+                    grid: {
+                        id: setting.toolbar.idGrid,
+                        title: 'Pemindahan',
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'NO SPPA', dataIndex: 'no_sppa', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'KD BARANG', dataIndex: 'kd_brg', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'NAMA BARANG', dataIndex: 'ur_baru', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'No Awal', dataIndex: 'no_awal', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'No Akhir', dataIndex: 'no_akhir', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tahun Anggaran', dataIndex: 'thn_ang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tgl Peroleh', dataIndex: 'tgl_perlh', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kondisi', dataIndex: 'kondisi', width: 150, hidden: false, groupable: false, filter: {type: 'string'},renderer: function(value) {
+                                    if (value === '1')
+                                    {
+                                        return "BAIK";
+                                    }
+                                    else if (value === '2')
+                                    {
+                                        return "RUSAK RINGAN";
+                                    }
+                                    else if (value === '3')
+                                    {
+                                        return "RUSAK BERAT";
+                                    }
+                                    else
+                                    {
+                                        return "";
+                                    }
+                                }
+                            },
+                            {header: 'jns_trn', dataIndex: 'jns_trn', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Jenis Trn', dataIndex: 'jenis_transaksi', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Rph Aset', dataIndex: 'rph_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'},renderer: function(value) {
+                                    return Math.abs(value);
+                                }
+                            },
+                            {header: 'Merk Type', dataIndex: 'merk_type', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Asal Perolehan', dataIndex: 'asal_perlh', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'No SK', dataIndex: 'no_dsr_mts', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tgl SK', dataIndex: 'tgl_dsr_mts', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'No Aset', dataIndex: 'no_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_pemindahan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_pemindahan',
+                        add: {
+                            id: 'button_add_pemindahan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_pemindahan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_pemindahan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+            
+
+
+
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var search = new Ext.create('Ext.ux.form.SearchField', {
+                id: settingGrid.search.id, store: setting.dataStore, width: 180
+            });
+
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
 
     // use in inventaris asset, 
         Grid.pemeliharaanGrid = function(setting) {

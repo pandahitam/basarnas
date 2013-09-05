@@ -9,6 +9,15 @@
         Ext.namespace('AngkutanLaut', 'AngkutanLaut.reader', 'AngkutanLaut.proxy', 'AngkutanLaut.Data', 'AngkutanLaut.Grid', 'AngkutanLaut.Window',
                 'AngkutanLaut.Form', 'AngkutanLaut.Action', 'AngkutanLaut.URL');
         
+        AngkutanLaut.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanLaut.dataStorePerlengkapanAngkutanLaut = new Ext.create('Ext.data.Store', {
             model: MAngkutanLautPerlengkapan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -252,10 +261,83 @@
                         AngkutanLaut.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        AngkutanLaut.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('angkutanLaut_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        AngkutanLaut.Action.pemindahanList = function() {
+            var selected = AngkutanLaut.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                AngkutanLaut.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                AngkutanLaut.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                AngkutanLaut.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                AngkutanLaut.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "angkutanLaut_grid_pemindahan",
+                    edit : AngkutanLaut.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: AngkutanLaut.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _angkutanLautMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_angkutanLautMutasiGrid, 'angkutanLaut-pemindahan', 'Pemindahan');
+            }
         };
         
          AngkutanLaut.Action.penghapusanDetail = function() {
@@ -301,7 +383,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {

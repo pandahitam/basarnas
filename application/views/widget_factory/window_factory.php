@@ -1250,9 +1250,7 @@
                     }, '-', {
                         text: 'Pemindahan',
                         textAlign: 'left',
-                        handler: function() {
-                            console.log('Button Press');
-                        }
+                        handler: actions.pemindahan
                     }, '-', {
                         text: 'Penghapusan',
                         textAlign: 'left',

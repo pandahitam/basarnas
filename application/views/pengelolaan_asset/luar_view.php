@@ -8,7 +8,16 @@
 
         Ext.namespace('Luar', 'Luar.reader', 'Luar.proxy',
                 'Luar.Data', 'Luar.Grid', 'Luar.Window', 'Luar.Form', 'Luar.Action', 'Luar.URL');
-
+        
+        Luar.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Luar.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -136,10 +145,83 @@
                         Luar.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('luar-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        Luar.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Luar.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('luar_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        Luar.Action.pemindahanList = function() {
+            var selected = Luar.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Luar.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Luar.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                Luar.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                Luar.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "luar_grid_pemindahan",
+                    edit : Luar.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Luar.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _luarMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_luarMutasiGrid, 'luar-pemindahan', 'Pemindahan');
+            }
         };
         
          Luar.Action.penghapusanDetail = function() {
@@ -185,7 +267,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {
@@ -272,7 +354,7 @@
                         {
                             form.getForm().setValues(jsonData);
                         }
-                        Tab.addToForm(form, 'tanah-pengadaan', 'Pengadaan');
+                        Tab.addToForm(form, 'luar-pengadaan', 'Pengadaan');
                         Modal.assetEdit.show();
                     }
                 });
@@ -515,7 +597,7 @@
         Luar.Grid.grid = Grid.inventarisGrid(setting, Luar.Data);
 
         var new_tabpanel_Asset = {
-            id: 'luar_panel', title: 'Luar', iconCls: 'icon-tanah_Luar', closable: true, border: false,layout:'border',
+            id: 'luar_panel', title: 'Luar', iconCls: 'icon-luar_Luar', closable: true, border: false,layout:'border',
             items: [Region.filterPanelAset(Luar.Data,'luar'),Luar.Grid.grid]
         };
 
