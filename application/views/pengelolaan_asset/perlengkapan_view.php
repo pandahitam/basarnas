@@ -8,7 +8,16 @@
 
         Ext.namespace('Perlengkapan', 'Perlengkapan.reader', 'Perlengkapan.proxy', 'Perlengkapan.Data', 'Perlengkapan.Grid', 'Perlengkapan.Window', 'Perlengkapan.Form', 'Perlengkapan.Action',
                 'Perlengkapan.URL');
-
+        
+        Perlengkapan.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Perlengkapan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: 'MPemeliharaanPerlengkapan', autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -57,7 +66,7 @@
             form.insert(0, Form.Component.unit(edit));
 //            form.insert(3, Form.Component.address());
 //            form.insert(4, Form.Component.perlengkapan());
-//            form.insert(5, Form.Component.tambahanPerlengkapanTanah());
+//            form.insert(5, Form.Component.tambahanPerlengkapanPerlengkapan());
             form.insert(1, Form.Component.klasifikasiAset(edit))
             form.insert(2, Form.Component.perlengkapan(edit));
             form.insert(3, Form.Component.fileUpload(edit));
@@ -128,10 +137,84 @@
                         Perlengkapan.Action.penghapusanDetail();
                     }
                 },
-
+               
+                pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('perlengkapan-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        Perlengkapan.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Perlengkapan.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('perlengkapan_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        Perlengkapan.Action.pemindahanList = function() {
+            var selected = Perlengkapan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Perlengkapan.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perlengkapan.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perlengkapan.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                Perlengkapan.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "perlengkapan_grid_pemindahan",
+                    edit : Perlengkapan.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Perlengkapan.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _perlengkapanMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_perlengkapanMutasiGrid, 'perlengkapan-pemindahan', 'Pemindahan');
+            }
         };
         
          Perlengkapan.Action.penghapusanDetail = function() {
@@ -177,7 +260,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {
@@ -491,7 +574,7 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'perlengkapan_panel', title: 'Perlengkapan', iconCls: 'icon-tanah_perlengkapan', closable: true, border: false,layout:'border',
+            id: 'perlengkapan_panel', title: 'Perlengkapan', iconCls: 'icon-perlengkapan_perlengkapan', closable: true, border: false,layout:'border',
             items: [Region.filterPanelAsetPerlengkapan(Perlengkapan.Data,'perlengkapan'),Perlengkapan.Grid.grid]
         };
 

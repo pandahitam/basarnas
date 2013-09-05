@@ -341,7 +341,7 @@
             return form;
         };
         
-        Form.penghapusanInAsset = function(setting)
+        Form.penghapusanDanMutasiInAsset = function(setting)
         {
 //            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
 //            form.insert(1, Form.Component.hiddenIdentifier());

@@ -9,6 +9,15 @@
         Ext.namespace('AngkutanDarat', 'AngkutanDarat.reader', 'AngkutanDarat.proxy', 'AngkutanDarat.Data', 'AngkutanDarat.Grid', 'AngkutanDarat.Window',
                 'AngkutanDarat.Form', 'AngkutanDarat.Action', 'AngkutanDarat.URL');
 
+        AngkutanDarat.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanDarat.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -166,10 +175,83 @@
                         AngkutanDarat.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanDarat-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanDarat.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        AngkutanDarat.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('angkutanDarat_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        AngkutanDarat.Action.pemindahanList = function() {
+            var selected = AngkutanDarat.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                AngkutanDarat.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                AngkutanDarat.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                AngkutanDarat.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                AngkutanDarat.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "angkutanDarat_grid_pemindahan",
+                    edit : AngkutanDarat.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: AngkutanDarat.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _angkutanDaratMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_angkutanDaratMutasiGrid, 'angkutanDarat-pemindahan', 'Pemindahan');
+            }
         };
         
          AngkutanDarat.Action.penghapusanDetail = function() {
@@ -215,7 +297,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {

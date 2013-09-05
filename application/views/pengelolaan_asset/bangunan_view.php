@@ -8,7 +8,16 @@
 
         Ext.namespace('Bangunan', 'Bangunan.reader', 'Bangunan.proxy', 'Bangunan.Data', 'Bangunan.Grid', 'Bangunan.Window', 'Bangunan.Form', 'Bangunan.Action',
                 'Bangunan.URL');
-
+        
+        Bangunan.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Bangunan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: 'MPemeliharaanBangunan', autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -196,10 +205,83 @@
                         Bangunan.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('bangunan-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        Bangunan.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Bangunan.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('bangunan_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        Bangunan.Action.pemindahanList = function() {
+            var selected = Bangunan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Bangunan.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Bangunan.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                Bangunan.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                Bangunan.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "bangunan_grid_pemindahan",
+                    edit : Bangunan.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Bangunan.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _bangunanMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_bangunanMutasiGrid, 'bangunan-pemindahan', 'Pemindahan');
+            }
         };
         
          Bangunan.Action.penghapusanDetail = function() {
@@ -245,7 +327,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {

@@ -8,7 +8,15 @@
 
         Ext.namespace('Perairan', 'Perairan.reader', 'Perairan.proxy', 'Perairan.Data', 'Perairan.Grid', 'Perairan.Window', 'Perairan.Form', 'Perairan.Action', 'Perairan.URL');
 
-
+         Perairan.dataStoreMutasi = new Ext.create('Ext.data.Store', {
+            model: MMutasi, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'mutasi/getSpecificMutasi', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Perairan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -130,10 +138,83 @@
                         Perairan.Action.penghapusanDetail();
                     }
                 },
-
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('perairan-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        Perairan.Action.pemindahanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Perairan.Action.pemindahanEdit = function () {
+            var selected = Ext.getCmp('perairan_grid_pemindahan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                var setting = {
+                    url: '',
+                    data: data,
+                    isEditing: false,
+                    addBtn: {
+                        isHidden: true,
+                        text: '',
+                        fn: function() {
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+                        
+                var form = Form.penghapusanDanMutasiInAsset(setting);
+
+                if (data !== null || data !== undefined)
+                {
+                    form.getForm().setValues(jsonData);
+                }
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Detail Pemindahan');
+                }
+
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+           }
+        };
+        
+        Perairan.Action.pemindahanList = function() {
+            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Perairan.dataStoreMutasi.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perairan.dataStoreMutasi.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perairan.dataStoreMutasi.getProxy().extraParams.no_aset = data.no_aset;
+                Perairan.dataStoreMutasi.load();
+                
+                var toolbarIDs = {
+                    idGrid : "perairan_grid_pemindahan",
+                    edit : Perairan.Action.pemindahanEdit,
+                    add : false,
+                    remove : false,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Perairan.dataStoreMutasi,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _perairanMutasiGrid = Grid.mutasiGrid(setting);
+                Tab.addToForm(_perairanMutasiGrid, 'perairan-pemindahan', 'Pemindahan');
+            }
         };
         
          Perairan.Action.penghapusanDetail = function() {
@@ -179,7 +260,7 @@
                             }
                         };
                         
-                        var form = Form.penghapusanInAsset(setting);
+                        var form = Form.penghapusanDanMutasiInAsset(setting);
 
                         if (jsonData !== null || jsonData !== undefined)
                         {
@@ -520,7 +601,7 @@
 
 
         var new_tabpanel_Asset = {
-            id: 'perairan_panel', title: 'Perairan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
+            id: 'perairan_panel', title: 'Perairan', iconCls: 'icon-perairan_bangunan', closable: true, border: false,layout:'border',
             items: [Region.filterPanelAset(Perairan.Data,'perairan'),Perairan.Grid.grid]
         };
 
