@@ -194,6 +194,13 @@ Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
     ]
 });
 
+Ext.define('MAngkutanLautPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'jenis_perlengkapan', 'no', 
+        'nama', 'keterangan'
+    ]
+});
+
 Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
     fields: ['id', 'kd_lokasi', 
         'kd_brg', 'no_aset', 

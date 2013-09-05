@@ -401,7 +401,6 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
-                debugger;
                 
                 if (Modal.assetSecondaryWindow.items.length === 0)
                 {
@@ -469,7 +468,7 @@
             var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-                 var flagExtAsset = false;
+                var flagExtAsset = false;
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
