@@ -9,6 +9,7 @@ var baseUrl = '<?php echo base_url(); ?>';
 var PixelsPerInch = 72; //defaults are for meters
 var InchesPerMapUnit = 39.3701;
 var	mapDefaultExtent = new Array(94.973492, -11.007750, 141.066985 ,7.033773);
+var sLocationCode = '';
 
 var mapQueryPoint = new Array(-1, -1);
 
@@ -22,7 +23,6 @@ var mapMaxScale;
 var mapZoomDir;
 var mapZoomSize;
 var mapPanSize;
-
 
 var refExtent;
 var refWidth;
@@ -178,25 +178,27 @@ function applyQuery() {
 			var imageName = baseUrl+'assets/map/tmp/';
 			imageName += 'basarnas'+rslt.kansar[0].imageId+'.png';
 			document.mainImage.src = imageName;
-			Ext.getCmp('map_nama_kansar').setValue('10701' + rslt.kansar[0].kodePse + rslt.kansar[0].kpb);
-			
-			var dbUrl = baseUrl + 'global_map/req_all_asset/' + rslt.kansar[0].kodePse + rslt.kansar[0].kpb; 
+			var kodeLoc = rslt.kansar[0].kodePse + rslt.kansar[0].kpb;
+			var namaLoc = rslt.kansar[0].kantorSar;
+			var dbUrl = baseUrl + 'global_map/req_all_asset/' + kodeLoc; 
+			propsGrid.setTitle(namaLoc);
 			Ext.Ajax.request({
 				url: dbUrl, 
 				method: 'GET',
 				success: function(response)
 				{
-					//alert(response.responseText);
 					var datas = new Ext.JSON.decode(response.responseText, true);
-					propsGrid.setSource(datas[2]);
+					sAssets.loadData(datas);
 				}
 			});
+			//Ext.getCmp('map_nama_kansar').setValue(kodeLoc);
+			sLocationCode = kodeLoc;
 		}
 	});
 };
 
 function mapDraw() {
-	propsGrid.setSource({});
+	//propsGrid.setSource({});
 	if(mapMode=='map')
 	{
 		document.mainImage.src = "/cgi-bin/mapserv?mode=map&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight+"&layers="+buildLayer();
@@ -226,7 +228,7 @@ function refClick(event) {
 	applyReference(pos_x, pos_y);
 	mapDraw();
 	mapMode = oldMode;
-	propsGrid.setSource({});
+	//propsGrid.setSource({});
 };
 
 function calculateExtent(arrExtents)
@@ -291,19 +293,22 @@ function applyItemQuery(kodeWilayah) {
 						mapMode = 'map';
 						mapDraw();
 						mapMode = oldMode;
-						Ext.getCmp('map_nama_kansar').setValue('10701' + rslt.kansar[0].kodePse + rslt.kansar[0].kpb);
-						/*
-						var data = rslt.kansar[0];
-						propsGrid.setSource({
-							'1. Kode Kansar': data.kodePse,
-							'2. Kode Provinsi': data.kodeProv,
-							'3. Nama Provinsi': data.namaProv,
-							'4. Kantor SAR': data.kantorSar,
-							'5. Jenis': data.jenis,
-							'6. Easting (Long.)': data.easting,
-							'7. Northing (Lat.)': data.northing
+						//Ext.getCmp('map_nama_kansar').setValue('10701' + rslt.kansar[0].kodePse + rslt.kansar[0].kpb);
+						var kodeLoc = rslt.kansar[0].kodePse + rslt.kansar[0].kpb;
+						var namaLoc = rslt.kansar[0].kantorSar;
+						var dbUrl = baseUrl + 'global_map/req_all_asset/' + kodeLoc; 
+						propsGrid.setTitle(namaLoc);
+						Ext.Ajax.request({
+							url: dbUrl, 
+							method: 'GET',
+							success: function(response)
+							{
+								var datas = new Ext.JSON.decode(response.responseText, true);
+								sAssets.loadData(datas);
+							}
 						});
-						*/
+						sLocationCode = kodeLoc;
+						alert(sLocationCode);
 					}
 				}
 			});
@@ -330,46 +335,102 @@ function applyZoomAll() {
 };
 
 //-------------------------------------------------------------------------------------------------------------------------------
+    Ext.define('mAsset', {
+        extend: 'Ext.data.Model',
+        fields: ['asset', 'criteria', 'count']
+    });
+
+   var sAssets = Ext.create('Ext.data.Store', {
+        storeId: 'sAssets',
+        model: 'mAsset',
+        //groupField: 'asset',
+        sorters: ['asset','criteria'],
+        data: []
+		/*
+		,
+        listeners: {
+            groupchange: function(store, groupers) {
+                var grouped = restaurants.isGrouped(),
+                    groupBy = groupers.items[0] ? groupers.items[0].property : '',
+                    toggleMenuItems, len, i = 0;
+
+                // Clear grouping button only valid if the store is grouped
+                grid.down('[text=Clear Grouping]').setDisabled(!grouped);
+                
+                // Sync state of group toggle checkboxes
+                if (grouped && groupBy === 'cuisine') {
+                    toggleMenuItems = grid.down('button[text=Toggle groups...]').menu.items.items;
+                    for (len = toggleMenuItems.length; i < len; i++) {
+                        toggleMenuItems[i].setChecked(groupingFeature.isExpanded(toggleMenuItems[i].text));
+                    }
+                    grid.down('[text=Toggle groups...]').enable();
+                } else {
+                    grid.down('[text=Toggle groups...]').disable();
+                }
+            }
+        }
+		*/
+    });
+
 /*
-Ext.create('Ext.data.Store', {
-    storeId:'simpsonsStore',
-    fields:['name', 'email', 'phone'],
-    data:{'items':[
-        { 'name': 'Lisa',  "email":"lisa@simpsons.com",  "phone":"555-111-1224"  },
-        { 'name': 'Bart',  "email":"bart@simpsons.com",  "phone":"555-222-1234" },
-        { 'name': 'Homer', "email":"home@simpsons.com",  "phone":"555-222-1244"  },
-        { 'name': 'Marge', "email":"marge@simpsons.com", "phone":"555-222-1254"  }
-    ]},
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'json',
-            root: 'items'
+     var groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
+            groupHeaderTpl: '{columnName}: {name} ({rows.length} Item{[values.rows.length > 1 ? "s" : ""]})',
+            hideGroupedHeader: true,
+            startCollapsed: true,
+            id: 'restaurantGrouping'
+        }),
+        groups = restaurants.getGroups(),
+        len = groups.length, i = 0,
+        toggleMenu = [],
+        toggleGroup = function(item) {
+            var groupName = item.text;
+            if (item.checked) {
+                groupingFeature.expand(groupName, true);
+            } else {
+                groupingFeature.collapse(groupName, true);
+            }
+        };
+
+    for (; i < len; i++) {
+        toggleMenu[i] = {
+            xtype: 'menucheckitem',
+            text: groups[i].name,
+            handler: toggleGroup
         }
     }
-});
-
-Ext.create('Ext.grid.Panel', {
-    title: 'Simpsons',
-    store: Ext.data.StoreManager.lookup('simpsonsStore'),
-    columns: [
-        { header: 'Name',  dataIndex: 'name' },
-        { header: 'Email', dataIndex: 'email', flex: 1 },
-        { header: 'Phone', dataIndex: 'phone' }
-    ],
-    height: 200,
-    width: 400,
-    renderTo: Ext.getBody()
-});
 */
-
-var propsGrid = Ext.create('Ext.grid.property.Grid', {
-	width: '100%',
-	bodyPadding: 5,
-	padding: '5 0 0 0',
-	renderTo: Ext.getBody(),
-	source: {}
-});
+    var propsGrid = Ext.create('Ext.grid.Panel', {
+        renderTo: Ext.getBody(),
+        //collapsible: true,
+        //iconCls: 'icon-grid',
+        //frame: true,
+        store: sAssets,
+		width: '100%',
+		height: 225,
+        title: '-',
+        //resizable: true,
+        //features: [groupingFeature],
+        /*
+		tbar: ['->', {
+            text: 'Toggle groups...',
+            menu: toggleMenu
+        }],
+		*/
+        columns: [{
+            text: 'Asset',
+            flex: 1,
+			dataIndex: 'asset'
+        },{
+            text: 'Criteria',
+            flex: 2,
+			width: 250,
+            dataIndex: 'criteria'
+        },{
+            text: 'Count',
+			width: 50,
+            dataIndex: 'count'
+        }]
+    });
 
 var scale_slider = new Ext.create('Ext.slider.Single', {
 	width: 130,
@@ -554,7 +615,7 @@ var map_option_layer = new Ext.create('Ext.form.Panel', {
 });
 
 var map_reference = new Ext.create('Ext.form.Panel', {
-    title: 'Reference',
+    title: 'Map Reference',
     bodyPadding: 10,
     padding: '5 0 0 0',
     width: '100%',
@@ -565,18 +626,18 @@ var map_reference = new Ext.create('Ext.form.Panel', {
 });
 
 var map_item_query = new Ext.create('Ext.form.Panel', {
-    title: 'Item Query',
+    title: 'Kansar Info',
     bodyPadding: 10,
     padding: '5 0 0 0',
     width: '100%',
 	height: '100%',
     renderTo: Ext.getBody(),
     items: [
-		{
+		/* {
 			xtype: 'textfield',
 			id: 'map_nama_kansar',
 			fieldLabel: 'Kantor SAR'
-		},
+		},*/
 		{
 			xtype: 'button', 
 			name: 'map_show_tanah', 
@@ -584,7 +645,8 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Tanah',
 			listeners: {
 				click : function(){
-					Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', Ext.getCmp('map_nama_kansar').value);
+					//Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', Ext.getCmp('map_nama_kansar').value);
+					Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', sLocationCode);
 				}
 			}
 		},
@@ -595,7 +657,8 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Bangunan',
 			listeners: {
 				click : function(){
-					Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', Ext.getCmp('map_nama_kansar').value);
+					//Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', Ext.getCmp('map_nama_kansar').value);
+					Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', sLocationCode);
 				}
 			}
 		},
@@ -606,7 +669,8 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Alat Besar',
 			listeners: {
 				click : function(){
-					Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', Ext.getCmp('map_nama_kansar').value);
+					//Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', Ext.getCmp('map_nama_kansar').value);
+					Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', sLocationCode);
 				}
 			}
 		},
@@ -617,7 +681,8 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Angkutan',
 			listeners: {
 				click : function(){
-					Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', Ext.getCmp('map_nama_kansar').value);
+					//Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', Ext.getCmp('map_nama_kansar').value);
+					Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', sLocationCode);
 				}
 			}
 		},
@@ -628,7 +693,8 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Perairan',
 			listeners: {
 				click : function(){
-					Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', Ext.getCmp('map_nama_kansar').value);
+					//Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', Ext.getCmp('map_nama_kansar').value);
+					Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', sLocationCode);
 				}
 			}
 		},
@@ -645,8 +711,8 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 		{id: 'center_map_navigator', region: 'center', split: true, bodyStyle: 'padding: 6px; background : #35537e;', width: '100%', height: '100%',
 		 html: '<img onClick="imgClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
 		},
-		{id: 'East_map_navigator', title: 'Reference and Query', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
-		 items: [/*map_reference,*/ map_item_query]
+		{id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
+		 items: [map_reference, map_item_query]
 		}
    ],
 	listeners: {
