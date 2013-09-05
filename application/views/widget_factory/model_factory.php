@@ -194,6 +194,13 @@ Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
     ]
 });
 
+Ext.define('MAngkutanLautPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'jenis_perlengkapan', 'no', 
+        'nama', 'keterangan'
+    ]
+});
+
 Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
     fields: ['id', 'kd_lokasi', 
         'kd_brg', 'no_aset', 
@@ -223,6 +230,13 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
         'udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
         'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',
         'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file'
+    ]
+});
+
+Ext.define('MAngkutanUdaraPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'jenis_perlengkapan', 'no', 
+        'nama', 'keterangan','part_number','serial_number'
     ]
 });
   

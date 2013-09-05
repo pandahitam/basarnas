@@ -91,5 +91,63 @@ class Asset_Angkutan_Laut extends MY_Controller {
                 
 		return $this->deleteData($data);
 	}
+        
+        function getSpecificPerlengkapanAngkutanLaut()
+        {
+            if($_POST['open'] == 1)
+            {
+                $data = $this->model->getSpecificPerlengkapanAngkutanLaut($_POST['id_ext_asset']);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+                
+            }
+        }
+        
+        function modifyPerlengkapanAngkutanLaut()
+        {
+            $dataPerlengkapanLaut = array();
+            $dataPerlengkapanLautFields = array(
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan'
+            );
+            
+            foreach ($dataPerlengkapanLautFields as $field) {
+			$dataPerlengkapanLaut[$field] = $this->input->post($field);
+            }
+                $this->db->set($dataPerlengkapanLaut);
+                $this->db->replace('ext_asset_angkutan_laut_perlengkapan');
+               
+        }
+        
+        function deletePerlengkapanAngkutanLaut()
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                foreach($data as $deleted)
+                {
+                    $deletedArray[] =$deleted['id'];
+                }
+                $this->db->where_in('id',$deletedArray);
+                
+		$this->db->delete('ext_asset_angkutan_laut_perlengkapan');
+	}
+        
+        function requestIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $this->db->insert('ext_asset_angkutan',$receivedData);
+            $idExt = $this->db->insert_id();
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
 }
 ?>

@@ -34,6 +34,210 @@
             return grid;
         };
         
+        Grid.angkutanLautPerlengkapan = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_ext_asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            
+                        ]
+                    },
+                    search: {
+                        id: 'search_angkutanLaut_perlengkapan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_angkutanLaut_perlengkapan',
+                        add: {
+                            id: 'button_add_angkutanLaut_perlengkapan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_angkutanLaut_perlengkapan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_angkutanLaut_perlengkapan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+                
+                 var search = new Ext.create('Ext.ux.form.SearchField', {
+                id: settingGrid.search.id, store: setting.dataStore, width: 180
+                });
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
+        
+        Grid.angkutanUdaraPerlengkapan = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_ext_asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            
+                        ]
+                    },
+                    search: {
+                        id: 'search_angkutanUdara_perlengkapan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_angkutanUdara_perlengkapan',
+                        add: {
+                            id: 'button_add_angkutanUdara_perlengkapan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_angkutanUdara_perlengkapan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_angkutanUdara_perlengkapan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+                
+                 var search = new Ext.create('Ext.ux.form.SearchField', {
+                id: settingGrid.search.id, store: setting.dataStore, width: 180
+                });
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        }
+        
         Grid.riwayatPajak = function(setting)
         {
  
