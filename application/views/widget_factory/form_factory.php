@@ -375,17 +375,17 @@
         };
         
         //start form pendayagunaan
-        Form.pendayagunaan = function(setting)
+        Form.pendayagunaan = function(setting,dataid)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
+            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
-            form.insert(2, Form.Component.pendayagunaan());
+            form.insert(2, Form.Component.pendayagunaan(dataid));
             form.insert(3, Form.Component.fileUpload());
 
             return form;
         };
-        Form.Component.pendayagunaan = function() {
+        Form.Component.pendayagunaan = function(dataid) {
             var component = [{
                     xtype: 'fieldset',
                     layout: 'column',
@@ -404,6 +404,11 @@
                             defaultType: 'textfield',
                             items: [
                                 {
+                                    xtype:'hidden',
+                                    name: 'id',
+                                    value:dataid,
+                                },
+                                {
                                     xtype:'numberfield',
                                     fieldLabel: 'Part Number',
                                     name: 'part_number',
@@ -418,7 +423,6 @@
                                     store: Ext.create('Ext.data.Store', {
                                         fields: ['name', 'value'],
                                         data : [
-                                            {"name":"Mode Pendayagunaan", "value":"Mode Pendayagunaan"},
                                             {"name":"Penyewaan", "value":"Penyewaan"},
                                             {"name":"Sewa Guna", "value":"Sewa Guna"},
                                             {"name":"KSO", "value":"KSO"},
@@ -427,6 +431,7 @@
                                     queryMode: 'local',
                                     displayField: 'name',
                                     valueField: 'value',
+                                    emptyText: 'Pendayagunaan'
                                 }
                             ]
                         }, {
@@ -653,7 +658,6 @@
                                 var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
                             }
                             
-//                           debugger;
                             if (imageField !== null)
                             {
                                 var arrayPhoto = [];

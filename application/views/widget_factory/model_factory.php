@@ -41,9 +41,9 @@ Ext.define('MKlasifikasiAsetLvl3', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPendayagunaan', {extend: 'Ext.data.Model',
-    fields: ['kd_lokasi', 'kd_brg', 'no_aset', 
+    fields: ['id','kd_lokasi', 'kd_brg', 'no_aset', 'nama',
              'part_number','serial_number','mode_pendayagunaan','tanggal_start',
-              'tanggal_end','document','nama_unker',
+              'tanggal_end','document','nama_unker','pihak_ketiga','description',
               'kd_gol','kd_bid','kd_kelompok','kd_skel', 'kd_sskel',
               'nama_klasifikasi_aset', 'kd_klasifikasi_aset',
               'kd_lvl1','kd_lvl2','kd_lvl3'

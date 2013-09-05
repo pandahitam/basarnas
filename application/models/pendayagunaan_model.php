@@ -3,10 +3,11 @@ class Pendayagunaan_Model extends MY_Model{
 	
 	function __construct(){
 		parent::__construct();
-		$this->table = 'pendayagunaan';
+                $this->table = 'pendayagunaan';
+		$this->extTable = 'pendayagunaan';
                 
-                $this->selectColumn = "SELECT t.kd_lokasi, t.kd_brg, t.no_aset, 
-                        t.part_number,t.serial_number,t.mode_pendayagunaan,t.tanggal_start,
+                $this->selectColumn = "SELECT t.id, t.kd_lokasi, t.kd_brg, t.no_aset, t.nama,t.pihak_ketiga,
+                        t.part_number,t.serial_number,t.mode_pendayagunaan,t.tanggal_start,t.description,
                         t.tanggal_end,t.document,
                         c.ur_upb as nama_unker,
                         e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel
@@ -30,7 +31,7 @@ class Pendayagunaan_Model extends MY_Model{
                         FROM $this->table AS t
                         LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                         LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                         ";
                 }
 		

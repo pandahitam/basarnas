@@ -8,9 +8,9 @@
 
         Ext.namespace('Pendayagunaan', 'Pendayagunaan.reader', 'Pendayagunaan.proxy', 'Pendayagunaan.Data', 'Pendayagunaan.Grid', 'Pendayagunaan.Window', 'Pendayagunaan.Form', 'Pendayagunaan.Action', 'Pendayagunaan.URL');
         Pendayagunaan.URL = {
-            read: BASE_URL + 'Pendayagunaan/getAllData',
-            createUpdate: BASE_URL + 'Pendayagunaan/modifyPendayagunaan',
-            remove: BASE_URL + 'Pendayagunaan/deletePendayagunaan'
+            read: BASE_URL + 'pendayagunaan/getAllData',
+            createUpdate: BASE_URL + 'pendayagunaan/modifyPendayagunaan',
+            remove: BASE_URL + 'pendayagunaan/deletePendayagunaan'
         };
 
         Pendayagunaan.reader = new Ext.create('Ext.data.JsonReader', {
@@ -60,19 +60,23 @@
                     noAsetHidden: false
                 }
             };
-
-            var form = Form.pendayagunaan(setting);
+            var tempId = ''; //TEMPORARY MEASURES ONLY UNTIL THE ROOT OF THE PROBLEM IS FOUND 
+            if(data !== null )
+            {
+                tempId = data.id;
+            }
+            var form = Form.pendayagunaan(setting,tempId);
 
             if (data !== null)
             {
-                //form.getForm().setValues(data);
-                var task = Ext.TaskManager.start({
-                    run: function () {
-                        form.getForm().setValues(data)
-                    },
-                    interval: 1000,
-                    repeat:2
-                });
+                form.getForm().setValues(data);
+//                var task = Ext.TaskManager.start({
+//                    run: function () {
+//                        form.getForm().setValues(data)
+//                    },
+//                    interval: 1000,
+//                    repeat:2
+//                });
             }
             return form;
         };
@@ -90,7 +94,6 @@
             {
                 var data = selected[0].data;
                 delete data.nama_unker;
-
                 if (Modal.processEdit.items.length === 0)
                 {
                     Modal.processEdit.setTitle('Edit Pendayagunaan');
@@ -190,8 +193,8 @@
                 title: 'DAFTAR PENDAYAGUNAAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'ID', dataIndex: 'id', flex:0.5, hidden: false, groupable: false, filter: {type: 'number'}},
-                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'ID', dataIndex: 'id', flex:0.5, hidden: true, groupable: false, filter: {type: 'number'}},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
@@ -207,8 +210,9 @@
                     {header: 'Pihak Ke-Tiga', dataIndex: 'pihak_ketiga', flex:1, hidden: false, groupable: false},
                     {header: 'Tanggal Mulai', dataIndex: 'tanggal_start', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Tanggal Selesai', dataIndex: 'tanggal_end', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Deksiprisi', dataIndex: 'deskripsi', flex:1, hidden: false, groupable: false},
+                    {header: 'Deksiprisi', dataIndex: 'description', flex:1, hidden: false, groupable: false},
                     {header: 'Document', dataIndex: 'document', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Aset', dataIndex: 'nama', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     
                     
                 ]
