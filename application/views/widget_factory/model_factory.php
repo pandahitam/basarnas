@@ -232,6 +232,13 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
         'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file'
     ]
 });
+
+Ext.define('MAngkutanUdaraPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'jenis_perlengkapan', 'no', 
+        'nama', 'keterangan','part_number','serial_number'
+    ]
+});
   
 
 Ext.define('MAngkutan', {extend: 'Ext.data.Model',

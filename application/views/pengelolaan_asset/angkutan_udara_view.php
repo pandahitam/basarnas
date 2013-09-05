@@ -8,7 +8,16 @@
 
         Ext.namespace('AngkutanUdara', 'AngkutanUdara.reader', 'AngkutanUdara.proxy', 'AngkutanUdara.Data', 'AngkutanUdara.Grid', 'AngkutanUdara.Window',
                 'AngkutanUdara.Form', 'AngkutanUdara.Action', 'AngkutanUdara.URL');
-
+                
+        AngkutanUdara.dataStorePerlengkapanAngkutanUdara = new Ext.create('Ext.data.Store', {
+            model: MAngkutanUdaraPerlengkapan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'asset_angkutan_udara/getSpecificPerlengkapanAngkutanUdara', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanUdara.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -23,7 +32,9 @@
             createUpdate: BASE_URL + 'asset_angkutan_udara/modifyAngkutanUdara',
             remove: BASE_URL + 'asset_angkutan_udara/deleteAngkutanUdara',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdatePerlengkapanAngkutanUdara: BASE_URL + 'asset_angkutan_udara/modifyPerlengkapanAngkutanUdara',
+            removePerlengkapanAngkutanUdara: BASE_URL + 'asset_angkutan_udara/deletePerlengkapanAngkutanUdara',
         };
 
         AngkutanUdara.reader = new Ext.create('Ext.data.JsonReader', {
@@ -51,8 +62,78 @@
             id: 'Data_AngkutanUdara', storeId: 'DataAngkutanUdara', model: 'MAngkutanUdara', pageSize: 50, noCache: false, autoLoad: true,
             proxy: AngkutanUdara.proxy, groupField: 'tipe'
         });
+        
+        AngkutanUdara.addPerlengkapan = function()
+        {
+            var selected = AngkutanUdara.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Perlengkapan');
+                }
+                    var form = Form.perlengkapanAngkutan(AngkutanUdara.URL.createUpdatePerlengkapanAngkutanUdara, AngkutanUdara.dataStorePerlengkapanAngkutanUdara, false);
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara(data.id));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        AngkutanUdara.editPerlengkapan = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanUdara_perlengkapan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Perlengkapan');
+                }
+                    var form = Form.perlengkapanAngkutan(AngkutanUdara.URL.createUpdatePerlengkapanAngkutanUdara, AngkutanUdara.dataStorePerlengkapanAngkutanUdara, false);
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara(data.id));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+        }};
+        
+        AngkutanUdara.removePerlengkapan = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanUdara_perlengkapan').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePerlengkapanAngkutanUdara,AngkutanUdara.dataStorePerlengkapanAngkutanUdara);
+        };
 
         AngkutanUdara.Form.create = function(data, edit) {
+            var setting_grid_perlengkapan = {
+                id:'grid_angkutanUdara_perlengkapan',
+                toolbar:{
+                    add: AngkutanUdara.addPerlengkapan,
+                    edit: AngkutanUdara.editPerlengkapan,
+                    remove: AngkutanUdara.removePerlengkapan
+                },
+                dataStore:AngkutanUdara.dataStorePerlengkapanAngkutanUdara
+            };
            var form = Form.asset(AngkutanUdara.URL.createUpdate, AngkutanUdara.Data, edit, true);
              var tab = Tab.formTabs();
             tab.add({
@@ -85,7 +166,7 @@
                 deferredRender: false,
                 bodyStyle:{background:'none'},
                 items: [
-                        Form.Component.tambahanAngkutanUdara(),
+                        Form.Component.tambahanAngkutanUdara(setting_grid_perlengkapan,edit),
                        ],
                 listeners: {
                     'beforeclose': function() {
@@ -370,6 +451,7 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
+                var flagExtAsset = false;
 
                 if (Modal.assetEdit.items.length === 0)
                 {
@@ -377,10 +459,36 @@
                     Modal.assetEdit.add(Region.createSidePanel(AngkutanUdara.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
-
-                var _form = AngkutanUdara.Form.create(data, true);
-                Tab.addToForm(_form, 'angkutanUdara-details', 'Simak Details');
-                Modal.assetEdit.show();
+                
+                if(data.id == null || data.id == undefined)
+                {   
+                    $.ajax({
+                       url:BASE_URL + 'asset_angkutan_udara/requestIdExtAsset',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            flagExtAsset = true;
+                            data.id = response.idExt;
+                        }
+                           
+                       }
+                    });
+                }
+                else
+                {
+                    flagExtAsset = true;
+                }
+                if(flagExtAsset == true)
+                {
+                    var _form = AngkutanUdara.Form.create(data, true);
+                    Tab.addToForm(_form, 'angkutanUdara-details', 'Simak Details');
+                    Modal.assetEdit.show();
+                    AngkutanUdara.dataStorePerlengkapanAngkutanUdara.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                }
 
             }
         };

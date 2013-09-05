@@ -136,6 +136,13 @@
                     {value:'Alat Lainnya'}]
         });
         
+        Reference.Data.jenisPerlengkapanAngkutanUdara = new Ext.create('Ext.data.Store', {
+            fields: ['value'],
+            data: [{value:'Alat Navigasi/Komunikasi'}, {value:'Alat Penolong/Rescue'},
+                    {value:'Part Pesawat'}, {value:'Alat Pemadam Kebakaran'},
+                    {value:'Alat Lainnya'}]
+        });
+        
         Reference.Data.kondisiPerlengkapan = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
             data: [{text: 'Baik', value: 'Baik'}, {text: 'Rusak Ringan', value: 'Rusak Ringan'}, {text: 'Rusak', value: 'Rusak'}]
@@ -2210,6 +2217,106 @@
         
         }
         
+        Form.Component.dataPerlengkapanAngkutanUdara = function (id_ext_asset)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Udara',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype: 'combo',
+                                fieldLabel: 'Jenis Perlengkapan *',
+                                name: 'jenis_perlengkapan',
+                                anchor: '100%',
+                                allowBlank: false,
+                                store: Reference.Data.jenisPerlengkapanAngkutanUdara,
+                                valueField: 'value',
+                                displayField: 'value', emptyText: 'Pilih Jenis',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Ruangan',
+                                listeners: {
+//                                    'focus': {
+//                                        fn: function(comboField) {
+//                                            var store = comboField.getStore();
+//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
+//                                            comboField.expand();
+//                                        },
+//                                        scope: this
+//                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if(value == "Part Pesawat")
+                                            {
+                                                Ext.getCmp('perlengkapan_angkutan_udara_part_number').setDisabled(false);
+                                                Ext.getCmp('perlengkapan_angkutan_udara_serial_number').setDisabled(false);
+                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(true);
+                                            }
+                                            else
+                                            {
+                                                Ext.getCmp('perlengkapan_angkutan_udara_part_number').setDisabled(true);
+                                                Ext.getCmp('perlengkapan_angkutan_udara_serial_number').setDisabled(true);
+                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(false);
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'No',
+                                name: 'no'
+                            }, {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan',
+                                id:'perlengkapan_angkutan_udara_keterangan'
+                            },
+                            {
+                                disabled:true,
+                                fieldLabel: 'Part Number',
+                                name: 'part_number',
+                                id:'perlengkapan_angkutan_udara_part_number'
+                            },
+                            {
+                                disabled:true,
+                                fieldLabel: 'Serial Number',
+                                name: 'serial_number',
+                                id:'perlengkapan_angkutan_udara_serial_number'
+                            }]
+                    },]
+            };
+
+            return component;
+        
+        }
+        
         Form.Component.dataRiwayatPajakTanahDanBangunan = function(id_ext_asset)
         {
             var component = {
@@ -3109,11 +3216,12 @@
             return subcomponent;
         };
         
-       Form.SubComponent.tambahanAngkutanUdaraPerlengkapan = function(){
+       Form.SubComponent.tambahanAngkutanUdaraPerlengkapan = function(setting,edit){
             var subcomponent = {
                 xtype: 'fieldset',
-                layout: 'column',
+                layout: 'anchor',
                 anchor: '100%',
+                height: (edit==true)?300:150,
                 title: 'Perlengkapan Angkutan Udara',
                 border: false,
                 frame: true,
@@ -3121,12 +3229,12 @@
                 defaults: {
                     layout: 'anchor'
                 },
-                items: []};
+                items: [(edit==true)?Grid.angkutanUdaraPerlengkapan(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]};
                 
             return subcomponent;
         };
 
-        Form.Component.tambahanAngkutanUdara = function() {
+        Form.Component.tambahanAngkutanUdara = function(setting_grid_perlengkapan,edit) {
             var component = {
                 xtype: 'fieldset',
                 layout: 'anchor',
@@ -3142,7 +3250,7 @@
                             Form.SubComponent.tambahanAngkutanUdaraSuratBuktiKepemilikan(),
                             Form.SubComponent.tambahanAngkutanUdaraSertifikatPendaftaranPesawatUdara(),
                             Form.SubComponent.tambahanAngkutanUdaraSertifikatKelaikanUdara(),
-                            Form.SubComponent.tambahanAngkutanUdaraPerlengkapan(),
+                            Form.SubComponent.tambahanAngkutanUdaraPerlengkapan(setting_grid_perlengkapan,edit),
                             
                 ]
             };

@@ -89,5 +89,76 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 
 		return $this->deleteData($data);
 	}
+        
+        function getSpecificPerlengkapanAngkutanUdara()
+        {
+            if($_POST['open'] == 1)
+            {
+                $data = $this->model->getSpecificPerlengkapanAngkutanUdara($_POST['id_ext_asset']);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+                
+            }
+        }
+        
+        function modifyPerlengkapanAngkutanUdara()
+        {
+            $dataPerlengkapanUdara = array();
+            $dataPerlengkapanUdaraFields = array(
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','part_number','serial_number'
+            );
+            
+            foreach ($dataPerlengkapanUdaraFields as $field) {
+			$dataPerlengkapanUdara[$field] = $this->input->post($field);
+            }
+            
+            if($dataPerlengkapanUdara['part_number'] == '' || $dataPerlengkapanUdara['part_number'] == null)
+            {
+                $dataPerlengkapanUdara['part_number'] = '-';
+            }
+            if($dataPerlengkapanUdara['serial_number'] == '' || $dataPerlengkapanUdara['serial_number'] == null)
+            {
+                $dataPerlengkapanUdara['serial_number'] = '-';
+            }
+            if($dataPerlengkapanUdara['keterangan'] == '' || $dataPerlengkapanUdara['keterangan'] == null)
+            {
+                $dataPerlengkapanUdara['keterangan'] = '-';
+            }
+                $this->db->set($dataPerlengkapanUdara);
+                $this->db->replace('ext_asset_angkutan_udara_perlengkapan');
+               
+        }
+        
+        function deletePerlengkapanAngkutanUdara()
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                foreach($data as $deleted)
+                {
+                    $deletedArray[] =$deleted['id'];
+                }
+                $this->db->where_in('id',$deletedArray);
+                
+		$this->db->delete('ext_asset_angkutan_udara_perlengkapan');
+	}
+        
+        function requestIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $this->db->insert('ext_asset_angkutan',$receivedData);
+            $idExt = $this->db->insert_id();
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
 }
 ?>
