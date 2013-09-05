@@ -308,7 +308,7 @@ function applyItemQuery(kodeWilayah) {
 							}
 						});
 						sLocationCode = kodeLoc;
-						alert(sLocationCode);
+						//alert(sLocationCode);
 					}
 				}
 			});
