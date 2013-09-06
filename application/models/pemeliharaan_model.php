@@ -16,7 +16,11 @@ class Pemeliharaan_Model extends MY_Model{
 	}
 	
 	function get_AllData(){
-		$query = "$this->selectColumn FROM $this->viewTable";
+		$query = "$this->selectColumn FROM $this->viewTable
+                        where kd_brg NOT LIKE '4%'
+                        AND kd_brg NOT LIKE '30205%'
+                        AND kd_brg NOT LIKE '30203%' AND kd_brg NOT LIKE '30204%'
+                        AND kd_brg NOT LIKE '30201%' AND kd_brg NOT LIKE '30202%'";
 
 		return $this->Get_By_Query($query);	
 	}

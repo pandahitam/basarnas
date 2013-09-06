@@ -256,7 +256,7 @@
         var new_tabpanel = {
             xtype: 'panel',
             id: 'pemeliharaan_asset', title: 'Pemeliharaan Umum', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Region.filterPanelPemeliharaan(Pemeliharaan.Data), Pemeliharaan.Grid.grid]
+            layout: 'border', items: [Region.filterPanelPemeliharaan(Pemeliharaan.Data,'pemeliharaan_alat_lainnya'), Pemeliharaan.Grid.grid]
         };
      
 <?php } else {

@@ -256,7 +256,7 @@
         var new_tabpanel = {
             xtype: 'panel',
             id: 'pemeliharaan_asset_kendaraan_laut', title: 'Pemeliharaan Laut ', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Region.filterPanelPemeliharaan(PemeliharaanLaut.Data), PemeliharaanLaut.Grid.grid]
+            layout: 'border', items: [Region.filterPanelPemeliharaan(PemeliharaanLaut.Data,'pemeliharaan_kendaraan_laut'), PemeliharaanLaut.Grid.grid]
         };
      
 <?php } else {

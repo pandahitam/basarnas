@@ -326,8 +326,9 @@
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
-            form.insert(1, Form.Component.perlengkapan());
-            form.insert(2, Form.Component.inventorypenerimaan());
+            form.insert(1, Form.Component.inventorypenerimaan());
+            form.insert(2, Form.Component.inventoryPerlengkapan());
+
 
             return form;
         }
@@ -815,6 +816,7 @@
                             {
                                 form.submit({
                                     success: function() {
+                                        
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
                                         if (!edit)
@@ -1249,9 +1251,6 @@
 
         Form.Component.fileUploadRiwayatPajak = function(edit) {
             
-            var photoStore = new Ext.create('Ext.data.Store', {
-                                        fields: ['url', 'name']
-                                    });
                                     
             var documentStore = new Ext.create('Ext.data.Store', {
                                         fields: ['url', 'name']
@@ -1268,23 +1267,6 @@
                     marginTop: '10px'
                 },
                 items: [{
-                        xtype: 'hidden',
-                        name: 'image_url',
-                        listeners: {
-                            change: function(obj, value) {
-                                
-                                if (value !== null & value.length > 0)
-                                {
-                                    
-                                    _.each(value.split(','), function(img) {
-                                        var fullPath = Reference.URL.imageBasePath + img;
-                                        photoStore.add({url: fullPath, name: img});
-
-                                    });
-                                }
-                            }
-                        }
-                    },{
                         xtype: 'hidden',
                         name: 'file_setoran',
                         listeners: {
@@ -1390,6 +1372,8 @@
 
             return component;
         };
+        
+        
 
         Form.Component.basicAsset = function() {
             var component = {
@@ -4277,6 +4261,11 @@
                                             {
                                                 comboUnitWaktu.setValue(value);
                                             }
+                                            if(value != 0 || value != null)
+                                            {
+                                                var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
+                                                pilihUnit.setValue(1);
+                                            }
                                         }
                                     }
                                 }
@@ -4292,6 +4281,11 @@
                                             if (comboUnitFreq !== null)
                                             {
                                                 comboUnitFreq.setValue(value);
+                                            }
+                                            if(value != 0 || value != null)
+                                            {
+                                                var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
+                                                pilihUnit.setValue(2);
                                             }
                                         }
                                     }
@@ -4550,19 +4544,64 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [
-                                {
-                                    xtype: 'numberfield',
-                                    fieldLabel: 'Penggunaan Waktu',
-                                    name: 'penggunaan_waktu',                                    
-                                },{
-                                    xtype: 'numberfield',
-                                    fieldLabel: 'Penggunaan Freq',
-                                    name: 'penggunaan_freq',                                    
-                                },
-                                {
+                            items: [{
                                     xtype: 'combo',
                                     disabled: false,
+                                    fieldLabel: 'Pilih Unit',
+                                    name: 'comboUnitWaktuOrUnitPenggunaan',
+                                    id : 'comboUnitWaktuOrUnitPenggunaan',
+                                    allowBlank: true,
+                                    store: Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Unit',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit',
+                                    listeners: {
+                                        change: function(obj, value) {
+                                            var unitWaktu = Ext.getCmp('combo_unit_waktu');
+                                            var unitPengunaan = Ext.getCmp('combo_unit_freq');
+                                            var freqwaktu = Ext.getCmp('penggunaan_waktu');
+                                            var freqpengunaan = Ext.getCmp('penggunaan_freq');
+                                            if (value === 1)
+                                            {
+                                                unitWaktu.enable();
+                                                unitPengunaan.disable();
+                                                freqwaktu.enable();
+                                                freqpengunaan.disable();
+                                                
+                                            }
+                                            else if (value === 2)
+                                            {
+                                                unitWaktu.disable();
+                                                unitPengunaan.enable();
+                                                freqwaktu.disable();
+                                                freqpengunaan.enable();
+                                            }
+                                            else
+                                            {
+                                                unitWaktu.disable();
+                                                unitPengunaan.disable();
+                                                freqwaktu.disable();
+                                                freqpengunaan.disable();
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    disabled:true,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Penggunaan Waktu',
+                                    name: 'penggunaan_waktu',
+                                    id:'penggunaan_waktu'
+                                },{
+                                    disabled:true,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Penggunaan Freq',
+                                    name: 'penggunaan_freq',
+                                    id: 'penggunaan_freq',
+                                },
+                                {
+                                    disabled:true,
+                                    xtype: 'combo',
                                     fieldLabel: 'Unit Waktu',
                                     name: 'combo_unit_waktu',
                                     id : 'combo_unit_waktu',
@@ -4600,8 +4639,8 @@
                                         }
                                     }
                                 },{
+                                    disabled:true,
                                     xtype: 'combo',
-                                    disabled:false,
                                     fieldLabel: 'Unit Freq',
                                     name: 'combo_unit_freq',
                                     id : 'combo_unit_freq',
@@ -4661,6 +4700,92 @@
             return component;
         };
         
+        Form.Component.inventoryPerlengkapan = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'Detail Perlengkapan',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Part Number *',
+                                    name: 'part_number',
+                                    allowBlank: false,
+                                    store: Reference.Data.partNumber,
+                                    valueField: 'part_number',
+                                    displayField: 'nama', emptyText: 'Pilih Part Number',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldPartNumber = Ext.getCmp('part_number');
+                                                    
+                                                    if (fieldPartNumber != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldPartNumber.setValue(value);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number'
+                                },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty'
+                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
         Form.Component.inventorypenerimaan = function(edit) {
 
             var component = [{
@@ -4677,42 +4802,48 @@
                             layout: 'anchor',
                             defaults: {
                                 anchor: '95%',
-                                labelWidth: 120
+                                labelWidth: 130
                             },
                             defaultType: 'textfield',
                             items: [{
                                     xtype: 'datefield',
                                     disabled: false,
-                                    fieldLabel: 'Tanggal Berita Acara',
+                                    fieldLabel: 'Tanggal Berita Acara *',
                                     name: 'tgl_berita_acara',
-                                    id : 'tgl_berita_acara',
                                     allowBlank: false,
                                 }, {
                                     disabled: false,
-                                    fieldLabel: 'No Berita Acara',
+                                    fieldLabel: 'No Berita Acara *',
                                     name: 'nomor_berita_acara',
-                                    id : 'nomor_berita_acara',
                                     allowBlank: false,
                                 }, {
                                     xtype: 'datefield',
                                     disabled: false,
-                                    fieldLabel: 'Tanggal Penerimaan',
+                                    fieldLabel: 'Tanggal Penerimaan *',
                                     name: 'tgl_penerimaan',
-                                    id : 'tgl_penerimaan',
                                     allowBlank: false,
                                 },{
                                     disabled: false,
-                                    fieldLabel: 'Asal Barang',
+                                    fieldLabel: 'Asal Barang *',
                                     name: 'asal_barang',
-                                    id : 'asal_barang',
                                     allowBlank: false,
+                                },
+                                {
+                                    disabled: false,
+                                    fieldLabel: 'Nama Penerima *',
+                                    name: 'nama_org',
+                                    allowBlank: false,
+                                },
+                                {
+                                    xtype:'textarea',
+                                    fieldLabel: 'Keterangan',
+                                    name: 'nama_org',
                                 },
                                 {
                                     xtype:'hidden',
                                     disabled: false,
                                     fieldLabel: 'Date Created',
                                     name: 'date_created',
-                                    id : 'date_created',
                                     value: new Date()
                                 }
                                 

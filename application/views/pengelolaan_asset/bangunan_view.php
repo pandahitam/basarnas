@@ -112,7 +112,6 @@
                 items: [
                         Form.Component.unit(edit,form),
                         Form.Component.kode(edit),
-                        Form.Component.klasifikasiAset(edit),
                         Form.Component.basicAsset(edit),
                         Form.Component.address(),
                         Form.Component.bangunan(),
@@ -799,7 +798,7 @@
                 title: 'DAFTAR ASSET BANGUNAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Id Ext Asset', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
@@ -881,7 +880,7 @@
 
         var new_tabpanel_Asset = {
             id: 'bangunan_panel', title: 'Bangunan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Bangunan.Data,'bangunan'),Bangunan.Grid.grid]
+            items: [Region.filterPanelAsetNoKlasifikasi(Bangunan.Data,'bangunan'),Bangunan.Grid.grid]
         };
 
     <?php } else {
