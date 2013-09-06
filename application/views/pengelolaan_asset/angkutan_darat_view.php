@@ -8,7 +8,16 @@
 
         Ext.namespace('AngkutanDarat', 'AngkutanDarat.reader', 'AngkutanDarat.proxy', 'AngkutanDarat.Data', 'AngkutanDarat.Grid', 'AngkutanDarat.Window',
                 'AngkutanDarat.Form', 'AngkutanDarat.Action', 'AngkutanDarat.URL');
-
+        
+        AngkutanDarat.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
+            model: MPendayagunaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pendayagunaan/getSpecificPendayagunaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanDarat.dataStoreMutasi = new Ext.create('Ext.data.Store', {
             model: MMutasi, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -32,7 +41,9 @@
             createUpdate: BASE_URL + 'asset_angkutan_darat/modifyAngkutanDarat',
             remove: BASE_URL + 'asset_angkutan_darat/deleteAngkutanDarat',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
         };
 
         AngkutanDarat.reader = new Ext.create('Ext.data.JsonReader', {
@@ -183,9 +194,123 @@
                         AngkutanDarat.Action.pemindahanList();
                     }
                 },
+               pendayagunaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanDarat-pendayagunaan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanDarat.Action.pendayagunaanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        AngkutanDarat.Form.createPendayagunaan = function(data, dataForm, edit) {
+            var setting = {
+                url: AngkutanDarat.URL.createUpdatePendayagunaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pendayagunaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        AngkutanDarat.Action.pendayagunaanEdit = function() {
+            var selected = Ext.getCmp('angkutanDarat_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = AngkutanDarat.Form.createPendayagunaan(AngkutanDarat.dataStorePendayagunaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pendayagunaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+
+            }
+        };
+
+        AngkutanDarat.Action.pendayagunaanRemove = function() {
+            var selected = Ext.getCmp('angkutanDarat_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                console.log(arrayDeleted);
+                Modal.deleteAlert(arrayDeleted, AngkutanDarat.URL.removePendayagunaan, AngkutanDarat.dataStorePendayagunaan);
+            }
+        };
+
+
+        AngkutanDarat.Action.pendayagunaanAdd = function()
+        {
+            var selected = AngkutanDarat.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset
+            };
+
+            var form = AngkutanDarat.Form.createPendayagunaan(AngkutanDarat.dataStorePendayagunaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pendayagunaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+        };
+        
+        AngkutanDarat.Action.pendayagunaanList = function() {
+            var selected = AngkutanDarat.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                AngkutanDarat.dataStorePendayagunaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                AngkutanDarat.dataStorePendayagunaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                AngkutanDarat.dataStorePendayagunaan.getProxy().extraParams.no_aset = data.no_aset;
+                AngkutanDarat.dataStorePendayagunaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "angkutanDarat_grid_pendayagunaan",
+                    edit : AngkutanDarat.Action.pendayagunaanEdit,
+                    add : AngkutanDarat.Action.pendayagunaanAdd,
+                    remove : AngkutanDarat.Action.pendayagunaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: AngkutanDarat.dataStorePendayagunaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _angkutanDaratPendayagunaanGrid = Grid.pendayagunaanGrid(setting);
+                Tab.addToForm(_angkutanDaratPendayagunaanGrid, 'angkutanDarat-pendayagunaan', 'Pendayagunaan');
+            }
         };
         
         AngkutanDarat.Action.pemindahanEdit = function () {

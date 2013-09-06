@@ -8,7 +8,16 @@
 
         Ext.namespace('Ruang', 'Ruang.reader', 'Ruang.proxy', 'Ruang.Data', 'Ruang.Grid', 'Ruang.Window', 'Ruang.Form', 'Ruang.Action',
                 'Ruang.URL');
-                
+        
+        Ruang.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
+            model: MPendayagunaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pendayagunaan/getSpecificPendayagunaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Ruang.dataStoreMutasi = new Ext.create('Ext.data.Store', {
             model: MMutasi, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -30,7 +39,9 @@
             createUpdate: BASE_URL + 'asset_ruang/modifyRuang',
             remove: BASE_URL + 'asset_ruang/deleteRuang',
             createUpdatePemeliharaan: BASE_URL + 'pemeliharaan/modifyPemeliharaanRuang',
-            removePemeliharaan: BASE_URL + 'pemeliharaan/deletePemeliharaanRuang'
+            removePemeliharaan: BASE_URL + 'pemeliharaan/deletePemeliharaanRuang',
+            createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
 
         };
 
@@ -147,9 +158,125 @@
                         Ruang.Action.pemindahanList();
                     }
                 },
+               pendayagunaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('ruang-pendayagunaan');
+                    if (tabpanels === undefined)
+                    {
+                        Ruang.Action.pendayagunaanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Ruang.Form.createPendayagunaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Ruang.URL.createUpdatePendayagunaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pendayagunaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Ruang.Action.pendayagunaanEdit = function() {
+            var selected = Ext.getCmp('ruang_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Ruang.Form.createPendayagunaan(Ruang.dataStorePendayagunaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pendayagunaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'ruang-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Ruang.Action.pendayagunaanRemove = function() {
+            var selected = Ext.getCmp('ruang_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                console.log(arrayDeleted);
+                Modal.deleteAlert(arrayDeleted, Ruang.URL.removePendayagunaan, Ruang.dataStorePendayagunaan);
+            }
+        };
+
+
+        Ruang.Action.pendayagunaanAdd = function()
+        {
+            var selected = Ruang.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset
+            };
+
+            var form = Ruang.Form.createPendayagunaan(Ruang.dataStorePendayagunaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pendayagunaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'ruang-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Ruang.Action.pendayagunaanList = function() {
+            var selected = Ruang.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Ruang.dataStorePendayagunaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Ruang.dataStorePendayagunaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Ruang.dataStorePendayagunaan.getProxy().extraParams.no_aset = data.no_aset;
+                Ruang.dataStorePendayagunaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "ruang_grid_pendayagunaan",
+                    edit : Ruang.Action.pendayagunaanEdit,
+                    add : Ruang.Action.pendayagunaanAdd,
+                    remove : Ruang.Action.pendayagunaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Ruang.dataStorePendayagunaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _ruangPendayagunaanGrid = Grid.pendayagunaanGrid(setting);
+                Tab.addToForm(_ruangPendayagunaanGrid, 'ruang-pendayagunaan', 'Pendayagunaan');
+            }
         };
         
         Ruang.Action.pemindahanEdit = function () {

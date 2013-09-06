@@ -66,14 +66,14 @@ class Pendayagunaan extends MY_Controller {
 	}
 	
 	
-//	function getSpecificPemeliharaan()
-//	{
-//		$kd_lokasi = $this->input->post("kd_lokasi");
-//		$kd_brg = $this->input->post("kd_brg");
-//		$no_aset = $this->input->post("no_aset");
-//		$data = $this->model->get_Pemeliharaan($kd_lokasi, $kd_brg, $no_aset);
-//		$datasend["results"] = $data;
-//		echo json_encode($datasend);
-//	}
+	function getSpecificPendayagunaan()
+	{
+		$kd_lokasi = $this->input->post("kd_lokasi");
+		$kd_brg = $this->input->post("kd_brg");
+		$no_aset = $this->input->post("no_aset");
+		$data = $this->model->get_Pendayagunaan($kd_lokasi, $kd_brg, $no_aset);
+		$datasend["results"] = $data;
+		echo json_encode($datasend);
+	}
 }
 ?>

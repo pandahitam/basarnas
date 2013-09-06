@@ -453,6 +453,102 @@
 
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         };
+        
+        Grid.pendayagunaanGrid = function(setting) {
+                var settingGrid = {
+                    grid: {
+                        id: setting.toolbar.idGrid,
+                        title: 'Pendayagunaan',
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'ID', dataIndex: 'id', flex:0.5, hidden: true, groupable: false, filter: {type: 'number'}},
+                            {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Unit Kerja', dataIndex: 'nama_unker', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Unit Organisasi', dataIndex: 'nama_unor', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'No Aset', dataIndex: 'no_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', flex:1, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', flex:1, groupable: false, filter: {type: 'string'}},
+                            {header: 'Mode Pendayagunaan', dataIndex: 'mode_pendayagunaan', flex:1.5, groupable: false, filter: {type: 'string'}},
+                            {header: 'Pihak Ke-Tiga', dataIndex: 'pihak_ketiga', flex:1, hidden: false, groupable: false},
+                            {header: 'Tanggal Mulai', dataIndex: 'tanggal_start', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tanggal Selesai', dataIndex: 'tanggal_end', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Deksiprisi', dataIndex: 'description', flex:1, hidden: false, groupable: false},
+                            {header: 'Document', dataIndex: 'document', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama Aset', dataIndex: 'nama', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_pendayagunaan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_pendayagunaan',
+                        add: {
+                            id: 'button_add_pendayagunaan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_pendayagunaan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_pendayagunaan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+            
+
+
+
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var search = new Ext.create('Ext.ux.form.SearchField', {
+                id: settingGrid.search.id, store: setting.dataStore, width: 180
+            });
+
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
 
     // use in inventaris asset, 
         Grid.pemeliharaanGrid = function(setting) {

@@ -331,6 +331,7 @@
 
             return form;
         }
+        
         Form.pengadaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
@@ -380,12 +381,25 @@
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
-            form.insert(2, Form.Component.pendayagunaan(dataid));
-            form.insert(3, Form.Component.fileUpload());
+            form.insert(2, Form.Component.klasifikasiAset(setting.isEditing))
+            form.insert(3, Form.Component.pendayagunaan(dataid));
+            form.insert(4, Form.Component.fileUpload());
 
             return form;
         };
-        Form.Component.pendayagunaan = function(dataid) {
+        
+        Form.pendayagunaanInAsset = function(setting,dataid)
+        {
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(1, Form.Component.hiddenIdentifier());
+            form.insert(2, Form.Component.klasifikasiAset(setting.isEditing));
+            form.insert(3, Form.Component.pendayagunaan());
+            form.insert(4, Form.Component.fileUpload());
+
+            return form;
+        };
+        
+        Form.Component.pendayagunaan = function() {
             var component = [{
                     xtype: 'fieldset',
                     layout: 'column',
@@ -404,11 +418,6 @@
                             defaultType: 'textfield',
                             items: [
                                 {
-                                    xtype:'hidden',
-                                    name: 'id',
-                                    value:dataid,
-                                },
-                                {
                                     xtype:'numberfield',
                                     fieldLabel: 'Part Number',
                                     name: 'part_number',
@@ -426,6 +435,7 @@
                                             {"name":"Penyewaan", "value":"Penyewaan"},
                                             {"name":"Sewa Guna", "value":"Sewa Guna"},
                                             {"name":"KSO", "value":"KSO"},
+                                            {"name":"Lainnya", "value":"Lainnya"},
                                         ]
                                     }),
                                     queryMode: 'local',

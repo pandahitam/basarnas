@@ -60,12 +60,7 @@
                     noAsetHidden: false
                 }
             };
-            var tempId = ''; //TEMPORARY MEASURES ONLY UNTIL THE ROOT OF THE PROBLEM IS FOUND 
-            if(data !== null )
-            {
-                tempId = data.id;
-            }
-            var form = Form.pendayagunaan(setting,tempId);
+            var form = Form.pendayagunaan(setting);
 
             if (data !== null)
             {
@@ -194,7 +189,7 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'ID', dataIndex: 'id', flex:0.5, hidden: true, groupable: false, filter: {type: 'number'}},
-                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},

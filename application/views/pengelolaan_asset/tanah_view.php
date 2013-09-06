@@ -7,6 +7,15 @@
 
         Ext.namespace('Tanah', 'Tanah.reader', 'Tanah.proxy', 'Tanah.Data', 'Tanah.Grid', 'Tanah.Window', 'Tanah.Form', 'Tanah.Action', 'Tanah.URL');
         
+        Tanah.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
+            model: MPendayagunaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pendayagunaan/getSpecificPendayagunaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Tanah.dataStoreMutasi = new Ext.create('Ext.data.Store', {
             model: MMutasi, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -44,6 +53,8 @@
             removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
             createUpdateRiwayatPajak: BASE_URL + 'asset_tanah/modifyRiwayatPajak',
             removeRiwayatPajak: BASE_URL + 'asset_tanah/deleteRiwayatPajak',
+            createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
         };
 
         Tanah.reader = new Ext.create('Ext.data.JsonReader', {
@@ -216,9 +227,125 @@
                         Tanah.Action.pemindahanList();
                     }
                 },
+               pendayagunaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('tanah-pendayagunaan');
+                    if (tabpanels === undefined)
+                    {
+                        Tanah.Action.pendayagunaanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Tanah.Form.createPendayagunaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Tanah.URL.createUpdatePendayagunaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pendayagunaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Tanah.Action.pendayagunaanEdit = function() {
+            var selected = Ext.getCmp('tanah_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Tanah.Form.createPendayagunaan(Tanah.dataStorePendayagunaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pendayagunaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Tanah.Action.pendayagunaanRemove = function() {
+            var selected = Ext.getCmp('tanah_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                console.log(arrayDeleted);
+                Modal.deleteAlert(arrayDeleted, Tanah.URL.removePendayagunaan, Tanah.dataStorePendayagunaan);
+            }
+        };
+
+
+        Tanah.Action.pendayagunaanAdd = function()
+        {
+            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset
+            };
+
+            var form = Tanah.Form.createPendayagunaan(Tanah.dataStorePendayagunaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pendayagunaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'tanah-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Tanah.Action.pendayagunaanList = function() {
+            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Tanah.dataStorePendayagunaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Tanah.dataStorePendayagunaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Tanah.dataStorePendayagunaan.getProxy().extraParams.no_aset = data.no_aset;
+                Tanah.dataStorePendayagunaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "tanah_grid_pendayagunaan",
+                    edit : Tanah.Action.pendayagunaanEdit,
+                    add : Tanah.Action.pendayagunaanAdd,
+                    remove : Tanah.Action.pendayagunaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Tanah.dataStorePendayagunaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _tanahPendayagunaanGrid = Grid.pendayagunaanGrid(setting);
+                Tab.addToForm(_tanahPendayagunaanGrid, 'tanah-pendayagunaan', 'Pendayagunaan');
+            }
         };
         
         Tanah.Action.pemindahanEdit = function () {

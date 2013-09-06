@@ -8,7 +8,16 @@
 
         Ext.namespace('Alatbesar', 'Alatbesar.reader', 'Alatbesar.proxy',
                 'Alatbesar.Data', 'Alatbesar.Grid', 'Alatbesar.Window', 'Alatbesar.Form', 'Alatbesar.Action', 'Alatbesar.URL');
-
+        
+        Alatbesar.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
+            model: MPendayagunaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pendayagunaan/getSpecificPendayagunaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Alatbesar.dataStoreMutasi = new Ext.create('Ext.data.Store', {
             model: MMutasi, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -32,7 +41,9 @@
             createUpdate: BASE_URL + 'asset_Alatbesar/modifyAlatbesar',
             remove: BASE_URL + 'asset_Alatbesar/deleteAlatbesar',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
 
         };
 
@@ -155,9 +166,125 @@
                         Alatbesar.Action.pemindahanList();
                     }
                 },
+               pendayagunaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('alatbesar-pendayagunaan');
+                    if (tabpanels === undefined)
+                    {
+                        Alatbesar.Action.pendayagunaanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Alatbesar.Form.createPendayagunaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Alatbesar.URL.createUpdatePendayagunaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pendayagunaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Alatbesar.Action.pendayagunaanEdit = function() {
+            var selected = Ext.getCmp('alatbesar_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Alatbesar.Form.createPendayagunaan(Alatbesar.dataStorePendayagunaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pendayagunaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'alatbesar-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Alatbesar.Action.pendayagunaanRemove = function() {
+            var selected = Ext.getCmp('alatbesar_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                console.log(arrayDeleted);
+                Modal.deleteAlert(arrayDeleted, Alatbesar.URL.removePendayagunaan, Alatbesar.dataStorePendayagunaan);
+            }
+        };
+
+
+        Alatbesar.Action.pendayagunaanAdd = function()
+        {
+            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset
+            };
+
+            var form = Alatbesar.Form.createPendayagunaan(Alatbesar.dataStorePendayagunaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pendayagunaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'alatbesar-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Alatbesar.Action.pendayagunaanList = function() {
+            var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Alatbesar.dataStorePendayagunaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Alatbesar.dataStorePendayagunaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Alatbesar.dataStorePendayagunaan.getProxy().extraParams.no_aset = data.no_aset;
+                Alatbesar.dataStorePendayagunaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "alatbesar_grid_pendayagunaan",
+                    edit : Alatbesar.Action.pendayagunaanEdit,
+                    add : Alatbesar.Action.pendayagunaanAdd,
+                    remove : Alatbesar.Action.pendayagunaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Alatbesar.dataStorePendayagunaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _alatbesarPendayagunaanGrid = Grid.pendayagunaanGrid(setting);
+                Tab.addToForm(_alatbesarPendayagunaanGrid, 'alatbesar-pendayagunaan', 'Pendayagunaan');
+            }
         };
         
         Alatbesar.Action.pemindahanEdit = function () {
@@ -449,7 +576,6 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
-                debugger;
                 if (Modal.assetEdit.items.length === 0)
                 {
                     Modal.assetEdit.setTitle('Edit Alatbesar');

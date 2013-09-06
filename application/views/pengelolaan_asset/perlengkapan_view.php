@@ -9,6 +9,15 @@
         Ext.namespace('Perlengkapan', 'Perlengkapan.reader', 'Perlengkapan.proxy', 'Perlengkapan.Data', 'Perlengkapan.Grid', 'Perlengkapan.Window', 'Perlengkapan.Form', 'Perlengkapan.Action',
                 'Perlengkapan.URL');
         
+        Perlengkapan.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
+            model: MPendayagunaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pendayagunaan/getSpecificPendayagunaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Perlengkapan.dataStoreMutasi = new Ext.create('Ext.data.Store', {
             model: MMutasi, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -30,7 +39,9 @@
             createUpdate: BASE_URL + 'asset_perlengkapan/modifyPerlengkapan',
             remove: BASE_URL + 'asset_perlengkapan/deletePerlengkapan',
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/modifyPemeliharaanPerlengkapan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/deletePemeliharaanPerlengkapan'
+            removePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/deletePemeliharaanPerlengkapan',
+            createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
 
         };
 
@@ -146,9 +157,125 @@
                         Perlengkapan.Action.pemindahanList();
                     }
                 },
+               pendayagunaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('perlengkapan-pendayagunaan');
+                    if (tabpanels === undefined)
+                    {
+                        Perlengkapan.Action.pendayagunaanList();
+                    }
+                },
             };
 
             return actions;
+        };
+        
+        Perlengkapan.Form.createPendayagunaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Perlengkapan.URL.createUpdatePendayagunaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pendayagunaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Perlengkapan.Action.pendayagunaanEdit = function() {
+            var selected = Ext.getCmp('perlengkapan_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Perlengkapan.Form.createPendayagunaan(Perlengkapan.dataStorePendayagunaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pendayagunaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'perlengkapan-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Perlengkapan.Action.pendayagunaanRemove = function() {
+            var selected = Ext.getCmp('perlengkapan_grid_pendayagunaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                console.log(arrayDeleted);
+                Modal.deleteAlert(arrayDeleted, Perlengkapan.URL.removePendayagunaan, Perlengkapan.dataStorePendayagunaan);
+            }
+        };
+
+
+        Perlengkapan.Action.pendayagunaanAdd = function()
+        {
+            var selected = Perlengkapan.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset
+            };
+
+            var form = Perlengkapan.Form.createPendayagunaan(Perlengkapan.dataStorePendayagunaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pendayagunaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'perlengkapan-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Perlengkapan.Action.pendayagunaanList = function() {
+            var selected = Perlengkapan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Perlengkapan.dataStorePendayagunaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perlengkapan.dataStorePendayagunaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perlengkapan.dataStorePendayagunaan.getProxy().extraParams.no_aset = data.no_aset;
+                Perlengkapan.dataStorePendayagunaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "perlengkapan_grid_pendayagunaan",
+                    edit : Perlengkapan.Action.pendayagunaanEdit,
+                    add : Perlengkapan.Action.pendayagunaanAdd,
+                    remove : Perlengkapan.Action.pendayagunaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Perlengkapan.dataStorePendayagunaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _perlengkapanPendayagunaanGrid = Grid.pendayagunaanGrid(setting);
+                Tab.addToForm(_perlengkapanPendayagunaanGrid, 'perlengkapan-pendayagunaan', 'Pendayagunaan');
+            }
         };
         
         Perlengkapan.Action.pemindahanEdit = function () {

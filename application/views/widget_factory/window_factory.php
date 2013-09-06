@@ -1258,9 +1258,7 @@
                     }, '-', {
                         text: 'Pendayagunaan',
                         textAlign: 'left',
-                        handler: function() {
-                            console.log('Button Press');
-                        }
+                        handler: actions.pendayagunaan
                     }, /*'-',{
                      text:'Perencanaan',
                      textAlign:'left',
