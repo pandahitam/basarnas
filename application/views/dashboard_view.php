@@ -922,81 +922,39 @@
             //Load_Variabel(BASE_URL + 'arsip_digital_func');
             //Load_Variabel(BASE_URL + 'user/set_var_access');
             
-            
-            function Load_MapSearch(tab_id,tab_url,dataStoreId,searchValue)
+            function Load_MapSearch(tab_id, tab_url, dataStoreId, searchValue)
             {
-                //LOAD ASSET INVENTARIS TAB
-                Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
-                var new_tab_id = Ext.getCmp('pengelolaan_asset');
-                if (new_tab_id) {
-                    Ext.getCmp('items-body').getLayout().setActiveItem(0);
-                    Ext.getCmp('items-body').doLayout();
-                    Ext.getCmp('Content_Body_Tabs').setActiveTab('pengelolaan_asset');
-                    Ext.getCmp('layout-body').body.unmask();
-                } else {
-                    Ext.Ajax.timeout = Time_Out;
-                    Ext.Ajax.request({
-                        url: BASE_URL + 'pengelolaan_asset', method: 'POST', params: {id_open: 1}, scripts: true, renderer: 'data',
-                        success: function(response) {
-                            var jsonData = response.responseText.substring(14);
-                            var aHeadNode = document.getElementsByTagName('head')[0];
-                            var aScript = document.createElement('script');
-                            aScript.text = jsonData;
-                            aHeadNode.appendChild(aScript);
-                            var new_tab = Ext.getCmp('Content_Body_Tabs');
-                            if (new_tabpanel != "GAGAL") {
-                                Ext.getCmp('items-body').getLayout().setActiveItem(0);
-                                Ext.getCmp('items-body').doLayout();
-                                new_tab.add(new_tabpanel).show();
-                            } else {
-                                Ext.MessageBox.show({title: 'Peringatan !', msg: 'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
-                            }
-
-                        },
-                        failure: function(response) {
-                            Ext.MessageBox.show({title: 'Peringatan !', msg: 'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});
-                        },
-                        callback: function(response) {
-                            Ext.getCmp('layout-body').body.unmask();
-                            //LOAD SELECTED ASSET INVENTARIS
-                            Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
-                            var new_tab_id = Ext.getCmp(tab_id);
-                            if(new_tab_id){
-                                    Ext.getCmp('Tab_PA').setActiveTab(tab_id);
-                                    Ext.getCmp('layout-body').body.unmask(); 
-                            }else{
-                                    Ext.Ajax.timeout = Time_Out;
-                                    Ext.Ajax.request({
-                                    url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
-                            success: function(response){
-                                    var jsonData = response.responseText.substring(13);   
-                                            var aHeadNode = document.getElementsByTagName('head')[0]; 
-                                            var aScript = document.createElement('script'); 
-                                            aScript.text = jsonData; 
-                                            aHeadNode.appendChild(aScript);
-                                    if(new_tabpanel_Asset != "GAGAL"){
-                                            Ext.getCmp('Tab_PA').add(new_tabpanel_Asset).show();
-
-                                    }else{
-                                            Ext.MessageBox.show({title:'Peringatan !', msg:'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});    			
-                                    }
-                                    },
-                            failure: function(response){ Ext.MessageBox.show({title:'Peringatan !', msg:'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR}); }, 
-                            callback: function(response){ Ext.getCmp('layout-body').body.unmask(); 
-                                    //FILTER DATA
-                                   Ext.getStore(dataStoreId).getProxy().extraParams = {'searchUnker':searchValue}; 
-                            },
-                            scope : this
-                                    });
-                            }
-                        },
-                        scope: this
-                    });
-                }
-                
-                
-                
-            }
+				/* var wFilter = Ext.util.Filter({	property: 'searchUnker', value: searchValue }); */
+				Load_TabPage('pengelolaan_asset', BASE_URL + 'pengelolaan_asset');
+				Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
+				var new_tab_id = Ext.getCmp(tab_id);
+				if(new_tab_id){
+					Ext.getCmp('Tab_PA').setActiveTab(tab_id);
+					Ext.getStore(dataStoreId).getProxy().extraParams = { 'searchUnker': searchValue }; 
+					Ext.getCmp('layout-body').body.unmask();
+				}else{
+					Ext.Ajax.timeout = Time_Out;
+					Ext.Ajax.request({
+					url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
+					success: function(response){
+						var jsonData = response.responseText.substring(13);   
+						var aHeadNode = document.getElementsByTagName('head')[0]; 
+						var aScript = document.createElement('script'); 
+						aScript.text = jsonData; 
+						aHeadNode.appendChild(aScript);
+						if(new_tabpanel_Asset != "GAGAL"){
+							Ext.getCmp('Tab_PA').add(new_tabpanel_Asset).show();
+							Ext.getStore(dataStoreId).getProxy().extraParams = { 'searchUnker': searchValue };
+						}else{
+							Ext.MessageBox.show({title:'Peringatan !', msg:'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});    			
+						}
+					},
+					failure: function(response) { Ext.MessageBox.show({title:'Peringatan !', msg:'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR}); }, 
+					callback: function(response) { Ext.getCmp('layout-body').body.unmask(); },
+					scope : this
+					});
+				}	
+			}
         </script>
     </head>
     <body>

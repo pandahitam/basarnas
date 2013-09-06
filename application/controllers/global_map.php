@@ -1,5 +1,5 @@
 <?php
-class Global_MAP extends CI_Controller {
+class Global_MAP extends MY_Controller {
 	function __construct() 
 	{
 		parent::__construct();
@@ -8,8 +8,8 @@ class Global_MAP extends CI_Controller {
  			echo "window.location = '".base_url()."user/index';";
  			exit;
 		}
-		//$this->load->model('Utility_Simpeg_Model','',TRUE);
 		$this->load->model('global_map_model','',TRUE);
+		$this->model = $this->global_map_model;
 	}
 	
 	function index()
@@ -17,7 +17,7 @@ class Global_MAP extends CI_Controller {
 		if($this->input->post('id_open'))
 		{
 			$data['jsscript'] = TRUE;
-			$this->load->view('global_map/global_map_view',$data);
+			$this->load->view('global_map/global_map_view', $data);
 		}else
 		{
 			$this->load->view('global_map/global_map_view');
@@ -26,15 +26,14 @@ class Global_MAP extends CI_Controller {
 
    function req_all_asset($location)
 	{
-        $data = array();
+        $dataOut = array();
 		$this->load->model('global_map_model');
 		$result =  $this->global_map_model->get_byLoc($location);
-		//echo($result);
 		foreach($result as $obj)
 		{
-			$data[] = $obj;
+			$dataOut[] = $obj;
 		}
-		echo json_encode($data);
+		echo json_encode($dataOut);
 	}
 }
 ?>
