@@ -844,9 +844,8 @@
                     {header: 'Lantai', dataIndex: 'jml_ltg', width: 90, hidden: true, filter: {type: 'numeric'}},
                     {xtype: 'actioncolumn', width: 60, items: [{icon: '../basarnas/assets/images/icons/map1.png', tooltip: 'Map',
                                 handler: function(grid, rowindex, colindex, obj) {
-                                    var kodeWilayah = Bangunan.Data.getAt(rowindex).data.kd_lokasi.substring(5, 9);
-                                    //console.log(kodeWilayah);
-                                    Ext.getCmp('Content_Body_Tabs').setActiveTab('map_asset');
+                                    var kodeWilayah = Bangunan.Data.getAt(rowindex).data.kd_lokasi.substring(9, 15);
+									Load_TabPage('map_asset', BASE_URL + 'global_map');
                                     applyItemQuery(kodeWilayah);
                                 }}]}
                 ]

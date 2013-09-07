@@ -35,5 +35,19 @@ class Global_MAP extends MY_Controller {
 		}
 		echo json_encode($dataOut);
 	}
+	
+   function map_pop_up($location)
+	{
+		if($this->input->post("id_open") && $this->session->userdata("iduser_zs_simpeg"))
+		{
+			$data['jsscript'] = TRUE;
+			$data['location'] = $location;
+			$this->load->view('global_map/map_pop_up_view', $data);
+		} else
+		{
+			$this->load->view('global_map/map_pop_up_view');
+		}		
+	}
+
 }
 ?>
