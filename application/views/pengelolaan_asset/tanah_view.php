@@ -107,7 +107,6 @@
                 items: [
                         Form.Component.unit(edit,form),
                         Form.Component.kode(edit),
-                        Form.Component.klasifikasiAset(edit),
                         Form.Component.basicAsset(edit),
                         Form.Component.address(),
                         Form.Component.tanah(),
@@ -818,7 +817,7 @@
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Id Ext Asset', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
@@ -901,7 +900,7 @@
 
         var new_tabpanel_Asset = {
             id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Tanah.Data,'tanah'),Tanah.Grid.grid]
+            items: [Region.filterPanelAsetNoKlasifikasi(Tanah.Data,'tanah'),Tanah.Grid.grid]
         };
 <?php
 

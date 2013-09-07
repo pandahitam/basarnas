@@ -256,7 +256,7 @@
         var new_tabpanel = {
             xtype: 'panel',
             id: 'pemeliharaan_asset_kendaraan_udara', title: 'Pemeliharaan Udara ', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Region.filterPanelPemeliharaan(PemeliharaanUdara.Data), PemeliharaanUdara.Grid.grid]
+            layout: 'border', items: [Region.filterPanelPemeliharaan(PemeliharaanUdara.Data,'pemeliharaan_kendaraan_udara'), PemeliharaanUdara.Grid.grid]
         };
      
 <?php } else {

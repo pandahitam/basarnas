@@ -74,6 +74,7 @@
 
         Angkutan.Form.create = function(data, edit) {
             var form = Form.asset(Angkutan.URL.createUpdate, Angkutan.Data, edit, true);
+            
              var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',

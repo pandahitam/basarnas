@@ -21,6 +21,8 @@ class inventory_penerimaan extends MY_Controller {
 	}
 	
 	function modifyInventoryPenerimaan(){
+            var_dump($_POST);
+            die;
 //		$dataSimak = array();
 //                $dataExt = array();
 //                $dataKode = array();

@@ -53,6 +53,7 @@
             id: 'Proxy_Ruang',
             url: Ruang.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Ruang.reader,
+            timeout:500000,
             afterRequest: function(request, success) {
                 Params_M_Ruang = request.operation.params;
                 
