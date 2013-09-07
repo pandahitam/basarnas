@@ -207,8 +207,9 @@ function mapDraw() {
 };
 
 function imgClick(event) {
-	pos_x = event.offsetX;
-	pos_y = event.offsetY;
+	var offPos = Ext.getCmp('center_map_navigator').getPosition();
+	var pos_x = event.clientX - offPos[0] - 6; //6: paddingX
+	var pos_y = event.clientY - offPos[1] - 6; //6: paddingY
 	if(mapMode=='map')
 	{
 		applyZoom(pos_x, pos_y);
