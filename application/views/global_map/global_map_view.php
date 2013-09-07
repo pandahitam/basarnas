@@ -42,8 +42,8 @@ mapLayers[mapLayers.length] = new Layer('Batas_Provinsi', 'Batas Provinsi', 'lay
 mapLayers[mapLayers.length] = new Layer('Batas_Kabupaten', 'Batas Kabupaten', 'layers', true);
 mapLayers[mapLayers.length] = new Layer('Batas_Kecamatan', 'Batas Kecamatan', 'layers', false);
 mapLayers[mapLayers.length] = new Layer('Kantor_SAR', 'Kantor SAR', 'layers', true);
-mapLayers[mapLayers.length] = new Layer('Pos_SAR', 'Pos SAR', 'layers', false);
-mapLayers[mapLayers.length] = new Layer('Jalan_Lokal', 'Jalan Lokal', 'layers', false);
+mapLayers[mapLayers.length] = new Layer('Pos_SAR', 'Pos SAR', 'layers', true);
+mapLayers[mapLayers.length] = new Layer('Jalan_Lokal', 'Jalan Lokal', 'layers', true);
 
 function buildLayer() {
 	var s = '';
@@ -189,21 +189,20 @@ function applyQuery() {
 				{
 					var datas = new Ext.JSON.decode(response.responseText, true);
 					sAssets.loadData(datas);
+					Load_Popup('winmappopup', baseUrl + 'global_map/map_pop_up/' + sLocationCode);
 				}
 			});
-			//Ext.getCmp('map_nama_kansar').setValue(kodeLoc);
 			sLocationCode = kodeLoc;
 		}
 	});
 };
 
 function mapDraw() {
-	//propsGrid.setSource({});
 	if(mapMode=='map')
 	{
-		document.mainImage.src = "/cgi-bin/mapserv?mode=map&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight+"&layers="+buildLayer();
+		Ext.getDom('mainImage').src = "/cgi-bin/mapserv?mode=map&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight+"&layers="+buildLayer();
 	} else if(mapMode=='query') applyQuery();
-	document.referenceImage.src = "/cgi-bin/mapserv?mode=reference&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight;
+	Ext.getDom('referenceImage').src = "/cgi-bin/mapserv?mode=reference&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight;
 };
 
 function imgClick(event) {
@@ -229,7 +228,6 @@ function refClick(event) {
 	applyReference(pos_x, pos_y);
 	mapDraw();
 	mapMode = oldMode;
-	//propsGrid.setSource({});
 };
 
 function calculateExtent(arrExtents)
@@ -251,7 +249,7 @@ function calculateExtent(arrExtents)
 }
 
 function applyItemQuery(kodeWilayah) {
-	
+	//alert(kodeWilayah);
 	if(kodeWilayah!=null)
 	{
 		kodeWilayah +='';
@@ -259,16 +257,18 @@ function applyItemQuery(kodeWilayah) {
 		{
 			var kode = '';
 			var queryUrl = '';
-			queryUrl = '/cgi-bin/mapserv?mode=itemnquery&map=MAP_FILE&qstring='+kodeWilayah+'&qitem=KODEPSE&qlayer=Kantor_SAR';
+			queryUrl = '/cgi-bin/mapserv?mode=itemnquery&map=MAP_FILE&qstring='+kodeWilayah+'&qitem=KODEPSE&qlayer=Kantor_SAR'+'&layers='+buildLayer();
 			Ext.Ajax.timeout = Time_Out;
 			Ext.Ajax.request({
 				url: queryUrl, 
 				method: 'GET',
-				success: function(response){
+				success: function(response) {
 					var rslt = new Ext.JSON.decode(response.responseText, true);
 					var eLength = rslt.kansar.length; 
 					if(eLength)
 					{
+						/* 
+						// Alternate 01 -> Show query result : Zoom Center, No Highlight
 						var x = 0;
 						var y = 0;
 						var extTmp = new Array();
@@ -290,11 +290,11 @@ function applyItemQuery(kodeWilayah) {
 							y = xy[1];
 						}
 						setExtentFromScale(x, y, getScale());
+						*/
 						var oldMode = mapMode;
 						mapMode = 'map';
 						mapDraw();
 						mapMode = oldMode;
-						//Ext.getCmp('map_nama_kansar').setValue('10701' + rslt.kansar[0].kodePse + rslt.kansar[0].kpb);
 						var kodeLoc = rslt.kansar[0].kodePse + rslt.kansar[0].kpb;
 						var namaLoc = rslt.kansar[0].kantorSar;
 						var dbUrl = baseUrl + 'global_map/req_all_asset/' + kodeLoc; 
@@ -306,10 +306,14 @@ function applyItemQuery(kodeWilayah) {
 							{
 								var datas = new Ext.JSON.decode(response.responseText, true);
 								sAssets.loadData(datas);
+								Load_Popup('winmappopup', baseUrl + 'global_map/map_pop_up/' + sLocationCode);
+								// Alternate 02 -> Show query result : Zoom Extent, Highlight
+								Ext.getDom('mainImage').src = baseUrl + 'assets/map/tmp/basarnas' + rslt.kansar[0].imageId + '.png';
+								Ext.getDom('referenceImage').src = baseUrl + 'assets/map/tmp/basarnasref' + rslt.kansar[0].imageId + '.png';
+								applyZoomAll();
 							}
 						});
 						sLocationCode = kodeLoc;
-						//alert(sLocationCode);
 					}
 				}
 			});
@@ -332,7 +336,6 @@ function applyZoomAll() {
 	mapCellsize = adjustExtent(mapExtent, mapWidth, mapHeight);
 	refExtent = new Array(94.973492, -11.007750, 141.066985 ,7.033773);
 	refCellsize = adjustExtent(refExtent, refWidth, refHeight);
-	mapDraw();
 };
 
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -373,33 +376,6 @@ function applyZoomAll() {
 		*/
     });
 
-/*
-     var groupingFeature = Ext.create('Ext.grid.feature.Grouping', {
-            groupHeaderTpl: '{columnName}: {name} ({rows.length} Item{[values.rows.length > 1 ? "s" : ""]})',
-            hideGroupedHeader: true,
-            startCollapsed: true,
-            id: 'restaurantGrouping'
-        }),
-        groups = restaurants.getGroups(),
-        len = groups.length, i = 0,
-        toggleMenu = [],
-        toggleGroup = function(item) {
-            var groupName = item.text;
-            if (item.checked) {
-                groupingFeature.expand(groupName, true);
-            } else {
-                groupingFeature.collapse(groupName, true);
-            }
-        };
-
-    for (; i < len; i++) {
-        toggleMenu[i] = {
-            xtype: 'menucheckitem',
-            text: groups[i].name,
-            handler: toggleGroup
-        }
-    }
-*/
     var propsGrid = Ext.create('Ext.grid.Panel', {
         renderTo: Ext.getBody(),
         //collapsible: true,
@@ -526,6 +502,7 @@ var map_option_control = new Ext.create('Ext.form.Panel', {
 					var oldMode = mapMode;
 					mapMode = 'map';
 					applyZoomAll();
+					mapDraw();
 					mapMode = oldMode;
 				}
 			}
@@ -622,7 +599,7 @@ var map_reference = new Ext.create('Ext.form.Panel', {
     width: '100%',
     renderTo: Ext.getBody(),
     items: [
-		{ html: '<img onClick="refClick(event)" name="referenceImage" width="192" height="120" src="'+startRefImg+'" />' }
+		{ html: '<img id="referenceImage" onClick="refClick(event)" name="referenceImage" width="192" height="120" src="'+startRefImg+'" />' }
 	]
 });
 
@@ -634,11 +611,6 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 	height: '100%',
     renderTo: Ext.getBody(),
     items: [
-		/* {
-			xtype: 'textfield',
-			id: 'map_nama_kansar',
-			fieldLabel: 'Kantor SAR'
-		},*/
 		{
 			xtype: 'button', 
 			name: 'map_show_tanah', 
@@ -646,7 +618,6 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Tanah',
 			listeners: {
 				click : function(){
-					//Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', Ext.getCmp('map_nama_kansar').value);
 					Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', sLocationCode);
 				}
 			}
@@ -658,7 +629,6 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Bangunan',
 			listeners: {
 				click : function(){
-					//Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', Ext.getCmp('map_nama_kansar').value);
 					Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', sLocationCode);
 				}
 			}
@@ -670,7 +640,6 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Alat Besar',
 			listeners: {
 				click : function(){
-					//Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', Ext.getCmp('map_nama_kansar').value);
 					Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', sLocationCode);
 				}
 			}
@@ -682,7 +651,6 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Angkutan',
 			listeners: {
 				click : function(){
-					//Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', Ext.getCmp('map_nama_kansar').value);
 					Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', sLocationCode);
 				}
 			}
@@ -694,7 +662,6 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
 			text: 'Perairan',
 			listeners: {
 				click : function(){
-					//Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', Ext.getCmp('map_nama_kansar').value);
 					Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', sLocationCode);
 				}
 			}
@@ -710,7 +677,7 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 		 items: [map_option_control, map_option_layer]
 		},
 		{id: 'center_map_navigator', region: 'center', split: true, bodyStyle: 'padding: 6px; background : #35537e;', width: '100%', height: '100%',
-		 html: '<img onClick="imgClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
+		 html: '<img id="mainImage" onClick="imgClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
 		},
 		{id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
 		 items: [map_reference, map_item_query]
