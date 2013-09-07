@@ -302,7 +302,7 @@ MAP
 			"DESCRIPTION" "Kantor_SAR"
 			"GROUP" "Annotasi"
 			"LAYER" "Kantor_SAR"
-			qstring_validation_pattern '^[0-9]{4}$' 
+			qstring_validation_pattern '^[0-9]{6}$' 
 		END
 	END	
 

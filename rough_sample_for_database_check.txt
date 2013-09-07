@@ -1,10 +1,11 @@
 -- WARNING, FOR DATABASE TESTING ONLY !!!!!
 
--- ASSUME ALL kd_klasifikasi_aset="020400" => RIGIT INFLATABLE BOAT
-UPDATE 
-ext_asset_angkutan 
-SET kd_klasifikasi_aset="020400" 
-WHERE kd_brg="3020302001";
+-- ASSUME ALL RIGID => RIGIT INFLATABLE BOAT
+UPDATE
+asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b`
+ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
+SET `b`.`kd_klasifikasi_aset` = "020400"
+WHERE `a`.`merk` LIKE "%rigid%" OR `a`.`type` LIKE "%rigid%";
 
 -- ASSUME ALL D-MAX => RESCUE CAR TYPE 1
 UPDATE
