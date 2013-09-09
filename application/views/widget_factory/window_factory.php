@@ -382,7 +382,7 @@
             return panel;
         };
         
-        Region.filterPanelAset = function(data,id) {
+        Region.filterPanelAset = function(data,id,defaultValGol,defaultValBid,defaultValKel) {
             var panel = {
                 region: 'west',
                 title: 'Filter',
@@ -402,6 +402,7 @@
                         text: 'Golongan',
                         height: 30
                     }, {
+                        readOnly:true,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Golongan',
                         name: 'aset-golongan' + id,
@@ -416,6 +417,15 @@
                         displayField: 'ur_gol', emptyText: 'Golongan',
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
                         listeners: {
+                            'afterrender': {
+                                fn: function()
+                                {
+                                    if(defaultValGol != null || defaultValGol != undefined)
+                                    {
+                                        this.setValue(defaultValGol);
+                                    }
+                                }
+                            },
                             'change': {
                                 fn: function(obj, value) {
                                     data.clearFilter();
@@ -446,6 +456,7 @@
                         text: 'Bidang',
                         height: 30
                     }, {
+                        readOnly:(defaultValBid !=  null || defaultValBid != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
                         name: 'aset-bidang'+ id,
@@ -462,6 +473,15 @@
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
                         editable: false,
                         listeners: {
+                        'afterrender': {
+                             fn: function()
+                                {
+                                    if(defaultValBid != null || defaultValBid != undefined)
+                                    {
+                                        this.setValue(defaultValBid);
+                                    }
+                                }
+                             },
                             'change': {
                                 fn: function(obj, value) {
                                     data.clearFilter();
@@ -494,6 +514,7 @@
                         text: 'Kelompok',
                         height: 30
                     }, {
+                        readOnly:(defaultValGol !=  null || defaultValGol != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Kelompok',
                         name: 'aset-kelompok'+ id,
@@ -510,6 +531,15 @@
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Kelompok',
                         editable: false,
                         listeners: {
+                            'afterrender': {
+                                fn: function()
+                                   {
+                                       if(defaultValKel != null || defaultValKel != undefined)
+                                       {
+                                           this.setValue(defaultValKel);
+                                       }
+                                   }
+                             },
                             'change': {
                                 fn: function(obj, value) {
                                     data.clearFilter();
@@ -768,7 +798,7 @@
             return panel;
         };
         
-        Region.filterPanelAsetNoKlasifikasi = function(data,id) {
+        Region.filterPanelAsetNoKlasifikasi = function(data,id,defaultValGol,defaultValBid) {
             var panel = {
                 region: 'west',
                 title: 'Filter',
@@ -788,6 +818,7 @@
                         text: 'Golongan',
                         height: 30
                     }, {
+                        readOnly:(defaultValGol !=  null || defaultValGol != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Golongan',
                         name: 'aset-golongan' + id,
@@ -802,6 +833,15 @@
                         displayField: 'ur_gol', emptyText: 'Golongan',
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
                         listeners: {
+                            'afterrender': {
+                                fn: function()
+                                {
+                                    if(defaultValGol != null || defaultValGol != undefined)
+                                    {
+                                        this.setValue(defaultValGol);
+                                    }
+                                }
+                            },
                             'change': {
                                 fn: function(obj, value) {
                                     data.clearFilter();
@@ -832,6 +872,7 @@
                         text: 'Bidang',
                         height: 30
                     }, {
+                        readOnly:(defaultValBid !=  null || defaultValBid != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
                         name: 'aset-bidang'+ id,
@@ -848,6 +889,15 @@
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
                         editable: false,
                         listeners: {
+                        'afterrender': {
+                             fn: function()
+                                {
+                                    if(defaultValBid != null || defaultValBid != undefined)
+                                    {
+                                        this.setValue(defaultValBid);
+                                    }
+                                }
+                             },
                             'change': {
                                 fn: function(obj, value) {
                                     data.clearFilter();
@@ -1040,6 +1090,7 @@
                         displayField: 'ur_upb', emptyText: 'Unit Kerja',
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Kerja',
                         listeners: {
+                            
                             'change': {
                                 fn: function(obj, value) {
                                     data.clearFilter();

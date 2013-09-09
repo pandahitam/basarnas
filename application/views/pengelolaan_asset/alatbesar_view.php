@@ -766,7 +766,7 @@
 
         var new_tabpanel_Asset = {
             id: 'alatbesar_panel', title: 'Alatbesar', iconCls: 'icon-alatbesar_Alatbesar', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Alatbesar.Data,'alatbesar'),Alatbesar.Grid.grid]
+            items: [Region.filterPanelAset(Alatbesar.Data,'alatbesar','3','01'),Alatbesar.Grid.grid]
         };
 
 <?php

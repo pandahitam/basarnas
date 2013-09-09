@@ -886,7 +886,7 @@
 
         var new_tabpanel_Asset = {
             id: 'angkutan_laut_panel', title: 'Angkutan Laut', iconCls: 'icon-tanah_AngkutanLaut', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(AngkutanLaut.Data,'angkutanLaut'),AngkutanLaut.Grid.grid]
+            items: [Region.filterPanelAset(AngkutanLaut.Data,'angkutanLaut','3','02'),AngkutanLaut.Grid.grid]
         };
 
 <?php } else {

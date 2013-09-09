@@ -31,8 +31,18 @@
             klasifikasiAset_lvl1: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl1',
             klasifikasiAset_lvl2: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl2',
             klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
+            pengadaan: BASE_URL + 'combo_ref/combo_pengadaan'
         };
+
         
+        
+        Reference.Data.pengadaan = new Ext.create('Ext.data.Store', {
+            fields: ['id'], storeId: 'DataPengadaanCombo',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         Reference.Data.klasifikasiAset_lvl1 = new Ext.create('Ext.data.Store', {
             fields: ['kd_lvl1', 'nama'], storeId: 'DataKlasifikasiAset_lvl1 ',
@@ -145,7 +155,7 @@
         
         Reference.Data.kondisiPerlengkapan = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
-            data: [{text: 'Baik', value: 'Baik'}, {text: 'Rusak Ringan', value: 'Rusak Ringan'}, {text: 'Rusak', value: 'Rusak'}]
+            data: [{text: 'Baik', value: 'Baik'}, {text: 'Rusak Ringan', value: 'Rusak Ringan'}, {text: 'Rusak Berat', value: 'Rusak Berat'}]
         });
         
         Reference.Data.unitWaktu = new Ext.create('Ext.data.Store', {
@@ -324,11 +334,71 @@
         
         Form.inventorypenerimaan = function(setting)
         {
+            var pilihPengadaan = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENGADAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'No Pengadaan *',
+                                    name: 'id_pengadaan',
+                                    allowBlank: false,
+                                    store: Reference.Data.pengadaan,
+                                    valueField: 'id',
+                                    displayField: 'id', emptyText: 'Pilih Pengadaan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+//                                        'change': {
+//                                            fn: function(obj, value) {
+//
+//                                                if (value !== null)
+//                                                {
+//                                                    var fieldPartNumber = Ext.getCmp('part_number');
+//                                                    
+//                                                    if (fieldPartNumber != null) {
+//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+//                                                            fieldPartNumber.setValue(value);
+//                                                        }
+//                                                    }
+//                                                    else {
+//                                                        console.error('error');
+//                                                    }
+//                                                }
+//
+//                                            },
+//                                            scope: this
+//                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
-            form.insert(1, Form.Component.inventorypenerimaan());
-            form.insert(2, Form.Component.inventoryPerlengkapan());
-
+            form.insert(1, pilihPengadaan);
+            form.insert(2, Form.Component.inventorypenerimaan());
+            form.insert(3, Form.Component.inventoryPerlengkapan());
 
             return form;
         }
@@ -502,7 +572,7 @@
             
 //            Ext.getCmp('nama_unker').setDisabled(true);
 //            Ext.getCmp('nama_unor').setDisabled(true);
-            if (setting.isBangunan)
+            if (setting.isBangunan) //isBangunan and Tanah
             {
                 form.insert(2, Form.Component.pemeliharaanBangunan());
             }
@@ -3450,7 +3520,51 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
+                            items: [
+                                    {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Part Number',
+                                    name: 'part_number',
+                                    allowBlank: true,
+                                    store: Reference.Data.partNumber,
+                                    valueField: 'part_number',
+                                    displayField: 'nama', emptyText: 'Pilih Part Number',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+//                                        'change': {
+//                                            fn: function(obj, value) {
+//
+//                                                if (value !== null)
+//                                                {
+//                                                    var fieldPartNumber = Ext.getCmp('part_number');
+//                                                    
+//                                                    if (fieldPartNumber != null) {
+//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+//                                                            fieldPartNumber.setValue(value);
+//                                                        }
+//                                                    }
+//                                                    else {
+//                                                        console.error('error');
+//                                                    }
+//                                                }
+//
+//                                            },
+//                                            scope: this
+//                                        }
+                                    }
+                                },
+                                {
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number'
+                                },
+                                {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tahun Anggaran',
                                     name: 'tahun_angaran',
@@ -3594,7 +3708,9 @@
                             ];       
             return components;
         };
-
+        
+        
+/* FORM FOR PEMELIHARAAN TANAH AND BANGUNAN */
         Form.Component.pemeliharaanBangunan = function(form) {
             var component = [{
                     xtype: 'fieldset',
@@ -4730,37 +4846,57 @@
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+//                                        'change': {
+//                                            fn: function(obj, value) {
+//
+//                                                if (value !== null)
+//                                                {
+//                                                    var fieldPartNumber = Ext.getCmp('part_number');
+//                                                    
+//                                                    if (fieldPartNumber != null) {
+//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+//                                                            fieldPartNumber.setValue(value);
+//                                                        }
+//                                                    }
+//                                                    else {
+//                                                        console.error('error');
+//                                                    }
+//                                                }
+//
+//                                            },
+//                                            scope: this
+//                                        }
+                                    }
+                                },
+                                {
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    listeners: {
                                         'change': {
                                             fn: function(obj, value) {
 
-                                                if (value !== null)
+                                                if (value !== null || value != '')
                                                 {
-                                                    var fieldPartNumber = Ext.getCmp('part_number');
-                                                    
-                                                    if (fieldPartNumber != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            fieldPartNumber.setValue(value);
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.readOnly = true;
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.readOnly = false;
                                                 }
 
                                             },
                                             scope: this
                                         }
                                     }
-                                },
-                                {
-                                    fieldLabel: 'Serial Number',
-                                    name: 'serial_number'
                                 },
                                 {
                                     xtype: 'combo',
@@ -4776,7 +4912,8 @@
                                 {
                                     xtype: 'numberfield',
                                     fieldLabel: 'Qty',
-                                    name: 'qty'
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
                                 },
                                 
                             ]

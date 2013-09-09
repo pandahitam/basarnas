@@ -8,6 +8,13 @@ class MY_Controller extends CI_Controller{
 	}
 	
 	function getAllData(){
+//                var_dump(json_decode($_POST['filter']));
+//                die;
+            
+                if(isset($_POST['filter']))
+                {
+                    $this->model->get_FilteredData(json_decode($_POST['filter']));
+                }
                 $start = null;
                 $limit = null;
                 if(isset($_POST['start']) && isset($_POST['limit']))
@@ -17,9 +24,9 @@ class MY_Controller extends CI_Controller{
                 }
                 
 		$data = $this->model->get_AllData($start,$limit);
-//                $total = $this->model->get_CountData();
-                $countData = $this->model->get_AllData();              
-                $total = count($countData);
+                $total = $this->model->get_CountData();
+//                $countData = $this->model->get_AllData();              
+//                $total = count($countData);
                 $dataSend['total'] = $total;
 		$dataSend['results'] = $data;
 		echo json_encode($dataSend);

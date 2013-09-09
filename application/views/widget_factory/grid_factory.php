@@ -768,7 +768,7 @@
             }
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
-                ftype: 'filters', autoReload: true, local: true, encode: true
+                ftype: 'filters', autoReload: true, local: false, encode: true
             });
 
             var search = new Ext.create('Ext.ux.form.SearchField', {

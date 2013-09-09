@@ -49,8 +49,8 @@
             read: BASE_URL + 'asset_tanah/getAllData',
             remove: BASE_URL + 'asset_tanah/deleteTanah',
             createUpdate: BASE_URL + 'asset_tanah/modifyTanah',
-            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan_Bangunan/modifyPemeliharaanBangunan',
+            removePemeliharaan: BASE_URL + 'Pemeliharaan_Bangunan/deletePemeliharaanBangunan',
             createUpdateRiwayatPajak: BASE_URL + 'asset_tanah/modifyRiwayatPajak',
             removeRiwayatPajak: BASE_URL + 'asset_tanah/deleteRiwayatPajak',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
@@ -82,7 +82,7 @@
         
         Tanah.Data = new Ext.create('Ext.data.Store', {
             id: 'Data_Tanah', storeId: 'DataTanah', model: 'MTanah', pageSize: 50, noCache: false, autoLoad: true,
-            proxy: Tanah.proxy
+            proxy: Tanah.proxy, remoteFilter:false
         });
         
         
@@ -163,7 +163,7 @@
                 url: Tanah.URL.createUpdatePemeliharaan,
                 data: data,
                 isEditing: edit,
-                isBangunan: false,
+                isBangunan: true, //isBangunan and tanah
                 addBtn: {
                     isHidden: true,
                     text: '',
@@ -900,7 +900,7 @@
 
         var new_tabpanel_Asset = {
             id: 'tanah_panel', title: 'Tanah', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAsetNoKlasifikasi(Tanah.Data,'tanah'),Tanah.Grid.grid]
+            items: [Region.filterPanelAsetNoKlasifikasi(Tanah.Data,'tanah','2','01'),Tanah.Grid.grid]
         };
 <?php
 

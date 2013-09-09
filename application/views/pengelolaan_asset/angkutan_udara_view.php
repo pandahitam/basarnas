@@ -881,7 +881,7 @@
 
         var new_tabpanel_Asset = {
             id: 'angkutan_udara_panel', title: 'Angkutan Udara', iconCls: 'icon-tanah_AngkutanUdara', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(AngkutanUdara.Data,'angkutanUdara'),AngkutanUdara.Grid.grid]
+            items: [Region.filterPanelAset(AngkutanUdara.Data,'angkutanUdara','3','02','05'),AngkutanUdara.Grid.grid]
         };
 
 <?php } else {

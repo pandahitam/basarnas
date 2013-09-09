@@ -5,6 +5,7 @@ class Pemeliharaan_Udara_Model extends MY_Model{
 		parent::__construct();
 		$this->extTable = 'pemeliharaan';
                 $this->viewTable = 'view_pemeliharaan';
+                $this->countTable = 'view_pemeliharaan_udara';
                 
                 $this->selectColumn = "SELECT id, kd_brg, kd_lokasi, no_aset,
                             kode_unker, kode_unor, nama_unker, nama_unor,jenis, nama, 
@@ -15,9 +16,18 @@ class Pemeliharaan_Udara_Model extends MY_Model{
                             rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert";
 	}
 	
-	function get_AllData(){
-		$query = "$this->selectColumn FROM $this->viewTable
-                        where kd_brg like '30205%'";
+	function get_AllData($start=null, $limit=null){
+//		$query = "$this->selectColumn FROM $this->viewTable
+//                        where kd_brg like '30205%'";
+                if($start !=null && $limit != null)
+                {
+                    $query = "$this->selectColumn FROM view_pemeliharaan_udara LIMIT $start, $limit";
+                }
+                else
+                {
+                    $query = "$this->selectColumn FROM view_pemeliharaan_udara";
+                }
+            	
 
 		return $this->Get_By_Query($query);	
 	}

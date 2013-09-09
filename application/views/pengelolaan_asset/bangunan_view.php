@@ -880,7 +880,7 @@
 
         var new_tabpanel_Asset = {
             id: 'bangunan_panel', title: 'Bangunan', iconCls: 'icon-tanah_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAsetNoKlasifikasi(Bangunan.Data,'bangunan'),Bangunan.Grid.grid]
+            items: [Region.filterPanelAsetNoKlasifikasi(Bangunan.Data,'bangunan','4'),Bangunan.Grid.grid]
         };
 
     <?php } else {

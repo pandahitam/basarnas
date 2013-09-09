@@ -56,7 +56,7 @@ Ext.define('MRiwayatPajakTanahDanBangunan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MInventoryPenerimaan', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pengadaan',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
         'status_barang','qty','tgl_penerimaan','asal_barang','kode_unor']
@@ -444,7 +444,7 @@ Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPengadaan', {extend: 'Ext.data.Model',
-    fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_no','merek','model',
+    fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_number','serial_number','merek','model',
                 'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 
                 'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
                 'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
