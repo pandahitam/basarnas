@@ -36,7 +36,7 @@ class inventory_penerimaan extends MY_Controller {
 //                );
                 
 	  	$simakFields = array(
-			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pengadaan',
+			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pengadaan','nama_org',
                                         'no_aset', 'part_number','serial_number','date_created',
                                         'keterangan', 'status_barang','qty','tgl_penerimaan','asal_barang'
                 );
