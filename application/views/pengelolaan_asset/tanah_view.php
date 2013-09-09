@@ -234,6 +234,9 @@
                         Tanah.Action.pendayagunaanList();
                     }
                 },
+                printPDF: function() {
+                        Tanah.Action.printpdf();
+                },
             };
 
             return actions;
@@ -808,6 +811,30 @@
             document.body.appendChild(my_form);
 
             my_form.submit();
+        };
+		
+		Tanah.Action.printpdf = function() {
+            var selected = Tanah.Grid.grid.getSelectionModel().getSelection();
+            var selectedData = "";
+            if (selected.length > 0)
+            {
+                for (var i = 0; i < selected.length; i++)
+                {
+                    selectedData += selected[i].data.kd_lokasi + "||" + selected[i].data.kd_brg + "||" + selected[i].data.no_aset;  
+                }
+            }
+            var arrayPrintpdf = [];
+            var data = selected[0].data;
+            _.each(selected, function(obj) {
+                var data = {
+                    kd_lokasi: obj.data.kd_lokasi,
+                    kd_brg: obj.data.kd_brg,
+                    no_aset: obj.data.no_aset
+                };
+                arrayPrintpdf.push(data);
+            });
+            Modal.printDocPdf(Ext.encode(arrayPrintpdf), BASE_URL + 'asset_tanah/cetak/' + selectedData, 'Cetak Pengelolaan Asset Tanah');
+            
         };
 
         var setting = {

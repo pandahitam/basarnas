@@ -125,5 +125,13 @@ class Asset_Perlengkapan extends MY_Controller {
 						
 		echo json_encode($result);
 	}
+	
+	function cetak($input){
+		$data_cetak = $this->model->get_SelectedDataPrint($input);
+			if(count($data_cetak)){
+				$data['dataprn'] = $data_cetak['dataasset'];
+				$this->load->view('pengelolaan_asset/perlengkapan_pdf',$data);
+			}
+	}
 }
 ?>
