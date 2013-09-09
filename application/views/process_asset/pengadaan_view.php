@@ -40,7 +40,15 @@ Pengadaan.Form.create = function(data,edit){
                 isHidden : edit,
                 text : 'Add Reference',
                 fn : function() {
-
+                    if (Modal.assetSelection.items.length === 0)
+                    {
+                        Modal.assetSelection.add(Grid.selectionReference());
+                        Modal.assetSelection.show();
+                    }
+                    else
+                    {
+                        console.error('There is existing grid in the popup selection - pengadaan');
+                    }
                 }
             },
             selectionAsset: {
@@ -168,38 +176,37 @@ var setting = {
             title : 'DAFTAR PENGADAAN',
             column : [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'ID',              dataIndex: 'id',                width: 50, groupable: false, filter:{type:'number'}},
-                    {header: 'Unit Kerja',      dataIndex: 'nama_unker',        width: 150,groupable : false,filter:{type:'string'}},
-                    {header: 'Unit Organisasi', dataIndex: 'nama_unor',         width: 150,groupable : false,filter:{type:'string'}},
-                    {header: 'Vendor Name',     dataIndex: 'venor_name',        width: 150,groupable: false,filter:{type:'string'}},
-                    {header: 'Tahun Angaran',   dataIndex: 'tahun_angaran',     width: 100,groupable: false,filter:{type:'string'}},
-                    {header: 'Sumber',          dataIndex: 'perolehan_sumber',  width: 100,groupable : false,filter:{type:'string'}},
-                    {header: 'Perolehan BMN',   dataIndex: 'perolehan_bmn',     width: 120,groupable : false,filter:{type:'string'}},
-                    {header: 'No Sppa',         dataIndex: 'sppa_no',           width: 70,  hidden:false,groupable : false,filter:{type:'string'}},
-                    {header: 'Asal Pengadaan',  dataIndex: 'asal_pengadaan',    width: 100, hidden:false,groupable : false,filter:{type:'string'}},
-                    {header: 'Harga Total',     dataIndex: 'harga_total',       width: 100, hidden:false,groupable : false,filter:{type:'string'}},
+                    {header: 'ID',              dataIndex: 'id',                width: 50,  hidden:true,    groupable: false, filter:{type:'number'}},
+                    {header: 'Unit Kerja',      dataIndex: 'nama_unker',        width: 150, hidden:true,    groupable : false,filter:{type:'string'}},
+                    {header: 'Unit Organisasi', dataIndex: 'nama_unor',         width: 150, hidden:true,    groupable : false,filter:{type:'string'}},
+                    {header: 'Kode Barang',     dataIndex: 'kd_brg',            width: 150, hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'Vendor Name',     dataIndex: 'venor_name',        width: 150, hidden:false,   groupable: false,filter:{type:'string'}},
+                    {header: 'Tahun Angaran',   dataIndex: 'tahun_angaran',     width: 100, hidden:false,   groupable: false,filter:{type:'string'}},
+                    {header: 'Sumber',          dataIndex: 'perolehan_sumber',  width: 100, hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'Perolehan BMN',   dataIndex: 'perolehan_bmn',     width: 120, hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'No Sppa',         dataIndex: 'sppa_no',           width: 70,  hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'Asal Pengadaan',  dataIndex: 'asal_pengadaan',    width: 100, hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'Harga Total',     dataIndex: 'harga_total',       width: 100, hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'Deskripsi',       dataIndex: 'deskripsi',         width: 120, hidden:false,filter:{type:'string'}},
                     {header: 'Tgl Perolehan',   dataIndex: 'perolehan_tanggal', width: 90,  hidden:false,filter:{type:'string'}},
-                    {header: 'Faktur No',       dataIndex: 'faktur_no',         width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Faktur Tgl',      dataIndex: 'faktur_tgl',        width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Kuitansi No',     dataIndex: 'kuitansi_no',       width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Kuitansi Tgl',    dataIndex: 'kuitansi_tanggal',  width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'SP2D No',         dataIndex: 'sp2d_no',           width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'SP2D tgl',        dataIndex: 'sp2d_tanggal',      width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Mutasi No',       dataIndex: 'mutasi_no',         width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Mutasi Tgl',      dataIndex: 'mutasi_tanggal',    width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Grs Berlaku',     dataIndex: 'garansi_berlaku',   width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Grs Keterangan',  dataIndex: 'garansi_keterangan',width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Pelihara Tgl',    dataIndex: 'pelihara_berlaku',  width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Pelihara Ket',    dataIndex: 'pelihara_keterangan',width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Spk No',          dataIndex: 'spk_no',            width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Spk Jenis',       dataIndex: 'spk_jenis',         width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Spk berlaku',     dataIndex: 'spk_berlaku',       width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Spk keterangan',  dataIndex: 'spk_keterangan',    width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Terpelihara',     dataIndex: 'is_terpelihara',    width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Bergaransi ',     dataIndex: 'is_bergaransi',     width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'SPK',             dataIndex: 'is_spk',            width: 90,hidden : true,filter:{type:'string'}},
-                    {header: 'Data Kontrak',    dataIndex: 'data_kontrak',      width: 90,hidden : true,filter:{type:'string'}},
+                    {header: 'Faktur No',       dataIndex: 'faktur_no',         width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Kuitansi Tgl',    dataIndex: 'kuitansi_tanggal',  width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'SP2D No',         dataIndex: 'sp2d_no',           width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'SP2D tgl',        dataIndex: 'sp2d_tanggal',      width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Mutasi No',       dataIndex: 'mutasi_no',         width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Mutasi Tgl',      dataIndex: 'mutasi_tanggal',    width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Grs Berlaku',     dataIndex: 'garansi_berlaku',   width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Grs Keterangan',  dataIndex: 'garansi_keterangan',width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Pelihara Tgl',    dataIndex: 'pelihara_berlaku',  width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Pelihara Ket',    dataIndex: 'pelihara_keterangan',width:90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Spk No',          dataIndex: 'spk_no',            width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Spk Jenis',       dataIndex: 'spk_jenis',         width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Spk berlaku',     dataIndex: 'spk_berlaku',       width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Spk keterangan',  dataIndex: 'spk_keterangan',    width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Terpelihara',     dataIndex: 'is_terpelihara',    width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Bergaransi ',     dataIndex: 'is_bergaransi',     width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'SPK',             dataIndex: 'is_spk',            width: 90,  hidden:true,filter:{type:'string'}},
+                    {header: 'Data Kontrak',    dataIndex: 'data_kontrak',      width: 90,  hidden:true,filter:{type:'string'}},
   
                     ]
         },

@@ -149,5 +149,13 @@ class Asset_Angkutan_Laut extends MY_Controller {
             
             echo json_encode($sendData);
         }
+		
+	function cetak($input){
+		$data_cetak = $this->model->get_SelectedDataPrint($input);
+			if(count($data_cetak)){
+				$data['dataprn'] = $data_cetak['dataasset'];
+				$this->load->view('pengelolaan_asset/angkutan_laut_pdf',$data);
+			}
+	}
 }
 ?>

@@ -1505,7 +1505,30 @@
 
             return panel;
         }
-
+		
+		Modal.printDocPdf = function(arrayPrintpdf, url, xtnama) {
+            /*debugger;*/
+            //console.log(Ext.getCmp('grid_tanah').getSelectionModel().getLastSelected().data);
+            console.log(arrayPrintpdf);
+            var docprint = new Ext.create('Ext.window.Window', {
+                    title: xtnama,
+                    iconCls: 'icon-printer',
+                    constrainHeader : true,
+                    closable: true,
+                    
+                    maximizable: true,
+                    width: '98%',
+                    height: '98%',
+                    bodyStyle: 'padding: 5px;',
+                    modal : true,
+                    items: [{ xtype:'tabpanel', activeTab : 0,width: '100%', height: '100%',
+                            items: [{ title: 'Preview', frame: false, collapsible: true, autoScroll: true, iconCls: 'icon-pdf',
+                                items: [{ xtype : 'miframe', frame: false, height: '100%', noCache: true, src : url
+                                }]
+                            }]
+                    }]
+            }).show();
+        };
 
         Region.createSidePanel = function(actions) {
             var _panels = Ext.create('Ext.panel.Panel', {
@@ -1554,7 +1577,13 @@
                         text: 'Pendayagunaan',
                         textAlign: 'left',
                         handler: actions.pendayagunaan
-                    }, /*'-',{
+                    },  '-', {
+                        text: 'Cetak Laporan',
+                        iconCls: 'icon-printer',
+                        textAlign: 'left',
+                        handler: actions.printPDF                    
+                    }
+                    /*'-',{
                      text:'Perencanaan',
                      textAlign:'left',
                      handler:actions.perencanaan

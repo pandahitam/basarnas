@@ -202,6 +202,9 @@
                         AngkutanDarat.Action.pendayagunaanList();
                     }
                 },
+                printPDF: function() {
+                        AngkutanDarat.Action.printpdf();
+                },
             };
 
             return actions;
@@ -679,6 +682,30 @@
             my_form.submit();
         };
 
+		AngkutanDarat.Action.printpdf = function() {
+            var selected = AngkutanDarat.Grid.grid.getSelectionModel().getSelection();
+            var selectedData = "";
+            if (selected.length > 0)
+            {
+                for (var i = 0; i < selected.length; i++)
+                {
+                    selectedData += selected[i].data.kd_lokasi + "||" + selected[i].data.kd_brg + "||" + selected[i].data.no_aset;  
+                }
+            }
+            var arrayPrintpdf = [];
+            var data = selected[0].data;
+            _.each(selected, function(obj) {
+                var data = {
+                    kd_lokasi: obj.data.kd_lokasi,
+                    kd_brg: obj.data.kd_brg,
+                    no_aset: obj.data.no_aset
+                };
+                arrayPrintpdf.push(data);
+            });
+            Modal.printDocPdf(Ext.encode(arrayPrintpdf), BASE_URL + 'asset_angkutan_darat/cetak/' + selectedData, 'Cetak Pengelolaan Asset Angkutan Darat');
+            
+        };
+		
         var setting = {
             grid: {
                 id: 'grid_AngkutanDarat',
@@ -734,9 +761,8 @@
                     {header: 'Cad1', dataIndex: 'cad1', width: 90, hidden: true, filter: {type: 'string'}},
                     {xtype: 'actioncolumn', width: 60, items: [{icon: '../basarnas/assets/images/icons/map1.png', tooltip: 'Map',
                                 handler: function(grid, rowindex, colindex, obj) {
-                                    var kodeWilayah = AngkutanDarat.Data.getAt(rowindex).data.kd_lokasi.substring(5, 9);
-                                    //console.log(kodeWilayah);
-                                    Ext.getCmp('Content_Body_Tabs').setActiveTab('map_asset');
+                                    var kodeWilayah = AngkutanDarat.Data.getAt(rowindex).data.kd_lokasi.substring(9, 15);
+									Load_TabPage('map_asset', BASE_URL + 'global_map');
                                     applyItemQuery(kodeWilayah);
                                 }
                             }]}

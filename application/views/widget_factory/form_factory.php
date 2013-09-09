@@ -406,7 +406,28 @@
         Form.pengadaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(0, {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'Reference',
+                border: false,
+                defaultType: 'container',
+                frame: true,
+                items: [{
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%',
+                            labelWidth: 120
+                        },
+                        defaultType: 'textfield',
+                        items : [{
+                                fieldLabel : "Kode Barang",
+                                name : "kd_brg"
+                        }]
+                }]
+            });
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.fileUpload());
 

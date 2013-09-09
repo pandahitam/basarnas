@@ -46,7 +46,7 @@ MAP
 		#TEMPLATE "set in index.html"
 		#FOOTER templates/footer.html    
 		EMPTY "/basarnas/assets/map/templates/empty.html"
-		IMAGEPATH "C:/xampp/htdocs/basarnas/assets/map/tmp/"
+		IMAGEPATH "D:/xampp/htdocs/basarnas/assets/map/tmp/"
 		IMAGEURL "/basarnas/assets/map/tmp/"
 	END
 
@@ -302,7 +302,7 @@ MAP
 			"DESCRIPTION" "Kantor_SAR"
 			"GROUP" "Annotasi"
 			"LAYER" "Kantor_SAR"
-			qstring_validation_pattern '^[0-9]{4}$' 
+			qstring_validation_pattern '^[0-9]{6}$' 
 		END
 	END	
 
