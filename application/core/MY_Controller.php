@@ -13,7 +13,7 @@ class MY_Controller extends CI_Controller{
             
                 if(isset($_POST['filter']))
                 {
-                    $this->model->get_FilteredData(json_decode($_POST['filter']));
+                    //$this->model->get_FilteredData(json_decode($_POST['filter']));
                 }
                 $start = null;
                 $limit = null;
