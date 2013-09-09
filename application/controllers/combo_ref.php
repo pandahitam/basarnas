@@ -37,6 +37,21 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_penerimaan()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $query = $this->db->query('select id, nomor_berita_acara from inventory_penerimaan where id NOT IN(select id_penerimaan from inventory_pemeriksaan)');
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_pengadaan()
     {
         $data = array();

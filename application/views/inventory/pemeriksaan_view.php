@@ -41,7 +41,7 @@
                 data: InventoryPemeriksaan.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 

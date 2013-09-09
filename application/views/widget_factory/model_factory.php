@@ -56,14 +56,14 @@ Ext.define('MRiwayatPajakTanahDanBangunan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MInventoryPenerimaan', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pengadaan',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pengadaan','nama_org',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
         'status_barang','qty','tgl_penerimaan','asal_barang','kode_unor']
 });
 
 Ext.define('MInventoryPemeriksaan', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pemeriksaan','nama_org',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
         'status_barang','qty','tgl_pemeriksaan','asal_barang','kode_unor']
