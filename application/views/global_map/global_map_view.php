@@ -194,10 +194,23 @@ function mapDraw() {
 	Ext.getDom('referenceImage').src = "/cgi-bin/mapserv?mode=reference&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight;
 };
 
-function imgClick(event) {
+function refMouseClick(event) {
+	var offPos = Ext.getCmp('id_map_reference').getPosition();
+	var pos_x = event.clientX - offPos[0] - 12; //12: Total paddingX
+	var pos_y = event.clientY - offPos[1] - 42; //42: Total paddingY
+	var oldMode = mapMode;
+	mapMode = 'map';
+	applyReference(pos_x, pos_y);
+	mapDraw();
+	mapMode = oldMode;
+	console.log(pos_x + ', ' + pos_y + ', ' + event.offsetX + ', ' + event.offsetY);	
+};
+
+/*
+function imgMouseClick(event) {
 	var offPos = Ext.getCmp('center_map_navigator').getPosition();
-	var pos_x = event.clientX - offPos[0] - 6; //6: paddingX
-	var pos_y = event.clientY - offPos[1] - 6; //6: paddingY
+	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
+	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
 	if(mapMode=='map') applyZoom(pos_x, pos_y);
 	else if(mapMode=='query')
 	{
@@ -205,17 +218,52 @@ function imgClick(event) {
 		mapQueryPoint[1] = pos_y;
 	}
 	mapDraw();
+	console.log(pos_x + ', ' + pos_y + ', ' + event.offsetX + ', ' + event.offsetY);
+};
+*/
+
+var mapMouseDownPoint = new Array(-1, -1);
+var mapMouseUpPoint = new Array(-1, -1);
+
+function imgMouseDown(event) {
+	var offPos = Ext.getCmp('center_map_navigator').getPosition();
+	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
+	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
+	mapMouseDownPoint[0] = pos_x;
+	mapMouseDownPoint[1] = pos_y;
+	event.preventDefault();
+	console.log('Mouse Down: ' + mapMouseDownPoint[0] + ', ' + mapMouseDownPoint[1]);
 };
 
-function refClick(event) {
+function imgMouseUp(event) {
+	var offPos = Ext.getCmp('center_map_navigator').getPosition();
+	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
+	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
+	mapMouseUpPoint[0] = pos_x;
+	mapMouseUpPoint[1] = pos_y;
 	var oldMode = mapMode;
-	mapMode = 'map';
-	pos_x = event.offsetX;
-	pos_y = event.offsetY;
-	applyReference(pos_x, pos_y);
+	var oldMapZoomSize = mapZoomSize;
+	var oldMapZoomDir = mapZoomDir;
+	if( (mapMouseDownPoint[0]==mapMouseUpPoint[0]) && ((mapMouseDownPoint[1]==mapMouseUpPoint[1])) )
+	{
+		
+		mapMode = 'query';
+		mapQueryPoint[0] = mapMouseUpPoint[0];
+		mapQueryPoint[1] = mapMouseUpPoint[1];
+	} else
+	{
+		mapMode = 'map';
+		mapZoomDir = 1;
+		mapZoomSize = parseFloat(768) / parseFloat(Math.abs(mapMouseUpPoint[0] - mapMouseDownPoint[0]));
+		applyZoom(mapMouseDownPoint[0] + Math.abs(mapMouseUpPoint[0] - mapMouseDownPoint[0])/2, mapMouseDownPoint[1] + Math.abs(mapMouseUpPoint[1] - mapMouseDownPoint[1])/2);
+	}
 	mapDraw();
+	mapZoomSize = oldMapZoomSize;
+	mapZoomDir = oldMapZoomDir;
 	mapMode = oldMode;
+	console.log('Mouse Up: ' + mapMouseUpPoint[0] + ', ' + mapMouseUpPoint[1]);
 };
+
 /*
 function calculateExtent(arrExtents)
 {
@@ -235,8 +283,8 @@ function calculateExtent(arrExtents)
 	return xy;
 }
 */
+
 function applyItemQuery(kodeWilayah) {
-	//console.log(kodeWilayah);
 	if(kodeWilayah!=null)
 	{
 		kodeWilayah +='';
@@ -379,11 +427,12 @@ var map_option_control = new Ext.create('Ext.form.Panel', {
     bodyPadding: 10,
 	padding: '5 0 0 0',
     width: '100%',
-    height: 210,
+    height: 160,
     renderTo: Ext.getBody(),
     items:[
 		{
 			xtype: 'radiogroup',
+			hidden: true,
 			columns: 1,
 			vertical: true,
 			items: [
@@ -541,15 +590,6 @@ var map_option_layer = new Ext.create('Ext.form.Panel', {
     ]
 });
 
-var map_reference = new Ext.create('Ext.form.Panel', {
-    title: 'Map Reference',
-    bodyPadding: 10,
-    padding: '5 0 0 0',
-    width: '100%',
-    renderTo: Ext.getBody(),
-    items: [ { html: '<img id="referenceImage" onClick="refClick(event)" name="referenceImage" width="192" height="120" src="'+startRefImg+'" />' } ]
-});
-
 var map_item_query = new Ext.create('Ext.form.Panel', {
     title: 'Kansar Info',
     bodyPadding: 10,
@@ -597,6 +637,16 @@ var map_item_query = new Ext.create('Ext.form.Panel', {
     ]
 });
 
+var map_reference = new Ext.create('Ext.form.Panel', {
+    title: 'Map Reference',
+	id: 'id_map_reference',
+    bodyPadding: 10,
+    padding: '5 0 0 0',
+    width: '100%',
+    renderTo: Ext.getBody(),
+    items: [ { html: '<img id="referenceImage" onClick="refMouseClick(event)" name="referenceImage" width="192" height="120" src="'+startRefImg+'" />' } ]
+});
+
 var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
    id: 'map_navigator_layout', layout: 'border', width: '100%', height: '100%', bodyStyle: 'padding: 0px;', border: false,
    items: [
@@ -606,7 +656,8 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 		},
 		{
 			id: 'center_map_navigator', region: 'center', split: true, bodyStyle: 'padding: 6px; background : #35537e;', width: '100%', height: '100%',
-			html: '<img id="mainImage" onClick="imgClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
+			//html: '<img id="mainImage" onClick="imgMouseClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
+			html: '<img id="mainImage" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
 		},
 		{
 			id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
