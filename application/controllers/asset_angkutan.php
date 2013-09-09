@@ -86,5 +86,14 @@ class Asset_Angkutan extends MY_Controller {
                 
 		return $this->deleteData($data);
 	}
+	
+	function cetak($input){
+		$data_cetak = $this->model->get_SelectedDataPrint($input);
+			if(count($data_cetak)){
+				$data['dataprn'] = $data_cetak['dataasset'];
+				$this->load->view('pengelolaan_asset/angkutan_pdf',$data);
+			}
+	}
+	
 }
 ?>

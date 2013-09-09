@@ -81,5 +81,30 @@ class Asset_Bangunan_Model extends MY_Model{
                 return $this->Get_By_Query($query);
             }
         }
+	
+	function get_SelectedDataPrint($ids){
+		$dataasset = array();
+		$idx = array();
+		$idx = explode("||", urldecode($ids));
+		$q = "$this->selectColumn
+                        FROM $this->table AS t 
+                        LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                        LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                        LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
+                        LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+								
+								WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'
+                        ";
+		$query = $this->db->query($q);
+		if ($query->num_rows() > 0) {
+			foreach ($query->result_array() as $row) {
+				$dataasset[] = $row;
+			}
+		}
+	
+		$data = array('dataasset' => $dataasset );
+		return $data;
+	}
 }
 ?>
