@@ -77,7 +77,7 @@ Ext.define('MInventoryPenyimpanan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MInventoryPengeluaran', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penyimpanan',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
         'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor']

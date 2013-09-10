@@ -3,7 +3,7 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
 	
 	function __construct(){
 		parent::__construct();
-		$this->table = 'asset_angkutan_darat';
+		$this->table = 'asset_angkutan';
                 $this->extTable = 'ext_asset_angkutan';
                 $this->countTable = 'view_asset_angkutan_darat';
                 
