@@ -199,6 +199,7 @@
                     {header: 'Qty', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Tanggal Penerimaan', dataIndex: 'tgl_penerimaan', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Asal Barang', dataIndex: 'asal_barang', width: 90, hidden: false, filter: {type: 'string'}},
+                    {header: 'Nama Penerima', dataIndex: 'nama_org', width: 90, hidden: false, filter: {type: 'string'}},
                 ]
             },
             search: {

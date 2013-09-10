@@ -21,7 +21,7 @@ class inventory_penyimpanan extends MY_Controller {
 	}
 	
 	function modifyInventoryPenyimpanan(){
-//		$dataSimak = array();
+		$dataSimak = array();
 //                $dataExt = array();
 //                $dataKode = array();
 //                
@@ -34,12 +34,11 @@ class inventory_penyimpanan extends MY_Controller {
 //                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
 //                );
 //                
-//	  	$simakFields = array(
-//			'kd_lokasi', 'kd_brg', 'no_aset', 'kuantitas', 'no_kib', 'merk', 'type', 'pabrik', 'thn_rakit', 'thn_buat', 'negara', 'kapasitas', 
-//			'sis_opr', 'sis_dingin', 'sis_bakar', 'duk_alat', 'pwr_train', 'no_mesin', 'no_rangka', 'lengkap1', 'lengkap2', 'lengkap3', 
-//			'jns_trn', 'dari', 'tgl_prl', 'rph_aset', 'dasar_hrg', 'sumber', 'no_dana', 'tgl_dana', 'unit_pmk', 'alm_pmk', 'catatan', 'kondisi', 
-//			'tgl_buku', 'rphwajar', 'status', 'cad1',
-//                );
+                $simakFields = array(
+			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pemeriksaan','nama_org',
+                                        'no_aset', 'part_number','serial_number','date_created',
+                                        'keterangan', 'status_barang','qty','tgl_penyimpanan','asal_barang'
+                );
 //                
 //                $extFields = array(
 //                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
@@ -52,9 +51,9 @@ class inventory_penyimpanan extends MY_Controller {
 //		}
 //                $kd_brg = $this->codeGenerator($dataKode);
 //                
-//		foreach ($simakFields as $field) {
-//			$dataSimak[$field] = $this->input->post($field);
-//		}
+		foreach ($simakFields as $field) {
+			$dataSimak[$field] = $this->input->post($field);
+		}
 //                $dataSimak['kd_brg'] = $kd_brg;
 //                
 //                foreach ($extFields as $field) {
@@ -76,14 +75,14 @@ class inventory_penyimpanan extends MY_Controller {
 //                    $dataExt['no_aset'] = $dataSimak['no_aset'];
 //                }
 //			
-//		$this->modifyData($dataSimak, $dataExt);
+		$this->modifyData($dataSimak, null);
 	}
 	
 	function deleteInventoryPenyimpanan()
 	{
-//		$data = $this->input->post('data');
-//                
-//		return $this->deleteData($data);
+		$data = $this->input->post('data');
+                
+		return $this->deleteProcess($data);
 	}
 }
 ?>

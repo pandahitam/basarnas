@@ -797,7 +797,7 @@
 
         var new_tabpanel_Asset = {
             id: 'angkutanDarat_darat_panel', title: 'Angkutan Darat', iconCls: 'icon-tanah_AngkutanDarat', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(AngkutanDarat.Data,'angkutanDarat'),AngkutanDarat.Grid.grid]
+            items: [Region.filterPanelAset(AngkutanDarat.Data,'angkutanDarat','3','02'),AngkutanDarat.Grid.grid]
         };
 
 <?php } else {

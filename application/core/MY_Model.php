@@ -4,6 +4,7 @@ class MY_Model extends CI_Model{
 	var $table;
         var $extTable;
         var $viewTable;
+        var $countTable;
 	var $limit = 100;
         
 	function __construct(){
@@ -75,7 +76,15 @@ class MY_Model extends CI_Model{
 //                
 //                var_dump($this->db->count_all_results("$this->table"));
 //                die;
-		return $this->db->count_all_results("$this->table");
+            if($this->countTable != null)
+            {
+                return $this->db->count_all_results("$this->countTable");
+            }
+            else
+            {
+                return $this->db->count_all_results("$this->table");
+            }
+		
 	}
 	
 	

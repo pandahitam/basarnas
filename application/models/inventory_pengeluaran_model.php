@@ -6,7 +6,7 @@ class Inventory_Pengeluaran_Model extends MY_Model{
 		$this->table = 'inventory_pengeluaran';
                 $this->selectColumn = "SELECT t.id,t.tgl_berita_acara,t.nomor_berita_acara,t.kd_brg,t.kd_lokasi,
                                         t.no_aset, t.part_number,t.serial_number,t.date_created,
-                                        t.keterangan, t.status_barang,t.qty,t.tgl_penerimaan,t.asal_barang,
+                                        t.keterangan, t.status_barang,t.qty,t.tgl_pengeluaran,t.asal_barang,
                                         c.ur_upb as nama_unker,
                                         e.kd_gol,e.kd_bid,e.kd_kel as kd_kelompok,e.kd_skel, e.kd_sskel,
                                         d.nama_unor, t.kode_unor";

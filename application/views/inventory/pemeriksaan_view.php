@@ -35,13 +35,13 @@
             proxy: InventoryPemeriksaan.proxy, groupField: 'tipe'
         });
 
-        InventoryPemeriksaan.Form.create = function(data, edit) {
+        InventoryPemeriksaan.Form.create = function(data, edit,id_penerimaan) {
             var setting = {
                 url: InventoryPemeriksaan.URL.createUpdate,
                 data: InventoryPemeriksaan.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 
@@ -61,7 +61,7 @@
                 }
             };
 
-            var form = Form.inventorypemeriksaan(setting);
+            var form = Form.inventorypemeriksaan(setting,id_penerimaan);
 
             if (data !== null)
             {
@@ -83,12 +83,11 @@
             {
                 var data = selected[0].data;
                 delete data.nama_unker;
-
                 if (Modal.processEdit.items.length === 0)
                 {
                     Modal.processEdit.setTitle('Edit Inventory Pemeriksaan');
                 }
-                var _form = InventoryPemeriksaan.Form.create(data, true);
+                var _form = InventoryPemeriksaan.Form.create(data, true,data.id_penerimaan);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
             }

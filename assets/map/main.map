@@ -46,7 +46,7 @@ MAP
 		#TEMPLATE "set in index.html"
 		#FOOTER templates/footer.html    
 		EMPTY "/basarnas/assets/map/templates/empty.html"
-		IMAGEPATH "D:/xampp/htdocs/basarnas/assets/map/tmp/"
+		IMAGEPATH "C:/xampp/htdocs/basarnas/assets/map/tmp/"
 		IMAGEURL "/basarnas/assets/map/tmp/"
 	END
 

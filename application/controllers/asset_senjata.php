@@ -89,7 +89,7 @@ class Asset_Senjata extends MY_Controller {
                 
 	}
 	
-	function deleteBangunan()
+	function deleteSenjata()
 	{
 		$data = $this->input->post('data');
                 

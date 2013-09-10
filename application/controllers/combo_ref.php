@@ -37,6 +37,69 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_pemeriksaan()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->get_post("excludedValue"))
+            {
+                $excludedValue = $this->input->post('excludedValue');
+                $query = $this->db->query("select id, nomor_berita_acara from inventory_pemeriksaan where id NOT IN(select id_pemeriksaan from inventory_penyimpanan where id_pemeriksaan NOT LIKE '$excludedValue') ");
+            }
+            else
+            {
+                 $query = $this->db->query('select id, nomor_berita_acara from inventory_pemeriksaan where id NOT IN(select id_pemeriksaan from inventory_penyimpanan)');
+            }
+            
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_penerimaan()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->get_post("excludedValue"))
+            {
+                $excludedValue = $this->input->post('excludedValue');
+                $query = $this->db->query("select id, nomor_berita_acara from inventory_penerimaan where id NOT IN(select id_penerimaan from inventory_pemeriksaan where id_penerimaan NOT LIKE '$excludedValue') ");
+            }
+            else
+            {
+                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penerimaan where id NOT IN(select id_penerimaan from inventory_pemeriksaan)');
+            }
+            
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_pengadaan()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $query = $this->db->query('select id from pengadaan');
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_klasifikasiAset_lvl1()
     {
         $data = array();

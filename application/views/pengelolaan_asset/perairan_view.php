@@ -76,7 +76,6 @@
             var form = Form.asset(Perairan.URL.createUpdate, Perairan.Data, edit);
             form.insert(0, Form.Component.unit(edit,form));
             form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
             form.insert(3, Form.Component.basicAsset(edit));
             form.insert(4, Form.Component.address());
             form.insert(5, Form.Component.bangunan());
@@ -676,7 +675,7 @@
                 title: 'DAFTAR ASSET PERAIRANG DAN IRIGASI',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
@@ -755,7 +754,7 @@
 
         var new_tabpanel_Asset = {
             id: 'perairan_panel', title: 'Perairan', iconCls: 'icon-perairan_bangunan', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Perairan.Data,'perairan'),Perairan.Grid.grid]
+            items: [Region.filterPanelAsetNoKlasifikasi(Perairan.Data,'perairan','5'),Perairan.Grid.grid]
         };
 
 <?php } else {
