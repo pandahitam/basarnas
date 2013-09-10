@@ -1,0 +1,11 @@
+USE db_asset_basarnas;
+
+CREATE TABLE ref_bidang_
+SELECT * FROM ref_bidang GROUP BY kd_gol, kd_bid;
+DROP TABLE ref_bidang;
+RENAME TABLE ref_bidang_ TO ref_bidang;
+
+CREATE TABLE ref_golongan_
+SELECT * FROM ref_golongan GROUP BY kd_gol;
+DROP TABLE ref_golongan;
+RENAME TABLE ref_golongan_ TO ref_golongan;
