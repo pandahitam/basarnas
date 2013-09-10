@@ -345,18 +345,30 @@
                 defaultType: 'container',
                 frame: true,
                 items: [{
-                        columnWidth: .5,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '100%',
-                            labelWidth: 120
-                        },
-                        defaultType: 'textfield',
-                        items : [{
-                                fieldLabel : "Kode Barang",
-                                name : "kd_brg"
+                            columnWidth: .5,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items : [{
+                                    fieldLabel : "Kode Barang",
+                                    name : "kd_brg"
+                            }]
+                        },{
+                            columnWidth: .5,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '100%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items : [{
+                                    fieldLabel : "Nama",
+                                    name : "nama"
+                            }]
                         }]
-                }]
             });
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.fileUpload());

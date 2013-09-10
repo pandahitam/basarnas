@@ -444,7 +444,7 @@ Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPengadaan', {extend: 'Ext.data.Model',
-    fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_no','merek','model',
+    fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_no','merek','model','nama',
                 'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 
                 'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
                 'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
@@ -482,3 +482,11 @@ Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
 Ext.define('MPengelolaan', {extend: 'Ext.data.Model',
     fields: ['id','nama','no_document','tanggal_document','pembuat','perihal','date_upload','image_url', 'document_url']
 });
+
+Ext.define('MUnitKerja', { extend:'Ext.data.Model',
+    fields: ['ur_upb', 'kdlok']
+})
+
+Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
+    fields: ['kd_lokasi', 'kode_unor', 'nama_unor', 'jabatan_unor', 'ur_upb']
+})

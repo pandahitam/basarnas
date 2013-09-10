@@ -180,6 +180,7 @@ var setting = {
                     {header: 'Unit Kerja',      dataIndex: 'nama_unker',        width: 150, hidden:true,    groupable : false,filter:{type:'string'}},
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor',         width: 150, hidden:true,    groupable : false,filter:{type:'string'}},
                     {header: 'Kode Barang',     dataIndex: 'kd_brg',            width: 150, hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'Nama',            dataIndex: 'nama',              width: 150, hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'Vendor Name',     dataIndex: 'venor_name',        width: 150, hidden:false,   groupable: false,filter:{type:'string'}},
                     {header: 'Tahun Angaran',   dataIndex: 'tahun_angaran',     width: 100, hidden:false,   groupable: false,filter:{type:'string'}},
                     {header: 'Sumber',          dataIndex: 'perolehan_sumber',  width: 100, hidden:false,   groupable : false,filter:{type:'string'}},

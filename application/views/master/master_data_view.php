@@ -33,7 +33,6 @@ var Center_MD = {
 	  layout: {overflowHandler: 'Menu'},
 		items: [
 	  	{text: 'Unit Kerja', iconCls: 'icon-course', disabled: false, handler: function(){Load_TabPage_MD('master_unit_kerja', BASE_URL + 'master_data/unit_kerja');}, tooltip: {text: 'Referensi Unit Kerja'}},
-	  	//{text: 'Jabatan', iconCls: 'icon-spam', disabled: false, handler: function(){Load_TabPage_MD('master_jabatan', BASE_URL + 'master_data/jabatan');}, tooltip: {text: 'Referensi Jabatan'}},
 	  	{text: 'Unit Organisasi', iconCls: 'icon-spell', disabled: false, handler: function(){Load_TabPage_MD('master_unit_organisasi', BASE_URL + 'master_data/unit_organisasi');}, tooltip: {text: 'Referensi Unit Organisasi'}},
                 {text: 'Klasifikasi Aset Lvl 1', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset_lvl1', BASE_URL + 'master_data/klasifikasi_aset_lvl1');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl1'}},
                 {text: 'Klasifikasi Aset Lvl 2', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset_lvl2', BASE_URL + 'master_data/klasifikasi_aset_lvl2');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl2'}},
@@ -41,11 +40,6 @@ var Center_MD = {
                 {text: 'Warehouse', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_warehouse', BASE_URL + 'master_data/warehouse');}, tooltip: {text: 'Referensi Warehouse'}},
                 {text: 'Ruang', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_ruang', BASE_URL + 'master_data/ruang');}, tooltip: {text: 'Referensi Ruang'}},
                 {text: 'Rak', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_rak', BASE_URL + 'master_data/rak');}, tooltip: {text: 'Referensi Rak'}},
-	  	//{text: 'TTD', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_ttd', BASE_URL + 'master_data/ttd');}, tooltip: {text: 'Referensi Pejabat Penandatangan'}},
-	  	//{text: 'Provinsi', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_prov', BASE_URL + 'master_data/prov');}, tooltip: {text: 'Referensi Provinsi'}},
-	  	//{text: 'Kabupaten', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kabkota', BASE_URL + 'master_data/kabkota');}, tooltip: {text: 'Referensi Kabupaten / Kota'}},
-	  	//{text: 'Kecamatan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kec', BASE_URL + 'master_data/kec');}, tooltip: {text: 'Referensi Kecamatan'}},
-	  	//{text: 'Satuan', iconCls: 'icon-templates'},
 	  ]
   })
 };
