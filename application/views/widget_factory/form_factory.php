@@ -33,9 +33,9 @@
             klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
             pengadaan: BASE_URL + 'combo_ref/combo_pengadaan',
             penerimaan: BASE_URL + 'combo_ref/combo_penerimaan',
+            pemeriksaan: BASE_URL + 'combo_ref/combo_pemeriksaan',
         };
 
-        
         
         Reference.Data.pengadaan = new Ext.create('Ext.data.Store', {
             fields: ['id'], storeId: 'DataPengadaanCombo',
@@ -49,6 +49,14 @@
             fields: ['id','nomor_berita_acara'], storeId: 'DataPenerimaanCombo',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.penerimaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.pemeriksaan = new Ext.create('Ext.data.Store', {
+            fields: ['id','nomor_berita_acara'], storeId: 'DataPemeriksaan Combo',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.pemeriksaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
             autoLoad: true
         });
@@ -412,8 +420,9 @@
             return form;
         }
         
-        Form.inventorypemeriksaan = function(setting)
+        Form.inventorypemeriksaan = function(setting,id_penerimaan)
         {
+//            debugger;
             var pilihPenerimaan = [{
                     xtype: 'fieldset',
                     layout: 'column',
@@ -439,35 +448,60 @@
                                     allowBlank: false,
                                     store: Reference.Data.penerimaan,
                                     valueField: 'id',
-                                    displayField: 'id', emptyText: 'Pilih Penerimaan',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penerimaan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'beforeRender': {
+                                            fn: function() {
+                                                if(setting.isEditing == true)
+                                                {
+                                                    Reference.Data.penerimaan.changeParams({params: {id_open: 1, excludedValue: id_penerimaan}});
+                                                }
+                                                else
+                                                {
+                                                    Reference.Data.penerimaan.changeParams({params: {id_open: 1}});
+                                                }
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                    /*
+                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
+                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
+                                                     */
+                                                    
+                                                    Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penerimaan/getSpecificInventoryPenerimaan',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                            Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                            Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                            Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                            Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                            Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                            Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
+                                                            Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
                                     }
                                 },
                                 
@@ -478,6 +512,105 @@
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPenerimaan);
             form.insert(2, Form.Component.inventorypemeriksaan());
+            form.insert(3, Form.Component.inventoryPerlengkapan());
+
+            return form;
+        }
+        
+        Form.inventorypenyimpanan = function(setting,id_pemeriksaan)
+        {
+
+            var pilihPemeriksaan = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PEMERIKSAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'No Pemeriksaan *',
+                                    name: 'id_pemeriksaan',
+                                    allowBlank: false,
+                                    store: Reference.Data.pemeriksaan,
+                                    valueField: 'id',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Pemeriksaan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'beforeRender': {
+                                            fn: function() {
+                                                if(setting.isEditing == true)
+                                                {
+                                                    Reference.Data.pemeriksaan.changeParams({params: {id_open: 1, excludedValue: id_pemeriksaan}});
+                                                }
+                                                else
+                                                {
+                                                    Reference.Data.pemeriksaan.changeParams({params: {id_open: 1}});
+                                                }
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                    /*
+                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
+                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
+                                                     */
+                                                    
+                                                    Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_pemeriksaan/getSpecificInventoryPemeriksaan',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
+                                                                Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                            
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(1, pilihPemeriksaan);
+            form.insert(2, Form.Component.inventorypenyimpanan());
             form.insert(3, Form.Component.inventoryPerlengkapan());
 
             return form;
@@ -4941,6 +5074,7 @@
                                     disabled: false,
                                     fieldLabel: 'Part Number *',
                                     name: 'part_number',
+                                    id:'inventory_data_perlengkapan_part_number',
                                     allowBlank: false,
                                     store: Reference.Data.partNumber,
                                     valueField: 'part_number',
@@ -4978,6 +5112,7 @@
                                 {
                                     fieldLabel: 'Serial Number',
                                     name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
                                     listeners: {
                                         'change': {
                                             fn: function(obj, value) {
@@ -5004,6 +5139,7 @@
                                     disabled: false,
                                     fieldLabel: 'Status Barang',
                                     name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
                                     allowBlank: true,
                                     store: Reference.Data.kondisiPerlengkapan,
                                     valueField: 'value',
@@ -5016,6 +5152,13 @@
                                     name: 'qty',
                                     id:'inventory_data_perlengkapan_qty'
                                 },
+                                {
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang *',
+                                    name: 'asal_barang',
+                                    allowBlank: false,
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
                                 
                             ]
                         }]
@@ -5024,75 +5167,6 @@
             return component;
         };
         
-    Form.Component.inventorypemeriksaan = function(edit) {
-
-            var component = [{
-                    xtype: 'fieldset',
-                    layout: 'column',
-                    anchor: '100%',
-                    title: 'PEMERIKSAAN',
-                    border: false,
-                    defaultType: 'container',
-                    frame: true,
-                    items: [
-                       {
-                            columnWidth: .99,
-                            layout: 'anchor',
-                            defaults: {
-                                anchor: '95%',
-                                labelWidth: 130
-                            },
-                            defaultType: 'textfield',
-                            items: [{
-                                    xtype: 'datefield',
-                                    disabled: false,
-                                    fieldLabel: 'Tanggal Berita Acara *',
-                                    name: 'tgl_berita_acara',
-                                    allowBlank: false,
-                                    format:'Y-m-d'
-                                }, {
-                                    disabled: false,
-                                    fieldLabel: 'No Berita Acara *',
-                                    name: 'nomor_berita_acara',
-                                    allowBlank: false,
-                                }, {
-                                    xtype: 'datefield',
-                                    disabled: false,
-                                    fieldLabel: 'Tanggal Pemeriksaan *',
-                                    name: 'tgl_pemeriksaan',
-                                    allowBlank: false,
-                                    format:'Y-m-d'
-                                },{
-                                    disabled: false,
-                                    fieldLabel: 'Asal Barang *',
-                                    name: 'asal_barang',
-                                    allowBlank: false,
-                                },
-                                {
-                                    disabled: false,
-                                    fieldLabel: 'Nama Pemeriksa *',
-                                    name: 'nama_org',
-                                    allowBlank: false,
-                                },
-                                {
-                                    xtype:'textarea',
-                                    fieldLabel: 'Keterangan',
-                                    name: 'keterangan',
-                                },
-                                {
-                                    xtype:'hidden',
-                                    disabled: false,
-                                    fieldLabel: 'Date Created',
-                                    name: 'date_created',
-                                    value: new Date()
-                                }
-                                
-                            ]
-                        }]
-                }]
-
-            return component;
-        };
         
         Form.Component.inventorypenerimaan = function(edit) {
 
@@ -5132,15 +5206,140 @@
                                     name: 'tgl_penerimaan',
                                     allowBlank: false,
                                     format:'Y-m-d'
-                                },{
-                                    disabled: false,
-                                    fieldLabel: 'Asal Barang *',
-                                    name: 'asal_barang',
-                                    allowBlank: false,
                                 },
                                 {
                                     disabled: false,
                                     fieldLabel: 'Nama Penerima *',
+                                    name: 'nama_org',
+                                    allowBlank: false,
+                                },
+                                {
+                                    xtype:'textarea',
+                                    fieldLabel: 'Keterangan',
+                                    name: 'keterangan',
+                                },
+                                {
+                                    xtype:'hidden',
+                                    disabled: false,
+                                    fieldLabel: 'Date Created',
+                                    name: 'date_created',
+                                    value: new Date()
+                                }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.inventorypemeriksaan = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PEMERIKSAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 130
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Berita Acara *',
+                                    name: 'tgl_berita_acara',
+                                    allowBlank: false,
+                                    format:'Y-m-d'
+                                }, {
+                                    disabled: false,
+                                    fieldLabel: 'No Berita Acara *',
+                                    name: 'nomor_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Penyimpanan *',
+                                    name: 'tgl_penyimpanan',
+                                    allowBlank: false,
+                                    format:'Y-m-d'
+                                },
+                                {
+                                    disabled: false,
+                                    fieldLabel: 'Nama Pemeriksa *',
+                                    name: 'nama_org',
+                                    allowBlank: false,
+                                },
+                                {
+                                    xtype:'textarea',
+                                    fieldLabel: 'Keterangan',
+                                    name: 'keterangan',
+                                },
+                                {
+                                    xtype:'hidden',
+                                    disabled: false,
+                                    fieldLabel: 'Date Created',
+                                    name: 'date_created',
+                                    value: new Date()
+                                }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.inventorypenyimpanan = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENYIMPANAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 130
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Berita Acara *',
+                                    name: 'tgl_berita_acara',
+                                    allowBlank: false,
+                                    format:'Y-m-d'
+                                }, {
+                                    disabled: false,
+                                    fieldLabel: 'No Berita Acara *',
+                                    name: 'nomor_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Penyimpanan *',
+                                    name: 'tgl_penyimpanan',
+                                    allowBlank: false,
+                                    format:'Y-m-d'
+                                },
+                                {
+                                    disabled: false,
+                                    fieldLabel: 'Nama Penyimpan *',
                                     name: 'nama_org',
                                     allowBlank: false,
                                 },

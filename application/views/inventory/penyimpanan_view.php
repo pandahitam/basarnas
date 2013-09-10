@@ -35,13 +35,13 @@
             proxy: InventoryPenyimpanan.proxy, groupField: 'tipe'
         });
 
-        InventoryPenyimpanan.Form.create = function(data, edit) {
+        InventoryPenyimpanan.Form.create = function(data, edit,id_pemeriksaan) {
             var setting = {
                 url: InventoryPenyimpanan.URL.createUpdate,
                 data: InventoryPenyimpanan.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 
@@ -61,7 +61,7 @@
                 }
             };
 
-            var form = Form.inventorypenyimpanan(setting);
+            var form = Form.inventorypenyimpanan(setting,id_pemeriksaan);
 
             if (data !== null)
             {
@@ -88,7 +88,7 @@
                 {
                     Modal.processEdit.setTitle('Edit Inventory Penyimpanan');
                 }
-                var _form = InventoryPenyimpanan.Form.create(data, true);
+                var _form = InventoryPenyimpanan.Form.create(data, true,data.id_pemeriksaan);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
             }

@@ -79,5 +79,12 @@ class inventory_penerimaan extends MY_Controller {
                 
 		return $this->deleteProcess($data);
 	}
+        
+        function getSpecificInventoryPenerimaan()
+        {
+            $id = $this->input->post('id');
+            $result = $this->model->get_InventoryPenerimaan($id);
+            echo json_encode($result);
+        }
 }
 ?>
