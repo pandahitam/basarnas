@@ -54,5 +54,53 @@ class Global_Map_Model extends CI_Model {
 		return $result;
 	}
 
+	function get_sarpras_data_byLoc($loc)
+	{
+		$this->load->database();
+		// Development Version :-), Create permanent View will be better.
+		$sql = 'SELECT "count_01" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "020200"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_02" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "020400"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_03" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "020500"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_04" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010201"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_05" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010202"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_06" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010204"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_07" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010100"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_08" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010205"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_09" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010204"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT "count_10" AS `ket`, COUNT(*) AS `jumlah`';
+		$sql .= ' FROM ext_asset_angkutan';
+		$sql .= ' WHERE kd_lokasi LIKE "%'.$loc.'%" AND kd_klasifikasi_aset = "010206"';
+		$sql .= ' ORDER BY `ket`';
+		$result = $this->db->query($sql)->result_array();
+		$this->db->close();
+		return $result;
+	}
 }
 ?>

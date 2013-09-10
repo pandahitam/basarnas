@@ -223,16 +223,59 @@ function imgMouseClick(event) {
 */
 
 var mapMouseDownPoint = new Array(-1, -1);
+var mapMouseMovePoint = new Array(-1, -1);
 var mapMouseUpPoint = new Array(-1, -1);
+var mapDragging = false;
 
 function imgMouseDown(event) {
-	var offPos = Ext.getCmp('center_map_navigator').getPosition();
+	var offPos =  Ext.getCmp('center_map_navigator').getPosition();
 	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
 	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
 	mapMouseDownPoint[0] = pos_x;
 	mapMouseDownPoint[1] = pos_y;
 	event.preventDefault();
-	console.log('Mouse Down: ' + mapMouseDownPoint[0] + ', ' + mapMouseDownPoint[1]);
+/*
+  canvastmp = document.createElement('canvas');
+  canvastmp.id = "mycanvastmp";
+  canvastmp.style = "{position: absolute;}";
+  canvastmp.width = Ext.getDom('cMainImage').width;
+  canvastmp.height = Ext.getDom('cMainImage').height;
+  //canvastmp.className = "double";
+  Ext.getDom('cMainImage').parentNode.appendChild(canvastmp);
+  canvastmp = Ext.getDom('mycanvastmp').getContext('2d');
+  canvastmp.lineWidth = 10;
+  canvastmp.fillStyle = "rgba(0, 0, 0, 0.5)";
+ */
+ 
+	mapDragging = true;
+	//console.log('Mouse Down: ' + mapMouseDownPoint[0] + ', ' + mapMouseDownPoint[1]);
+};
+
+var prevWidth;
+var prevHeight;
+
+function imgMouseMove(event) 
+{
+	var offPos = Ext.getCmp('center_map_navigator').getPosition();
+	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
+	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
+	mapMouseMovePoint[0] = pos_x;
+	mapMouseMovePoint[1] = pos_y;
+
+	/*
+	if(mapDragging)
+	{
+	
+		//canvastmp = Ext.getDom('mycanvastmp').getContext('2d');
+	
+		//ctx = Ext.getDom('mycanvastmp').getContext('2d');
+		//console.debug(canvastmp);
+		//console.log(canvastmp.lineWidth);	
+		//ctx.clearRect(mapMouseDownPoint[0], mapMouseDownPoint[0], $(this).width(), $(this).height());
+		//canvastmp.fillRect(mapMouseDownPoint[0], mapMouseDownPoint[1], mapMouseMovePoint[0] - mapMouseDownPoint[0], mapMouseMovePoint[1] - mapMouseMovePoint[1]);
+	}
+	*/
+	//console.log('Mouse Over: ' + pos_x + ', ' + pos_y);
 };
 
 function imgMouseUp(event) {
@@ -241,6 +284,7 @@ function imgMouseUp(event) {
 	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
 	mapMouseUpPoint[0] = pos_x;
 	mapMouseUpPoint[1] = pos_y;
+	mapDragging = false;
 	var oldMode = mapMode;
 	var oldMapZoomSize = mapZoomSize;
 	var oldMapZoomDir = mapZoomDir;
@@ -256,12 +300,22 @@ function imgMouseUp(event) {
 		mapZoomDir = 1;
 		mapZoomSize = parseFloat(768) / parseFloat(Math.abs(mapMouseUpPoint[0] - mapMouseDownPoint[0]));
 		applyZoom(mapMouseDownPoint[0] + Math.abs(mapMouseUpPoint[0] - mapMouseDownPoint[0])/2, mapMouseDownPoint[1] + Math.abs(mapMouseUpPoint[1] - mapMouseDownPoint[1])/2);
+		if( (mapMouseUpPoint[0]==mapMouseMovePoint[0]) && (mapMouseUpPoint[1]==mapMouseMovePoint[1]) ) console.log('done');
 	}
 	mapDraw();
 	mapZoomSize = oldMapZoomSize;
 	mapZoomDir = oldMapZoomDir;
 	mapMode = oldMode;
-	console.log('Mouse Up: ' + mapMouseUpPoint[0] + ', ' + mapMouseUpPoint[1]);
+
+/*
+	var ctx = Ext.getDom('cTempMainImage').getContext('2d');
+	ctx.fillStyle = "#FF0000";
+	//ctx.clearRect(mapMouseDownPoint[0], mapMouseDownPoint[1], 150, 150);
+	ctx.rect(0,0,150,100);
+	ctx.fillRect(200, 10, 150, 100);
+	ctx.fillStyle="#FF0000";
+	console.debug(ctx);
+*/	//console.log('Mouse Up: ' + parseInt(mapMouseUpPoint[0]) + ', ' + parseInt(mapMouseUpPoint[1]) );
 };
 
 /*
@@ -375,6 +429,7 @@ function applyZoomAll() {
 
     var propsGrid = Ext.create('Ext.grid.Panel', {
         renderTo: Ext.getBody(),
+		id: 'idPropsGrid',
         //collapsible: true,
         //iconCls: 'icon-grid',
         //frame: true,
@@ -657,7 +712,9 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 		{
 			id: 'center_map_navigator', region: 'center', split: true, bodyStyle: 'padding: 6px; background : #35537e;', width: '100%', height: '100%',
 			//html: '<img id="mainImage" onClick="imgMouseClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
-			html: '<img id="mainImage" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
+			//html: '<img id="mainImage" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
+			html: '<canvas id="cMainImage" style="position: absolute;" width="768" height="480" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" ></canvas>' + 
+			'<img id="mainImage" name="mainImage" src="'+startMapImg+'"/>'
 		},
 		{
 			id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',

@@ -6,7 +6,7 @@
 ////PANEL UTAMA MASTER DATA  -------------------------------------------- START
 
 $.ajax({
-    url : 'http://localhost:8888/basarnas/services/assetByKode/3010110001/107010900414412000KP/2',
+    url : BASE_URL + 'services/assetByKode/3010110001/107010900414412000KP/2',
     type : 'GET',
     dataType : 'JSON',
     success : function (data)

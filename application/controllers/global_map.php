@@ -49,5 +49,16 @@ class Global_MAP extends MY_Controller {
 		}		
 	}
 
+   function get_sarpras_data($location)
+	{
+        $dataOut = array();
+		$this->load->model('global_map_model');
+		$result =  $this->global_map_model->get_sarpras_data_byLoc($location);
+		foreach($result as $obj)
+		{
+			$dataOut[] = $obj;
+		}
+		echo json_encode($dataOut);
+	}
 }
 ?>
