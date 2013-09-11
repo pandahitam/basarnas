@@ -415,25 +415,19 @@ var new_popup = new Ext.create('Ext.Window', {
   })
 });
 
-new_popup.on('show', function(win) 
+new_popup.on('show', function() 
 {
 	var saprasUrl = baseUrl + 'global_map/get_sarpras_data/<?php echo($location) ?>';
-	console.debug(saprasUrl);
 	Ext.Ajax.request({
 		url: saprasUrl, 
 		method: 'POST',
 		success: function(response)
 		{
-			console.log(response.responseText);
 			var jsonData = new Ext.JSON.decode(response.responseText, true);
 			var len = jsonData.length;
 			for(var i=0; i<len; i++)
 			{
-				if( Ext.getDom(jsonData[i]['ket']) )
-				{
-					Ext.getDom(jsonData[i]['ket']).innerHTML = jsonData[i]['jumlah'];
-				//console.log( jsonData[i]['ket'] + '|' + jsonData[i]['jumlah'] );
-				}
+				if( Ext.getDom(jsonData[i]['ket']) ) { Ext.getDom(jsonData[i]['ket']).innerHTML = jsonData[i]['jumlah']; }
 			}
 		}
 	});

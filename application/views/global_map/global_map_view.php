@@ -173,23 +173,26 @@ function applyQuery() {
 		method: 'GET',
 		success: function(response) {
 			var rslt = new Ext.JSON.decode(response.responseText, true);
-			sLocationCode = rslt.kansar[0].kodePse + rslt.kansar[0].kpb;
-			propsGrid.setTitle(rslt.kansar[0].kantorSar);
-			Ext.getDom('mainImage').src = baseUrl + 'assets/map/tmp/basarnas' + rslt.kansar[0].imageId + '.png';
-			Ext.getDom('referenceImage').src = baseUrl + 'assets/map/tmp/basarnasref' + rslt.kansar[0].imageId + '.png';
-			Ext.Ajax.request({
-				url: baseUrl + 'global_map/req_all_asset/' + sLocationCode, 
-				method: 'GET',
-				success: function(response) { sAssets.loadData(new Ext.JSON.decode(response.responseText, true)); },
-				callback: function() { Load_Popup('winmappopup', baseUrl + 'global_map/map_pop_up/' + sLocationCode); },
-				scope: this
-			});
+			if(rslt['kansar'])
+			{
+				sLocationCode = rslt.kansar[0].kodePse + rslt.kansar[0].kpb;
+				propsGrid.setTitle(rslt.kansar[0].kantorSar);
+				Ext.getDom('cMainImage').style["background"] = 'url(' + baseUrl + 'assets/map/tmp/basarnas' + rslt.kansar[0].imageId + '.png)';
+				Ext.getDom('referenceImage').src = baseUrl + 'assets/map/tmp/basarnasref' + rslt.kansar[0].imageId + '.png';
+				Ext.Ajax.request({
+					url: baseUrl + 'global_map/req_all_asset/' + sLocationCode, 
+					method: 'GET',
+					success: function(response) { sAssets.loadData(new Ext.JSON.decode(response.responseText, true)); },
+					callback: function() { Load_Popup('winmappopup', baseUrl + 'global_map/map_pop_up/' + sLocationCode); },
+					scope: this
+				});
+			}
 		}
 	});
 };
 
 function mapDraw() {
-	if(mapMode=='map') Ext.getDom('mainImage').src = "/cgi-bin/mapserv?mode=map&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight+"&layers="+buildLayer();
+	if(mapMode=='map') Ext.getDom('cMainImage').style["background"] = "url(" + "/cgi-bin/mapserv?mode=map&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight+"&layers="+buildLayer() + ")";
 	else if(mapMode=='query') applyQuery();
 	Ext.getDom('referenceImage').src = "/cgi-bin/mapserv?mode=reference&map=MAP_FILE&mapext="+mapExtent.join("+")+"&mapsize="+mapWidth+"+"+mapHeight;
 };
@@ -203,28 +206,9 @@ function refMouseClick(event) {
 	applyReference(pos_x, pos_y);
 	mapDraw();
 	mapMode = oldMode;
-	console.log(pos_x + ', ' + pos_y + ', ' + event.offsetX + ', ' + event.offsetY);	
 };
-
-/*
-function imgMouseClick(event) {
-	var offPos = Ext.getCmp('center_map_navigator').getPosition();
-	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
-	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
-	if(mapMode=='map') applyZoom(pos_x, pos_y);
-	else if(mapMode=='query')
-	{
-		mapQueryPoint[0] = pos_x;
-		mapQueryPoint[1] = pos_y;
-	}
-	mapDraw();
-	console.log(pos_x + ', ' + pos_y + ', ' + event.offsetX + ', ' + event.offsetY);
-};
-*/
 
 var mapMouseDownPoint = new Array(-1, -1);
-var mapMouseMovePoint = new Array(-1, -1);
-var mapMouseUpPoint = new Array(-1, -1);
 var mapDragging = false;
 
 function imgMouseDown(event) {
@@ -234,88 +218,57 @@ function imgMouseDown(event) {
 	mapMouseDownPoint[0] = pos_x;
 	mapMouseDownPoint[1] = pos_y;
 	event.preventDefault();
-/*
-  canvastmp = document.createElement('canvas');
-  canvastmp.id = "mycanvastmp";
-  canvastmp.style = "{position: absolute;}";
-  canvastmp.width = Ext.getDom('cMainImage').width;
-  canvastmp.height = Ext.getDom('cMainImage').height;
-  //canvastmp.className = "double";
-  Ext.getDom('cMainImage').parentNode.appendChild(canvastmp);
-  canvastmp = Ext.getDom('mycanvastmp').getContext('2d');
-  canvastmp.lineWidth = 10;
-  canvastmp.fillStyle = "rgba(0, 0, 0, 0.5)";
- */
- 
+	var ctx = Ext.getDom('cMainImage').getContext('2d');
+	ctx.lineWidth = 1;
+	ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
 	mapDragging = true;
-	//console.log('Mouse Down: ' + mapMouseDownPoint[0] + ', ' + mapMouseDownPoint[1]);
 };
-
-var prevWidth;
-var prevHeight;
 
 function imgMouseMove(event) 
 {
 	var offPos = Ext.getCmp('center_map_navigator').getPosition();
 	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
 	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
-	mapMouseMovePoint[0] = pos_x;
-	mapMouseMovePoint[1] = pos_y;
-
-	/*
 	if(mapDragging)
 	{
-	
-		//canvastmp = Ext.getDom('mycanvastmp').getContext('2d');
-	
-		//ctx = Ext.getDom('mycanvastmp').getContext('2d');
-		//console.debug(canvastmp);
-		//console.log(canvastmp.lineWidth);	
-		//ctx.clearRect(mapMouseDownPoint[0], mapMouseDownPoint[0], $(this).width(), $(this).height());
-		//canvastmp.fillRect(mapMouseDownPoint[0], mapMouseDownPoint[1], mapMouseMovePoint[0] - mapMouseDownPoint[0], mapMouseMovePoint[1] - mapMouseMovePoint[1]);
+		var ctx = Ext.getDom('cMainImage').getContext('2d');
+		ctx.clearRect(mapMouseDownPoint[0], mapMouseDownPoint[1], pos_x-mapMouseDownPoint[0], pos_y-mapMouseDownPoint[1]);
+		ctx.fillRect(mapMouseDownPoint[0], mapMouseDownPoint[1], pos_x-mapMouseDownPoint[0], pos_y-mapMouseDownPoint[1]);
 	}
-	*/
-	//console.log('Mouse Over: ' + pos_x + ', ' + pos_y);
 };
 
 function imgMouseUp(event) {
 	var offPos = Ext.getCmp('center_map_navigator').getPosition();
 	var pos_x = event.clientX - offPos[0] -7; //7: paddingX
 	var pos_y = event.clientY - offPos[1] -7; //7: paddingY
-	mapMouseUpPoint[0] = pos_x;
-	mapMouseUpPoint[1] = pos_y;
-	mapDragging = false;
+		
+	if(mapDragging) 
+	{
+		var ctx = Ext.getDom('cMainImage').getContext('2d');
+		ctx.clearRect(mapMouseDownPoint[0], mapMouseDownPoint[1], pos_x - mapMouseDownPoint[0], pos_y - mapMouseDownPoint[1]);
+		mapDragging = false;
+	}
+
 	var oldMode = mapMode;
 	var oldMapZoomSize = mapZoomSize;
 	var oldMapZoomDir = mapZoomDir;
-	if( (mapMouseDownPoint[0]==mapMouseUpPoint[0]) && ((mapMouseDownPoint[1]==mapMouseUpPoint[1])) )
+	if( (mapMouseDownPoint[0]==pos_x) && ((mapMouseDownPoint[1]==pos_y)) )
 	{
 		
 		mapMode = 'query';
-		mapQueryPoint[0] = mapMouseUpPoint[0];
-		mapQueryPoint[1] = mapMouseUpPoint[1];
+		mapQueryPoint[0] = pos_x;
+		mapQueryPoint[1] = pos_y;
 	} else
 	{
 		mapMode = 'map';
 		mapZoomDir = 1;
-		mapZoomSize = parseFloat(768) / parseFloat(Math.abs(mapMouseUpPoint[0] - mapMouseDownPoint[0]));
-		applyZoom(mapMouseDownPoint[0] + Math.abs(mapMouseUpPoint[0] - mapMouseDownPoint[0])/2, mapMouseDownPoint[1] + Math.abs(mapMouseUpPoint[1] - mapMouseDownPoint[1])/2);
-		if( (mapMouseUpPoint[0]==mapMouseMovePoint[0]) && (mapMouseUpPoint[1]==mapMouseMovePoint[1]) ) console.log('done');
+		mapZoomSize = parseFloat(768) / parseFloat(Math.abs(pos_x - mapMouseDownPoint[0]));
+		applyZoom(mapMouseDownPoint[0] + Math.abs(pos_x - mapMouseDownPoint[0])/2, mapMouseDownPoint[1] + Math.abs(pos_y - mapMouseDownPoint[1])/2);
 	}
 	mapDraw();
 	mapZoomSize = oldMapZoomSize;
 	mapZoomDir = oldMapZoomDir;
 	mapMode = oldMode;
-
-/*
-	var ctx = Ext.getDom('cTempMainImage').getContext('2d');
-	ctx.fillStyle = "#FF0000";
-	//ctx.clearRect(mapMouseDownPoint[0], mapMouseDownPoint[1], 150, 150);
-	ctx.rect(0,0,150,100);
-	ctx.fillRect(200, 10, 150, 100);
-	ctx.fillStyle="#FF0000";
-	console.debug(ctx);
-*/	//console.log('Mouse Up: ' + parseInt(mapMouseUpPoint[0]) + ', ' + parseInt(mapMouseUpPoint[1]) );
 };
 
 /*
@@ -363,7 +316,7 @@ function applyItemQuery(kodeWilayah) {
 							mapDraw();
 							mapMode = oldMode;
 						} else { // Alternate 1 -> Show query result : Zoom Extent, Highlight
-							Ext.getDom('mainImage').src = baseUrl + 'assets/map/tmp/basarnas' + rslt.kansar[0].imageId + '.png';
+							Ext.getDom('cMainImage').style["background"] = 'url(' + baseUrl + 'assets/map/tmp/basarnas' + rslt.kansar[0].imageId + '.png)';
 							Ext.getDom('referenceImage').src = baseUrl + 'assets/map/tmp/basarnasref' + rslt.kansar[0].imageId + '.png';
 							applyZoomAll();
 						}
@@ -713,8 +666,8 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 			id: 'center_map_navigator', region: 'center', split: true, bodyStyle: 'padding: 6px; background : #35537e;', width: '100%', height: '100%',
 			//html: '<img id="mainImage" onClick="imgMouseClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
 			//html: '<img id="mainImage" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
-			html: '<canvas id="cMainImage" style="position: absolute;" width="768" height="480" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" ></canvas>' + 
-			'<img id="mainImage" name="mainImage" src="'+startMapImg+'"/>'
+			html: '<canvas id="cMainImage" style="position: absolute; background: url(' + startMapImg + ')" width="768" height="480" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" >Your browser does not support the HTML5 canvas tag.</canvas>' 
+			//'<img id="mainImage" name="mainImage" src="'+startMapImg+'"/>'
 		},
 		{
 			id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
