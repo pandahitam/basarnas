@@ -1,9 +1,0 @@
-Bandung		0200
-Jambi		1000
-Lampung		1200
-Palu		1800
-Bengkulu	2600
-Ternate		2800
-Pangkal Pinang	3000
-Gorontalo	3100
-Manokwari	3300
