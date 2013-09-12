@@ -104,15 +104,15 @@ MAP
 	 END
 
 	LAYER
-		GROUP			"Polygon"
+		GROUP "Polygon"
 		NAME 			Batas_Negara
 		TYPE 			POLYGON
-		STATUS 			OFF
+		STATUS 			ON
 		DATA 			Batas_Negara
 		CLASS
 			NAME "Batas Negara"
-			COLOR 203 247 233
-			OUTLINECOLOR 110 110 110
+			COLOR 230 152 0
+			#OUTLINECOLOR 110 110 110
 			TEMPLATE "templates/bn.html"
 		END
 		HEADER "templates/bn_header.html"
@@ -131,23 +131,16 @@ MAP
 		STATUS ON
 		DATA Batas_Provinsi
 		LABELITEM "PROVINSI"
-		CLASSITEM "PROVINSI"
-		TRANSPARENCY	50
 		CLASS
 			NAME "Batas Provinsi"
-			COLOR 238 207 250
-			OUTLINECOLOR 255 255 255
+			COLOR 255 235 175
+			OUTLINECOLOR 255 211 127
 			TEMPLATE "templates/bp.html"
-			EXPRESSION /./      
 			LABEL
-				COLOR 100 100 100
-				SHADOWCOLOR 218 218 218
-				SHADOWSIZE 2 2
+				COLOR 205 170 102
 				TYPE BITMAP
 				SIZE MEDIUM
 				POSITION CC
-				PARTIALS FALSE
-				BUFFER 2
 			END
 		END
 		HEADER "templates/bp_header.html"
@@ -164,25 +157,20 @@ MAP
 		GROUP "Polygon"
 		NAME Batas_Kabupaten
 		TYPE POLYGON
-		STATUS OFF
+		STATUS ON
 		DATA Batas_Kabupaten
 		LABELITEM "KOTA"
-		#CLASSITEM "KOTA"
+		TRANSPARENCY 50
 		CLASS
 			NAME "Batas Kabupaten"
-			COLOR 191 184 242
-			OUTLINECOLOR 255 255 255
+			COLOR 255 235 175
+			OUTLINECOLOR 255 211 127
 			TEMPLATE "templates/bk.html"
-			#EXPRESSION /./      
 			LABEL
-				COLOR 100 100 100
-				SHADOWCOLOR 218 218 218
-				SHADOWSIZE 2 2
+				COLOR 205 170 102
 				TYPE BITMAP
 				SIZE SMALL
 				POSITION CC
-				PARTIALS FALSE
-				BUFFER 2
 			END
 		END
 		HEADER "templates/bk_header.html"
@@ -201,10 +189,11 @@ MAP
 		TYPE POLYGON
 		STATUS OFF
 		DATA Batas_Kecamatan
+		TRANSPARENCY 25
 		CLASS
 			NAME "Batas Kecamatan"
-			COLOR 203 218 242
-			OUTLINECOLOR 110 110 110
+			COLOR 255 235 175
+			OUTLINECOLOR 255 211 127
 			TEMPLATE "templates/bkc.html"
 		END
 		HEADER "templates/bkc_header.html"
@@ -217,54 +206,53 @@ MAP
 	END
 	
 	LAYER
+		GROUP "Polygon"
+		NAME Sungai_Besar
+		TYPE POLYGON
+		STATUS OFF
+		DATA Sungai_Besar
+		LABELITEM "NAMA"
+		CLASS
+			NAME "Sungai Besar"
+			COLOR 115 178 255
+			OUTLINECOLOR 0 112 255
+			TEMPLATE "templates/s.html"
+			LABEL
+				COLOR 0 38 115
+				TYPE BITMAP
+				SIZE SMALL
+				POSITION CC
+			END
+		END
+		HEADER "templates/s_header.html"
+		FOOTER "templates/s_footer.html"
+		METADATA
+			"DESCRIPTION" "Sungai Besar"
+			"GROUP" "Polygon"
+			"LAYER" "Sungai Besar"
+			qstring_validation_pattern '^[0-9]{4}$' 
+		END
+	END
+
+	LAYER
 		NAME Jalan_Lokal
-		GROUP "Jalan"
-		#MAXSCALE 600000
+		GROUP "Jalan Lokal"
 		STATUS OFF
 		DATA Jalan_Lokal
 		TYPE LINE
 		CLASS
 			NAME "Jalan Lokal"
 			STYLE
-				COLOR 205 137 102
+				COLOR 255 0 0
+				WIDTH 0.25
 			END
 		END
 		METADATA
-			"DESCRIPTION" "Jalan_Lokal"
-			"GROUP" "Jalan"
-			"LAYER" "Jalan_Lokal"
+			"DESCRIPTION" "Jalan Lokal"
+			"GROUP" "Jalan Lokal"
+			"LAYER" "Jalan Lokal"
 		END
 	END
-	
-	LAYER
-		NAME Text_Kota_Kabupaten
-		GROUP "Annotasi"
-		TYPE ANNOTATION
-		DATA Text_Kota_Kabupaten
-		STATUS ON
-		LABELITEM "NAMA"
-		CLASSITEM "NAMA"
-		#LABELMAXSCALE 2000000
-		CLASS
-			EXPRESSION /./      
-			LABEL
-				COLOR 0 0 0
-				SHADOWCOLOR 218 218 218
-				SHADOWSIZE 2 2
-				TYPE BITMAP
-				SIZE MEDIUM
-				POSITION CC
-				PARTIALS FALSE
-				BUFFER 2
-			END
-		END
-
-		METADATA
-			"DESCRIPTION" "Text_Kota_Kabupaten"
-			"GROUP" "Annotasi"
-			"LAYER" "Text_Kota_Kabupaten"
-		END
-	END	
 	
 	LAYER
 		NAME Kantor_SAR
@@ -273,27 +261,20 @@ MAP
 		DATA kansar
 		STATUS ON
 		LABELITEM "NAMA"
-		#CLASSITEM "JENIS"
-		#LABELMAXSCALE 2000000
-		#MINSCALE 1000000
 		CLASS
 			NAME "Kantor SAR"
 			TEMPLATE "templates/ks.html"
-			#EXPRESSION /./
 			STYLE
 				SYMBOL "star"
-				SIZE 14
-				COLOR 13 0 153
+				SIZE 15
+				COLOR 0 115 76
+				OUTLINECOLOR 0 115 76
 			END      
 			LABEL
-				COLOR 13 0 153
-				SHADOWCOLOR 218 218 218
-				SHADOWSIZE 2 2
+				COLOR 0 0 0 
 				TYPE BITMAP
-				SIZE MEDIUM
+				SIZE LARGE
 				POSITION UC
-				PARTIALS FALSE
-				BUFFER 2
 			END
 		END
 		HEADER "templates/ks_header.html"
@@ -313,26 +294,18 @@ MAP
 		DATA possar
 		STATUS ON
 		LABELITEM "NAMA"
-		#CLASSITEM "NAMA"
-		#LABELMAXSCALE 2000000
-		#MINSCALE 1000000
 		CLASS
 			NAME "Pos SAR"
-			#EXPRESSION /./
 			STYLE
 				SYMBOL "Circle"
 				SIZE 6
-				COLOR 149 0 166 
+				COLOR 76 230 0 
 			END      
 			LABEL
-				COLOR 149 0 166
-				SHADOWCOLOR 218 218 218
-				SHADOWSIZE 2 2
+				COLOR 0 115 76
 				TYPE BITMAP
-				SIZE SMALL #MEDIUM
+				SIZE SMALL
 				POSITION UC
-				PARTIALS FALSE
-				BUFFER 2
 			END
 		END
 		METADATA

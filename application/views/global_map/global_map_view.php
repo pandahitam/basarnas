@@ -37,13 +37,14 @@ function Layer(name, longname, group, status) {
 }
 
 var mapLayers =  new Array();
-mapLayers[mapLayers.length] = new Layer('Batas_Negara', 'Batas Negara', 'layers', false);
-mapLayers[mapLayers.length] = new Layer('Batas_Provinsi', 'Batas Provinsi', 'layers', false);
+mapLayers[mapLayers.length] = new Layer('Batas_Negara', 'Batas Negara', 'layers', true);
+mapLayers[mapLayers.length] = new Layer('Batas_Provinsi', 'Batas Provinsi', 'layers', true);
 mapLayers[mapLayers.length] = new Layer('Batas_Kabupaten', 'Batas Kabupaten', 'layers', true);
 mapLayers[mapLayers.length] = new Layer('Batas_Kecamatan', 'Batas Kecamatan', 'layers', false);
+mapLayers[mapLayers.length] = new Layer('Sungai_Besar', 'Sungai Besar', 'layers', false);
+mapLayers[mapLayers.length] = new Layer('Jalan_Lokal', 'Jalan Lokal', 'layers', false);
 mapLayers[mapLayers.length] = new Layer('Kantor_SAR', 'Kantor SAR', 'layers', true);
 mapLayers[mapLayers.length] = new Layer('Pos_SAR', 'Pos SAR', 'layers', true);
-mapLayers[mapLayers.length] = new Layer('Jalan_Lokal', 'Jalan Lokal', 'layers', true);
 
 function buildLayer() {
 	var s = '';
@@ -55,6 +56,7 @@ function buildLayer() {
 			else s += '+'+mapLayers[i].name;
 		}
 	}
+	console.debug(s);
 	return s;
 };
 
@@ -578,6 +580,13 @@ var map_option_layer = new Ext.create('Ext.form.Panel', {
 					handler: function(ctl, val) {
 						mapLayers[6].status = val;
 					}
+				}, {
+                    boxLabel  : mapLayers[7].longname,
+                    name      : mapLayers[7].group,
+                    checked   : mapLayers[7].status,
+					handler: function(ctl, val) {
+						mapLayers[7].status = val;
+					}
 				}
             ]			
         },
@@ -664,10 +673,7 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 		},
 		{
 			id: 'center_map_navigator', region: 'center', split: true, bodyStyle: 'padding: 6px; background : #35537e;', width: '100%', height: '100%',
-			//html: '<img id="mainImage" onClick="imgMouseClick(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
-			//html: '<img id="mainImage" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" name="mainImage" width="768" height="480" src="'+startMapImg+'"/>'
 			html: '<canvas id="cMainImage" style="position: absolute; background: url(' + startMapImg + ')" width="768" height="480" onMouseDown="imgMouseDown(event)" onMouseUp="imgMouseUp(event)" onMouseMove="imgMouseMove(event)" >Your browser does not support the HTML5 canvas tag.</canvas>' 
-			//'<img id="mainImage" name="mainImage" src="'+startMapImg+'"/>'
 		},
 		{
 			id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
