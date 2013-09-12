@@ -324,7 +324,7 @@ function applyItemQuery(kodeWilayah) {
 							url: baseUrl + 'global_map/req_all_asset/' + sLocationCode, 
 							method: 'GET',
 							success: function(response) { sAssets.loadData(new Ext.JSON.decode(response.responseText, true)); },
-							callback: function() { Load_Popup('winmappopup', baseUrl + 'global_map/map_pop_up/' + sLocationCode); },
+							//callback: function() { Load_Popup('winmappopup', baseUrl + 'global_map/map_pop_up/' + sLocationCode); },
 							scope: this
 						});
 					}
