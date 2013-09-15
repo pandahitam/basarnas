@@ -4,7 +4,7 @@ MAP
 	SIZE 768 480
 	EXTENT 94.973492 -11.007750 141.066985 7.033773
 	SHAPEPATH "data"
-	IMAGECOLOR 255 255 255
+	IMAGECOLOR 151 219 242
 	#IMAGECOLOR 200 200 200
 	UNITS DD
 
@@ -42,9 +42,7 @@ MAP
 	END 
 
 	WEB
-		#HEADER templates/header.html
-		#TEMPLATE "set in index.html"
-		#FOOTER templates/footer.html    
+		TEMPLATE "templates/browse.html"
 		EMPTY "/basarnas/assets/map/templates/empty.html"
 		IMAGEPATH "D:/xampp/htdocs/basarnas/assets/map/tmp/"
 		IMAGEURL "/basarnas/assets/map/tmp/"
@@ -55,12 +53,8 @@ MAP
 		EXTENT 94.973492 -11.007750 141.066985 7.033773
 		SIZE 192 120
 		STATUS ON
-		#MINBOXSIZE 50
-		#MAXBOXSIZE 500
 		COLOR -1 -1 -1
 		OUTLINECOLOR 255 0 0
-		#MARKERSIZE 50
-		#MARKER 'star'
 	END
 	
 	SCALEBAR
@@ -77,24 +71,20 @@ MAP
 		TRANSPARENT true
 		STATUS embed
 		BACKGROUNDCOLOR 255 0 0
-		IMAGECOLOR 255 255 255
-		COLOR 255 255 255
-		OUTLINECOLOR 0 0 255
 	END
 	
 	LEGEND
+		POSITION ur
+		TRANSPARENT false
+		STATUS embed
+		IMAGECOLOR 151 219 242
+		KEYSIZE 20 10
+		KEYSPACING 5 5
 		LABEL
 			COLOR 0 0 0
 			ANTIALIAS true
 			SIZE small
 		END
-		POSITION ur
-		TRANSPARENT false
-		STATUS embed
-		#IMAGECOLOR -1 -1 -1
-		KEYSIZE 20 10
-		KEYSPACING 5 5
-		#OUTLINECOLOR 200 200 200
 	END
 	
 	 QUERYMAP
@@ -105,18 +95,14 @@ MAP
 
 	LAYER
 		GROUP "Polygon"
-		NAME 			Batas_Negara
-		TYPE 			POLYGON
-		STATUS 			ON
-		DATA 			Batas_Negara
+		NAME Batas_Negara
+		TYPE POLYGON
+		STATUS ON
+		DATA Batas_Negara
 		CLASS
 			NAME "Batas Negara"
 			COLOR 230 152 0
-			#OUTLINECOLOR 110 110 110
-			TEMPLATE "templates/bn.html"
 		END
-		HEADER "templates/bn_header.html"
-		FOOTER "templates/bn_footer.html"
 		METADATA
 			"DESCRIPTION" "Batas_Negara"
 			"GROUP" "Polygon"
@@ -135,7 +121,6 @@ MAP
 			NAME "Batas Provinsi"
 			COLOR 255 235 175
 			OUTLINECOLOR 255 211 127
-			TEMPLATE "templates/bp.html"
 			LABEL
 				COLOR 205 170 102
 				TYPE BITMAP
@@ -143,8 +128,6 @@ MAP
 				POSITION CC
 			END
 		END
-		HEADER "templates/bp_header.html"
-		FOOTER "templates/bp_footer.html"
 		METADATA
 			"DESCRIPTION" "Batas_Provinsi"
 			"GROUP" "Polygon"
@@ -165,7 +148,6 @@ MAP
 			NAME "Batas Kabupaten"
 			COLOR 255 235 175
 			OUTLINECOLOR 255 211 127
-			TEMPLATE "templates/bk.html"
 			LABEL
 				COLOR 205 170 102
 				TYPE BITMAP
@@ -173,8 +155,6 @@ MAP
 				POSITION CC
 			END
 		END
-		HEADER "templates/bk_header.html"
-		FOOTER "templates/bk_footer.html"
 		METADATA
 			"DESCRIPTION" "Batas_Kabupaten"
 			"GROUP" "Polygon"
@@ -194,10 +174,7 @@ MAP
 			NAME "Batas Kecamatan"
 			COLOR 255 235 175
 			OUTLINECOLOR 255 211 127
-			TEMPLATE "templates/bkc.html"
 		END
-		HEADER "templates/bkc_header.html"
-		FOOTER "templates/bkc_footer.html"
 		METADATA
 			"DESCRIPTION" "Batas_Kecamatan"
 			"GROUP" "Polygon"
@@ -216,7 +193,6 @@ MAP
 			NAME "Sungai Besar"
 			COLOR 115 178 255
 			OUTLINECOLOR 0 112 255
-			TEMPLATE "templates/s.html"
 			LABEL
 				COLOR 0 38 115
 				TYPE BITMAP
@@ -224,8 +200,6 @@ MAP
 				POSITION CC
 			END
 		END
-		HEADER "templates/s_header.html"
-		FOOTER "templates/s_footer.html"
 		METADATA
 			"DESCRIPTION" "Sungai Besar"
 			"GROUP" "Polygon"
@@ -263,7 +237,6 @@ MAP
 		LABELITEM "NAMA"
 		CLASS
 			NAME "Kantor SAR"
-			TEMPLATE "templates/ks.html"
 			STYLE
 				SYMBOL "star"
 				SIZE 15
@@ -277,6 +250,7 @@ MAP
 				POSITION UC
 			END
 		END
+		TEMPLATE "templates/ks.html"
 		HEADER "templates/ks_header.html"
 		FOOTER "templates/ks_footer.html"
 		METADATA

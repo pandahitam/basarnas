@@ -56,7 +56,6 @@ function buildLayer() {
 			else s += '+'+mapLayers[i].name;
 		}
 	}
-	console.debug(s);
 	return s;
 };
 
