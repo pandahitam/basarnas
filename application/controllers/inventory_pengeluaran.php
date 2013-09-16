@@ -21,68 +21,58 @@ class inventory_pengeluaran extends MY_Controller {
 	}
 	
 	function modifyInventoryPengeluaran(){
-//		$dataSimak = array();
-//                $dataExt = array();
-//                $dataKode = array();
-//                
-//                $dataKlasifikasiAset = array();
-//                
-//                $klasifikasiAsetFields = array(
-//                    'kd_lvl1','kd_lvl2','kd_lvl3'
-//                );
-//                $kodeFields = array(
-//                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
-//                );
-//                
-//	  	$simakFields = array(
-//			'kd_lokasi', 'kd_brg', 'no_aset', 'kuantitas', 'no_kib', 'merk', 'type', 'pabrik', 'thn_rakit', 'thn_buat', 'negara', 'kapasitas', 
-//			'sis_opr', 'sis_dingin', 'sis_bakar', 'duk_alat', 'pwr_train', 'no_mesin', 'no_rangka', 'lengkap1', 'lengkap2', 'lengkap3', 
-//			'jns_trn', 'dari', 'tgl_prl', 'rph_aset', 'dasar_hrg', 'sumber', 'no_dana', 'tgl_dana', 'unit_pmk', 'alm_pmk', 'catatan', 'kondisi', 
-//			'tgl_buku', 'rphwajar', 'status', 'cad1',
-//                );
-//                
-//                $extFields = array(
-//                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
-//                        'kode_unor','image_url','document_url',
-//                        'kd_klasifikasi_aset'
-//                );
-//		
-//		foreach ($kodeFields as $field) {
-//			$dataKode[$field] = $this->input->post($field);
-//		}
-//                $kd_brg = $this->codeGenerator($dataKode);
-//                
-//		foreach ($simakFields as $field) {
-//			$dataSimak[$field] = $this->input->post($field);
-//		}
-//                $dataSimak['kd_brg'] = $kd_brg;
-//                
-//                foreach ($extFields as $field) {
-//			$dataExt[$field] = $this->input->post($field);
-//		} 
-//                $dataExt['kd_brg'] = $kd_brg;
-//                
-//                foreach($klasifikasiAsetFields as $field)
-//                {
-//                    $dataKlasifikasiAset[$field] =  $this->input->post($field);
-//                }
-//                
-//                $dataExt['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
-//                
-//                 //GENERASI NO_ASET 
-//                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
-//                {
-//                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
-//                    $dataExt['no_aset'] = $dataSimak['no_aset'];
-//                }
-//			
-//		$this->modifyData($dataSimak, $dataExt);
+                
+//                var_dump($_POST);
+//                die;
+		$dataSimak = array();
+	  	$simakFields = array(
+			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_perlengkapan','nama_org',
+                        'no_aset', 'part_number','serial_number','date_created',
+                        'keterangan','kode_unor',
+                        'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor','qty_barang_keluar'
+                );
+                
+                
+
+		foreach ($simakFields as $field) {
+			$dataSimak[$field] = $this->input->post($field);
+		}
+                
+                $dataPerlengkapan = array(
+                    'kuantitas'=> $dataSimak['qty'] - $dataSimak['qty_barang_keluar']
+                );
+                
+                /*UPDATE QTY IN PERLENGKAPAN */
+                $this->db->where('id',$dataSimak['id_perlengkapan']);
+                $this->db->update('asset_perlengkapan',$dataPerlengkapan);
+
+                $this->modifyData($dataSimak, null);
 	}
 	
 	function deleteInventoryPengeluaran()
 	{
-//		$data = $this->input->post('data');
-//                
+		$input_data = $this->input->post('data');
+                
+                foreach($input_data as $data)
+                {
+                    
+                    $this->db->where('id',$data['id']);
+                    $this->db->delete('inventory_pengeluaran');
+                    
+                    //Return the quantity back to asset_perlengkapan when deleted
+                    $this->db->where('id',$data['id_perlengkapan']);
+                    $perlengkapan_result = $this->db->get('asset_perlengkapan');
+                   if($perlengkapan_result->num_rows == 1)
+                   {
+                       $data_perlengkapan = $perlengkapan_result->row();
+                       $qty_akhir = array( 
+                           'kuantitas'=>(int)$data_perlengkapan->kuantitas + (int)$data['qty_barang_keluar']
+                               );
+                       $this->db->where('id',$data['id_perlengkapan']);
+                       $this->db->update('asset_perlengkapan',$qty_akhir);
+                               
+                   }
+                }
 //		return $this->deleteData($data);
 	}
 }

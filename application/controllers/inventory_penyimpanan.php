@@ -22,6 +22,7 @@ class inventory_penyimpanan extends MY_Controller {
 	
 	function modifyInventoryPenyimpanan(){
 		$dataSimak = array();
+                $dataPerlengkapan = array();
 //                $dataExt = array();
 //                $dataKode = array();
 //                
@@ -33,11 +34,18 @@ class inventory_penyimpanan extends MY_Controller {
 //                $kodeFields = array(
 //                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
 //                );
-//                
+//              
+                $perlengkapanFields = array(
+                                    'kd_brg','kd_lokasi','no_aset', 'part_number',
+                                    'serial_number','kuantitas','kondisi','kode_unor',
+                                    'warehouse_id','ruang_id','rak_id','dari'
+                );
+                
                 $simakFields = array(
 			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pemeriksaan','nama_org',
                                         'no_aset', 'part_number','serial_number','date_created',
-                                        'keterangan', 'status_barang','qty','tgl_penyimpanan','asal_barang'
+                                        'keterangan', 'status_barang','qty','tgl_penyimpanan','asal_barang',
+                                        'warehouse_id','ruang_id','rak_id'
                 );
 //                
 //                $extFields = array(
@@ -54,6 +62,15 @@ class inventory_penyimpanan extends MY_Controller {
 		foreach ($simakFields as $field) {
 			$dataSimak[$field] = $this->input->post($field);
 		}
+                
+                foreach ($perlengkapanFields as $field) {
+			$dataPerlengkapan[$field] = $this->input->post($field);
+		}
+                $dataPerlengkapan['kondisi'] = $dataSimak['status_barang'];
+                $dataPerlengkapan['kuantitas'] = $dataSimak['qty'];
+                $dataPerlengkapan['dari'] = $dataSimak['asal_barang'];
+                $this->db->set($dataPerlengkapan);
+                $this->db->replace('asset_perlengkapan');
 //                $dataSimak['kd_brg'] = $kd_brg;
 //                
 //                foreach ($extFields as $field) {

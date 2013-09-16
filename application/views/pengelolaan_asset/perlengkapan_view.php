@@ -73,7 +73,6 @@
 
         Perlengkapan.Form.create = function(data, edit) {
             var form = Form.asset(Perlengkapan.URL.createUpdate, Perlengkapan.Data, edit);
-            
             form.insert(0, Form.Component.unit(edit));
 //            form.insert(3, Form.Component.address());
 //            form.insert(4, Form.Component.perlengkapan());
