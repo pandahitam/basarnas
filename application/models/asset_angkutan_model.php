@@ -59,15 +59,14 @@ class Asset_Angkutan_Model extends MY_Model{
 	
 	function get_byIDs($ids)
 	{		
-		$query = 'SELECT id, kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
-						msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
-						dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status, cad1
-				  FROM '.$this->table.'
-				  WHERE id IN ('.$this->prepare_Query($ids).')
-				  ORDER BY kd_lokasi ASC';
-		return $this->Get_By_Query($query);
+            $query = 'SELECT id, kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
+                                            msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
+                                            dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status, cad1
+                              FROM '.$this->table.'
+                              WHERE id IN ('.$this->prepare_Query($ids).')
+                              ORDER BY kd_lokasi ASC';
+            return $this->Get_By_Query($query);
 	}
-	
 	
 	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){
 		$kode = NULL;

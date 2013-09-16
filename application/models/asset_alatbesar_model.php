@@ -55,7 +55,8 @@ class Asset_Alatbesar_Model extends MY_Model{
 				  ORDER BY kd_lokasi ASC';
 		return $this->Get_By_Query($query);
 	}
-	
+        
+        
 	
 	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){
 		$kode = NULL;

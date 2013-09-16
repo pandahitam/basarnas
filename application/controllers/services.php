@@ -13,7 +13,7 @@ class services extends MY_Controller {
             $result = null;
             if (isset($kd_brg) && isset($kd_lokasi) && isset($no_aset))
             {
-                $temp = $this->model->AssetServicesWithFilter($kd_brg,$kd_lokasi,$no_aset);
+                $temp = $this->model->AssetForMobileServicesWithFilter($kd_brg,$kd_lokasi,$no_aset);
                 $result = $temp[0];
                 $imageArray = explode(",", $result->image_url);
                 $images = array();
@@ -30,6 +30,21 @@ class services extends MY_Controller {
             }
             
             
+            
+            echo json_encode($result);
+        }
+        
+        function updateAssetByKode()
+        {
+            $result = 0;
+            $data = $_POST["data"];
+            if (isset($data))
+            {
+                if (isset($data['kd_brg']) && isset($data['kd_lokasi']) && isset($data['no_aset']) && isset($data['table']) )
+                {
+                    $result = $this->model->UpdateAssetForMobileServices($data);
+                }
+            }
             
             echo json_encode($result);
         }
