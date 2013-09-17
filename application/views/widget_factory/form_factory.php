@@ -34,13 +34,13 @@
             pengadaan: BASE_URL + 'combo_ref/combo_pengadaan',
             penerimaan: BASE_URL + 'combo_ref/combo_penerimaan',
             pemeriksaan: BASE_URL + 'combo_ref/combo_pemeriksaan',
-            perlengkapan: BASE_URL + 'combo_ref/combo_perlengkapan',
+            penyimpanan: BASE_URL + 'combo_ref/combo_penyimpanan',
         };
         
-        Reference.Data.perlengkapan = new Ext.create('Ext.data.Store', {
-            fields: ['id'], storeId: 'DataPerlengkapanCombo',
+        Reference.Data.penyimpanan = new Ext.create('Ext.data.Store', {
+            fields: ['id','nomor_berita_acara'], storeId: 'DataPenyimpananCombo',
             proxy: new Ext.data.AjaxProxy({
-                url: Reference.URL.perlengkapan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+                url: Reference.URL.penyimpanan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
             autoLoad: true
         });
@@ -648,23 +648,23 @@
                                     readOnly:setting.isEditing,
                                     xtype: 'combo',
                                     disabled: false,
-                                    fieldLabel: 'No Perlengkapan *',
-                                    name: 'id_perlengkapan',
+                                    fieldLabel: 'No Penyimpanan *',
+                                    name: 'id_penyimpanan',
                                     allowBlank: false,
-                                    store: Reference.Data.perlengkapan,
+                                    store: Reference.Data.penyimpanan,
                                     valueField: 'id',
-                                    displayField: 'id', emptyText: 'Pilih Perlengkapan',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
                                         'beforeRender': {
                                             fn: function() {
                                                 if(setting.isEditing == true)
                                                 {
-                                                    Reference.Data.perlengkapan.changeParams({params: {id_open: 1, excludedValue: id_perlengkapan}});
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1, excludedValue: id_perlengkapan}});
                                                 }
                                                 else
                                                 {
-                                                    Reference.Data.perlengkapan.changeParams({params: {id_open: 1}});
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1}});
                                                 }
                                             },
                                             scope: this
@@ -680,7 +680,7 @@
                                                      */
                                                     
                                                     Ext.Ajax.request({
-                                                        url: BASE_URL + 'asset_perlengkapan/getSpecificPerlengkapan',
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpanan',
                                                         params: {
                                                             id: value
                                                         },
@@ -688,17 +688,19 @@
                                                             var data = eval ("(" + response.responseText + ")");
                                                                 Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
                                                                 Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
-                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.kuantitas);
-                                                                if(setting.isEditing == true)
-                                                                {
-                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.kuantitas) + parseInt(Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').value));
-                                                                }
-                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.kondisi);
-                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.dari);
+                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
                                                                 Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
                                                                 Ext.getCmp('kode_unor').setValue(data.kode_unor);
                                                                 Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setDisabled(false);
-                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setMaxValue(data.kuantitas);
+                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setMaxValue(data.qty);
+//                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').validate();
+                                                                if(setting.isEditing == true)
+                                                                {
+                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').value));
+                                                                    Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
+                                                                }
                                                            
                                                             // process server response here
                                                         }
@@ -916,12 +918,12 @@
         //end form pendayagunaan
 
 
-        Form.pemeliharaan = function(setting)
+        Form.pemeliharaan = function(setting,setting_grid_pemeliharaan_part)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
-            form.insert(3, Form.Component.fileUpload());
+            form.insert(4, Form.Component.fileUpload());
             
 //            Ext.getCmp('nama_unker').setDisabled(true);
 //            Ext.getCmp('nama_unor').setDisabled(true);
@@ -932,6 +934,11 @@
             else
             {
                 form.insert(2, Form.Component.pemeliharaan());
+                if(setting_grid_pemeliharaan_part != null || setting_grid_pemeliharaan_part != undefined)
+                {
+                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+                }
+                
             }
 
             return form;
@@ -1234,6 +1241,51 @@
                                 
                                 documentField.setRawValue(arrayDoc.join());
                             }
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (!edit)
+                                        {
+                                            if (Modal.assetSecondaryWindow.isVisible(true))
+                                            {
+                                                Modal.assetSecondaryWindow.close();
+                                            }
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.pemeliharaanPart = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_pemeliharaan_part', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
                             
                             if (form.isValid())
                             {
@@ -2798,6 +2850,134 @@
             return component;
         
         }
+        
+        Form.Component.dataPemeliharaanPart = function(id_pemeliharaan,edit)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'PEMELIHARAAN PART',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'numberfield',
+                        items: [
+                            {
+                                    readOnly:(edit==true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'No Penyimpanan *',
+                                    name: 'id_penyimpanan',
+                                    allowBlank: false,
+                                    store: Reference.Data.penyimpanan,
+                                    valueField: 'id',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'beforeRender': {
+                                            fn: function() {
+                                                if(setting.isEditing == true)
+                                                {
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1, excludedValue: id_perlengkapan}});
+                                                }
+                                                else
+                                                {
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1}});
+                                                }
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                    /*
+                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
+                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
+                                                     */
+                                                    
+                                                    Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpanan',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                Ext.getCmp('pemeliharaan_part_qty').setDisabled(false);
+                                                                Ext.getCmp('pemeliharaan_part_qty').setMaxValue(data.qty);
+                                                                if(edit == true)
+                                                                {
+                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('pemeliharaan_part_qty').value));
+                                                                    Ext.getCmp('pemeliharaan_part_qty').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
+                                                                }
+//                                                                Ext.getCmp('pemeliharaan_part_qty').reset();
+                                                           
+                                                        }
+                                                        });
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_pemeliharaan',
+                                value:id_pemeliharaan,
+                            },
+                            {
+                                disabled:true,
+                                xtype:'numberfield',
+                                fieldLabel: 'Qty Pemeliharaan',
+                                name: 'qty_pemeliharaan',
+                                id:'pemeliharaan_part_qty',
+                                minValue:1,
+                            },
+                            ]
+                    }]
+            };
+
+            return component;
+        
+        }
+        
+        
+        Form.Component.gridPemeliharaanPart = function(setting,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: (edit == true)?300:150,
+                anchor: '100%',
+                title: 'PEMELIHARAAN PART',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [(edit==true)?Grid.pemeliharaanPart(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+            };
+
+            return component;
+        };
         
         Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
             var component = {

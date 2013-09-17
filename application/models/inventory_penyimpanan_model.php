@@ -40,15 +40,12 @@ class Inventory_Penyimpanan_Model extends MY_Model{
 			
 	}
 	
-	function get_byIDs($ids)
+        function get_InventoryPenyimpanan($id)
 	{		
-//		$query = 'SELECT id, kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
-//						msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
-//						dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status, cad1
-//				  FROM '.$this->table.'
-//				  WHERE id IN ('.$this->prepare_Query($ids).')
-//				  ORDER BY kd_lokasi ASC';
-//		return $this->Get_By_Query($query);
+            $this->db->from($this->table);
+            $this->db->where('id',$id);
+            $query = $this->db->get();
+            return $query->row();
 	}
 	
 	

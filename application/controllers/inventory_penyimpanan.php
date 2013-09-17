@@ -101,5 +101,12 @@ class inventory_penyimpanan extends MY_Controller {
                 
 		return $this->deleteProcess($data);
 	}
+        
+        function getSpecificInventoryPenyimpanan()
+        {
+            $id = $this->input->post('id');
+            $result = $this->model->get_InventoryPenyimpanan($id);
+            echo json_encode($result);
+        }
 }
 ?>

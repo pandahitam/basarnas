@@ -100,7 +100,7 @@
             _.each(selected, function(obj) {
                 var data = {
                     id: obj.data.id,
-                    id_perlengkapan: obj.data.id_perlengkapan,
+                    id_penyimpanan: obj.data.id_penyimpanan,
                     qty_barang_keluar: obj.data.qty_barang_keluar,
                 };
                 arrayDeleted.push(data);

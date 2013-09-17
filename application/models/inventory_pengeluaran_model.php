@@ -4,7 +4,7 @@ class Inventory_Pengeluaran_Model extends MY_Model{
 	function __construct(){
 		parent::__construct();
 		$this->table = 'inventory_pengeluaran';
-                $this->selectColumn = "SELECT t.id,t.id_perlengkapan,t.tgl_berita_acara,t.nomor_berita_acara,t.kd_brg,t.kd_lokasi,
+                $this->selectColumn = "SELECT t.id,t.id_penyimpanan,t.tgl_berita_acara,t.nomor_berita_acara,t.kd_brg,t.kd_lokasi,
                                         t.no_aset, t.part_number,t.serial_number,t.date_created,t.nama_org,
                                         t.keterangan, t.status_barang,t.qty,t.tgl_pengeluaran,t.asal_barang,t.qty_barang_keluar,
                                         c.ur_upb as nama_unker,

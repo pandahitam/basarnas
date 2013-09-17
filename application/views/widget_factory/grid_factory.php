@@ -238,6 +238,106 @@
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         }
         
+        
+        Grid.pemeliharaanPart = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_pemeliharaan', dataIndex: 'id_pemeliharaan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_penyimpanan', dataIndex: 'id_penyimpanan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty', dataIndex: 'qty_pemeliharaan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_pemeliharaan_part'
+                    },
+                    toolbar: {
+                        id: 'toolbar_pemeliharaan_part',
+                        add: {
+                            id: 'button_add_pemeliharaan_part',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_pemeliharaan_part',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_pemeliharaan_part',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+                
+                 var search = new Ext.create('Ext.ux.form.SearchField', {
+                id: settingGrid.search.id, store: setting.dataStore, width: 180
+                });
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        }
+        
         Grid.riwayatPajak = function(setting)
         {
  

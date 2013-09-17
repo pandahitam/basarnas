@@ -37,7 +37,7 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
-    function combo_perlengkapan()
+    function combo_penyimpanan()
     {
         $data = array();
         if($this->input->get_post("id_open"))
@@ -45,11 +45,11 @@ class Combo_Ref extends CI_Controller {
             if($this->input->get_post("excludedValue"))
             {
                 $excludedValue = $this->input->post('excludedValue');
-                $query = $this->db->query("select id from asset_perlengkapan where kuantitas > 0");
+                $query = $this->db->query("select id, nomor_berita_acara from inventory_penyimpanan where id=$excludedValue");
             }
             else
             {
-                 $query = $this->db->query('select id from asset_perlengkapan where kuantitas > 0');
+                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan where qty > 0');
             }
             
             foreach($query->result() as $obj)
