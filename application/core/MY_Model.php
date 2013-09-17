@@ -12,20 +12,71 @@ class MY_Model extends CI_Model{
 	}
 	
 	function Get_By_Query($query)
-	{	
-            $r = $this->db->query($query);
-            $data = array();
-            if ($r->num_rows() > 0)
-            {
-                foreach ($r->result() as $obj)
+	{
+		$query_ex = explode("limit", strtolower($query));
+		$query = trim($query_ex[0]);
+		
+		$explode_char_tbl = explode('.ur_upb as nama_unker',$query);
+		$table_alisa = 'c';
+		if(isset($explode_char_tbl[0])){
+			$table_alisa = substr($explode_char_tbl[0], -1);
+		}
+		
+		$limit_num = null;
+		if(isset($query_ex[1])){
+			$limit_num = " LIMIT ".trim($query_ex[1]);
+		}
+		
+		$filter = null;
+		
+                if(isset($_POST['filter']))
                 {
-                    $data[] = $obj;
-                }  
-            }
-
-
-            $r->free_result();
-	    return $data;
+			$filter = json_decode($_POST['filter']);
+		}
+		
+		$statusx = false;
+		if(count($filter) > 0){
+			if(isset($filter[0]->field)){
+				$statusx = true;
+			}
+		}
+		if($statusx){
+			$temp_query = " where ";
+			$statusloopex = false;
+			foreach($filter as $key=>$value)
+			{
+				$temp = null;
+				switch($value->field){
+					case "nama_unker" :
+						$temp = $table_alisa.".ur_upb";
+						break;
+				}
+				if($temp!=null){
+					$statusloopex = true;
+					$temp_query.=$temp." like '%".$value->value."%'";
+				}
+			}
+			if($statusloopex){
+				$query.= $temp_query;
+			}
+		}
+		if($limit_num!=null){
+			$query .= $limit_num;
+		}
+		
+		$r = $this->db->query($query);
+		$data = array();
+		if ($r->num_rows() > 0)
+		{
+		    foreach ($r->result() as $obj)
+		    {
+			$data[] = $obj;
+		    }  
+		}
+    
+    
+		$r->free_result();
+		return $data;
 	}
 	
 	/**

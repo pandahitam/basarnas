@@ -11,12 +11,14 @@ class MY_Controller extends CI_Controller{
 //                var_dump(json_decode($_POST['filter']));
 //                die;
             
+		$filters =  null;
+                $start = null;
+                $limit = null;
                 if(isset($_POST['filter']))
                 {
                     //$this->model->get_FilteredData(json_decode($_POST['filter']));
+		    $filters = json_decode($_POST['filter']);
                 }
-                $start = null;
-                $limit = null;
                 if(isset($_POST['start']) && isset($_POST['limit']))
                 {
                     $start = $_POST['start'];

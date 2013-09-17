@@ -8,7 +8,7 @@ class Asset_Tanah extends MY_Controller {
  			exit;
     	}
 		$this->load->model('Asset_Tanah_Model','',TRUE);
-		$this->model = $this->Asset_Tanah_Model;		
+		$this->model = $this->Asset_Tanah_Model;
 	}
 	
 	function tanah(){
