@@ -1,0 +1,44 @@
+TRUNCATE `db_asset_basarnas`.`asset_alatbesar`;
+INSERT INTO `db_asset_basarnas`.`asset_alatbesar` (`alm_pmk`, `cad1`, `catatan`, `dari`, `dasar_hrg`, `duk_alat`, `jns_trn`, `kapasitas`, `kd_brg`, `kd_lokasi`, `kondisi`, `kuantitas`, `lengkap1`, `lengkap2`, `lengkap3`, `merk`, `negara`, `no_aset`, `no_dana`, `no_kib`, `no_mesin`, `no_rangka`, `pabrik`, `pwr_train`, `rphwajar`, `rph_aset`, `sis_bakar`, `sis_dingin`, `sis_opr`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `thn_buat`, `thn_rakit`, `type`, `unit_pmk`)
+SELECT `alm_pmk`, `cad1`, `catatan`, `dari`, `dasar_hrg`, `duk_alat`, `jns_trn`, `kapasitas`, `kd_brg`, `kd_lokasi`, `kondisi`, `kuantitas`, `lengkap1`, `lengkap2`, `lengkap3`, `merk`, `negara`, `no_aset`, `no_dana`, `no_kib`, `no_mesin`, `no_rangka`, `pabrik`, `pwr_train`, `rphwajar`, `rph_aset`, `sis_bakar`, `sis_dingin`, `sis_opr`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `thn_buat`, `thn_rakit`, `type`, `unit_pmk`
+FROM `dbbmn13`.`t_kalb`;
+
+TRUNCATE `db_asset_basarnas`.`asset_angkutan`;
+INSERT INTO `db_asset_basarnas`.`asset_angkutan` (`alm_pmk`, `bhn_bakar`, `bobot`, `cad1`, `catatan`, `dari`, `dasar_hrg`, `daya`, `jml_msn`, `jns_trn`, `kd_brg`, `kd_lokasi`, `kondisi`, `kuantitas`, `lengkap1`, `lengkap2`, `lengkap3`, `merk`, `msn_gerak`, `muat`, `negara`, `no_aset`, `no_bpkb`, `no_dana`, `no_kib`, `no_mesin`, `no_polisi`, `no_rangka`, `pabrik`, `rphwajar`, `rph_aset`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `thn_buat`, `thn_rakit`, `type`, `unit_pmk`)
+SELECT `alm_pmk`, `bhn_bakar`, `bobot`, `cad1`, `catatan`, `dari`, `dasar_hrg`, `daya`, `jml_msn`, `jns_trn`, `kd_brg`, `kd_lokasi`, `kondisi`, `kuantitas`, `lengkap1`, `lengkap2`, `lengkap3`, `merk`, `msn_gerak`, `muat`, `negara`, `no_aset`, `no_bpkb`, `no_dana`, `no_kib`, `no_mesin`, `no_polisi`, `no_rangka`, `pabrik`, `rphwajar`, `rph_aset`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `thn_buat`, `thn_rakit`, `type`, `unit_pmk`
+FROM `dbbmn13`.`t_kangk`;
+
+TRUNCATE `db_asset_basarnas`.`asset_bangunan`;
+INSERT INTO `db_asset_basarnas`.`asset_bangunan` (`alamat`, `alm_pmk`, `cad1`, `catatan`, `dari`, `dasar_hrg`, `jml_lt`, `jns_trn`, `kd_brg`, `kd_kab`, `kd_kec`, `kd_kel`, `kd_lokasi`, `kd_prov`, `kd_rtrw`, `kondisi`, `kuantitas`, `luas_bdg`, `luas_dsr`, `no_aset`, `no_dana`, `no_imb`, `no_kib`, `no_kibtnh`, `rph`, `rphnjop`, `rphwajar`, `rph_aset`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_imb`, `tgl_prl`, `thn_pakai`, `thn_sls`, `type`, `unit_pmk`)
+SELECT `alamat`, `alm_pmk`, `cad1`, `catatan`, `dari`, `dasar_hrg`, `jml_lt`, `jns_trn`, `kd_brg`, `kd_kab`, `kd_kec`, `kd_kel`, `kd_lokasi`, `kd_prov`, `kd_rtrw`, `kondisi`, `kuantitas`, `luas_bdg`, `luas_dsr`, `no_aset`, `no_dana`, `no_imb`, `no_kib`, `no_kibtnh`, `rph`, `rphnjop`, `rphwajar`, `rph_aset`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_imb`, `tgl_prl`, `thn_pakai`, `thn_sls`, `type`, `unit_pmk`
+FROM `dbbmn13`.`t_kbdg`;
+
+TRUNCATE `db_asset_basarnas`.`asset_dil`;
+INSERT INTO `db_asset_basarnas`.`asset_dil` (`kd_brg`, `kd_lokasi`, `kd_pemilik`, `lok_fisik`, `no_aset`)
+SELECT `kd_brg`, `kd_lokasi`, `kd_pemilik`, `lok_fisik`, `no_aset`
+FROM `dbbmn13`.`t_dil`;
+
+TRUNCATE `db_asset_basarnas`.`asset_perairan`;
+INSERT INTO `db_asset_basarnas`.`asset_perairan` (`alamat`, `alm_pmk`, `catatan`, `dari`, `dasar_hrg`, `jns_trn`, `kapasitas`, `kd_brg`, `kd_kab`, `kd_kec`, `kd_kel`, `kd_lokasi`, `kd_prov`, `kd_rtrw`, `kondisi`, `kons_sist`, `kuantitas`, `luas_bdg`, `luas_dsr`, `no_aset`, `no_dana`, `no_imb`, `no_kib`, `no_kibtnh`, `rphwajar`, `rph_aset`, `rph_wajar`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_imb`, `tgl_prl`, `thn_pakai`, `thn_sls`, `unit_pmk`)  
+SELECT `alamat`, `alm_pmk`, `catatan`, `dari`, `dasar_hrg`, `jns_trn`, `kapasitas`, `kd_brg`, `kd_kab`, `kd_kec`, `kd_kel`, `kd_lokasi`, `kd_prov`, `kd_rtrw`, `kondisi`, `kons_sist`, `kuantitas`, `luas_bdg`, `luas_dsr`, `no_aset`, `no_dana`, `no_imb`, `no_kib`, `no_kibtnh`, `rphwajar`, `rph_aset`, `rph_wajar`, `status`, `sumber`, `tgl_buku`, `tgl_dana`, `tgl_imb`, `tgl_prl`, `thn_pakai`, `thn_sls`, `unit_pmk`
+FROM `dbbmn13`.`t_kbair`;
+
+TRUNCATE `db_asset_basarnas`.`asset_perlengkapan`;
+-- INSERT INTO `db_asset_basarnas`.`asset_perlengkapan` 
+-- SELECT 
+-- FROM `dbbmn13`.`t_kdp`;
+
+TRUNCATE `db_asset_basarnas`.`asset_ruang`;
+INSERT INTO `db_asset_basarnas`.`asset_ruang` (`kd_brg`, `kd_lokasi`, `kd_pemilik`, `kd_ruang`, `no_aset`)
+SELECT `kd_brg`, `kd_lokasi`, `kd_pemilik`, `kd_ruang`, `no_aset`
+FROM `dbbmn13`.`t_dir`;
+
+TRUNCATE `db_asset_basarnas`.`asset_senjata`;
+INSERT INTO `db_asset_basarnas`.`asset_senjata` (`alm_pmk`, `catatan`, `dari`, `dasar_hrg`, `jns_trn`, `kaliber`, `kd_brg`, `kd_lokasi`, `kondisi`, `kuantitas`, `lengkap1`, `lengkap2`, `lengkap3`, `merk`, `nama`, `no_aset`, `no_dana`, `no_kib`, `no_pabrik`, `rphwajar`, `rph_aset`, `status`, `sumber`, `surat`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `tgl_surat`, `thn_buat`, `type`, `unit_pmk`)
+SELECT `alm_pmk`, `catatan`, `dari`, `dasar_hrg`, `jns_trn`, `kaliber`, `kd_brg`, `kd_lokasi`, `kondisi`, `kuantitas`, `lengkap1`, `lengkap2`, `lengkap3`, `merk`, `nama`, `no_aset`, `no_dana`, `no_kib`, `no_pabrik`, `rphwajar`, `rph_aset`, `status`, `sumber`, `surat`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `tgl_surat`, `thn_buat`, `type`, `unit_pmk` 
+FROM `dbbmn13`.`t_ksenj`;
+
+TRUNCATE `db_asset_basarnas`.`asset_tanah`;
+INSERT INTO `db_asset_basarnas`.`asset_tanah` (`alamat`, `alm_pmk`, `batas_b`, `batas_s`, `batas_t`, `batas_u`, `catatan`, `dari`, `dasar_hrg`, `jns_trn`, `kd_brg`, `kd_kab`, `kd_kec`, `kd_kel`, `kd_lokasi`, `kd_prov`, `kd_rtrw`, `kuantitas`, `luas_tnhb`, `luas_tnhk`, `luas_tnhl`, `luas_tnhs`, `no_aset`, `no_dana`, `no_kib`, `rphnjop`, `rphwajar`, `rph_aset`, `rph_m2`, `smilik`, `status`, `sumber`, `surat1`, `surat2`, `surat3`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `unit_pmk`)
+SELECT `alamat`, `alm_pmk`, `batas_b`, `batas_s`, `batas_t`, `batas_u`, `catatan`, `dari`, `dasar_hrg`, `jns_trn`, `kd_brg`, `kd_kab`, `kd_kec`, `kd_kel`, `kd_lokasi`, `kd_prov`, `kd_rtrw`, `kuantitas`, `luas_tnhb`, `luas_tnhk`, `luas_tnhl`, `luas_tnhs`, `no_aset`, `no_dana`, `no_kib`, `rphnjop`, `rphwajar`, `rph_aset`, `rph_m2`, `smilik`, `status`, `sumber`, `surat1`, `surat2`, `surat3`, `tgl_buku`, `tgl_dana`, `tgl_prl`, `unit_pmk` 
+FROM `dbbmn13`.`t_ktnh`;
