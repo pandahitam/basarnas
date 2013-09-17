@@ -37,6 +37,30 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_perlengkapan()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->get_post("excludedValue"))
+            {
+                $excludedValue = $this->input->post('excludedValue');
+                $query = $this->db->query("select id from asset_perlengkapan where kuantitas > 0");
+            }
+            else
+            {
+                 $query = $this->db->query('select id from asset_perlengkapan where kuantitas > 0');
+            }
+            
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_pemeriksaan()
     {
         $data = array();
@@ -90,7 +114,7 @@ class Combo_Ref extends CI_Controller {
         $data = array();
         if($this->input->get_post("id_open"))
         {
-            $query = $this->db->query('select id from pengadaan');
+            $query = $this->db->query('select id, no_sppa from pengadaan');
             foreach($query->result() as $obj)
             {
                 $data[] = $obj;

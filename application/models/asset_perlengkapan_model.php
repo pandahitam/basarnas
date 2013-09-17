@@ -52,15 +52,12 @@ class Asset_Perlengkapan_Model extends MY_Model{
                 return true;
         }
         
-	function get_byIDs($ids)
+        function get_Perlengkapan($id)
 	{		
-//		$query = 'SELECT id, kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, kapasitas, 
-//						 sis_opr, sis_dingin, sis_bakar, duk_alat, pwr_train, no_mesin, no_rangka, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
-//						 dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status, cad1
-//				  FROM '.$this->table.'
-//				  WHERE id IN ('.$this->prepare_Query($ids).')
-//				  ORDER BY kd_lokasi ASC';
-//		return $this->Get_By_Query($query);
+            $this->db->from($this->table);
+            $this->db->where('id',$id);
+            $query = $this->db->get();
+            return $query->row();
 	}
 	
         function get_partNumberDetails($part_number)
