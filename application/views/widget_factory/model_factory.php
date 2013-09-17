@@ -4,6 +4,14 @@
 <script>
 ////// Model In View
 
+Ext.define('MPemeliharaanPart', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_pemeliharaan', 
+        'id_penyimpanan', 'part_number', 
+        'nama', 'qty_pemeliharaan'
+    ]
+});
+
+
 Ext.define('MWarehouse', {extend: 'Ext.data.Model',
     fields: ['kd_lokasi','nama','id', 
              'nama_unker'
@@ -78,7 +86,7 @@ Ext.define('MInventoryPenyimpanan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MInventoryPengeluaran', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_perlengkapan','nama_org',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penyimpanan','nama_org',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
         'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor','qty_barang_keluar','kode_unor']

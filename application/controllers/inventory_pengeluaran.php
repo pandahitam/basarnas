@@ -26,7 +26,7 @@ class inventory_pengeluaran extends MY_Controller {
 //                die;
 		$dataSimak = array();
 	  	$simakFields = array(
-			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_perlengkapan','nama_org',
+			'id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penyimpanan','nama_org',
                         'no_aset', 'part_number','serial_number','date_created',
                         'keterangan','kode_unor',
                         'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor','qty_barang_keluar'
@@ -38,13 +38,13 @@ class inventory_pengeluaran extends MY_Controller {
 			$dataSimak[$field] = $this->input->post($field);
 		}
                 
-                $dataPerlengkapan = array(
-                    'kuantitas'=> $dataSimak['qty'] - $dataSimak['qty_barang_keluar']
+                $dataPenyimpanan = array(
+                    'qty'=> $dataSimak['qty'] - $dataSimak['qty_barang_keluar']
                 );
                 
-                /*UPDATE QTY IN PERLENGKAPAN */
-                $this->db->where('id',$dataSimak['id_perlengkapan']);
-                $this->db->update('asset_perlengkapan',$dataPerlengkapan);
+                /*UPDATE QTY IN PENYIMPANAN */
+                $this->db->where('id',$dataSimak['id_penyimpanan']);
+                $this->db->update('inventory_penyimpanan',$dataPenyimpanan);
 
                 $this->modifyData($dataSimak, null);
 	}
@@ -59,17 +59,17 @@ class inventory_pengeluaran extends MY_Controller {
                     $this->db->where('id',$data['id']);
                     $this->db->delete('inventory_pengeluaran');
                     
-                    //Return the quantity back to asset_perlengkapan when deleted
-                    $this->db->where('id',$data['id_perlengkapan']);
-                    $perlengkapan_result = $this->db->get('asset_perlengkapan');
-                   if($perlengkapan_result->num_rows == 1)
+                    //Return the quantity back to inventory_penyimpanan when deleted
+                    $this->db->where('id',$data['id_penyimpanan']);
+                    $penyimpanan_result = $this->db->get('inventory_penyimpanan');
+                   if($penyimpanan_result->num_rows == 1)
                    {
-                       $data_perlengkapan = $perlengkapan_result->row();
+                       $data_penyimpanan = $penyimpanan_result->row();
                        $qty_akhir = array( 
-                           'kuantitas'=>(int)$data_perlengkapan->kuantitas + (int)$data['qty_barang_keluar']
+                           'qty'=>(int)$data_penyimpanan->qty + (int)$data['qty_barang_keluar']
                                );
-                       $this->db->where('id',$data['id_perlengkapan']);
-                       $this->db->update('asset_perlengkapan',$qty_akhir);
+                       $this->db->where('id',$data['id_penyimpanan']);
+                       $this->db->update('inventory_penyimpanan',$qty_akhir);
                                
                    }
                 }
