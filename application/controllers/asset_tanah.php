@@ -136,6 +136,7 @@ class Asset_Tanah extends MY_Controller {
             }
                 $this->db->set($dataRiwayatPajak);
                 $this->db->replace('ext_asset_tanah_riwayat_pajak');
+                echo "{success:true, info: { reason: 'Sukses!' }}";
             
             
                

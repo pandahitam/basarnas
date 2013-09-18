@@ -129,7 +129,7 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'rphnjop', 'status', 'luas_dsr', 
             'luas_bdg', 'jml_lt',
             'id','nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',// Field from ext bangunan
-            'nama_unker', 'nama_unor', 
+            'nama_unker', 'nama_unor',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kode_unor','image_url','document_url',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang

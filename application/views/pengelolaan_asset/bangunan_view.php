@@ -105,7 +105,7 @@
             
             tab.add({
                 title: 'Utama',
-                closable: true,
+                closable: false,
                 border: false,
                 deferredRender: false,
                 bodyStyle:{background:'none'},
@@ -126,7 +126,7 @@
             
             tab.add({
                 title: 'Tambahan',
-                closable: true,
+                closable: false,
                 border: false,
                 layout:'fit',
                 deferredRender: false,
@@ -626,7 +626,7 @@
                     }]
                     };
                     
-                    var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, false);
+                    var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, false,'bangunan');
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
                     form.insert(1, uploadRiwayatPajak);
                     Modal.assetSecondaryWindow.add(form);
@@ -646,9 +646,29 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Edit Riwayat Pajak');
                 }
-                    var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, true);
+                 var uploadRiwayatPajak = {
+                        xtype: 'fieldset',
+                        itemId: 'fileUpload',
+                        layout: 'column',
+                        border: false,
+                        title: 'FILE UPLOAD',
+                        defaultType: 'container',
+                        style: {
+                            marginTop: '10px'
+                        },
+                        items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items:[Form.Component.fileUploadDocumentOnly('file_setoran','BangunanRiwayatPajakFile')]
+                    }]
+                    };
+                    
+                    var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, true,'bangunan');
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
-                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    form.insert(1, uploadRiwayatPajak);
                     
                     if (data !== null)
                     {
@@ -688,7 +708,8 @@
                 var data = selected[0].data;
                 delete data.nama_unker;
                 delete data.nama_unor;
-
+                
+                
                 if (Modal.assetEdit.items.length <= 1)
                 {
                     Modal.assetEdit.setTitle('Edit Bangunan');
@@ -696,7 +717,7 @@
                     Modal.assetEdit.add(Tab.create());
                 }
                 
-                if(data.id_ext_asset == null || data.id_ext_asset == undefined)
+                if(data.id == null || data.id == undefined)
                 {   
                     $.ajax({
                        url:BASE_URL + 'asset_bangunan/requestIdExtAsset',

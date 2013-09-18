@@ -1035,7 +1035,7 @@
                                 documentField.setRawValue(arrayDoc.join());
                             }
                             
-                            console.log(form.getValues());
+//                            console.log(form.getValues());
                             
                             if (form.isValid())
                             {
@@ -1536,7 +1536,7 @@
             return _form;
         };
         
-        Form.riwayatPajak = function(url, data, edit) {
+        Form.riwayatPajak = function(url, data, edit, jenis) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
                 url: url,
@@ -1560,7 +1560,14 @@
                                 
                                 if(form !=null)
                                 {
-                                     documentStore = Ext.getCmp('TanahRiwayatPajakFile').getStore(); 
+                                    if(jenis == 'tanah')
+                                    {
+                                        documentStore = Ext.getCmp('TanahRiwayatPajakFile').getStore(); 
+                                    }
+                                    else if(jenis == 'bangunan')
+                                    {
+                                        documentStore = Ext.getCmp('BangunanRiwayatPajakFile').getStore(); 
+                                    }
                                 }
                                 _.each(documentStore.data.items, function(obj) {
                                     arrayDoc.push(obj.data.name);
@@ -1577,13 +1584,13 @@
                                         
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        if (!edit)
-                                        {
+//                                        if (!edit)
+//                                        {
                                             if (Modal.assetSecondaryWindow.isVisible(true))
                                             {
                                                 Modal.assetSecondaryWindow.close();
                                             }
-                                        }
+//                                        }
                                     },
                                     failure: function() {
                                         Ext.MessageBox.alert('Fail', 'Changes saved fail.');
@@ -3178,7 +3185,8 @@
                         items: [{
                                 fieldLabel: 'Keterangan',
                                 name: 'keterangan'
-                            }]
+                            },
+                        ]
                     }]
             };
 
@@ -4677,7 +4685,13 @@
                                            var selWaktu = Ext.getCmp('unit_waktu').value;
                                            var selPengunaan = Ext.getCmp('unit_pengunaan').value;
                                            var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
-                                           
+                                           var pilihUnitWaktu = Ext.getCmp('unit_waktu');
+                                           var pilihUnitPengunaan = Ext.getCmp('unit_pengunaan');
+                                           var pilihFreqwaktu = Ext.getCmp('freq_waktu');
+                                           var pilihFreqpengunaan = Ext.getCmp('freq_pengunaan');
+                                           var pilihRenwaktu = Ext.getCmp('rencana_waktu');
+                                           var pilihRenpengunaan = Ext.getCmp('rencana_pengunaan');
+                                           var pilihRenketerangan = Ext.getCmp('rencana_keterangan');
                                            
                                             if (value === 1)
                                             {
@@ -4691,10 +4705,24 @@
                                             else if (value === 3)
                                             {
                                                 pilihUnit.disable();
+                                                pilihUnitWaktu.disable();
+                                                pilihUnitPengunaan.disable();
+                                                pilihFreqwaktu.disable();
+                                                pilihFreqpengunaan.disable();
+                                                pilihRenwaktu.disable();
+                                                pilihRenpengunaan.disable();
+                                                pilihRenketerangan.disable();
                                             }
                                             else
                                             {
                                                 pilihUnit.disable();
+                                                pilihUnitWaktu.disable();
+                                                pilihUnitPengunaan.disable();
+                                                pilihFreqwaktu.disable();
+                                                pilihFreqpengunaan.disable();
+                                                pilihRenwaktu.disable();
+                                                pilihRenpengunaan.disable();
+                                                pilihRenketerangan.disable();
                                             }
                                             
                                             if(selWaktu != 0 && selWaktu != null)

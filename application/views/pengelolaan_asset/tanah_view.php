@@ -638,7 +638,7 @@
                     }]
                     };
                     
-                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false);
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false,'tanah');
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
                     form.insert(1, uploadRiwayatPajak);
                     Modal.assetSecondaryWindow.add(form);
@@ -661,9 +661,30 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Edit Riwayat Pajak');
                 }
-                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true);
+                
+                var uploadRiwayatPajak = {
+                        xtype: 'fieldset',
+                        itemId: 'fileUpload',
+                        layout: 'column',
+                        border: false,
+                        title: 'FILE UPLOAD',
+                        defaultType: 'container',
+                        style: {
+                            marginTop: '10px'
+                        },
+                        items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items:[Form.Component.fileUploadDocumentOnly('file_setoran','TanahRiwayatPajakFile')]
+                    }]
+                    };
+                   
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true, 'tanah');
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
-                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    form.insert(1, uploadRiwayatPajak);
 //                    form.insert(1, Form.Component.fileUpload());
                     
                     if (data !== null)

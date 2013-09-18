@@ -118,7 +118,7 @@ class asset_bangunan extends MY_Controller {
             }
                 $this->db->set($dataRiwayatPajak);
                 $this->db->replace('ext_asset_bangunan_riwayat_pajak');
-                return 1;
+                echo "{success:true, info: { reason: 'Sukses!' }}";
         }
         
         function deleteRiwayatPajak()
