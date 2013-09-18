@@ -9,6 +9,15 @@
         Ext.namespace('Alatbesar', 'Alatbesar.reader', 'Alatbesar.proxy',
                 'Alatbesar.Data', 'Alatbesar.Grid', 'Alatbesar.Window', 'Alatbesar.Form', 'Alatbesar.Action', 'Alatbesar.URL');
         
+        Alatbesar.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Alatbesar.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -43,7 +52,9 @@
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
             removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
 
         };
 
@@ -72,50 +83,7 @@
             id: 'Data_Alatbesar', storeId: 'DataAlatbesar', model: 'MAlatbesar', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Alatbesar.proxy, groupField: 'tipe'
         });
-
-        Alatbesar.Form.create = function(data, edit) {
-            var form = Form.asset(Alatbesar.URL.createUpdate, Alatbesar.Data, edit);
-            form.insert(0, Form.Component.unit(edit,form));
-            form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
-            form.insert(3, Form.Component.basicAsset(edit));
-            form.insert(4, Form.Component.mechanical());
-            form.insert(5, Form.Component.alatbesar());
-            form.insert(6, Form.Component.fileUpload());
-            if (data !== null)
-            {
-                form.getForm().setValues(data);
-            }
-
-            return form;
-        };
-
-        Alatbesar.Form.createPemeliharaan = function(data, dataForm, edit) {
-            var setting = {
-                url: Alatbesar.URL.createUpdatePemeliharaan,
-                data: data,
-                isEditing: edit,
-                isBangunan: false,
-                addBtn: {
-                    isHidden: true,
-                    text: '',
-                    fn: function() {
-                    }
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
-            };
-
-            var form = Form.pemeliharaanInAsset(setting);
-
-            if (dataForm !== null)
-            {
-                form.getForm().setValues(dataForm);
-            }
-            return form;
-        };
-
+        
         Alatbesar.Window.actionSidePanels = function() {
             var actions = {
                 details: function() {
@@ -181,6 +149,118 @@
 
             return actions;
         };
+
+        Alatbesar.Form.create = function(data, edit) {
+            var form = Form.asset(Alatbesar.URL.createUpdate, Alatbesar.Data, edit);
+            form.insert(0, Form.Component.unit(edit,form));
+            form.insert(1, Form.Component.kode(edit));
+            form.insert(2, Form.Component.klasifikasiAset(edit))
+            form.insert(3, Form.Component.basicAsset(edit));
+            form.insert(4, Form.Component.mechanical());
+            form.insert(5, Form.Component.alatbesar());
+            form.insert(6, Form.Component.fileUpload());
+            if (data !== null)
+            {
+                form.getForm().setValues(data);
+            }
+
+            return form;
+        };
+
+        Alatbesar.Form.createPemeliharaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Alatbesar.URL.createUpdatePemeliharaan,
+                data: data,
+                isEditing: edit,
+                isBangunan: false,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+            
+             var setting_grid_pemeliharaan_part = {
+                id:'grid_alatbesar_pemeliharaan_part',
+                toolbar:{
+                    add: Alatbesar.addPemeliharaanPart,
+                    edit: Alatbesar.editPemeliharaanPart,
+                    remove: Alatbesar.removePemeliharaanPart
+                },
+                dataStore:Alatbesar.dataStorePemeliharaanPart
+            };
+
+            var form = Form.pemeliharaanInAsset(setting,setting_grid_pemeliharaan_part);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Alatbesar.addPemeliharaanPart = function(){
+            var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
+            if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+            {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                }
+                    var form = Form.pemeliharaanPart(Alatbesar.URL.createUpdatePemeliharaanPart, Alatbesar.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+            }
+        };
+        
+        Alatbesar.editPemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_alatbesar_pemeliharaan_part').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.pemeliharaanPart(Alatbesar.URL.createUpdatePemeliharaanPart, Alatbesar.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        Alatbesar.removePemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_alatbesar_pemeliharaan_part').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Alatbesar.URL.removePemeliharaanPart, Alatbesar.dataStorePemeliharaanPart);
+        };
+
+        
         
         Alatbesar.Form.createPendayagunaan = function(data, dataForm, edit) {
             var setting = {
@@ -501,6 +581,7 @@
                 var form = Alatbesar.Form.createPemeliharaan(Alatbesar.dataStorePemeliharaan, dataForm, true);
                 Tab.addToForm(form, 'alatbesar-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
+                Alatbesar.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
 

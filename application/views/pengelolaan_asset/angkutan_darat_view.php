@@ -9,6 +9,15 @@
         Ext.namespace('AngkutanDarat', 'AngkutanDarat.reader', 'AngkutanDarat.proxy', 'AngkutanDarat.Data', 'AngkutanDarat.Grid', 'AngkutanDarat.Window',
                 'AngkutanDarat.Form', 'AngkutanDarat.Action', 'AngkutanDarat.URL');
         
+        AngkutanDarat.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanDarat.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -43,7 +52,9 @@
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
             removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
         };
 
         AngkutanDarat.reader = new Ext.create('Ext.data.JsonReader', {
@@ -71,87 +82,7 @@
             id: 'Data_AngkutanDarat', storeId: 'DataAngkutanDarat', model: 'MAngkutanDarat', pageSize: 50, noCache: false, autoLoad: true,
             proxy: AngkutanDarat.proxy, groupField: 'tipe'
         });
-
-        AngkutanDarat.Form.create = function(data, edit) {
-           var form = Form.asset(AngkutanDarat.URL.createUpdate, AngkutanDarat.Data, edit, true);
-             var tab = Tab.formTabs();
-            tab.add({
-                title: 'Utama',
-                closable: true,
-                border: false,
-                deferredRender: false,
-                bodyStyle:{background:'none'},
-                items: [
-                        Form.Component.unit(edit,form),
-                        Form.Component.kode(edit),
-                        Form.Component.klasifikasiAset(edit),
-                        Form.Component.basicAsset(edit),
-                        Form.Component.mechanical(),
-                        Form.Component.angkutan(),
-                        Form.Component.fileUpload(),
-                       ],
-                listeners: {
-                    'beforeclose': function() {
-                        Utils.clearDataRef();
-                    }
-                }
-            });
-            
-            tab.add({
-                title: 'Tambahan',
-                closable: true,
-                border: false,
-                layout:'fit',
-                deferredRender: false,
-                bodyStyle:{background:'none'},
-                items: [
-                        Form.Component.tambahanAngkutanDarat(),
-                       ],
-                listeners: {
-                    'beforeclose': function() {
-                        Utils.clearDataRef();
-                    }
-                }
-            });
-
-            tab.setActiveTab(0);
-            
-            form.insert(0,tab);
-            
-            if (data !== null)
-            {
-                form.getForm().setValues(data);
-            }
-
-            return form;
-        };
-
-        AngkutanDarat.Form.createPemeliharaan = function(data, dataForm, edit) {
-            var setting = {
-                url: AngkutanDarat.URL.createUpdatePemeliharaan,
-                data: data,
-                isEditing: edit,
-                isBangunan: false,
-                addBtn: {
-                    isHidden: true,
-                    text: '',
-                    fn: function() {
-                    }
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
-            };
-
-            var form = Form.pemeliharaanInAsset(setting);
-
-            if (dataForm !== null)
-            {
-                form.getForm().setValues(dataForm);
-            }
-            return form;
-        };
-
+        
         AngkutanDarat.Window.actionSidePanels = function() {
             var actions = {
                 details: function() {
@@ -209,6 +140,159 @@
 
             return actions;
         };
+        
+
+        AngkutanDarat.Form.create = function(data, edit) {
+           var form = Form.asset(AngkutanDarat.URL.createUpdate, AngkutanDarat.Data, edit, true);
+             var tab = Tab.formTabs();
+            tab.add({
+                title: 'Utama',
+                closable: false,
+                border: false,
+                deferredRender: false,
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.unit(edit,form),
+                        Form.Component.kode(edit),
+                        Form.Component.klasifikasiAset(edit),
+                        Form.Component.basicAsset(edit),
+                        Form.Component.mechanical(),
+                        Form.Component.angkutan(),
+                        Form.Component.fileUpload(),
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+            
+            tab.add({
+                title: 'Tambahan',
+                closable: false,
+                border: false,
+                layout:'fit',
+                deferredRender: false,
+                bodyStyle:{background:'none'},
+                items: [
+                        Form.Component.tambahanAngkutanDarat(),
+                       ],
+                listeners: {
+                    'beforeclose': function() {
+                        Utils.clearDataRef();
+                    }
+                }
+            });
+
+            tab.setActiveTab(0);
+            
+            form.insert(0,tab);
+            
+            if (data !== null)
+            {
+                form.getForm().setValues(data);
+            }
+
+            return form;
+        };
+
+        AngkutanDarat.Form.createPemeliharaan = function(data, dataForm, edit) {
+            var setting = {
+                url: AngkutanDarat.URL.createUpdatePemeliharaan,
+                data: data,
+                isEditing: edit,
+                isBangunan: false,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+             var setting_grid_pemeliharaan_part = {
+                id:'grid_angkutanDarat_pemeliharaan_part',
+                toolbar:{
+                    add: AngkutanDarat.addPemeliharaanPart,
+                    edit: AngkutanDarat.editPemeliharaanPart,
+                    remove: AngkutanDarat.removePemeliharaanPart
+                },
+                dataStore:AngkutanDarat.dataStorePemeliharaanPart
+            };
+
+            var form = Form.pemeliharaanInAsset(setting,setting_grid_pemeliharaan_part);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        AngkutanDarat.addPemeliharaanPart = function(){
+                
+                var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
+                if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+                {
+                    if (Modal.assetSecondaryWindow.items.length === 0)
+                    {
+                        Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                    }
+                        var form = Form.pemeliharaanPart(AngkutanDarat.URL.createUpdatePemeliharaanPart, AngkutanDarat.dataStorePemeliharaanPart, false);
+                        form.insert(0, Form.Component.dataPemeliharaanPart(id_pemeliharaan));
+                        form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                        Modal.assetSecondaryWindow.add(form);
+                        Modal.assetSecondaryWindow.show();
+                }
+                
+                
+        };
+        
+        AngkutanDarat.editPemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_angkutanDarat_pemeliharaan_part').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.pemeliharaanPart(AngkutanDarat.URL.createUpdatePemeliharaanPart, AngkutanDarat.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        AngkutanDarat.removePemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_angkutanDarat_pemeliharaan_part').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, AngkutanDarat.URL.removePemeliharaanPart, AngkutanDarat.dataStorePemeliharaanPart);
+        };
+
+
+        
         
         AngkutanDarat.Form.createPendayagunaan = function(data, dataForm, edit) {
             var setting = {
@@ -502,6 +586,7 @@
                 var form = AngkutanDarat.Form.createPemeliharaan(AngkutanDarat.dataStorePemeliharaan, dataForm, true);
                 Tab.addToForm(form, 'angkutanDarat-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
+                AngkutanDarat.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
 

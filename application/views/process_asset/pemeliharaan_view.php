@@ -136,6 +136,7 @@
                     }
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
+                    
                 
             }
         };
@@ -176,6 +177,7 @@
                 var _form = Pemeliharaan.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
+                Pemeliharaan.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:data.id}});
             }
         };
 

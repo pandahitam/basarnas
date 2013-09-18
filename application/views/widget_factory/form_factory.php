@@ -944,10 +944,10 @@
             return form;
         };
         
-        Form.pemeliharaanInAsset = function(setting){
+        Form.pemeliharaanInAsset = function(setting,setting_grid_pemeliharaan_part){
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
-            form.insert(3, Form.Component.fileUpload());
+            form.insert(4, Form.Component.fileUpload());
             
             if (setting.isBangunan)
             {
@@ -956,6 +956,7 @@
             else
             {
                 form.insert(2, Form.Component.pemeliharaan(form.getForm()));
+                form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
             }
             
             return form;
@@ -4533,7 +4534,7 @@
         Form.Component.hiddenIdentifier = function() {
             var components = [{ xtype : 'hidden', name: 'kd_lokasi'},        
                                 { xtype : 'hidden',name: 'kode_unor'}, 
-                                { xtype : 'hidden', name: 'id' },
+                                { xtype : 'hidden', name: 'id', id:'hidden_identifier_id_pemeliharaan'},
                                 { xtype : 'hidden', name: 'kd_brg'},
                                 { xtype : 'hidden', name: 'no_aset'}
                             ];       

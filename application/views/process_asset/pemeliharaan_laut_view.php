@@ -176,6 +176,7 @@
                 var _form = PemeliharaanLaut.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
+                PemeliharaanLaut.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:data.id}});
             }
         };
 
