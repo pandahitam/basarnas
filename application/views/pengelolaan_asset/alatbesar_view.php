@@ -212,7 +212,7 @@
                     Modal.assetSecondaryWindow.setTitle('Tambah Part');
                 }
                     var form = Form.pemeliharaanPart(Alatbesar.URL.createUpdatePemeliharaanPart, Alatbesar.dataStorePemeliharaanPart, false);
-                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id));
+                    form.insert(0, Form.Component.dataPemeliharaanPart(id_pemeliharaan));
                     form.insert(1, Form.Component.inventoryPerlengkapan(true));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
@@ -761,7 +761,7 @@
             my_form.submit();
         };
 
-		Alatbesar.Action.printpdf = function() {
+	Alatbesar.Action.printpdf = function() {
             var selected = Alatbesar.Grid.grid.getSelectionModel().getSelection();
             var selectedData = "";
             if (selected.length > 0)

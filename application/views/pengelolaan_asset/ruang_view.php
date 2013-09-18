@@ -9,6 +9,15 @@
         Ext.namespace('Ruang', 'Ruang.reader', 'Ruang.proxy', 'Ruang.Data', 'Ruang.Grid', 'Ruang.Window', 'Ruang.Form', 'Ruang.Action',
                 'Ruang.URL');
         
+        Ruang.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Ruang.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -41,7 +50,9 @@
             createUpdatePemeliharaan: BASE_URL + 'pemeliharaan/modifyPemeliharaanRuang',
             removePemeliharaan: BASE_URL + 'pemeliharaan/deletePemeliharaanRuang',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
 
         };
 
@@ -70,52 +81,8 @@
             id: 'Data_Ruang', storeId: 'DataRuang', model: 'MRuang', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Ruang.proxy, groupField: 'tipe'
         });
-
-        Ruang.Form.create = function(dataForm, edit) {
-            
-            var setting = {
-                url : Ruang.URL.createUpdate,
-                dataGrid : Ruang.Data,
-                isEditing : edit
-            };
-            
-            var form = Form.assetRuang(setting);
-            
-            if (dataForm !== null)
-            {
-                form.getForm().setValues(dataForm);
-            }
-            
-            return form;
-        };
-
-        Ruang.Form.createPemeliharaan = function(dataGrid,dataForm,edit) {
-            var setting = {
-                url: Ruang.URL.createUpdatePemeliharaan,
-                data: dataGrid,
-                isEditing: edit,
-                isRuang: true,
-                addBtn: {
-                    isHidden: true,
-                    text: '',
-                    fn: null
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
-            };
-
-            var form = Form.pemeliharaanInAsset(setting);
-
-            if (dataForm !== null)
-            {
-                form.getForm().setValues(dataForm);
-            }
-            
-            return form;
-        };
-
-        Ruang.Window.actionSidePanels = function() {
+        
+         Ruang.Window.actionSidePanels = function() {
             var actions = {
                 details: function() {
                     var _tab = Modal.assetEdit.getComponent('asset-window-tab');
@@ -173,6 +140,118 @@
 
             return actions;
         };
+
+        Ruang.Form.create = function(dataForm, edit) {
+            
+            var setting = {
+                url : Ruang.URL.createUpdate,
+                dataGrid : Ruang.Data,
+                isEditing : edit
+            };
+            
+            var form = Form.assetRuang(setting);
+            
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            
+            return form;
+        };
+
+        Ruang.Form.createPemeliharaan = function(dataGrid,dataForm,edit) {
+            var setting = {
+                url: Ruang.URL.createUpdatePemeliharaan,
+                data: dataGrid,
+                isEditing: edit,
+                isRuang: true,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: null
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+          var setting_grid_pemeliharaan_part = {
+                id:'grid_ruang_pemeliharaan_part',
+                toolbar:{
+                    add: Ruang.addPemeliharaanPart,
+                    edit: Ruang.editPemeliharaanPart,
+                    remove: Ruang.removePemeliharaanPart
+                },
+                dataStore:Ruang.dataStorePemeliharaanPart
+            };
+
+            var form = Form.pemeliharaanInAsset(setting,setting_grid_pemeliharaan_part);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Ruang.addPemeliharaanPart = function(){
+            var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
+            if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+            {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                }
+                    var form = Form.pemeliharaanPart(Ruang.URL.createUpdatePemeliharaanPart, Ruang.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(id_pemeliharaan));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+            }
+        };
+        
+        Ruang.editPemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_ruang_pemeliharaan_part').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.pemeliharaanPart(Ruang.URL.createUpdatePemeliharaanPart, Ruang.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        Ruang.removePemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_ruang_pemeliharaan_part').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Ruang.URL.removePemeliharaanPart, Ruang.dataStorePemeliharaanPart);
+        };
+
+       
         
         Ruang.Form.createPendayagunaan = function(data, dataForm, edit) {
             var setting = {
@@ -467,6 +546,7 @@
                 var dataForm = selected[0].data;
                 var form = Ruang.Form.createPemeliharaan(Ruang.dataStorePemeliharaan, dataForm, true)
                 Tab.addToForm(form, 'bangunan-edit-pemeliharaan', 'Edit Pemeliharaan');
+                Ruang.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
 

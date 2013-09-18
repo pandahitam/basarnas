@@ -8,6 +8,15 @@
 
         Ext.namespace('Senjata', 'Senjata.reader', 'Senjata.proxy', 'Senjata.Data', 'Senjata.Grid', 'Senjata.Window', 'Senjata.Form', 'Senjata.Action', 'Senjata.URL');
         
+        Senjata.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Senjata.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -42,7 +51,9 @@
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
             removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
         };
 
         Senjata.reader = new Ext.create('Ext.data.JsonReader', {
@@ -70,51 +81,8 @@
             id: 'Data_Senjata', storeId: 'DataSenjata', model: 'MSenjata', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Senjata.proxy, groupField: 'tipe'
         });
-
-        Senjata.Form.create = function(data, edit) {
-            var form = Form.asset(Senjata.URL.createUpdate, Senjata.Data, edit);
-            form.insert(0, Form.Component.unit(edit,form));
-            form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
-            form.insert(3, Form.Component.basicAsset(edit));
-            form.insert(4, Form.Component.mechanical());
-            form.insert(5, Form.Component.senjata());
-            form.insert(6, Form.Component.fileUpload());
-            if (data !== null)
-            {
-                form.getForm().setValues(data);
-            }
-
-            return form;
-        };
-
-        Senjata.Form.createPemeliharaan = function(data, dataForm, edit) {
-            var setting = {
-                url: Senjata.URL.createUpdatePemeliharaan,
-                data: data,
-                isEditing: edit,
-                isBangunan: false,
-                addBtn: {
-                    isHidden: true,
-                    text: '',
-                    fn: function() {
-                    }
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
-            };
-
-            var form = Form.pemeliharaanInAsset(setting);
-
-            if (dataForm !== null)
-            {
-                form.getForm().setValues(dataForm);
-            }
-            return form;
-        };
-
-        Senjata.Window.actionSidePanels = function() {
+        
+         Senjata.Window.actionSidePanels = function() {
             var actions = {
                 details: function() {
                     var _tab = Asset.Window.popupEdit.getComponent('asset-window-tab');
@@ -171,6 +139,119 @@
 
             return actions;
         };
+
+        Senjata.Form.create = function(data, edit) {
+            var form = Form.asset(Senjata.URL.createUpdate, Senjata.Data, edit);
+            form.insert(0, Form.Component.unit(edit,form));
+            form.insert(1, Form.Component.kode(edit));
+            form.insert(2, Form.Component.klasifikasiAset(edit))
+            form.insert(3, Form.Component.basicAsset(edit));
+            form.insert(4, Form.Component.mechanical());
+            form.insert(5, Form.Component.senjata());
+            form.insert(6, Form.Component.fileUpload());
+            if (data !== null)
+            {
+                form.getForm().setValues(data);
+            }
+
+            return form;
+        };
+
+        Senjata.Form.createPemeliharaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Senjata.URL.createUpdatePemeliharaan,
+                data: data,
+                isEditing: edit,
+                isBangunan: false,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+             var setting_grid_pemeliharaan_part = {
+                id:'grid_senjata_pemeliharaan_part',
+                toolbar:{
+                    add: Senjata.addPemeliharaanPart,
+                    edit: Senjata.editPemeliharaanPart,
+                    remove: Senjata.removePemeliharaanPart
+                },
+                dataStore:Senjata.dataStorePemeliharaanPart
+            };
+
+            var form = Form.pemeliharaanInAsset(setting,setting_grid_pemeliharaan_part);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Senjata.addPemeliharaanPart = function(){
+            var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
+            if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+            {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                }
+                    var form = Form.pemeliharaanPart(Senjata.URL.createUpdatePemeliharaanPart, Senjata.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(id_pemeliharaan));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+            }
+        };
+        
+        Senjata.editPemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_senjata_pemeliharaan_part').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.pemeliharaanPart(Senjata.URL.createUpdatePemeliharaanPart, Senjata.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        Senjata.removePemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_senjata_pemeliharaan_part').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Senjata.URL.removePemeliharaanPart, Senjata.dataStorePemeliharaanPart);
+        };
+
+
+       
         
         Senjata.Form.createPendayagunaan = function(data, dataForm, edit) {
             var setting = {
@@ -469,6 +550,7 @@
                 var form = Senjata.Form.createPemeliharaan(Senjata.dataStorePemeliharaan, dataForm, true);
                 Tab.addToForm(form, 'senjata-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
+                Senjata.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
 
