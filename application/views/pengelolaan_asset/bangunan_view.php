@@ -606,9 +606,29 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
                 }
+                var uploadRiwayatPajak = {
+                        xtype: 'fieldset',
+                        itemId: 'fileUpload',
+                        layout: 'column',
+                        border: false,
+                        title: 'FILE UPLOAD',
+                        defaultType: 'container',
+                        style: {
+                            marginTop: '10px'
+                        },
+                        items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items:[Form.Component.fileUploadDocumentOnly('file_setoran','BangunanRiwayatPajakFile')]
+                    }]
+                    };
+                    
                     var form = Form.riwayatPajak(Bangunan.URL.createUpdateRiwayatPajak, Bangunan.dataStoreRiwayatPajak, false);
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
-                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    form.insert(1, uploadRiwayatPajak);
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 

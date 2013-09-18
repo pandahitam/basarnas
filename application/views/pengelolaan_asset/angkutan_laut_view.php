@@ -155,11 +155,11 @@
                 dataStore:AngkutanLaut.dataStorePerlengkapanAngkutanLaut
             };
             
-           var form = Form.asset(AngkutanLaut.URL.createUpdate, AngkutanLaut.Data, edit, true);
+           var form = Form.assetAngkutanLaut(AngkutanLaut.URL.createUpdate, AngkutanLaut.Data, edit, true);
              var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
-                closable: true,
+                closable: false,
                 border: false,
                 deferredRender: false,
                 bodyStyle:{background:'none'},
@@ -181,7 +181,7 @@
             
             tab.add({
                 title: 'Tambahan',
-                closable: true,
+                closable: false,
                 border: false,
                 layout: 'fit',
 //                anchor: '100%',

@@ -154,11 +154,11 @@
                 },
                 dataStore:AngkutanUdara.dataStorePerlengkapanAngkutanUdara
             };
-           var form = Form.asset(AngkutanUdara.URL.createUpdate, AngkutanUdara.Data, edit, true);
+           var form = Form.assetAngkutanUdara(AngkutanUdara.URL.createUpdate, AngkutanUdara.Data, edit, true);
              var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
-                closable: true,
+                closable: false,
                 border: false,
                 deferredRender: false,
                 bodyStyle:{background:'none'},
@@ -180,7 +180,7 @@
             
             tab.add({
                 title: 'Tambahan',
-                closable: true,
+                closable: false,
                 border: false,
                 layout:'fit',
                 deferredRender: false,

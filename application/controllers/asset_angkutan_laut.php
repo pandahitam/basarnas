@@ -21,7 +21,10 @@ class Asset_Angkutan_Laut extends MY_Controller {
 	}
 	
 	function modifyAngkutanLaut(){
-
+                
+//                var_dump($_POST);
+//                die;
+                
 		$dataSimak = array();
                 $dataExt = array();
                 

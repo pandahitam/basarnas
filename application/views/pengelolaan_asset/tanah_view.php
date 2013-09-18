@@ -100,7 +100,7 @@
             var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
-                closable: true,
+                closable: false,
                 border: false,
                 deferredRender: false,
                 bodyStyle:{background:'none'},
@@ -121,7 +121,7 @@
             
             tab.add({
                 title: 'Tambahan',
-                closable: true,
+                closable: false,
                 border: false,
                 layout: 'fit',
                 deferredRender: false,
@@ -618,9 +618,29 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
                 }
+                    var uploadRiwayatPajak = {
+                        xtype: 'fieldset',
+                        itemId: 'fileUpload',
+                        layout: 'column',
+                        border: false,
+                        title: 'FILE UPLOAD',
+                        defaultType: 'container',
+                        style: {
+                            marginTop: '10px'
+                        },
+                        items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items:[Form.Component.fileUploadDocumentOnly('file_setoran','TanahRiwayatPajakFile')]
+                    }]
+                    };
+                    
                     var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false);
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
-                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    form.insert(1, uploadRiwayatPajak);
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 

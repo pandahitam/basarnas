@@ -1076,6 +1076,330 @@
             return _form;
         };
         
+        Form.assetAngkutanLaut = function(url, data, edit, hasTabs) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                             if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            
+                            var laut_stkk_file = form.findField('laut_stkk_file');
+                            var laut_sertifikasi_keselamatan_file = form.findField('laut_sertifikasi_keselamatan_file');
+                            var laut_sertifikasi_radio_file = form.findField('laut_sertifikasi_radio_file');
+                            var laut_surat_ijin_berlayar_file = form.findField('laut_surat_ijin_berlayar_file');
+  
+                            if (laut_stkk_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSTKKFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_stkk_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (laut_sertifikasi_keselamatan_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSertifikasiKeselamatanFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_sertifikasi_keselamatan_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (laut_sertifikasi_radio_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSertifikasiRadioFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_sertifikasi_radio_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (laut_surat_ijin_berlayar_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSuratIjinBerlayarFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_surat_ijin_berlayar_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+                                        if (!edit)
+                                        {
+                                            Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.assetAngkutanUdara = function(url, data, edit, hasTabs) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                             if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            var udara_sertifikat_kelaikan_udara_file = form.findField('udara_sertifikat_kelaikan_udara_file');
+                            var udara_sertifikat_pendaftaran_pesawat_udara_file = form.findField('udara_sertifikat_pendaftaran_pesawat_udara_file');
+                            var udara_surat_bukti_kepemilikan_file = form.findField('udara_surat_bukti_kepemilikan_file');
+                           
+  
+                            if (udara_sertifikat_kelaikan_udara_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanUdaraTambahanSertifikatKelaikanUdaraFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                udara_sertifikat_kelaikan_udara_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (udara_sertifikat_pendaftaran_pesawat_udara_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanUdaraTambahanSertifikatPendaftaranPesawatUdaraFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                udara_sertifikat_pendaftaran_pesawat_udara_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (udara_surat_bukti_kepemilikan_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanUdaraTambahanSuratBuktiKepemilikanFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                udara_surat_bukti_kepemilikan_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+                                        if (!edit)
+                                        {
+                                            Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
         Form.asset = function(url, data, edit, hasTabs) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -1231,9 +1555,12 @@
                             if (documentField !== null)
                             {
                                 var arrayDoc = [];
+                                var documentStore = null;
                                 
-                                var documentStore = Utils.getDocumentStore(_form);
-                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('TanahRiwayatPajakFile').getStore(); 
+                                }
                                 _.each(documentStore.data.items, function(obj) {
                                     arrayDoc.push(obj.data.name);
                                 });
@@ -1473,6 +1800,135 @@
             };
 
 
+            return component;
+        };
+        
+        /*
+         * @param {string} database_field = the field fileupload field name in database
+         * @param {string} id_fileupload = unique id for fileupload grid     
+         */
+        Form.Component.fileUploadDocumentOnly= function(database_field,id_fileupload)
+        {
+          
+            var documentStore = new Ext.create('Ext.data.Store', {
+                                        fields: ['url', 'name']
+                                    })
+            
+            var component = {
+                xtype: 'container',
+                itemId: 'fileUpload',
+                layout: 'column',
+                border: false,
+//                title: 'FILE',
+                defaultType: 'container',
+                style: {
+                    marginTop: '10px'
+                },
+                items: [{
+                                xtype: 'hidden',
+                                name: database_field,
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                        if (value !== null && value.length > 0)
+                                        {
+                                            _.each(value.split(','), function(doc) {
+                                                var fullPath = Reference.URL.documentBasePath + doc;
+                                                documentStore.add({url: fullPath, name: doc});
+                                            });
+                                        }
+                                    }
+                                }
+                            }, {// DOCUMENT START
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId: 'documentColumn',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [{
+                                xtype: 'gridpanel',
+                                id : id_fileupload,
+                                store: documentStore,
+                                columnWidth: .5,
+                                width: '100%',
+                                height: 90,
+                                style: {
+                                    marginBottom: '10px'
+                                },
+                                columns: [{
+                                        text: 'Document Name',
+                                        dataIndex: 'name',
+                                        width: 200
+                                    }, {
+                                        xtype: 'actioncolumn',
+                                        width: 50,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/delete.png',
+                                                tooltipe: 'Remove Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    var dataSend = {
+                                                        file: record.data.name
+                                                    };
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        dataType: 'json',
+                                                        data: dataSend,
+                                                        url: Reference.URL.deleteDocument,
+                                                        success: function(res) {
+                                                            if (res.success)
+                                                            {
+                                                                console.log(res);
+                                                                documentStore.remove(record);
+                                                            }
+                                                            else
+                                                            {
+                                                                console.error('failed to remove');
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                }
+                                            }]
+                                    }]
+                            }, {
+                                xtype: 'filefield',
+                                name: 'userfile',
+                                width: 100,
+                                buttonOnly: true,
+                                buttonText: 'Add Document',
+                                listeners: {
+                                    'change': {
+                                        fn: function() {
+                                            var tempForm = Ext.create('Ext.form.Panel', {
+                                                url: Reference.URL.upDocument,
+                                                items: this
+                                            });
+
+                                            tempForm.getForm().submit({
+                                                waitMsg: 'Uploading your document...',
+                                                success: function(response, action) {
+                                                    var res = action.result.upload_data;
+                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
+                                                    documentStore.add({url:fullPath, name: res.file_name});
+                                                },
+                                                failure: function(response, action) {
+                                                    console.error('fail');
+                                                    console.log(action);
+                                                    Ext.Msg.alert('Fail',action.result.error);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }]
+                    }]// DOCUMENT END
+            };
+            
             return component;
         };
         
@@ -1724,129 +2180,7 @@
             return component;
         };
 
-        Form.Component.fileUploadRiwayatPajak = function(edit) {
-            
-                                    
-            var documentStore = new Ext.create('Ext.data.Store', {
-                                        fields: ['url', 'name']
-                                    })
-            
-            var component = {
-                xtype: 'fieldset',
-                itemId: 'fileUpload',
-                layout: 'column',
-                border: false,
-                title: 'FILE UPLOAD',
-                defaultType: 'container',
-                style: {
-                    marginTop: '10px'
-                },
-                items: [{
-                        xtype: 'hidden',
-                        name: 'file_setoran',
-                        listeners: {
-                            change: function(obj, value) {
-                                if (value !== null && value.length > 0)
-                                {
-                                    _.each(value.split(','), function(doc) {
-                                        var fullPath = Reference.URL.documentBasePath + doc;
-                                        documentStore.add({url: fullPath, name: doc});
-                                    });
-                                }
-                            }
-                        }
-                    }, {// DOCUMENT START
-                        columnWidth: .99,
-                        layout: 'anchor',
-                        itemId: 'documentColumn',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{// DOCUMENT START
-                                xtype: 'gridpanel',
-                                itemId : 'documentGrid',
-                                store: documentStore,
-                                columnWidth: .5,
-                                width: '100%',
-                                height: 90,
-                                style: {
-                                    marginBottom: '10px'
-                                },
-                                columns: [{
-                                        text: 'Document Name',
-                                        dataIndex: 'name',
-                                        width: 200
-                                    }, {
-                                        xtype: 'actioncolumn',
-                                        width: 50,
-                                        items: [{
-                                                icon: '../basarnas/assets/images/icons/delete.png',
-                                                tooltipe: 'Remove Document',
-                                                handler: function(grid, rowIndex, colIndex, obj) {
-                                                    var record = documentStore.getAt(rowIndex);
-
-                                                    var dataSend = {
-                                                        file: record.data.name
-                                                    };
-
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        dataType: 'json',
-                                                        data: dataSend,
-                                                        url: Reference.URL.deleteDocument,
-                                                        success: function(res) {
-                                                            if (res.success)
-                                                            {
-                                                                console.log(res);
-                                                                documentStore.remove(record);
-                                                            }
-                                                            else
-                                                            {
-                                                                console.error('failed to remove');
-                                                            }
-                                                        }
-                                                    });
-
-
-                                                }
-                                            }]
-                                    }]
-                            }, {
-                                xtype: 'filefield',
-                                name: 'userfile',
-                                width: 100,
-                                buttonOnly: true,
-                                buttonText: 'Add Document',
-                                listeners: {
-                                    'change': {
-                                        fn: function() {
-                                            var tempForm = Ext.create('Ext.form.Panel', {
-                                                url: Reference.URL.upDocument,
-                                                items: this
-                                            });
-
-                                            tempForm.getForm().submit({
-                                                waitMsg: 'Uploading your document...',
-                                                success: function(response, action) {
-                                                    var res = action.result.upload_data;
-                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
-                                                    documentStore.add({url:fullPath, name: res.file_name});
-                                                },
-                                                failure: function(response, action) {
-                                                    console.error('fail');
-                                                    console.log(action);
-                                                    Ext.Msg.alert('Fail',action.result.error);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            }]
-                    }]// DOCUMENT END
-            };
-
-            return component;
-        };
+        
         
         
 
@@ -2796,7 +3130,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                title: 'Riwayat Pajak',
+                title: 'RIWAYAT PAJAK',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -3375,20 +3709,13 @@
                                    ]
                                 
                             }, {
-                                columnWidth: .5,
-                                layout: 'anchor',
-                                defaults: {
-                                    anchor: '95%'
-                                },
-                                items:[ {
-                                xtype: 'filefield',
-                                fieldLabel: 'File',
-                                name: 'laut_stkk_file',
-                                format: 'Y-m-d'
-                                } 
-                                      ]
-                              
-                            },  
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [Form.Component.fileUploadDocumentOnly('laut_stkk_file','AngkutanLautTambahanSTKKFile')]
+                    }  
                     ]};
             return subcomponent;
         };
@@ -3488,12 +3815,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'laut_sertifikasi_keselamatan_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('laut_sertifikasi_keselamatan_file','AngkutanLautTambahanSertifikasiKeselamatanFile')]
                               
                             },
                 ]};
@@ -3543,12 +3865,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'laut_sertifikasi_radio_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('laut_sertifikasi_radio_file','AngkutanLautTambahanSertifikasiRadioFile')]
                               
                             },
                 ]};
@@ -3598,12 +3915,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'laut_surat_ijin_berlayar_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('laut_surat_ijin_berlayar_file','AngkutanLautTambahanSuratIjinBerlayarFile')]
                               
                             },
                 ]};
@@ -3694,12 +4006,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'udara_surat_bukti_kepemilikan_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('udara_surat_bukti_kepemilikan_file','AngkutanUdaraTambahanSuratBuktiKepemilikanFile')]
                               
                             },
                 ]};
@@ -3749,12 +4056,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'udara_sertifikat_pendaftaran_pesawat_udara_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('udara_sertifikat_pendaftaran_pesawat_udara_file','AngkutanUdaraTambahanSertifikatPendaftaranPesawatUdaraFile')]
                               
                             },
                 ]};
@@ -3804,12 +4106,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'udara_sertifikat_kelaikan_udara_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('udara_sertifikat_kelaikan_udara_file','AngkutanUdaraTambahanSertifikatKelaikanUdaraFile')]
                               
                             },
                 ]};
