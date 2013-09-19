@@ -5,11 +5,11 @@ class Penghapusan_Model extends MY_Model{
 		parent::__construct();
                 $this->table = 'view_penghapusan';
                 $this->countTable = 'view_penghapusan';
-                $this->selectColumn = "select ur_baru, no_awal, no_akhir, jenis_transaksi, 
+                /*$this->selectColumn = "select ur_baru, no_awal, no_akhir, jenis_transaksi, 
                         thn_ang,periode,kd_lokasi,no_sppa,kd_brg,no_aset,
                         tgl_perlh,tercatat,kondisi,tgl_buku,jns_trn,dsr_hrg,kd_data,flag_sap,kuantitas,
                         rph_sat,rph_aset,flag_kor,keterangan,merk_type,asal_perlh,no_bukti,no_dsr_mts,
-                        tgl_dsr_mts,flag_ttp,flag_krm,kdblu,setatus,noreg,kdbapel,kdkpknl,umeko,rph_res,kdkppn";
+                        tgl_dsr_mts,flag_ttp,flag_krm,kdblu,setatus,noreg,kdbapel,kdkpknl,umeko,rph_res,kdkppn";*/
 //		$this->extTable = 'pemeliharaan';
 //                $this->viewTable = 'view_pemeliharaan';
 	}
@@ -32,8 +32,61 @@ class Penghapusan_Model extends MY_Model{
 //                        group by b.ur_baru
 //                        LIMIT $start, $limit";
                 
-                $query = " $this->selectColumn
-                        from view_penghapusan
+//                $query = " $this->selectColumn
+//                        from view_penghapusan
+//                        LIMIT $start, $limit";
+                $query = "
+						SELECT `y`.`ur_baru` AS `ur_baru`, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							`u`.`rph_sat`     AS `rph_sat`,
+							`u`.`rph_aset`    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
                         LIMIT $start, $limit";
             }
             else
@@ -52,8 +105,60 @@ class Penghapusan_Model extends MY_Model{
 //                        where u.jns_trn IN ('301','391')
 //                        group by b.ur_baru
 //                        ";
-                $query = "$this->selectColumn
-                        from view_penghapusan";
+//                $query = "$this->selectColumn
+//                        from view_penghapusan";
+                $query = "
+						SELECT `y`.`ur_baru` AS `ur_baru`, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							`u`.`rph_sat`     AS `rph_sat`,
+							`u`.`rph_aset`    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`";
             }
 		return $this->Get_By_Query($query);	
 	}
