@@ -164,6 +164,12 @@
             data: [{text: 'Waktu', value: 1}, {text: 'Penggunaan', value: 2}]
         });
         
+        Reference.Data.jenisPerlengkapanAngkutanDarat = new Ext.create('Ext.data.Store', {
+            fields: ['value'],
+            data: [{value:'Alat Navigasi/Komunikasi'}, {value:'Alat Penolong/Rescue'},
+                    {value:'Alat Pemadam Kebakaran'},{value:'Alat Lainnya'}]
+        });
+        
         Reference.Data.jenisPerlengkapanAngkutanLaut = new Ext.create('Ext.data.Store', {
             fields: ['value'],
             data: [{value:'Alat Navigasi/Komunikasi'}, {value:'Alat Penolong/Rescue'},
@@ -1493,6 +1499,75 @@
             return _form;
         };
         
+        Form.detailPenggunaanAngkutan = function(url, data, edit,tipe_angkutan) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_penggunaan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        
+                                        if (Modal.assetSecondaryWindow.isVisible(true))
+                                        {
+                                            var id_ext_asset = Ext.getCmp('id_ext_asset_detail_penggunaan_angkutan').value;
+                                            $.ajax({
+                                                url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                                                type: "POST",
+                                                dataType:'json',
+                                                async:false,
+                                                data:{tipe_angkutan:tipe_angkutan,id_ext_asset:id_ext_asset},
+                                                success:function(response, status){
+                                                 if(response.status == 'success')
+                                                 {
+                                                     if(tipe_angkutan == "darat")
+                                                    {
+                                                        var updateTotalPenggunaan = response.total + ' Km';
+                                                        Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                                    }
+                                                    else if(tipe_angkutan == "laut" || tipe_angkutan == "udara")
+                                                    {
+                                                        var updateTotalPenggunaan = response.total + ' Jam';
+                                                        Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                                    }
+
+                                                 }
+
+                                                }
+                                             });
+
+                                            Modal.assetSecondaryWindow.close();
+                                        }
+                                        
+                                        
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
         Form.perlengkapanAngkutan = function(url, data, edit) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -1505,7 +1580,7 @@
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_riwayat_pajak', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan', id: 'save_perlengkapan', iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             
@@ -2963,7 +3038,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                title: 'Perlengkapan Angkutan Laut',
+                title: 'Perlengkapan Angkutan Darat',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -2992,7 +3067,7 @@
                                 name: 'jenis_perlengkapan',
                                 anchor: '100%',
                                 allowBlank: false,
-                                store: Reference.Data.jenisPerlengkapanAngkutanLaut,
+                                store: Reference.Data.jenisPerlengkapanAngkutanDarat,
                                 valueField: 'value',
                                 displayField: 'value', emptyText: 'Pilih Jenis',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Ruangan',
@@ -3030,7 +3105,157 @@
 
             return component;
         
-        }
+        };
+        
+        Form.Component.dataPerlengkapanAngkutanDarat = function (id_ext_asset)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Darat',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype: 'combo',
+                                fieldLabel: 'Jenis Perlengkapan *',
+                                name: 'jenis_perlengkapan',
+                                anchor: '100%',
+                                allowBlank: false,
+                                store: Reference.Data.jenisPerlengkapanAngkutanDarat,
+                                valueField: 'value',
+                                displayField: 'value', emptyText: 'Pilih Jenis',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
+                                listeners: {
+//                                    'focus': {
+//                                        fn: function(comboField) {
+//                                            var store = comboField.getStore();
+//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
+//                                            comboField.expand();
+//                                        },
+//                                        scope: this
+//                                    },
+//                                    'change': {
+//                                        fn: function(obj, value) {
+//
+//                                        },
+//                                        scope: this
+//                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'No',
+                                name: 'no'
+                            }, {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            }]
+                    },]
+            };
+
+            return component;
+        
+        };
+        
+        Form.Component.dataPerlengkapanAngkutanLaut = function (id_ext_asset)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Laut',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype: 'combo',
+                                fieldLabel: 'Jenis Perlengkapan *',
+                                name: 'jenis_perlengkapan',
+                                anchor: '100%',
+                                allowBlank: false,
+                                store: Reference.Data.jenisPerlengkapanAngkutanLaut,
+                                valueField: 'value',
+                                displayField: 'value', emptyText: 'Pilih Jenis',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
+                                listeners: {
+//                                    'focus': {
+//                                        fn: function(comboField) {
+//                                            var store = comboField.getStore();
+//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
+//                                            comboField.expand();
+//                                        },
+//                                        scope: this
+//                                    },
+//                                    'change': {
+//                                        fn: function(obj, value) {
+//
+//                                        },
+//                                        scope: this
+//                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'No',
+                                name: 'no'
+                            }, {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            }]
+                    },]
+            };
+
+            return component;
+        
+        };
         
         Form.Component.dataPerlengkapanAngkutanUdara = function (id_ext_asset)
         {
@@ -3070,7 +3295,7 @@
                                 store: Reference.Data.jenisPerlengkapanAngkutanUdara,
                                 valueField: 'value',
                                 displayField: 'value', emptyText: 'Pilih Jenis',
-                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Ruangan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
                                 listeners: {
 //                                    'focus': {
 //                                        fn: function(comboField) {
@@ -3132,6 +3357,138 @@
         
         }
         
+        Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan = function(tipe_angkutan)
+        {
+          if(tipe_angkutan == "darat")
+          {
+              var subComponent = {
+                  xtype:'container',
+                  items:[
+                         {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Satuan Penggunaan',
+                                    name: 'satuan_penggunaan',
+                                    allowBlank: false,
+                                    store: Reference.Data.unitPengunaan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Satuan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                             },
+                  ]
+              }
+              
+              return subComponent;
+          }
+          else if(tipe_angkutan == "laut")
+          {
+              var subComponent = {
+                  xtype:'container',
+                  items:[
+                         {
+                            xtype: 'hidden',
+                            name: 'satuan_penggunaan',
+                            value:'4',
+                         },
+                         {
+                             xtype: 'displayfield',
+                             fieldLabel: 'Satuan Penggunaan',
+                             value: 'Jam Layar',
+                         }
+                  ]
+              }
+              
+              return subComponent;
+
+          }
+          else if(tipe_angkutan == "udara")
+          {
+              var subComponent = {
+                  xtype:'container',
+                  items:[
+                         {
+                            xtype: 'hidden',
+                            name: 'satuan_penggunaan',
+                            value:'5',
+                         },
+                         {
+                             xtype: 'displayfield',
+                             fieldLabel: 'Satuan Penggunaan',
+                             value: 'Jam Terbang',
+                         }
+                  ]
+              }
+              
+              return subComponent;
+
+          }
+        };
+        
+        Form.Component.dataDetailPenggunaanAngkutan= function(id_ext_asset,tipe_angkutan)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'DETAIL PENGGUNAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'numberfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                id:'id_ext_asset_detail_penggunaan_angkutan',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal',
+                                name: 'tanggal',
+                                format: 'Y-m-d',
+                                allowBlank:false,
+                            },
+                            {
+                                fieldLabel: 'Jumlah Penggunaan',
+                                name: 'jumlah_penggunaan',
+                                allowBlank:false,
+                                minValue:1,
+                            },
+                            Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan(tipe_angkutan)
+                           ]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textarea',
+                        items: [{
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            },
+                        ]
+                    }]
+            };
+
+            return component;
+        
+        };
+        
         Form.Component.dataRiwayatPajakTanahDanBangunan = function(id_ext_asset)
         {
             var component = {
@@ -3174,7 +3531,8 @@
                             {
                                 fieldLabel: 'Jumlah Setoran',
                                 name: 'jumlah_setoran'
-                            }]
+                            },
+                            ]
                     }, {
                         columnWidth: .50,
                         layout: 'anchor',
@@ -3192,7 +3550,7 @@
 
             return component;
         
-        }
+        };
         
         Form.Component.dataPemeliharaanPart = function(id_pemeliharaan,edit)
         {
@@ -3310,13 +3668,13 @@
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: (edit == true)?300:150,
+                height: (edit == true)?325:150,
                 anchor: '100%',
                 title: 'PEMELIHARAAN PART',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [(edit==true)?Grid.pemeliharaanPart(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
             };
 
             return component;
@@ -3326,13 +3684,13 @@
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: (edit == true)?300:150,
+                height: (edit == true)?325:150,
                 anchor: '100%',
                 title: 'Riwayat Pajak',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [(edit==true)?Grid.riwayatPajak(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
             };
 
             return component;
@@ -3612,14 +3970,32 @@
             return component;
         };
         
+        Form.SubComponent.tambahanAngkutanDaratPerlengkapan = function(setting,edit){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                height: (edit==true)?325:150,
+                title: 'Perlengkapan Angkutan Darat',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.angkutanDaratPerlengkapan(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+        };
+                
+            return subcomponent;
+        };
         
-
-        Form.Component.tambahanAngkutanDarat = function() {
-            var component = {
+        
+        Form.SubComponent.tambahanAngkutanDarat = function() {
+            var subcomponent = {
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Darat',
+                title: 'Tambahan',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -3676,6 +4052,24 @@
                                 name: 'darat_keterangan_lainnya',
                         }]
                     }]
+            };
+
+            return subcomponent;
+        };
+        
+        Form.Component.tambahanAngkutanDarat = function(setting_grid_perlengkapan,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                anchor: '100%',
+                title: 'Darat',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [
+                        Form.SubComponent.tambahanAngkutanDarat(),
+                        Form.SubComponent.tambahanAngkutanDaratPerlengkapan(setting_grid_perlengkapan,edit)
+                       ]
             };
 
             return component;
@@ -3937,7 +4331,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                height: (edit==true)?300:150,
+                height: (edit==true)?325:150,
                 title: 'Perlengkapan Angkutan Laut',
                 border: false,
                 frame: true,
@@ -3945,7 +4339,7 @@
                 defaults: {
                     layout: 'anchor'
                 },
-                items: [(edit==true)?Grid.angkutanLautPerlengkapan(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.angkutanLautPerlengkapan(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
         };
                 
             return subcomponent;
@@ -4128,7 +4522,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                height: (edit==true)?300:150,
+                height: (edit==true)?325:150,
                 title: 'Perlengkapan Angkutan Udara',
                 border: false,
                 frame: true,
@@ -4136,7 +4530,7 @@
                 defaults: {
                     layout: 'anchor'
                 },
-                items: [(edit==true)?Grid.angkutanUdaraPerlengkapan(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]};
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.angkutanUdaraPerlengkapan(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]};
                 
             return subcomponent;
         };
@@ -5682,7 +6076,7 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'Detail Perlengkapan',
+                    title: 'DETAIL PERLENGKAPAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -6002,7 +6396,7 @@
                                     fieldLabel: 'Warehouse',
                                     name: 'combo_warehouse_id',
                                     id : 'combo_warehouse_id',
-                                    allowBlank: true,
+                                    allowBlank: false,
                                     store: Reference.Data.warehouse,
                                     valueField: 'id',
                                     displayField: 'nama', emptyText: 'Pilih Warehouse',
@@ -6092,7 +6486,7 @@
                                     fieldLabel: 'Rak',
                                     name: 'combo_rak_id',
                                     id : 'combo_rak_id',
-                                    allowBlank: false,
+                                    allowBlank: true,
                                     store: Reference.Data.warehouseRak,
                                     valueField: 'id',
                                     displayField: 'nama', emptyText: 'Pilih Rak',
@@ -6317,6 +6711,76 @@
                             ]
                         }]
                 }]
+
+            return component;
+        };
+        
+  
+
+        
+        Form.Component.detailPenggunaanAngkutan = function(setting_grid_penggunaan,edit) {
+            
+        var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'DETAIL PENGGUNAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [
+                                    {
+                                        xtype:'displayfield',
+                                        fieldLabel:'Total Penggunaan',
+                                        name:'total_penggunaan',
+                                        labelWidth: 125,
+                                        id:'total_detail_penggunaan_angkutan',
+                                        value:'',
+                                    },
+//                                    {
+//                                        xtype:'displayfield',
+//                                        fieldLabel:'Satuan',
+//                                        name:'satuan_detail_penggunaan_angkutan',
+//                                        labelWidth: 125,
+//                                        id:'satuan_detail_penggunaan_angkutan',
+//                                        value:'',
+//                                    },
+                                    {
+                                        xtype:'fieldset',
+                                        title:'Daftar Penggunaan',
+                                        height:(edit ==true)?325:150,
+                                        items:[(edit==true)?{xtype:'container',height:300,items:[Grid.detailPenggunaanAngkutan(setting_grid_penggunaan,edit)]}:{xtype:'displayfield', value:'Harap Simpan data terlebih dahulu'}]
+                                    }
+                                    
+                                ]
+                    },
+                    ]
+            };
+
+            return component;
+            
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                anchor: '100%',
+                title: 'DETAIL PENGGUNAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [
+                        
+//                        Form.SubComponent.tambahanAngkutanDaratPerlengkapan(setting_grid_penggunaan,edit)
+                       ]
+            };
 
             return component;
         };

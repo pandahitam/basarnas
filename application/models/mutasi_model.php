@@ -4,6 +4,7 @@ class Mutasi_Model extends MY_Model{
 	function __construct(){
 		parent::__construct();
                 $this->table = 'view_mutasi';
+                $this->countTable = 'view_mutasi';
 //		$this->extTable = 'pemeliharaan';
 //                $this->viewTable = 'view_pemeliharaan';
 	}

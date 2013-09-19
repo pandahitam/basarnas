@@ -187,6 +187,62 @@
             })
         };
         
+        Modal.deleteAlertDetailPenggunaanAngkutan = function(arrayDeleted, url, dataGrid, tipe_angkutan) {
+            /*debugger;*/
+            Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ?',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: url,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                dataGrid.load();
+                                $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{tipe_angkutan:tipe_angkutan,id_ext_asset:arrayDeleted[0]['id_ext_asset']},
+                                    success:function(response, status){
+                                     if(response.status == 'success')
+                                     {
+                                        if(tipe_angkutan == "darat")
+                                        {
+                                            var updateTotalPenggunaan = response.total + ' Km';
+                                            Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                        }
+                                        else if(tipe_angkutan == "laut" || tipe_angkutan == "udara")
+                                        {
+                                            var updateTotalPenggunaan = response.total + ' Jam';
+                                            Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                        }
+                                         
+                                     }
+
+                                    }
+                                 });
+                            }
+                        });
+                    }
+                }
+            })
+        };
+        
         Region.filterPanelAsetPerlengkapan = function(data,id) {
             var panel = {
                 region: 'west',
@@ -1496,6 +1552,77 @@
                                     if (value !== null)
                                     {
                                         data.filter({property: 'tahun_angaran', value: value});
+                                    }
+                                }
+                            }
+                        }
+                    }]
+            };
+
+            return panel;
+        }
+        
+        Region.filterPanelPenghapusanDanMutasi = function(data,id) {
+            var panel = {
+                region: 'west',
+                title: 'Filter',
+                width: 200,
+                split: true,
+                collapsible: true,
+                floatable: false,
+                frame: true,
+                items: [{
+                        xtype: 'label',
+                        text: 'Filter by Unit Kerja',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Unker',
+                        name: 'unker'+id,
+                        id: 'unker'+id,
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.unker,
+                        valueField: 'kdlok',
+                        displayField: 'ur_upb', emptyText: 'Unit Kerja',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Kerja',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    data.filter([{property: 'kd_lokasi', value: value}]);
+
+                                }
+                            }
+                        }
+                    }, {
+                        xtype: 'label',
+                        text: 'Filter by Tahun Anggaran',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by year',
+                        name: 'year'+id,
+                        id: 'year'+id,
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.year,
+                        valueField: 'year',
+                        displayField: 'year', emptyText: 'Year',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        data.filter({property: 'thn_ang', value: value});
                                     }
                                 }
                             }

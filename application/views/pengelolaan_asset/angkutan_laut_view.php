@@ -9,6 +9,15 @@
         Ext.namespace('AngkutanLaut', 'AngkutanLaut.reader', 'AngkutanLaut.proxy', 'AngkutanLaut.Data', 'AngkutanLaut.Grid', 'AngkutanLaut.Window',
                 'AngkutanLaut.Form', 'AngkutanLaut.Action', 'AngkutanLaut.URL');
         
+        AngkutanLaut.dataStoreDetailPenggunaanAngkutan = new Ext.create('Ext.data.Store', {
+            model: MDetailPenggunaanAngkutan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'asset_angkutan_detail_penggunaan/getSpecificDetailPenggunaanAngkutan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanLaut.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
             model: MPemeliharaanPart, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -65,7 +74,9 @@
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
-            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
+            createUpdateDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutan',
+            removeDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutan'
         };
 
         AngkutanLaut.reader = new Ext.create('Ext.data.JsonReader', {
@@ -213,8 +224,83 @@
             Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePerlengkapanAngkutanLaut,AngkutanLaut.dataStorePerlengkapanAngkutanLaut);
         };
         
+        AngkutanLaut.addDetailPenggunaan = function()
+        {
+            var selected = AngkutanLaut.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
+                }
+                    var form = Form.detailPenggunaanAngkutan(AngkutanLaut.URL.createUpdateDetailPenggunaanAngkutan, AngkutanLaut.dataStoreDetailPenggunaanAngkutan, false,'laut');
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'laut'));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        AngkutanLaut.editDetailPenggunaan = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanLaut_detail_penggunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
+                }
+                    var form = Form.detailPenggunaanAngkutan(AngkutanLaut.URL.createUpdateDetailPenggunaanAngkutan, AngkutanLaut.dataStoreDetailPenggunaanAngkutan, true,'laut');
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'laut'));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+        }};
+        
+        AngkutanLaut.removeDetailPenggunaan = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanLaut_detail_penggunaan').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_ext_asset:obj.data.id_ext_asset,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+           Modal.deleteAlertDetailPenggunaanAngkutan(arrayDeleted, AngkutanLaut.URL.removeDetailPenggunaanAngkutan,AngkutanLaut.dataStoreDetailPenggunaanAngkutan,'laut');
+            
+                    
+        };
+        
         AngkutanLaut.Form.create = function(data, edit) {
-           var setting_grid_perlengkapan = {
+          
+        var setting_grid_detail_penggunaan = {
+                id:'grid_angkutanLaut_detail_penggunaan',
+                toolbar:{
+                    add: AngkutanLaut.addDetailPenggunaan,
+                    edit: AngkutanLaut.editDetailPenggunaan,
+                    remove: AngkutanLaut.removeDetailPenggunaan
+                },
+                dataStore:AngkutanLaut.dataStoreDetailPenggunaanAngkutan,
+            }; 
+        
+          var setting_grid_perlengkapan = {
                 id:'grid_angkutanLaut_perlengkapan',
                 toolbar:{
                     add: AngkutanLaut.addPerlengkapan,
@@ -239,6 +325,7 @@
                         Form.Component.basicAsset(edit),
                         Form.Component.mechanical(),
                         Form.Component.angkutan(),
+                        Form.Component.detailPenggunaanAngkutan(setting_grid_detail_penggunaan,edit),
                         Form.Component.fileUpload(),
                        ],
                 listeners: {
@@ -275,6 +362,20 @@
             
             if (data !== null)
             {
+                $.ajax({
+                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{tipe_angkutan:'laut',id_ext_asset:data.id},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            data.total_detail_penggunaan_angkutan = response.total + ' Jam';
+                        }
+                           
+                       }
+                    });
                 form.getForm().setValues(data);
             }
 
@@ -786,6 +887,7 @@
                     Tab.addToForm(_form, 'angkutanLaut-details', 'Simak Details');
                     Modal.assetEdit.show();
                     AngkutanLaut.dataStorePerlengkapanAngkutanLaut.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                    AngkutanLaut.dataStoreDetailPenggunaanAngkutan.changeParams({params:{open:'1',id_ext_asset:data.id}});
                 }
 
             }

@@ -63,6 +63,17 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
             return $this->Get_By_Query($query);
 			
 	}
+        
+        function getSpecificPerlengkapanAngkutanDarat($id_ext_asset)
+        {
+            if($_POST['open'] == 1)
+            {
+                $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan 
+                        FROM ext_asset_angkutan_darat_perlengkapan WHERE id_ext_asset = $id_ext_asset";
+                return $this->Get_By_Query($query);
+            }
+        }
+       
 	
 	function get_byIDs($ids)
 	{		

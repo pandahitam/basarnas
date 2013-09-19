@@ -4,6 +4,13 @@
 <script>
 ////// Model In View
 
+Ext.define('MDetailPenggunaanAngkutan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'tanggal', 'jumlah_penggunaan', 
+        'satuan_penggunaan','keterangan'
+    ]
+});
+
 Ext.define('MPemeliharaanPart', {extend: 'Ext.data.Model',
     fields: ['id', 'id_pemeliharaan', 
         'id_penyimpanan', 'part_number', 
@@ -166,6 +173,13 @@ Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
         'kd_lvl1','kd_lvl2','kd_lvl3',
          'darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
          'darat_jumlah_pajak', 'darat_keterangan_lainnya'
+    ]
+});
+
+Ext.define('MAngkutanDaratPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'jenis_perlengkapan', 'no', 
+        'nama', 'keterangan'
     ]
 });
 

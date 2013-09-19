@@ -4,6 +4,7 @@ class Penghapusan_Model extends MY_Model{
 	function __construct(){
 		parent::__construct();
                 $this->table = 'view_penghapusan';
+                $this->countTable = 'view_penghapusan';
                 $this->selectColumn = "select ur_baru, no_awal, no_akhir, jenis_transaksi, 
                         thn_ang,periode,kd_lokasi,no_sppa,kd_brg,no_aset,
                         tgl_perlh,tercatat,kondisi,tgl_buku,jns_trn,dsr_hrg,kd_data,flag_sap,kuantitas,

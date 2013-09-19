@@ -135,6 +135,8 @@ class MY_Model extends CI_Model{
             {
                 return $this->db->count_all_results("$this->table");
             }
+            
+            
 		
 	}
 	

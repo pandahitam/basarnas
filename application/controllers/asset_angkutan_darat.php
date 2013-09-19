@@ -88,6 +88,66 @@ class Asset_Angkutan_Darat extends MY_Controller {
                 
 		return $this->deleteData($data);
 	}
+        
+        function getSpecificPerlengkapanAngkutanDarat()
+        {
+            if($_POST['open'] == 1)
+            {
+                $data = $this->model->getSpecificPerlengkapanAngkutanDarat($_POST['id_ext_asset']);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+                
+            }
+        }
+        
+        function modifyPerlengkapanAngkutanDarat()
+        {
+            $dataPerlengkapanDarat = array();
+            $dataPerlengkapanDaratFields = array(
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan'
+            );
+            
+            foreach ($dataPerlengkapanDaratFields as $field) {
+			$dataPerlengkapanDarat[$field] = $this->input->post($field);
+            }
+                $this->db->set($dataPerlengkapanDarat);
+                $this->db->replace('ext_asset_angkutan_darat_perlengkapan');
+               
+        }
+        
+        function deletePerlengkapanAngkutanDarat()
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                foreach($data as $deleted)
+                {
+                    $deletedArray[] =$deleted['id'];
+                }
+                $this->db->where_in('id',$deletedArray);
+                
+		$this->db->delete('ext_asset_angkutan_darat_perlengkapan');
+	}
+        
+        
+        
+        function requestIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $this->db->insert('ext_asset_angkutan',$receivedData);
+            $idExt = $this->db->insert_id();
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
 	
 	function cetak($input){
 		$data_cetak = $this->model->get_SelectedDataPrint($input);
@@ -96,5 +156,7 @@ class Asset_Angkutan_Darat extends MY_Controller {
 				$this->load->view('pengelolaan_asset/angkutan_darat_pdf',$data);
 			}
 	}
+        
+        
 }
 ?>
