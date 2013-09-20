@@ -48,7 +48,9 @@
         });
 
         PemeliharaanUdara.Form.create = function(data, edit) {
-            var setting = {
+           var tipe_angkutan = 'udara';
+           var setting = {
+                tipe_angkutan:tipe_angkutan,
                 url: PemeliharaanUdara.URL.createUpdate,
                 data: PemeliharaanUdara.Data,
                 isEditing: edit,
@@ -59,7 +61,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAsset());
+                            Modal.assetSelection.add(Grid.selectionAsset(tipe_angkutan));
                             Modal.assetSelection.show();
                         }
                         else

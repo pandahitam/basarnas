@@ -48,7 +48,9 @@
         });
 
         PemeliharaanLaut.Form.create = function(data, edit) {
+            var tipe_angkutan = 'laut';
             var setting = {
+                tipe_angkutan:tipe_angkutan,
                 url: PemeliharaanLaut.URL.createUpdate,
                 data: PemeliharaanLaut.Data,
                 isEditing: edit,
@@ -59,7 +61,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAsset());
+                            Modal.assetSelection.add(Grid.selectionAsset(tipe_angkutan));
                             Modal.assetSelection.show();
                         }
                         else

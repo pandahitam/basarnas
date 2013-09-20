@@ -59,14 +59,37 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
               'id_ext_asset'=>$_POST['id_ext_asset'],
             );
             
-            
-           
-            $totalPenggunaan = (double)0;
             $query = $this->db->query("select jumlah_penggunaan, satuan_penggunaan 
                                 from ext_asset_angkutan_detail_penggunaan
                                 where id_ext_asset =".$receivedData['id_ext_asset']);
            
+           $this->calculateTotalPenggunaan($receivedData, $query);
+        }
+        
+        function getTotalPenggunaanWithoudIdExtAsset()
+        {
             
+            $receivedData = array(
+              'tipe_angkutan'=>$_POST['tipe_angkutan'],
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            
+            $query = $this->db->query("select jumlah_penggunaan, satuan_penggunaan 
+                                from ext_asset_angkutan_detail_penggunaan as t
+                                LEFT JOIN ext_asset_angkutan as a on t.id_ext_asset = a.id
+                                LEFT JOIN asset_angkutan as c on a.kd_lokasi = c.kd_lokasi AND a.kd_brg=c.kd_brg AND a.no_aset = c.no_aset
+                                where c.kd_brg ='".$receivedData['kd_brg']."' AND c.kd_lokasi='".$receivedData['kd_lokasi']."' AND c.no_aset ='".$receivedData['no_aset']."'");
+            
+            $this->calculateTotalPenggunaan($receivedData, $query);
+        }
+        
+        
+        function calculateTotalPenggunaan($receivedData,$query)
+        {
+            $totalPenggunaan = (double)0;
+             
             if($receivedData['tipe_angkutan'] == 'darat')
             {
                 
@@ -113,8 +136,6 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
             
             
             echo json_encode($sendData);
-            
-            
         }
 }
 ?>

@@ -1200,7 +1200,7 @@
 
         };
 
-        Grid.selectionAsset = function() {
+        Grid.selectionAsset = function(tipe_angkutan) {
 
             var data = new Ext.create('Ext.data.Store', {
                 fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
@@ -1232,9 +1232,37 @@
                         debugger;
                         if (data !== null)
                         {
+                            
+                            if(tipe_angkutan != null && tipe_angkutan != undefined)
+                            {
+                                 $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanWithoudIdExtAsset',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{tipe_angkutan:tipe_angkutan,kd_brg:data.kd_brg,kd_lokasi:data.kd_lokasi,no_aset:data.no_aset},
+                                    success:function(response, status){
+                                     if(response.status == 'success')
+                                     {
+                                        if(tipe_angkutan == "darat")
+                                        {
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+                                        }
+                                        else if(tipe_angkutan == "udara" || tipe_angkutan == "laut")
+                                        {
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+                                        }
+                                            
+                                         
+                                     }
+
+                                    }
+                                 });
+                            }
                             var temp = Ext.getCmp('form-process');
                             if (temp !== null && temp != undefined)
                             {
+                                
                                 var form = temp.getForm();
                                 form.setValues(data);
                             }

@@ -196,6 +196,12 @@
         
         Reference.Data.unitPengunaan = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
+            data: [{text: 'Meter', value: 1}, {text: 'Kilometer', value: 2}, {text: 'Mil', value: 3},
+                    {text:'Jam Layar', value: 4}, {text:'Jam Terbang', value: 5}]
+        });
+        
+        Reference.Data.unitPengunaanAngkutanDarat = new Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
             data: [{text: 'Meter', value: 1}, {text: 'Kilometer', value: 2}, {text: 'Mil', value: 3}]
         });
         
@@ -939,7 +945,13 @@
             }
             else
             {
-                form.insert(2, Form.Component.pemeliharaan());
+                var tipe_angkutan = null;
+                if(setting.tipe_angkutan != undefined && setting.tipe_angkutan != null)
+                {
+                    tipe_angkutan = setting.tipe_angkutan;
+                }
+                
+                form.insert(2, Form.Component.pemeliharaan(tipe_angkutan));
                 if(setting_grid_pemeliharaan_part != null || setting_grid_pemeliharaan_part != undefined)
                 {
                     form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
@@ -3370,7 +3382,7 @@
                                     fieldLabel: 'Satuan Penggunaan',
                                     name: 'satuan_penggunaan',
                                     allowBlank: false,
-                                    store: Reference.Data.unitPengunaan,
+                                    store: Reference.Data.unitPengunaanAngkutanDarat,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Pilih Satuan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
@@ -5045,9 +5057,10 @@
 
             return component;
         };
+        
 
 
-        Form.Component.pemeliharaan = function() {
+        Form.Component.pemeliharaan = function(tipe_angkutan) {
             var component = [{
                     xtype: 'fieldset',
                     layout: 'column',
@@ -5178,7 +5191,25 @@
                                     valueField: 'year',
                                     displayField: 'year', emptyText: 'Year',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
-                                }]
+                                },
+                                (tipe_angkutan != null)?{
+                                    xtype:'fieldset',
+                                    items:[
+                                        {
+                                            xtype:'label',
+                                            text: 'Status Penggunaan Sampai Saat Ini:',
+                                            
+                                        },
+                                        {
+                                            xtype:'displayfield',
+                                            id:'pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini',
+                                            name:'pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini',
+                                            value:'',
+                                        }
+                                    ]
+                                }:{xtype:'displayfield'}
+                                
+                            ]
                         }, {
                             columnWidth: .33,
                             layout: 'anchor',
