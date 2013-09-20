@@ -123,9 +123,18 @@ LEFT JOIN ref_subsubkel as ref ON master.kode_barang = ref.kd_brg LEFT JOIN ref_
         $data = $this->AllAsset();
         
         $filterComponent = array();
-        $filterComponent['kd_lokasi'] = $kd_lokasi;
-        $filterComponent['kd_brg'] = $kd_brg;
-        $filterComponent['no_aset'] = $no_aset;
+        if($kd_lokasi != '')
+        {
+            $filterComponent['kd_lokasi'] = $kd_lokasi;
+        }
+        if($kd_brg != '')
+        {
+            $filterComponent['kd_brg'] = $kd_brg;
+        }
+        if($no_aset != '')
+        {
+            $filterComponent['no_aset'] = $no_aset;
+        }
         
         
         $filteredData = $this->FilteredArray($data, $filterComponent);
