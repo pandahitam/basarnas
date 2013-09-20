@@ -6,126 +6,50 @@ class MY_Model extends CI_Model{
         var $viewTable;
         var $countTable;
 	var $limit = 100;
-	var $query_semar = null;
         
 	function __construct(){
 		parent::__construct();
 	}
 	
-	function cariAliasTable($query, $fieldname){
-		
-		$table_alisa = "";
-		
-		$explode_char_tbl = explode($fieldname,$query);
-		if(isset($explode_char_tbl[0])){
-			$table_alisa = substr($explode_char_tbl[0], -1).".";
-		}
-		
-		if(strpos($query, $fieldname)==false){
-			$table_alisa = "";
-		}
-			
-		return $table_alisa;
-	}
-	
-	function extractLimitQuery($query){
+	function Get_By_Query($query)
+	{
 		$query_ex = explode("limit", strtolower($query));
 		$query = trim($query_ex[0]);
+		
+		$explode_char_tbl = explode('.ur_upb as nama_unker',$query);
+		$table_alisa = 'c';
+		if(isset($explode_char_tbl[0])){
+			$table_alisa = substr($explode_char_tbl[0], -1);
+		}
 		
 		$limit_num = null;
 		if(isset($query_ex[1])){
 			$limit_num = " LIMIT ".trim($query_ex[1]);
 		}
-		return array('limit_num'=>$limit_num, 'query'=>$query);
-	}
-	
-	function checkingFieldAllowed($property){
-		$status = false;
-		switch($property){
-			case "kd_brg" :
-				$status = true;
-			break;
-		}
-		return $status;
-	}
-	
-	function makeQueryLikeFromFields($query, $likeme){
-		$query_ex = explode("from", strtolower($query));
-		$query = trim($query_ex[0]);
-		
-		$query_ex = explode("select", strtolower($query));
-		if(count($query_ex) > 0){
-			$query_like_or = array();
-			$query = trim($query_ex[1]);
-			$fields = explode(',', $query);
-			foreach($fields as $key => $value){
-				$extrac_aliasn = explode(' as ', trim($value));
-				$query_like_or[] = trim($extrac_aliasn[0])." like '%".$likeme."%'";
-			}
-			return $query_like_or;
-		}else{
-			return false;
-		}
-	}
-	
-	function Get_By_Query($query)
-	{
-		$extra_qr = $this->extractLimitQuery($query);
-		$query = $extra_qr['query'];
-		$limit_num = $extra_qr['limit_num'];
 		
 		$filter = null;
-		$query_pencarian = null;
-                if(isset($_POST['query']))
-                {
-			$query_pencarian = $_POST['query'];
-		}
 		
                 if(isset($_POST['filter']))
                 {
 			$filter = json_decode($_POST['filter']);
 		}
 		
-		$statusx = 0;
-		$statusx_query = 0;
-		
-		if($query_pencarian!=null && strlen($query_pencarian) > 0){
-			$statusx_query = 1;
-		}
-		
+		$statusx = false;
 		if(count($filter) > 0){
 			if(isset($filter[0]->field)){
-				$statusx = 1;
-			}else if($this->checkingFieldAllowed($filter[0]->property)){
-				$statusx = 2;
+				$statusx = true;
 			}
 		}
-		$filter_lainnya = false;
-		if(($statusx == 1 || $statusx == 2) && $statusx_query == 0){
+		if($statusx){
 			$temp_query = " where ";
 			$statusloopex = false;
 			foreach($filter as $key=>$value)
 			{
 				$temp = null;
-				if($statusx == 1){
-					
-					switch($value->field){
-						case "nama_unker" :
-							$table_alisa = $this->cariAliasTable($query, '.ur_upb as nama_unker');
-							$temp = $table_alisa."ur_upb";
-							break;
-						case "kd_brg" :
-							$table_alisa = $this->cariAliasTable($query, '.kd_brg');
-							$temp = $table_alisa."kd_brg";
-							break;
-					}
-				}else if($statusx == 2){
-					switch($value->property){
-						case "kd_brg" :
-							$table_alisa = $this->cariAliasTable($query, '.kd_brg');
-							$temp = $table_alisa."kd_brg";
-							break;
-					}
+				switch($value->field){
+					case "nama_unker" :
+						$temp = $table_alisa.".ur_upb";
+						break;
 				}
 				if($temp!=null){
 					$statusloopex = true;
@@ -133,31 +57,12 @@ class MY_Model extends CI_Model{
 				}
 			}
 			if($statusloopex){
-				$filter_lainnya = true;
-				$query.= $temp_query;
-			}
-		}else if($statusx_query == 1){
-			$temp_query = "";
-			if($filter_lainnya==false){
-				$temp_query = " where ";
-			}else{
-				$temp_query = " or ";
-			}
-			$statusloopex = false;
-			$makeQueryLikeFromFields = $this->makeQueryLikeFromFields($query, $query_pencarian);
-			if(count($makeQueryLikeFromFields) > 0){
-				$statusloopex = true;
-				$temp_query.= implode(" or ", $makeQueryLikeFromFields);
-			}
-			if($statusloopex){
 				$query.= $temp_query;
 			}
 		}
-		$this->query_semar = $query;
 		if($limit_num!=null){
 			$query .= $limit_num;
 		}
-		
 		
 		$r = $this->db->query($query);
 		$data = array();
@@ -222,29 +127,14 @@ class MY_Model extends CI_Model{
 //                
 //                var_dump($this->db->count_all_results("$this->table"));
 //                die;
-		if($this->query_semar!=null){
-			if($this->countTable != null)
-			{
-			    //return $this->db->count_all_results("$this->countTable");
-			    $r_count = $this->db->query($this->query_semar);
-			    return $r_count->num_rows();
-			}
-			else
-			{
-			    //return $this->db->count_all_results("$this->table");
-			    $r_count = $this->db->query($this->query_semar);
-			    return $r_count->num_rows();
-			}
-		}else{
-			if($this->countTable != null)
-			{
-			    return $this->db->count_all_results("$this->countTable");
-			}
-			else
-			{
-			    return $this->db->count_all_results("$this->table");
-			}
-		}
+            if($this->countTable != null)
+            {
+                return $this->db->count_all_results("$this->countTable");
+            }
+            else
+            {
+                return $this->db->count_all_results("$this->table");
+            }
             
             
 		
