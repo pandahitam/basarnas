@@ -1210,8 +1210,9 @@
                 })
             });
 
-            var toolbar = ToolbarGrid.selection(true, data);
+            var toolbar = ToolbarGrid.gridSelectionAsset(true, data);
 
+            
             var _grid = Ext.create('Ext.grid.Panel', {
                 store: data,
                 title: 'SELECT ASSET',
@@ -1229,7 +1230,6 @@
                 listeners: {
                     itemdblclick: function(dataview, record, item, index, e) {
                         var data = record.data;
-                        debugger;
                         if (data !== null)
                         {
                             
@@ -1375,11 +1375,35 @@
             return _grid;
         }
 
-        ToolbarGrid.selection = function(WithLokasi, data) {
-            var cmp = ToolbarGrid.component(WithLokasi, data);
+//        ToolbarGrid.selection = function(WithLokasi, data) {
+//            var cmp = ToolbarGrid.component(WithLokasi, data);
+//
+//            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                items: cmp
+//            });
+//
+//
+//            return toolbar;
+//        };
+//        
+//        ToolbarGrid.selectionWrite = function(WithLokasi, data) {
+//            var cmp = ToolbarGrid.componentWrite(WithLokasi, data);
+//
+//            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                items: cmp
+//            });
+//
+//
+//            return toolbar;
+//        };
+        
+        ToolbarGrid.gridSelectionAsset = function(WithLokasi, data) {
+            var cmp_selection = ToolbarGrid.component(WithLokasi, data);
+            var cmp_write = ToolbarGrid.componentWrite(WithLokasi, data);
 
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
-                items: cmp
+                layout:'column',
+                items: [cmp_selection,cmp_write]
             });
 
 
@@ -1593,6 +1617,51 @@
 
                 component.splice(0, 0, lokasi);
             }
+
+            return component;
+        };
+        
+        
+        ToolbarGrid.componentWrite = function(WithLokasi, data)
+        {
+            
+            var component = [ 
+                    {
+                        xtype:'textfield',
+                        fieldLabel: 'Kode Lokasi',
+                        id:'grid_selection_asset_component_write_kd_lokasi',
+                        name:'kd_lokasi',
+                        
+                    },
+                    {
+                        xtype:'textfield',
+                        fieldLabel: 'Kode Barang',
+                        id:'grid_selection_asset_component_write_kd_brg',
+                        name:'kd_brg',
+                        
+                    },
+                    {
+                        xtype:'numberfield',
+                        fieldLabel: 'No Aset',
+                        id:'grid_selection_asset_component_write_no_aset',
+                        name:'kd_lokasi',
+                        minValue:0,
+                        
+                    }, '->',{
+                    xtype: 'button',
+                    text: 'search',
+                    frame: true,
+                    border: 1,
+                    handler: function() {
+                            data.changeParams({params: {
+                                    write_filter: 1,
+                                    kd_lokasi: Ext.getCmp('grid_selection_asset_component_write_kd_lokasi').value,
+                                    kd_brg: Ext.getCmp('grid_selection_asset_component_write_kd_brg').value,
+                                    no_aset: Ext.getCmp('grid_selection_asset_component_write_no_aset').value,
+                                }});
+                    }
+                }];
+
 
             return component;
         };
