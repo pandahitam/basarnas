@@ -16,7 +16,7 @@ class Pemeliharaan_Darat_Model extends MY_Model{
                             rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert";
 	}
 	
-	function get_AllData($start=null,$limit=null){
+	function get_AllData($start=null,$limit=null, $searchTextFilter = null){
 //		$query = "$this->selectColumn FROM $this->viewTable
 //                        where kd_brg like '30201%' or kd_brg like '30202%'";
 
@@ -25,10 +25,22 @@ class Pemeliharaan_Darat_Model extends MY_Model{
             {
                    $query = "$this->selectColumn FROM view_pemeliharaan_darat
                     LIMIT $start, $limit";
+                   if($searchTextFilter != null)
+                   {
+                       $query = "$this->selectColumn FROM view_pemeliharaan_darat
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        LIMIT $start, $limit";
+                   }
             }
             else
             {
                  $query = "$this->selectColumn FROM view_pemeliharaan_darat";
+                 if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM view_pemeliharaan_darat
+                         where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                         ";
+                    }
             }
 
 		return $this->Get_By_Query($query);	

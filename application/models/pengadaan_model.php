@@ -18,9 +18,30 @@ class Pengadaan_Model extends MY_Model{
 	}
         
 	
-	function get_AllData(){
-		$query = "$this->selectColumn FROM $this->viewTable";
-
+	function get_AllData($start = null, $limit = null, $searchTextFilter = null){
+		
+                
+                if($start !=null && $limit != null)
+                {
+                    $query = "$this->selectColumn FROM $this->viewTable LIMIT $start, $limit";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        LIMIT $start, $limit";
+                    }
+                }
+                else
+                {
+                    $query = "$this->selectColumn FROM $this->viewTable";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        ";
+                    }
+                }
+                
 		return $this->Get_By_Query($query);	
 	}
 	

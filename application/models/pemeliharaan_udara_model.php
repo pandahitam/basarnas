@@ -16,16 +16,28 @@ class Pemeliharaan_Udara_Model extends MY_Model{
                             rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert";
 	}
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
 //		$query = "$this->selectColumn FROM $this->viewTable
 //                        where kd_brg like '30205%'";
                 if($start !=null && $limit != null)
                 {
                     $query = "$this->selectColumn FROM view_pemeliharaan_udara LIMIT $start, $limit";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM view_pemeliharaan_udara
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        LIMIT $start, $limit";
+                    }
                 }
                 else
                 {
                     $query = "$this->selectColumn FROM view_pemeliharaan_udara";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM view_pemeliharaan_udara
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        ";
+                    }
                 }
             	
 

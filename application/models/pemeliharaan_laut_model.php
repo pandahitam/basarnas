@@ -16,17 +16,31 @@ class Pemeliharaan_Laut_Model extends MY_Model{
                             rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert";
 	}
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
 //		$query = "$this->selectColumn FROM $this->viewTable
 //                where kd_brg like '30203%' or kd_brg like '30204%'";
             
             if($start !=null && $limit != null)
             {
-                 $query = "$this->selectColumn FROM view_pemeliharaan_laut LIMIT $start, $limit";
+                 $query = "$this->selectColumn FROM view_pemeliharaan_laut
+                     LIMIT $start, $limit";
+                 
+                 if($searchTextFilter != null)
+                 {
+                     $query = "$this->selectColumn FROM view_pemeliharaan_laut
+                     where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                     LIMIT $start, $limit";
+                 }
             }
             else
             {
                  $query = "$this->selectColumn FROM view_pemeliharaan_laut";
+                 if($searchTextFilter != null)
+                 {
+                     $query = "$this->selectColumn FROM view_pemeliharaan_laut
+                     where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                     ";
+                 }
             }
 
 		return $this->Get_By_Query($query);	

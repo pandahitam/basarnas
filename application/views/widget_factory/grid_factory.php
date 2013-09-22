@@ -106,7 +106,8 @@
                 var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
@@ -213,7 +214,8 @@
               var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
@@ -319,7 +321,8 @@
                 var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
@@ -428,7 +431,8 @@
             var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
                 
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
@@ -535,7 +539,8 @@
                     var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
                 
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
@@ -642,7 +647,8 @@
                     var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
@@ -785,7 +791,8 @@
 var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -887,7 +894,8 @@ var search = [{
             var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -1102,7 +1110,8 @@ var search = [{
             var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
-                    store:setting.dataStore
+                    store:setting.dataStore,
+                    width:180
             }];
             
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -1156,7 +1165,8 @@ var search = [{
             var search = [{
                     xtype:'searchfield',
                     id:setting.search.id,
-                    store:data
+                    store:data,
+                    width:180
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -1212,7 +1222,8 @@ var search = [{
             var search = [{
                     xtype:'searchfield',
                     id:setting.search.id,
-                    store:data
+                    store:data,
+                    width:180
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');

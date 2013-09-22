@@ -16,7 +16,7 @@ class Pendayagunaan_Model extends MY_Model{
                         f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
 	}
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
                 if($start != null && $limit !=null)
                 {
                     $query = "$this->selectColumn
@@ -25,6 +25,16 @@ class Pendayagunaan_Model extends MY_Model{
                         LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                         LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                         LIMIT $start, $limit";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn
+                        FROM $this->table AS t
+                        LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                        LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                        where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter' 
+                        LIMIT $start, $limit";
+                    }
                 }
                 else
                 {
@@ -34,6 +44,16 @@ class Pendayagunaan_Model extends MY_Model{
                         LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                         LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                         ";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn
+                        FROM $this->table AS t
+                        LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                        LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                        where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter' 
+                        ";
+                    }
                 }    
                 
 		return $this->Get_By_Query($query);	

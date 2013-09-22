@@ -12,7 +12,7 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                                         d.nama_unor, t.kode_unor";
                                         }
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
                 
             if($start != null && $limit != null)
             {
@@ -22,6 +22,17 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                             LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LIMIT $start,$limit";
+                
+                if($searchTextFilter !=null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
+                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                            LIMIT $start,$limit";
+                }
 		
             }
             else
@@ -33,6 +44,17 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                             LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             ";
+                
+                if($searchTextFilter !=null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
+                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                            ";
+                }
             }
             
             return $this->Get_By_Query($query);
