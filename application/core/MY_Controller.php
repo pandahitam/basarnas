@@ -11,13 +11,13 @@ class MY_Controller extends CI_Controller{
 //                var_dump(json_decode($_POST['filter']));
 //                die;
             
-		$filters =  null;
+		$searchTextFilter =  null;
                 $start = null;
                 $limit = null;
-                if(isset($_POST['filter']))
+                if(isset($_POST['query']))
                 {
                     //$this->model->get_FilteredData(json_decode($_POST['filter']));
-		    $filters = json_decode($_POST['filter']);
+		    $searchTextFilter = $_POST['query'];
                 }
                 if(isset($_POST['start']) && isset($_POST['limit']))
                 {
@@ -25,7 +25,7 @@ class MY_Controller extends CI_Controller{
                     $limit = $_POST['limit'];
                 }
                 
-		$data = $this->model->get_AllData($start,$limit);
+		$data = $this->model->get_AllData($start,$limit,$searchTextFilter);
                 $total = $this->model->get_CountData();
 //                $countData = $this->model->get_AllData();              
 //                $total = count($countData);

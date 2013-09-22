@@ -1419,6 +1419,102 @@
             return _form;
         };
         
+        
+        Form.assetBangunanDanTanah = function(url, data, edit, hasTabs, storeRiwayatPajak) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                
+                                form.submit({
+                                    success: function(response) {
+                                        debugger;
+                                        storeRiwayatPajak.sync();
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+                                        if (!edit)
+                                        {
+                                            Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
         Form.asset = function(url, data, edit, hasTabs) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -1487,6 +1583,7 @@
                             
                             if (form.isValid())
                             {
+                                
                                 form.submit({
                                     success: function() {
                                         data.load();
@@ -1666,23 +1763,11 @@
                             
                             if (form.isValid())
                             {
-                                form.submit({
-                                    success: function() {
-                                        
-                                        data.load();
-                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-//                                        if (!edit)
-//                                        {
-                                            if (Modal.assetSecondaryWindow.isVisible(true))
-                                            {
-                                                Modal.assetSecondaryWindow.close();
-                                            }
-//                                        }
-                                    },
-                                    failure: function() {
-                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
-                                    }
-                                });
+                                var form_values = form.getValues();
+                                data.add(form_values);
+                                Modal.assetSecondaryWindow.close();
+                                
+
                             }
                         }
                     }]// BUTTONS END
@@ -3692,17 +3777,33 @@
             return component;
         };
         
+//        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+//            var component = {
+//                xtype: 'fieldset',
+//                layout:'anchor',
+//                height: (edit == true)?325:150,
+//                anchor: '100%',
+//                title: 'Riwayat Pajak',
+//                border: false,
+//                frame: true,
+//                defaultType: 'container',
+//                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+//            };
+//
+//            return component;
+//        };
+        
         Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: (edit == true)?325:150,
+                height: 325,
                 anchor: '100%',
                 title: 'Riwayat Pajak',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}]
             };
 
             return component;

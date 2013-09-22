@@ -14,7 +14,7 @@ class Asset_Luar_Model extends MY_Model{
                                         ";
 	}
 	
-	function get_AllData($start=null,$limit=null){
+	function get_AllData($start=null,$limit=null, $searchTextFilter = null){
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn
@@ -25,6 +25,19 @@ class Asset_Luar_Model extends MY_Model{
                         LEFT JOIN ref_subsubkel as e ON t.kd_brg = e.kd_brg
                         LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON a.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                         LIMIT $start, $limit";
+                
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                        FROM $this->table as t 
+                        LEFT JOIN $this->extTable as a ON t.kd_lokasi = a.kd_lokasi AND t.kd_brg = a.kd_brg AND t.no_aset = a.no_aset
+                        LEFT JOIN ref_unker AS b ON t.kd_lokasi = b.kdlok
+                        LEFT JOIN ref_unor AS c ON a.kode_unor = c.kode_unor
+                        LEFT JOIN ref_subsubkel as e ON t.kd_brg = e.kd_brg
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON a.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                        where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                        LIMIT $start, $limit";
+                }
             }
             else
             {
@@ -36,6 +49,19 @@ class Asset_Luar_Model extends MY_Model{
                         LEFT JOIN ref_subsubkel as e ON t.kd_brg = e.kd_brg
                         LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON a.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                         ";
+                
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                        FROM $this->table as t 
+                        LEFT JOIN $this->extTable as a ON t.kd_lokasi = a.kd_lokasi AND t.kd_brg = a.kd_brg AND t.no_aset = a.no_aset
+                        LEFT JOIN ref_unker AS b ON t.kd_lokasi = b.kdlok
+                        LEFT JOIN ref_unor AS c ON a.kode_unor = c.kode_unor
+                        LEFT JOIN ref_subsubkel as e ON t.kd_brg = e.kd_brg
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON a.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                         where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                        ";
+                }
             }
                 
                 return $this->Get_By_Query($query);	

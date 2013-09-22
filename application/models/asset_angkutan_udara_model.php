@@ -34,11 +34,17 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             ";
 	}
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter=null){
                 
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn FROM view_asset_angkutan_udara LIMIT $start,$limit";
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn FROM view_asset_angkutan_udara 
+                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                                LIMIT $start,$limit";
+                }
 //                $query = "$this->selectColumn
 //                            FROM $this->table AS t
 //                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
@@ -63,6 +69,12 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
 //                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
 //                            where t.kd_brg like '30205%'
 //                            ";
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn FROM view_asset_angkutan_udara 
+                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                               ";
+                }
             }
             
             return $this->Get_By_Query($query);

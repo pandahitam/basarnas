@@ -38,11 +38,17 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
                             ";
 	}
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
                 
             if($start != null && $limit != null)
             {
                   $query = "$this->selectColumn from view_asset_angkutan_laut LIMIT $start, $limit";
+                  if($searchTextFilter != null)
+                  {
+                      $query = "$this->selectColumn from view_asset_angkutan_laut 
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                LIMIT $start, $limit";
+                  }
 //                $query = "$this->selectColumn
 //                            FROM $this->table AS t
 //                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
@@ -57,6 +63,12 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
             else
             {
                   $query = "$this->selectColumn from view_asset_angkutan_laut";
+                  if($searchTextFilter != null)
+                  {
+                      $query = "$this->selectColumn from view_asset_angkutan_laut 
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                ";
+                  }
 //                $query = "$this->selectColumn
 //                            FROM $this->table AS t
 //                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset

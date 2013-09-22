@@ -476,7 +476,7 @@
                             'afterrender': {
                                 fn: function()
                                 {
-                                    if(defaultValGol != null || defaultValGol != undefined)
+                                    if(defaultValGol != null && defaultValGol != undefined)
                                     {
                                         this.setValue(defaultValGol);
                                     }
@@ -512,7 +512,7 @@
                         text: 'Bidang',
                         height: 30
                     }, {
-                        readOnly:(defaultValBid !=  null || defaultValBid != undefined)?true:false,
+                        readOnly:(defaultValBid !=  null && defaultValBid != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
                         name: 'aset-bidang'+ id,
@@ -532,7 +532,7 @@
                         'afterrender': {
                              fn: function()
                                 {
-                                    if(defaultValBid != null || defaultValBid != undefined)
+                                    if(defaultValBid != null && defaultValBid != undefined)
                                     {
                                         this.setValue(defaultValBid);
                                     }
@@ -570,7 +570,7 @@
                         text: 'Kelompok',
                         height: 30
                     }, {
-                        readOnly:(defaultValGol !=  null || defaultValGol != undefined)?true:false,
+                        readOnly:(defaultValKel !=  null && defaultValKel != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Kelompok',
                         name: 'aset-kelompok'+ id,
@@ -590,7 +590,7 @@
                             'afterrender': {
                                 fn: function()
                                    {
-                                       if(defaultValKel != null || defaultValKel != undefined)
+                                       if(defaultValKel != null && defaultValKel != undefined)
                                        {
                                            this.setValue(defaultValKel);
                                        }
@@ -854,7 +854,7 @@
             return panel;
         };
         
-        Region.filterPanelAsetNoKlasifikasi = function(data,id,defaultValGol,defaultValBid) {
+        Region.filterPanelAsetNoKlasifikasi = function(data,id,defaultValGol,defaultValBid, defaultValKel) {
             var panel = {
                 region: 'west',
                 title: 'Filter',
@@ -874,7 +874,7 @@
                         text: 'Golongan',
                         height: 30
                     }, {
-                        readOnly:(defaultValGol !=  null || defaultValGol != undefined)?true:false,
+                        readOnly:(defaultValGol !=  null && defaultValGol != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Golongan',
                         name: 'aset-golongan' + id,
@@ -892,7 +892,7 @@
                             'afterrender': {
                                 fn: function()
                                 {
-                                    if(defaultValGol != null || defaultValGol != undefined)
+                                    if(defaultValGol != null && defaultValGol != undefined)
                                     {
                                         this.setValue(defaultValGol);
                                     }
@@ -928,7 +928,7 @@
                         text: 'Bidang',
                         height: 30
                     }, {
-                        readOnly:(defaultValBid !=  null || defaultValBid != undefined)?true:false,
+                        readOnly:(defaultValBid !=  null && defaultValBid != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
                         name: 'aset-bidang'+ id,
@@ -948,7 +948,7 @@
                         'afterrender': {
                              fn: function()
                                 {
-                                    if(defaultValBid != null || defaultValBid != undefined)
+                                    if(defaultValBid != null && defaultValBid != undefined)
                                     {
                                         this.setValue(defaultValBid);
                                     }
@@ -986,6 +986,7 @@
                         text: 'Kelompok',
                         height: 30
                     }, {
+                        readOnly:(defaultValKel !=  null && defaultValKel != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Kelompok',
                         name: 'aset-kelompok'+ id,

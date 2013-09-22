@@ -83,7 +83,9 @@ class asset_bangunan extends MY_Controller {
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
                 
-		$this->modifyData($dataSimak,$dataExt);
+		$id = $this->modifyData($dataSimak,$dataExt);
+                
+                return 1;
 	}
 	
 	function deleteBangunan()
@@ -108,6 +110,8 @@ class asset_bangunan extends MY_Controller {
         
         function modifyRiwayatPajak()
         {
+            var_dump($_POST);
+            die;
             $dataRiwayatPajak = array();
             $dataRiwayatPajakFields = array(
                 'id','id_ext_asset','tahun_pajak','tanggal_pembayaran','jumlah_setoran','file_setoran','keterangan'

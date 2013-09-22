@@ -100,9 +100,14 @@
                     
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+                var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -202,9 +207,14 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+              var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -303,9 +313,14 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+                var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -406,9 +421,16 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
+                
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -506,9 +528,16 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+
+                    var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
+                
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -607,9 +636,14 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+                    var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -745,9 +779,14 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-            });
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
+var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -841,9 +880,15 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-            });
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
+            
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -1050,10 +1095,16 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-            });
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
 
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore
+            }];
+            
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
@@ -1099,12 +1150,14 @@
             }
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
-                ftype: 'filters', autoReload: true, local: false, encode: true
+                ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: setting.search.id, store: data, width: 180
-            });
+            var search = [{
+                    xtype:'searchfield',
+                    id:setting.search.id,
+                    store:data
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -1156,9 +1209,11 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: setting.search.id, store: data, width: 180
-            });
+            var search = [{
+                    xtype:'searchfield',
+                    id:setting.search.id,
+                    store:data
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
