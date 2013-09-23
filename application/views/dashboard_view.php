@@ -932,7 +932,9 @@
 					Ext.getCmp('Tab_PA').setActiveTab(tab_id);
 					Ext.getStore(dataStoreId).getProxy().extraParams = { 'searchUnker': searchValue }; 
 					Ext.getCmp('layout-body').body.unmask();
+					Ext.getStore(dataStoreId).load()
 				}else{
+					Ext.getBody().mask('Loading...');
 					Ext.Ajax.timeout = Time_Out;
 					Ext.Ajax.request({
 					url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
@@ -943,8 +945,12 @@
 						aScript.text = jsonData; 
 						aHeadNode.appendChild(aScript);
 						if(new_tabpanel_Asset != "GAGAL"){
-							Ext.getCmp('Tab_PA').add(new_tabpanel_Asset).show();
-							Ext.getStore(dataStoreId).getProxy().extraParams = { 'searchUnker': searchValue };
+							setTimeout(function(){
+								Ext.getCmp('Tab_PA').add(new_tabpanel_Asset).show();
+								Ext.getStore(dataStoreId).getProxy().extraParams = { 'searchUnker': searchValue };
+								Ext.getStore(dataStoreId).load()
+								Ext.getBody().unmask();
+							}, 1000);
 						}else{
 							Ext.MessageBox.show({title:'Peringatan !', msg:'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});    			
 						}
