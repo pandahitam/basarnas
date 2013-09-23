@@ -28,7 +28,7 @@ class Global_Map_Model extends CI_Model {
 		$images = Array('sp_rescueboat', 'sp_rigidinflatableboat', 'sp_rubberboat', 'sp_rescuecartype1', 'sp_rescuecartype2', 'sp_truckpersonil', 'sp_rescuetruck', 'sp_ambulance', 'sp_atv', 'sp_sepedamotor');		
 		$saranas = Array('Rescue Boat Kl. II/III/IV', 'Rigid Inflatable Boat', 'Rubber Boat', 'Rescue car Tipe 1', 'Rescue car Tipe 2', 'Truck Personil', 'Rescue Truck', 'Ambulance', 'ATV', 'Sepeda Motor');
 		$standars = Array('Dermaga kantor SAR <br />dan Pos SAR', '- 1 Unit di Kantor SAR <br />- 1 Unit di Pos SAR', '4 unit Kantor SAR <br />dan 3 Unit diPos SAR', '1 Unit di Kantor SAR <br />dan Tiap Pos SAR', '2 Unit tiap Kantor SAR <br />dan Pos SAR', '2 Unit Kantor SAR <br />dan 1 Unit di Pos SAR', '1 Unit di Kantor SAR', '- 1 Unit di Kantor SAR <br />- 1 Unit di Pos SAR', 'Kantor SAR', '- 5 Unit Kantor SAR <br />- 3 Unit di Pos SAR');
-		$kodes = Array('020200', '020400', '020500', '010201', '010202', '010204', '010100', '010205', '010204', '010206');
+		$kodes = Array('020200', '020400', '020500', '010201', '010202', '010204', '010100', '010205', '010203', '010206');
 		$sql = '';
 		for($i=0; $i<10; $i++)
 		{
