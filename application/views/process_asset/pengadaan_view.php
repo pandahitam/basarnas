@@ -42,7 +42,8 @@ Pengadaan.Form.create = function(data,edit){
                 fn : function() {
                     if (Modal.assetSelection.items.length === 0)
                     {
-                        Modal.assetSelection.add(Grid.selectionReference());
+                        //Modal.assetSelection.add(Grid.selectionReference());
+						Modal.assetSelection.add(Grid.selectionAsset());
                         Modal.assetSelection.show();
                     }
                     else
