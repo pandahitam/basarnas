@@ -112,17 +112,11 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
-		$q = "$this->selectColumn
-                        FROM $this->table AS t
-                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
-                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LEFT JOIN ext_asset_angkutan_darat AS g ON b.id = g.id_ext_angkutan
+		
+		$q = "$this->selectColumn from view_asset_angkutan_darat
                             
 									 
-								WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'
+								WHERE kd_lokasi = '".$idx[0]."' and kd_brg = '".$idx[1]."' and no_aset = '".$idx[2]."'
                         ";
 		$query = $this->db->query($q);
 		if ($query->num_rows() > 0) {
@@ -130,9 +124,7 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
 				$dataasset[] = $row;
 			}
 		}
-	
-		$data = array('dataasset' => $dataasset );
-		return $data;
+		return $dataasset;
 	}
 }
 ?>

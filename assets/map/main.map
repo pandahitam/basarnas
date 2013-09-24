@@ -44,7 +44,7 @@ MAP
 	WEB
 		TEMPLATE "templates/browse.html"
 		EMPTY "/basarnas/assets/map/templates/empty.html"
-		IMAGEPATH "C:/xampp/htdocs/basarnas/assets/map/tmp/"
+		IMAGEPATH "D:/xampp/htdocs/basarnas/assets/map/tmp/"
 		IMAGEURL "/basarnas/assets/map/tmp/"
 	END
 

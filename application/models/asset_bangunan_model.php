@@ -108,10 +108,18 @@ class Asset_Bangunan_Model extends MY_Model{
             }
         }
 	
+	function getRiwayatPajak($id_ext_asset)
+	{
+			$query = "select id,id_ext_asset,tahun_pajak,tanggal_pembayaran,jumlah_setoran,file_setoran,keterangan 
+					FROM ext_asset_bangunan_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
+			return $this->Get_By_Query($query);
+	}
+	
 	function get_SelectedDataPrint($ids){
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
+		
 		$q = "$this->selectColumn
                         FROM $this->table AS t 
                         LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
@@ -128,9 +136,7 @@ class Asset_Bangunan_Model extends MY_Model{
 				$dataasset[] = $row;
 			}
 		}
-	
-		$data = array('dataasset' => $dataasset );
-		return $data;
+		return $dataasset;
 	}
 }
 ?>
