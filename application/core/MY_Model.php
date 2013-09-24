@@ -71,100 +71,102 @@ class MY_Model extends CI_Model{
 	function Get_By_Query($query)
 	{
 		$extra_qr = $this->extractLimitQuery($query);
-		$query = $extra_qr['query'];
-		$limit_num = $extra_qr['limit_num'];
-		
-		$filter = null;
-		$query_pencarian = null;
-                if(isset($_POST['query']))
-                {
-			$query_pencarian = $_POST['query'];
-		}else if(isset($_POST['searchUnker']))
-                {
-			$query_pencarian = $_POST['searchUnker'];
-		}
-		
-                if(isset($_POST['filter']))
-                {
-			$filter = json_decode($_POST['filter']);
-		}
-		
-		$statusx = 0;
-		$statusx_query = 0;
-		
-		if($query_pencarian!=null && strlen($query_pencarian) > 0){
-			$statusx_query = 1;
-		}
-		
-		if(count($filter) > 0){
-			if(isset($filter[0]->field)){
-				$statusx = 1;
-			}else if($this->checkingFieldAllowed($filter[0]->property)){
-				$statusx = 2;
-			}
-		}
-		$filter_lainnya = false;
-		if(($statusx == 1 || $statusx == 2) && $statusx_query == 0){
-			$temp_query = " where ";
-			$statusloopex = false;
-			foreach($filter as $key=>$value)
-			{
-				$temp = null;
-				if($statusx == 1){
-					
-					switch($value->field){
-						case "nama_unker" :
-							$table_alisa = $this->cariAliasTable($query, '.ur_upb as nama_unker');
-							$temp = $table_alisa."ur_upb";
-							break;
-						case "kd_brg" :
-							$table_alisa = $this->cariAliasTable($query, '.kd_brg');
-							$temp = $table_alisa."kd_brg";
-							break;
-					}
-				}else if($statusx == 2){
-					switch($value->property){
-						case "kd_brg" :
-							$table_alisa = $this->cariAliasTable($query, '.kd_brg');
-							$temp = $table_alisa."kd_brg";
-							break;
-					}
-				}
-				if($temp!=null){
-					$statusloopex = true;
-					$temp_query.=$temp." like '%".$value->value."%'";
-				}
-			}
-			if($statusloopex){
-				$filter_lainnya = true;
-				$query.= $temp_query;
-			}
-		}else if($statusx_query == 1){
-			$temp_query = "";
-			if($filter_lainnya==false){
-				$temp_query = " where ";
-			}else{
-				$temp_query = " or ";
-			}
-			$statusloopex = false;
-			$makeQueryLikeFromFields = $this->makeQueryLikeFromFields($query, $query_pencarian);
-			if(count($makeQueryLikeFromFields) > 0){
-				$statusloopex = true;
-				$temp_query.= implode(" or ", $makeQueryLikeFromFields);
-			}
-			if($statusloopex){
-				$query.= $temp_query;
-			}
-		}
-		if(!$this->blackListController()){
-			$this->query_semar = $query;
-		}
-		if($limit_num!=null){
-			$query .= $limit_num;
-		}
+//		$query = $extra_qr['query'];
+//		$limit_num = $extra_qr['limit_num'];
+//		
+//		$filter = null;
+//		$query_pencarian = null;
+//                if(isset($_POST['query']))
+//                {
+//			$query_pencarian = $_POST['query'];
+//		}else if(isset($_POST['searchUnker']))
+//                {
+//			$query_pencarian = $_POST['searchUnker'];
+//		}
+//		
+//                if(isset($_POST['filter']))
+//                {
+//			$filter = json_decode($_POST['filter']);
+//		}
+//		
+//		$statusx = 0;
+//		$statusx_query = 0;
+//		
+//		if($query_pencarian!=null && strlen($query_pencarian) > 0){
+//			$statusx_query = 1;
+//		}
+//		
+//		if(count($filter) > 0){
+//			if(isset($filter[0]->field)){
+//				$statusx = 1;
+//			}else if($this->checkingFieldAllowed($filter[0]->property)){
+//				$statusx = 2;
+//			}
+//		}
+//		$filter_lainnya = false;
+//		if(($statusx == 1 || $statusx == 2) && $statusx_query == 0){
+//			$temp_query = " where ";
+//			$statusloopex = false;
+//			foreach($filter as $key=>$value)
+//			{
+//				$temp = null;
+//				if($statusx == 1){
+//					
+//					switch($value->field){
+//						case "nama_unker" :
+//							$table_alisa = $this->cariAliasTable($query, '.ur_upb as nama_unker');
+//							$temp = $table_alisa."ur_upb";
+//							break;
+//						case "kd_brg" :
+//							$table_alisa = $this->cariAliasTable($query, '.kd_brg');
+//							$temp = $table_alisa."kd_brg";
+//							break;
+//					}
+//				}else if($statusx == 2){
+//					switch($value->property){
+//						case "kd_brg" :
+//							$table_alisa = $this->cariAliasTable($query, '.kd_brg');
+//							$temp = $table_alisa."kd_brg";
+//							break;
+//					}
+//				}
+//				if($temp!=null){
+//					$statusloopex = true;
+//					$temp_query.=$temp." like '%".$value->value."%'";
+//				}
+//			}
+//			if($statusloopex){
+//				$filter_lainnya = true;
+//				$query.= $temp_query;
+//			}
+//		}else if($statusx_query == 1){
+//			$temp_query = "";
+//			if($filter_lainnya==false){
+////				$temp_query = " where ";
+//                                $temp_query = " or ";
+//			}else{
+//				$temp_query = " or ";
+//			}
+//			$statusloopex = false;
+//			$makeQueryLikeFromFields = $this->makeQueryLikeFromFields($query, $query_pencarian);
+//			if(count($makeQueryLikeFromFields) > 0){
+//				$statusloopex = true;
+//				$temp_query.= implode(" or ", $makeQueryLikeFromFields);
+//			}
+//			if($statusloopex){
+//				$query.= $temp_query;
+//			}
+//		}
+//		if(!$this->blackListController()){
+//			$this->query_semar = $query;
+//		}
+//		if($limit_num!=null){
+//			$query .= $limit_num;
+//		}
 		
 		
 		$r = $this->db->query($query);
+                $count = $this->getQueryCountWithoutLimit($extra_qr['query']);
 		$data = array();
 		if ($r->num_rows() > 0)
 		{
@@ -176,8 +178,32 @@ class MY_Model extends CI_Model{
     
     
 		$r->free_result();
-		return $data;
+                
+                $returnedData = array(
+                    'data'=>$data,
+                    'count'=>$count,
+                );
+		return $returnedData;
+                
+               
 	}
+        
+        function getQueryCountWithoutLimit($noLimitQuery)
+        {
+            $temp = explode('from',$noLimitQuery,2);
+            $temp2 = explode('where',$temp[1],2);
+            if(isset($temp2[1]))
+            {
+                $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
+            }
+            else
+            {
+                $query = "select count(*) as total from $this->table";
+            }
+            
+            $count = $this->db->query($query);
+            return $count->row()->total;
+        }
 	
 	/**
 	* @param int $id

@@ -25,12 +25,12 @@ class MY_Controller extends CI_Controller{
                     $limit = $_POST['limit'];
                 }
                 
-		$data = $this->model->get_AllData($start,$limit,$searchTextFilter);
-                $total = $this->model->get_CountData();
+		$queryData = $this->model->get_AllData($start,$limit,$searchTextFilter);
+//                $total = $this->model->get_CountData();
 //                $countData = $this->model->get_AllData();              
 //                $total = count($countData);
-                $dataSend['total'] = $total;
-		$dataSend['results'] = $data;
+                $dataSend['total'] = $queryData['count'];
+		$dataSend['results'] = $queryData['data'];
 		echo json_encode($dataSend);
 	}
 	
