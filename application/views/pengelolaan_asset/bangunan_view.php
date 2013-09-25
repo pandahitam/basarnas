@@ -54,7 +54,6 @@
                     root: 'results', totalProperty: 'total', idProperty: 'id'}),
                 extraParams:{open:'0'}
             }),
-            autoLoad: false,
         });
 
 
@@ -79,6 +78,7 @@
             id: 'Proxy_Bangunan',
             url: Bangunan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Bangunan.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Bangunan = request.operation.params;
                 

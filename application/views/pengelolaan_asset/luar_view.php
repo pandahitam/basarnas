@@ -66,6 +66,7 @@
             id: 'Proxy_Luar',
             url: Luar.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Luar.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Luar = request.operation.params;
                 

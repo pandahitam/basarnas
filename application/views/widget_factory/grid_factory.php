@@ -35,6 +35,94 @@
         };
         
         
+        Grid.inventoryPerlengkapan = function(setting)
+        {
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_inventory', dataIndex: 'id_inventory', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'no_aset', dataIndex: 'no_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Status Barang', dataIndex: 'status_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty', dataIndex: 'qty', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Asal Barang', dataIndex: 'asal_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            
+                        ]
+                    },
+                    search: {
+                        id: 'search_inventory_perlengkapan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_inventory_perlengkapan',
+                        add: {
+                            id: 'button_add_inventory_perlengkapan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_inventory_perlengkapan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_inventory_perlengkapan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+
+              var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
+        
+        
         
         Grid.detailPenggunaanAngkutan = function(setting,edit)
         {
@@ -1159,7 +1247,8 @@ var search = [{
             }
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
-                ftype: 'filters', autoReload: true, local: true, encode: true
+                ftype: 'filters', autoReload: true, local: false, encode: true, paramPrefix:'gridFilter',
+                updateBuffer: 2000,
             });
 
             var search = [{
@@ -1189,12 +1278,14 @@ var search = [{
                         text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '->', 
+                            {
+                        text: 'Clear Grid Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
-                            _grid.filters.clearFilters();
+                            Ext.getCmp(setting.grid.id).filters.clearFilters();
                         }
-                    }, search
+                    }, 
+                            search
                 ]
             });
 

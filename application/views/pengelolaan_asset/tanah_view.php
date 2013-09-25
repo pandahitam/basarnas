@@ -65,6 +65,7 @@
             id: 'Proxy_Tanah',
             url: Tanah.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Tanah.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_TB = request.operation.params;
                 

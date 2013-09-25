@@ -64,6 +64,7 @@
             id: 'Proxy_Senjata',
             url: Senjata.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Senjata.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Senjata = request.operation.params;
                 

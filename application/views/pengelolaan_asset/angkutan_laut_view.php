@@ -87,6 +87,7 @@
             id: 'Proxy_AngkutanLaut',
             url: AngkutanLaut.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: AngkutanLaut.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 //Params_M_AngkutanLaut = request.operation.params;
                 

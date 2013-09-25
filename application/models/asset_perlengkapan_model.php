@@ -5,65 +5,75 @@ class Asset_Perlengkapan_Model extends MY_Model{
 		parent::__construct();
 		$this->table = 'asset_perlengkapan';
 //                $this->extTable = "ext_asset_perlengkapan";
+                $this->viewTable = 'view_asset_perlengkapan';
                 
-                $this->selectColumn = "SELECT t.id,t.warehouse_id,t.ruang_id,t.rak_id,
-                            t.serial_number, t.part_number,t.kd_brg,t.kd_lokasi,
-                            t.no_aset,t.kondisi, t.kuantitas, t.dari,
-                            t.tanggal_perolehan,t.no_dana,t.penggunaan_waktu,
-                            t.penggunaan_freq,t.unit_waktu,t.unit_freq,t.disimpan, 
-                            t.dihapus,t.image_url,t.document_url,t.kode_unor
-                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
-                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
+//                $this->selectColumn = "SELECT t.id,t.warehouse_id,t.ruang_id,t.rak_id,
+//                            t.serial_number, t.part_number,t.kd_brg,t.kd_lokasi,
+//                            t.no_aset,t.kondisi, t.kuantitas, t.dari,
+//                            t.tanggal_perolehan,t.no_dana,t.penggunaan_waktu,
+//                            t.penggunaan_freq,t.unit_waktu,t.unit_freq,t.disimpan, 
+//                            t.dihapus,t.image_url,t.document_url,t.kode_unor
+//                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
+//                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
+                
+                $this->selectColumn = "SELECT id,warehouse_id,ruang_id,rak_id,
+                            serial_number, part_number,kd_brg,kd_lokasi,
+                            no_aset,kondisi, kuantitas, dari,
+                            tanggal_perolehan,no_dana,penggunaan_waktu,
+                            penggunaan_freq,unit_waktu,unit_freq,disimpan, 
+                            dihapus,image_url,document_url,kode_unor
+                            ,nama_klasifikasi_aset, kd_klasifikasi_aset,
+                            kd_lvl1,kd_lvl2,kd_lvl3";
                             }
 	
-	function get_AllData($start=null,$limit=null, $searchTextFilter = null){
-//		$query = "$this->selectColumn
-//                            FROM $this->table AS t
-//                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+	function get_AllData($start=null,$limit=null, $searchTextFilter = null, $gridFilter = null){
+////		$query = "$this->selectColumn
+////                            FROM $this->table AS t
+////                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+////                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
+////                            LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
+////                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+////                            LIMIT 0,$this->limit";
+//            if($start != null && $limit != null)
+//            {
+//                $query = "$this->selectColumn
+//                            FROM $this->table as t
 //                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-//                            LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
-//                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-//                            LIMIT 0,$this->limit";
-            if($start != null && $limit != null)
-            {
-                $query = "$this->selectColumn
-                            FROM $this->table as t
-                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            LIMIT $start,$limit";
-                
-                if($searchTextFilter != null)
-                {
-                    $query = "$this->selectColumn
-                            FROM $this->table as t
-                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
-                            LIMIT $start,$limit";
-                }
-            }
-            else
-            {
-                $query = "$this->selectColumn
-                            FROM $this->table as t
-                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                            ";
-                
-                if($searchTextFilter != null)
-                {
-                    $query = "$this->selectColumn
-                            FROM $this->table as t
-                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
-                            ";
-                }
-                
-            }
-            
-
-		return $this->Get_By_Query($query);	
+//                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+//                            LIMIT $start,$limit";
+//                
+//                if($searchTextFilter != null)
+//                {
+//                    $query = "$this->selectColumn
+//                            FROM $this->table as t
+//                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
+//                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+//                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+//                            LIMIT $start,$limit";
+//                }
+//            }
+//            else
+//            {
+//                $query = "$this->selectColumn
+//                            FROM $this->table as t
+//                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
+//                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+//                            ";
+//                
+//                if($searchTextFilter != null)
+//                {
+//                    $query = "$this->selectColumn
+//                            FROM $this->table as t
+//                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
+//                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+//                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+//                            ";
+//                }
+//                
+//            }
+//            
+//
+//		return $this->Get_By_Query($query);	
 	}
 	
         function deleteData($id)

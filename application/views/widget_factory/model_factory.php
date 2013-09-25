@@ -4,6 +4,14 @@
 <script>
 ////// Model In View
 
+Ext.define('MInventoryPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_inventory', 
+        'kd_brg', 'no_aset', 
+        'part_number','serial_number',
+        'status_barang','qty','asal_barang'
+    ]
+});
+
 Ext.define('MDetailPenggunaanAngkutan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'tanggal', 'jumlah_penggunaan', 
