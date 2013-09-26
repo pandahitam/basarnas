@@ -352,53 +352,29 @@ function applyZoomAll() {
    var sAssets = Ext.create('Ext.data.Store', {
         storeId: 'sAssets',
         model: 'mAsset',
-        //groupField: 'asset',
-        sorters: ['asset','criteria'],
+        //sorters: ['asset','criteria'],
         data: []
-		/*
-		,
-        listeners: {
-            groupchange: function(store, groupers) {
-                var grouped = restaurants.isGrouped(),
-                    groupBy = groupers.items[0] ? groupers.items[0].property : '',
-                    toggleMenuItems, len, i = 0;
-
-                // Clear grouping button only valid if the store is grouped
-                grid.down('[text=Clear Grouping]').setDisabled(!grouped);
-                
-                // Sync state of group toggle checkboxes
-                if (grouped && groupBy === 'cuisine') {
-                    toggleMenuItems = grid.down('button[text=Toggle groups...]').menu.items.items;
-                    for (len = toggleMenuItems.length; i < len; i++) {
-                        toggleMenuItems[i].setChecked(groupingFeature.isExpanded(toggleMenuItems[i].text));
-                    }
-                    grid.down('[text=Toggle groups...]').enable();
-                } else {
-                    grid.down('[text=Toggle groups...]').disable();
-                }
-            }
-        }
-		*/
     });
 
     var propsGrid = Ext.create('Ext.grid.Panel', {
         renderTo: Ext.getBody(),
 		id: 'idPropsGrid',
-        //collapsible: true,
-        //iconCls: 'icon-grid',
-        //frame: true,
+		padding: '5 0 0 0',
         store: sAssets,
 		width: '100%',
-		height: 225,
-        title: '-',
-        //resizable: true,
-        //features: [groupingFeature],
-        /*
-		tbar: ['->', {
-            text: 'Toggle groups...',
-            menu: toggleMenu
-        }],
-		*/
+		height: 290,
+        title: 'Kansar Info',
+		listeners: {
+		itemdblclick: function(view, record, item, index, e) {
+			if(record.get('asset')=='Tanah') Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', sLocationCode);
+			else if(record.get('asset')=='Bangunan') Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', sLocationCode);
+			else if(record.get('asset')=='Alat Besar') Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', sLocationCode);
+			else if(record.get('asset')=='Angkutan') Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', sLocationCode);
+			else if(record.get('asset')=='Perairan') Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', sLocationCode);
+			else if(record.get('asset')=='Senjata') Load_MapSearch('senjata_panel', BASE_URL + 'asset_senjata/senjata','DataSenjata', sLocationCode);
+			else if(record.get('asset')=='Ruang') Load_MapSearch('ruang_panel', BASE_URL + 'asset_ruang/ruang','DataRuang', sLocationCode);
+			else if(record.get('asset')=='Luar') Load_MapSearch('luar_panel', BASE_URL + 'asset_luar/luar','DataLuar', sLocationCode);
+		}},
         columns: [{
             text: 'Asset',
             flex: 1,
@@ -606,53 +582,6 @@ var map_option_layer = new Ext.create('Ext.form.Panel', {
     ]
 });
 
-var map_item_query = new Ext.create('Ext.form.Panel', {
-    title: 'Kansar Info',
-    bodyPadding: 10,
-    padding: '5 0 0 0',
-    width: '100%',
-	height: '100%',
-    renderTo: Ext.getBody(),
-    items: [
-		{
-			xtype: 'button', 
-			name: 'map_show_tanah', 
-			id: 'map_show_tanah', 
-			text: 'Tanah',
-			listeners: { click : function() { Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', sLocationCode); } }
-		},
-		{
-			xtype: 'button', 
-			name: 'map_show_bangunan', 
-			id: 'map_show_bangunan', 
-			text: 'Bangunan',
-			listeners: { click : function() { Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', sLocationCode); } }
-		},
-		{
-			xtype: 'button', 
-			name: 'map_show_alatbesar', 
-			id: 'map_show_alatbesar', 
-			text: 'Alat Besar',
-			listeners: { click : function() { Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', sLocationCode); } }
-		},
-		{
-			xtype: 'button', 
-			name: 'map_show_angkutan', 
-			id: 'map_show_angkutan', 
-			text: 'Angkutan',
-			listeners: { click : function() { Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', sLocationCode); } }
-		},
-		{
-			xtype: 'button', 
-			name: 'map_show_perairan', 
-			id: 'map_show_perairan', 
-			text: 'Perairan',
-			listeners: { click : function() { Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', sLocationCode); } }
-		},
-		propsGrid
-    ]
-});
-
 var map_reference = new Ext.create('Ext.form.Panel', {
     title: 'Map Reference',
 	id: 'id_map_reference',
@@ -676,7 +605,7 @@ var map_navigator_layout = new Ext.create('Ext.panel.Panel', {
 		},
 		{
 			id: 'East_map_navigator', title: 'Map Reference and Kansar Info', region: 'east', width: 360, minWidth: 360, split: true, collapsible: true, collapseMode: 'mini', bodyStyle: 'padding: 5px',
-			items: [map_reference, map_item_query]
+			items: [map_reference, propsGrid]
 		}
    ],
 	listeners: { render: function() { mapInit(); } }
