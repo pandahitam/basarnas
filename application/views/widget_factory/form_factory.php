@@ -1052,8 +1052,8 @@
                                         var id = action.result.id;
                                         var grid = Ext.getCmp('grid_inventory_penerimaan_perlengkapan').getStore();
                                         var new_records = grid.getNewRecords();
-                                        var updated_records = grid.getUpdatedRecords();
-                                        var removed_records = grid.getRemovedRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
                                         Ext.each(new_records, function(obj){
                                             var index = grid.indexOf(obj);
                                             var record = grid.getAt(index);
@@ -2117,17 +2117,31 @@
                                 store: documentStore,
                                 columnWidth: .5,
                                 width: '100%',
-                                height: 90,
+                                height: 110,
                                 style: {
                                     marginBottom: '10px'
                                 },
                                 columns: [{
                                         text: 'Document Name',
                                         dataIndex: 'name',
-                                        width: 200
+                                        width: 230
                                     }, {
                                         xtype: 'actioncolumn',
-                                        width: 50,
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
                                         items: [{
                                                 icon: '../basarnas/assets/images/icons/delete.png',
                                                 tooltipe: 'Remove Document',
@@ -2260,7 +2274,7 @@
                                 xtype : 'panel',
                                 itemId : 'photoPanel',
                                 frame : true,
-                                height : 90,
+                                height : 110,
                                 style : {
                                     marginBottom: '10px'
                                 },
@@ -2270,14 +2284,15 @@
                                     tpl: [
                                         '<tpl for=".">',
                                         '<div class="thumb-wrap" id="{name}" style="float:left; padding:5px">',
-                                        '<div class="thumb"><img src="{url}" height="70" width="70"></div>',
+                                        '<div class="thumb"><img src="{url}" height="70" width="70"><br/><input type="button" value="Tindakan" id="{name}" class="action_btn" /></div>',
                                         '</div>',
                                         '</tpl>',
                                         '<div class="x-clear"></div>'
                                     ],
                                     height: 80,
                                     emptyText: 'No image',
-                                    itemSelector: 'div.thumb-wrap',
+//                                    itemSelector: 'div.thumb-wrap',
+                                    itemSelector: 'input.action_btn',
                                     prepareData: function(data) {
                                         Ext.apply(data);
                                         return data;
@@ -2288,36 +2303,61 @@
                                         },
                                         itemclick: function(view, record, item, index) {
                                             var data = record.data;
+                                            
+                                            var messageBox = Ext.create('Ext.window.MessageBox', {
+                                                width:300,
+                                                height: 100,
+                                                buttonText: {yes: "Lihat",no: "Hapus",cancel: "Batal"},
 
-                                            var dataSend = {
-                                                file: data.name
-                                            };
+                                           });
+                                           
 
-                                            $.ajax({
-                                                type: 'POST',
-                                                dataType: 'json',
-                                                data: dataSend,
-                                                url: Reference.URL.deleteImage,
-                                                success: function(res) {
-                                                    if (res.success)
+                                            messageBox.show({
+                                                title:'Tindakan',
+                                                msg: 'Pilih Tindakan',
+                                                buttons: Ext.Msg.YESNOCANCEL,
+                                                fn: function(btn){
+                                                    if (btn === 'yes')
                                                     {
-                                                        var recordToRemove = photoStore.findRecord('name', data.name);
-                                                        if (recordToRemove !== null)
-                                                        {
-                                                            photoStore.remove(recordToRemove);
-                                                            console.log(photoStore.count());
-                                                        }
-                                                        else
-                                                        {
-                                                            console.error('could not found the expected image');
-                                                        }
+                                                        window.open(data.url,'_blank');
                                                     }
-                                                    else
+                                                    else if(btn === 'no')
                                                     {
-                                                        console.error('fail to delete image');
+                                                        var dataSend = {
+                                                            file: data.name
+                                                        };
+
+
+
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            dataType: 'json',
+                                                            data: dataSend,
+                                                            url: Reference.URL.deleteImage,
+                                                            success: function(res) {
+                                                                if (res.success)
+                                                                {
+                                                                    var recordToRemove = photoStore.findRecord('name', data.name);
+                                                                    if (recordToRemove !== null)
+                                                                    {
+                                                                        photoStore.remove(recordToRemove);
+                                                                        console.log(photoStore.count());
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        console.error('could not found the expected image');
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    console.error('fail to delete image');
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             });
+                                            
                                         }
                                     }
                                 })
@@ -2365,17 +2405,31 @@
                                 store: documentStore,
                                 columnWidth: .5,
                                 width: '100%',
-                                height: 90,
+                                height: 110,
                                 style: {
                                     marginBottom: '10px'
                                 },
                                 columns: [{
                                         text: 'Document Name',
                                         dataIndex: 'name',
-                                        width: 200
+                                        width: 270
                                     }, {
                                         xtype: 'actioncolumn',
-                                        width: 50,
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
                                         items: [{
                                                 icon: '../basarnas/assets/images/icons/delete.png',
                                                 tooltipe: 'Remove Document',
@@ -2407,7 +2461,8 @@
 
                                                 }
                                             }]
-                                    }]
+                                    },
+                                    ]
                             }, {
                                 xtype: 'filefield',
                                 name: 'userfile',

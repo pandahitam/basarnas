@@ -31,9 +31,13 @@ class upload_file extends CI_Controller {
     public function imageDelete() {
         $file = $this->input->post('file');
 
-        $success = false;
-        if (unlink(FCPATH . 'uploads/images/' . $file)) {
+        $success = true;
+//        $success = false;
+        if(is_file(FCPATH . 'uploads/images/' . $file))
+        {
+            if (unlink(FCPATH . 'uploads/images/' . $file)) {
             $success = true;
+            }
         }
 
         $info = array('success' => $success,
@@ -67,11 +71,16 @@ class upload_file extends CI_Controller {
 
     public function documentDelete() {
         $file = $this->input->post('file');
-
-        $success = false;
-        if (unlink(FCPATH . 'uploads/documents/' . $file)) {
+        
+        $success = true;
+//        $success = false;
+        if(is_file(FCPATH . 'uploads/documents/' . $file))
+        {
+            if (unlink(FCPATH . 'uploads/documents/' . $file)) {
             $success = true;
+            }
         }
+        
 
         $info = array('success' => $success,
             'path' => base_url() . 'uploads/documents/' . $file,

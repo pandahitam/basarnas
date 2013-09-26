@@ -3,7 +3,7 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
 	
 	function __construct(){
 		parent::__construct();
-		$this->table = 'asset_angkutan_laut';
+		$this->table = 'asset_angkutan';
                 $this->extTable = 'ext_asset_angkutan';
                 $this->countTable = 'view_asset_angkutan_laut';
                 $this->viewTable = 'view_asset_angkutan_laut';
@@ -145,7 +145,17 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
             {
                 $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan 
                         FROM ext_asset_angkutan_laut_perlengkapan WHERE id_ext_asset = $id_ext_asset";
-                return $this->Get_By_Query($query);
+//                return $this->Get_By_Query($query);
+                $r = $this->db->query($query);
+                 $data = array();
+                if ($r->num_rows() > 0)
+		{
+		    foreach ($r->result() as $obj)
+		    {
+			$data[] = $obj;
+		    }  
+		}
+                return $data;
             }
         }
 	

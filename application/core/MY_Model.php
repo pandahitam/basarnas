@@ -1,8 +1,8 @@
 <?php
 class MY_Model extends CI_Model{
 	
-	var $table;
-        var $extTable;
+	var $table = null;
+        var $extTable = null;
         var $viewTable = null;
         var $countTable = null;
 	var $limit = 100;
@@ -198,9 +198,13 @@ class MY_Model extends CI_Model{
                 {
                     $query = "select count(*) as total from ".$this->viewTable." as t where ".$temp2[1];
                 }
-                else
+                else if($this->table != null)
                 {
                     $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
+                }
+                else
+                {
+                    $query = "";
                 }
                 
             }
@@ -216,17 +220,29 @@ class MY_Model extends CI_Model{
                     {
                          $query = "select count(*) as total from $this->countTable";
                     }
-                    else
+                    else if($this->table != null)
                     {
                          $query = "select count(*) as total from $this->table";
+                    }
+                    else
+                    {
+                        $query = "";
                     }
                    
                 }
                 
             }
             
-            $count = $this->db->query($query);
-            return $count->row()->total;
+            if($query != "")
+            {
+                $count = $this->db->query($query);
+                return $count->row()->total;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 	
 	/**
