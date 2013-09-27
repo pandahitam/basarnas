@@ -375,6 +375,16 @@
                        }
                     });
                     
+                if(data.darat_masa_berlaku_stnk == "0000-00-00")
+                {
+                    data.darat_masa_berlaku_stnk = "";
+
+                }    
+                if(data.darat_masa_berlaku_pajak == "0000-00-00")
+                {
+                    data.darat_masa_berlaku_pajak = "";
+
+                }   
                 
                 form.getForm().setValues(data);
             }

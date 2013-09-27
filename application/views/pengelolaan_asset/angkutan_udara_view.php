@@ -374,7 +374,18 @@
                            
                        }
                     });
-                 
+                
+                if(data.udara_sertifikat_kelaikan_udara_masa_berlaku == "0000-00-00")
+                {
+                    data.udara_sertifikat_kelaikan_udara_masa_berlaku = "";
+
+                }
+                if(data.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku == "0000-00-00")
+                {
+                    data.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku = "";
+
+                }
+                
                 form.getForm().setValues(data);
             }
 

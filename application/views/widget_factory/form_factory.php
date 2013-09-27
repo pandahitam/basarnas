@@ -952,17 +952,22 @@
             
             return form;
         }
-
-        Form.penghapusan = function(setting)
+        
+        Form.peraturan = function(setting)
         {
-
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, Form.Component.peraturan());
+            form.insert(1, Form.Component.fileUploadDocumentOnly('document','fileupload_peraturan'));
+            
+            return form;
         }
+
         
         Form.pengelolaan = function(setting)
         {
             var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
-            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset,false));
             form.insert(2, Form.Component.pengelolaan(setting.isEditing));
             form.insert(3, Form.Component.fileUpload(setting.isEditing));
             
@@ -2514,7 +2519,7 @@
                 defaultType: 'container',
                 frame: true,
                 items: [{
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
@@ -2527,31 +2532,22 @@
                             }, {
                                 fieldLabel: 'No KIB',
                                 name: 'no_kib'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%',
-                            labelWidth: 80
-                        },
-                        defaultType: 'textfield',
-                        items: [{
+                            },{
                                 fieldLabel: 'Unit Kerja',
                                 name: 'unit_pmk'
-                            }, {
-                                fieldLabel: 'Catatan',
-                                name: 'catatan'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
                             labelWidth: 80
                         },
                         defaultType: 'textfield',
-                        items: [{
+                        items: [ {
+                                fieldLabel: 'Catatan',
+                                name: 'catatan'
+                            },{
                                 fieldLabel: 'Alamat Unit',
                                 name: 'alm_pmk'
                             }, {
@@ -2559,11 +2555,11 @@
                                 name: 'status'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .34,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
-                            labelWidth: 80,
+                            labelWidth: 80
                         },
                         defaultType: 'textfield',
                         items: [{
@@ -2571,17 +2567,21 @@
                                 name: 'kuantitas'
                             }, {
                                 xtype: 'numberfield',
+                                fieldLabel: 'Harga Aset',
+                                name: 'rph_aset'
+                            },{
+                                xtype: 'numberfield',
                                 fieldLabel: 'Harga Wajar',
                                 name: 'rphwajar'
                             }]
-                    }]
+                    }, ]
             };
 
 
             return component;
         };
 
-        Form.Component.selectionAsset = function(cmpSetting) {
+        Form.Component.selectionAsset = function(cmpSetting,isReadOnly) {
 
             var component = {
                 xtype: 'fieldset',
@@ -2602,7 +2602,7 @@
                         items: [{
                                 fieldLabel: 'Kode Barang*',
                                 name: 'kd_brg',
-                                readOnly:true,
+                                readOnly:(isReadOnly == false)?false:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -2616,7 +2616,7 @@
                                 fieldLabel: 'Nama',
                                 name: 'nama',
                                 editable: false,
-                                readOnly:true,
+                                readOnly:(isReadOnly == false)?false:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -3933,40 +3933,101 @@
             return component;
         };
         
-//        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
-//            var component = {
-//                xtype: 'fieldset',
-//                layout:'anchor',
-//                height: (edit == true)?325:150,
-//                anchor: '100%',
-//                title: 'Riwayat Pajak',
-//                border: false,
-//                frame: true,
-//                defaultType: 'container',
-//                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
-//            };
-//
-//            return component;
-//        };
-
-        
         Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: 325,
+                height: (edit == true)?325:150,
                 anchor: '100%',
                 title: 'Riwayat Pajak',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
             };
 
             return component;
         };
+
+        
+//        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+//            var component = {
+//                xtype: 'fieldset',
+//                layout:'anchor',
+//                height: 325,
+//                anchor: '100%',
+//                title: 'Riwayat Pajak',
+//                border: false,
+//                frame: true,
+//                defaultType: 'container',
+//                items: [{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}]
+//            };
+//
+//            return component;
+//        };
+//        
         
         
+        Form.Component.peraturan = function()
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'PERATURAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'date_upload',
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama'
+                            }, 
+                            {
+                                fieldLabel: 'No Dokumen',
+                                name: 'no_dokumen'
+                            },{
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal Dokumen',
+                                name: 'tanggal_dokumen',
+                                format: 'Y-m-d'
+                            },
+                            {
+                                fieldLabel: 'Initiator',
+                                name: 'initiator'
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Perihal',
+                                name: 'perihal'
+                            },
+                        ]
+                  
+                        
+                    }]
+            };
+
+            return component;
+        
+        };
 
         Form.Component.tambahanBangunanTanah = function() {
             var component = {
@@ -5023,7 +5084,10 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id',
+                                    },
                                     {
                                     xtype: 'combo',
                                     disabled: false,
@@ -5034,38 +5098,36 @@
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 {
                                     fieldLabel: 'Serial Number',
-                                    name: 'serial_number'
+                                    name: 'serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.readOnly = true;
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
+                                                    qtyField.readOnly = false;
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel:'Qty',
+                                    name:'qty',
+                                    id:'pengadaan_data_perlengkapan_qty'
                                 },
                                 {
                                     xtype: 'datefield',
@@ -5793,7 +5855,7 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'PERENCANAAN',
+                    title: 'PENGELOLAAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -5807,23 +5869,20 @@
                             defaultType: 'textfield',
                             items: [
                                 {
-                                    xtype : 'hidden',
-                                    name : 'id'
-                                }, {
                                     fieldLabel: 'Nama Operasi SAR',
-                                    name: 'namaoperasisar',
+                                    name: 'nama_operasi',
                                 }, {
                                     fieldLabel: 'PIC',
                                     name: 'pic'
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Mulai',
-                                    name: 'start_date',
+                                    name: 'tanggal_mulai',
                                     format : 'Y-m-d'
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Selesai',
-                                    name: 'end_date',
+                                    name: 'tanggal_selesai',
                                     format : 'Y-m-d'
                                 }
                             ]
@@ -5838,7 +5897,7 @@
                             items: [
                                 {
                                     fieldLabel: 'Deskripsi',
-                                    name: 'description',
+                                    name: 'deskripsi',
                                     xtype:'textarea',
                                     anchor:'100%',
                                 }
@@ -6398,34 +6457,6 @@
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 {
                                     readOnly:(readOnly == true)?true:false,

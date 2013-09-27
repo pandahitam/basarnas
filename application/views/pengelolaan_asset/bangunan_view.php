@@ -101,71 +101,6 @@
 
         
         Bangunan.Form.create = function(data, edit) {
-//            var setting_grid_riwayat_pajak = {
-//                id:'grid_bangunan_riwayat_pajak',
-//                toolbar:{
-//                    add: Bangunan.addRiwayatPajak,
-//                    edit: Bangunan.editRiwayatPajak,
-//                    remove: Bangunan.removeRiwayatPajak
-//                },
-//                dataStore:Bangunan.dataStoreRiwayatPajak
-//            };
-//            
-//            
-//            var form = Form.asset(Bangunan.URL.createUpdate, Bangunan.Data, edit,true);
-//            var tab = Tab.formTabs();
-//            
-//            tab.add({
-//                title: 'Utama',
-//                closable: false,
-//                border: false,
-//                deferredRender: false,
-//                bodyStyle:{background:'none'},
-//                items: [
-//                        Form.Component.unit(edit,form),
-//                        Form.Component.kode(edit),
-//                        Form.Component.basicAsset(edit),
-//                        Form.Component.address(),
-//                        Form.Component.bangunan(),
-//                        Form.Component.fileUpload(),
-//                       ],
-//                listeners: {
-//                    'beforeclose': function() {
-//                        Utils.clearDataRef();
-//                    }
-//                }
-//            });
-//            
-//            tab.add({
-//                title: 'Tambahan',
-//                closable: false,
-//                border: false,
-//                layout:'fit',
-//                deferredRender: false,
-//                bodyStyle:{background:'none'},
-//                items: [
-//                        Form.Component.tambahanBangunanTanah(),
-//                        Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit),
-//            
-//                       ],
-//                listeners: {
-//                    'beforeclose': function() {
-//                        Utils.clearDataRef();
-//                    }
-//                }
-//            });
-//
-//            tab.setActiveTab(0);
-//            
-//            form.insert(0,tab);
-//
-//            if (data !== null)
-//            {
-//                form.getForm().setValues(data);
-//            }
-//
-//            return form;
-            
             var setting_grid_riwayat_pajak = {
                 id:'grid_bangunan_riwayat_pajak',
                 toolbar:{
@@ -177,7 +112,7 @@
             };
             
             
-            var form = Form.assetBangunanDanTanah(Bangunan.URL.createUpdate, Bangunan.Data, edit,true,Bangunan.dataStoreRiwayatPajak);
+            var form = Form.asset(Bangunan.URL.createUpdate, Bangunan.Data, edit,true);
             var tab = Tab.formTabs();
             
             tab.add({
@@ -230,6 +165,71 @@
             }
 
             return form;
+            
+//            var setting_grid_riwayat_pajak = {
+//                id:'grid_bangunan_riwayat_pajak',
+//                toolbar:{
+//                    add: Bangunan.addRiwayatPajak,
+//                    edit: Bangunan.editRiwayatPajak,
+//                    remove: Bangunan.removeRiwayatPajak
+//                },
+//                dataStore:Bangunan.dataStoreRiwayatPajak
+//            };
+//            
+//            
+//            var form = Form.assetBangunanDanTanah(Bangunan.URL.createUpdate, Bangunan.Data, edit,true,Bangunan.dataStoreRiwayatPajak);
+//            var tab = Tab.formTabs();
+//            
+//            tab.add({
+//                title: 'Utama',
+//                closable: false,
+//                border: false,
+//                deferredRender: false,
+//                bodyStyle:{background:'none'},
+//                items: [
+//                        Form.Component.unit(edit,form),
+//                        Form.Component.kode(edit),
+//                        Form.Component.basicAsset(edit),
+//                        Form.Component.address(),
+//                        Form.Component.bangunan(),
+//                        Form.Component.fileUpload(),
+//                       ],
+//                listeners: {
+//                    'beforeclose': function() {
+//                        Utils.clearDataRef();
+//                    }
+//                }
+//            });
+//            
+//            tab.add({
+//                title: 'Tambahan',
+//                closable: false,
+//                border: false,
+//                layout:'fit',
+//                deferredRender: false,
+//                bodyStyle:{background:'none'},
+//                items: [
+//                        Form.Component.tambahanBangunanTanah(),
+//                        Form.Component.gridRiwayatPajakTanahDanBangunan(setting_grid_riwayat_pajak,edit),
+//            
+//                       ],
+//                listeners: {
+//                    'beforeclose': function() {
+//                        Utils.clearDataRef();
+//                    }
+//                }
+//            });
+//
+//            tab.setActiveTab(0);
+//            
+//            form.insert(0,tab);
+//
+//            if (data !== null)
+//            {
+//                form.getForm().setValues(data);
+//            }
+//
+//            return form;
         };
 
         Bangunan.Form.createPemeliharaan = function(dataGrid,dataForm,edit) {

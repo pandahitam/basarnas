@@ -25,14 +25,14 @@ class master_model extends MY_Model{
             FROM `asset_tanah` as t LEFT JOIN ref_subsubkel as b ON t.`kd_brg` = b.`kd_brg` LEFT JOIN ref_unker as c ON t.`kd_lokasi` = c.kdlok)';
 
         $data = $this->Get_By_Query($query);
-        return $data;
+        return $data['data'];
     }
     
     function AllRefBarang()
     {
         $query = 'SELECT kd_gol,kd_bid,kd_kel, kd_skel, kd_sskel, kd_brg, ur_sskel as nama FROM `ref_subsubkel`';
         $data = $this->Get_By_Query($query);
-        return $data;
+        return $data['data'];
     }
     
     function AllAssetServices()
@@ -47,7 +47,7 @@ LEFT JOIN ref_subsubkel as ref ON master.kode_barang = ref.kd_brg LEFT JOIN ref_
 ";
         
         $data = $this->Get_By_Query($query);
-        return $data;
+        return $data['data'];
     }
     
     function AssetServicesWithFilter($kd_brg,$kd_lokasi,$no_aset)

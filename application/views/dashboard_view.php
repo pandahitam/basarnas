@@ -256,7 +256,12 @@
                                         }
 
                                     },
-                                    {text: 'Peraturan', iconCls: 'icon-menu_impasing', id: 'm_peraturan'},
+                                    {text: 'Peraturan', iconCls: 'icon-menu_impasing', id: 'm_peraturan',
+                                        handler: function()
+                                        {
+                                            Load_TabPage('peraturan', BASE_URL + 'peraturan');
+                                        }
+                                    },
                                     {text: 'Pengelolaan', iconCls: 'icon-menu_impasing', id: 'm_pengelolaan',
                                         handler: function()
                                         {
