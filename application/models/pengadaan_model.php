@@ -7,7 +7,7 @@ class Pengadaan_Model extends MY_Model{
 		$this->extTable = 'pengadaan';
     
                 $this->selectColumn = "SELECT id, kd_lokasi, kd_brg, no_aset, kode_unor, part_number, serial_number, merek, model, nama,
-                            nama_unker, nama_unor, id_vendor, nama,
+                            nama_unker, nama_unor, id_vendor, nama, qty,
                             tahun_angaran, perolehan_sumber, perolehan_bmn, no_sppa, 
                             asal_pengadaan, harga_total, deskripsi, perolehan_tanggal, 
                             faktur_no, faktur_tanggal, kuitansi_no, kuitansi_tanggal, 

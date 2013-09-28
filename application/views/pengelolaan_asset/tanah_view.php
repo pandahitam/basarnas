@@ -65,6 +65,7 @@
             id: 'Proxy_Tanah',
             url: Tanah.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Tanah.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_TB = request.operation.params;
                 
@@ -897,6 +898,7 @@
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 150, groupable: true, filter: {type: 'string'}},
                     {header: 'Kuantitas', dataIndex: 'kuantitas', width: 70, groupable: false, filter: {type: 'numeric'}},
                     {header: 'RPH Asset', dataIndex: 'rph_aset', width: 120, groupable: false, filter: {type: 'numeric'}},
+                    {header: 'RPH Wajar', dataIndex: 'rphwajar', width: 90, hidden: false, filter: {type: 'numeric'}},
                     {header: 'No KIB', dataIndex: 'no_kib', width: 70, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Luas Tnhs', dataIndex: 'luas_tnhs', width: 70, hidden: false, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Luas Thnb', dataIndex: 'luas_tnhb', width: 70, hidden: false, groupable: false, filter: {type: 'numeric'}},
@@ -927,7 +929,6 @@
                     {header: 'Catatan', dataIndex: 'catatan', width: 90, hidden: true, filter: {type: 'string'}},
                     {header: 'Tanggal Prl', dataIndex: 'tgl_prl', width: 90, hidden: true, filter: {type: 'string'}},
                     {header: 'Tanggal Buku', dataIndex: 'tgl_buku', width: 90, hidden: true, filter: {type: 'string'}},
-                    {header: 'RPH Wajar', dataIndex: 'rph_wajar', width: 90, hidden: true, filter: {type: 'numeric'}},
                     {header: 'RPH NJOP', dataIndex: 'rphnjop', width: 90, hidden: true, filter: {type: 'numeric'}},
                     {header: 'Status', dataIndex: 'status', width: 90, hidden: true, filter: {type: 'string'}},
                     {header: 'Milik', dataIndex: 'smilik', width: 90, hidden: true, filter: {type: 'string'}},

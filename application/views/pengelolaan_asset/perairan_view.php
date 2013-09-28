@@ -65,6 +65,7 @@
             id: 'Proxy_Perairan',
             url: Perairan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Perairan.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Perairan = request.operation.params;
                 

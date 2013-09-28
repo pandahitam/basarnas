@@ -6,6 +6,83 @@ class MY_Controller extends CI_Controller{
 	function __construct(){
 		parent::__construct();
 	}
+        
+        function parseNumericFilterComparisonOperator($operator)
+        {
+            if($operator == 'gt')
+            {
+                return '>';
+            }
+            else if($operator == 'lt')
+            {
+                return '<';
+            }
+            else if($operator == 'eq')
+            {
+                return '=';
+            }
+        }
+        
+        function generateFilterQueryString($filter)
+        {
+            $filterData= json_decode($filter);
+            $queryString = "";
+            
+            for($i = 0; $i<count($filterData); $i++)
+            {
+                if($i == count($filterData)-1)
+                {
+                    if($filterData[$i]->type == 'numeric')
+                    {
+                        $queryString .= $filterData[$i]->field.' '.$this->parseNumericFilterComparisonOperator($filterData[$i]->comparison). ' '.$filterData[$i]->value;
+    //                    $this->db->where($filterData->field.' '.$this->parseNumericFilterComparisonOperator($this->comparison),$filterData->value);
+                    }
+                    else if($filterData[$i]->type == 'string')
+                    {
+                        $queryString .= $filterData[$i]->field." LIKE '%".$filterData[$i]->value."%'";
+//                        $this->db->like($filterData[$i]->field,$filterData->value);
+                    }
+                    else
+                    {
+                        $queryString = null;
+                    }
+                }
+                else
+                {
+                    if($filterData[$i]->type == 'numeric')
+                    {
+                        $queryString .= $filterData[$i]->field.' '.$this->parseNumericFilterComparisonOperator($filterData[$i]->comparison). ' '.$filterData[$i]->value.' AND ';
+    //                    $this->db->where($filterData->field.' '.$this->parseNumericFilterComparisonOperator($this->comparison),$filterData->value);
+                    }
+                    else if($filterData[$i]->type == 'string')
+                    {
+                        $queryString .= $filterData[$i]->field." LIKE '%".$filterData[$i]->value."%' AND ";
+//                        $this->db->like($filterData[$i]->field,$filterData[$i]->value);
+                    }
+                    else
+                    {
+                        $queryString = null;
+                    }
+                }
+            }
+//            foreach($decodedJson as $filterData)
+//            {
+//                if($filterData->type == 'numeric')
+//                {
+//                    $queryString .= $filterData->field.' '.$this->parseNumericFilterComparisonOperator($filterData->comparison). ' '."'$filterData->value'".' AND ';
+////                    $this->db->where($filterData->field.' '.$this->parseNumericFilterComparisonOperator($this->comparison),$filterData->value);
+//                }
+//                else if($filterData->type == 'string')
+//                {
+//                    $queryString .= $filterData->field.' LIKE %'.$filterData->value."% AND ";
+//                    $this->db->like($filterData->field,$filterData->value);
+//                }
+//            }
+//            $this->db->get();
+//            
+//            $queryString = $this->db->_compile_select();
+            return $queryString;
+        }
 	
 	function getAllData(){
 //                var_dump(json_decode($_POST['filter']));
@@ -14,6 +91,13 @@ class MY_Controller extends CI_Controller{
 		$searchTextFilter =  null;
                 $start = null;
                 $limit = null;
+                $filterString = null;
+                
+                if(isset($_POST['gridFilter']))
+                {
+                    $filterString = $this->generateFilterQueryString($_POST['gridFilter']);
+                }
+                
                 if(isset($_POST['query']))
                 {
                     //$this->model->get_FilteredData(json_decode($_POST['filter']));
@@ -25,7 +109,7 @@ class MY_Controller extends CI_Controller{
                     $limit = $_POST['limit'];
                 }
                 
-		$queryData = $this->model->get_AllData($start,$limit,$searchTextFilter);
+		$queryData = $this->model->get_AllData($start,$limit,$searchTextFilter,$filterString);
 //                $total = $this->model->get_CountData();
 //                $countData = $this->model->get_AllData();              
 //                $total = count($countData);

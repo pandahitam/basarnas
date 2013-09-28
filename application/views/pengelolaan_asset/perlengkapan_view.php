@@ -53,6 +53,7 @@
             id: 'Proxy_Perlengkapan',
             url: Perlengkapan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Perlengkapan.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Perlengkapan = request.operation.params;
                 

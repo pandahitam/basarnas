@@ -484,10 +484,10 @@
                             },
                             'change': {
                                 fn: function(obj, value) {
-                                    data.clearFilter();
+//                                    data.clearFilter();
                                     if (value !== null)
                                     {
-                                        data.filter([{property: 'kd_brg', value: value}]);
+//                                        data.filter([{property: 'kd_brg', value: value}]);
                                         var filterByGolongan = value;
                                         var filterByBidang = Ext.getCmp('aset-bidang'+ id);
                                                 if (filterByGolongan !== null && filterByBidang !== null) {
@@ -540,7 +540,7 @@
                              },
                             'change': {
                                 fn: function(obj, value) {
-                                    data.clearFilter();
+//                                    data.clearFilter();
                                     if (value !== null)
                                     {
                                         var filterByGolonganValue = Ext.getCmp('aset-golongan'+ id).value;

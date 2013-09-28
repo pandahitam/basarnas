@@ -44,7 +44,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionReference());
+                            Modal.assetSelection.add(Grid.selectionAsset());
                             Modal.assetSelection.show();
                         }
                         else
@@ -57,19 +57,12 @@
                     noAsetHidden: true
                 }
             };
-            //debugger;
+//            debugger;
             var form = Form.pengelolaan(setting);
 
             if (data !== null)
             {
-                //form.getForm().setValues(data);
-                var task = Ext.TaskManager.start({
-                    run: function () {
-                        form.getForm().setValues(data)
-                    },
-                    interval: 1000,
-                    repeat:2
-                });
+                form.getForm().setValues(data);
             }
 
             return form;
@@ -136,7 +129,7 @@
                 }
             }
             var serverSideModelName = "Pengelolaan_Model";
-            var title = "Perencaanaan";
+            var title = "Pengelolaan";
             var primaryKeys = "id";
 
             my_form = document.createElement('FORM');
@@ -188,12 +181,21 @@
                 title: 'DAFTAR PENGELOLAAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'ID', dataIndex: 'id', flex:0.5, groupable: false, filter: {type: 'number'}},
-                    {header: 'Nama Operasi SAR', dataIndex: 'namaoperasisar', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'ID', dataIndex: 'id', flex:0.5, groupable: false, hidden:true, filter: {type: 'number'}},
+                    {header: 'Nama Operasi SAR', dataIndex: 'nama_operasi', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'PIC', dataIndex: 'pic', flex: 1, groupable: false, filter: {type: 'string'}},
-                    {header: 'Tanggal Mulai', dataIndex: 'start_date', flex: 1, groupable: false, filter: {type: 'date'}},
-                    {header: 'Tanggal Mulai', dataIndex: 'end_date', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Deskripsi', dataIndex: 'deskripsi', flex: 1, groupable: false},
+                    {header: 'Tanggal Mulai', dataIndex: 'tanggal_mulai', flex: 1, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tanggal Mulai', dataIndex: 'tanggal_selesai', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Deskripsi', dataIndex: 'deskripsi', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Barang', dataIndex: 'kd_brg', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Barang', dataIndex: 'kd_brg', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'No Aset', dataIndex: 'no_aset', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Barang', dataIndex: 'nama', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Image Url', dataIndex: 'image_url', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Document Url', dataIndex: 'document_url', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+
+
                 ]
             },
             search: {
@@ -225,7 +227,7 @@
         var new_tabpanel = {
             xtype: 'panel',
             id: 'pengelolaan', title: 'Pengelolaan', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Region.filterPanelPerencanaan(Pengelolaan.Data), Pengelolaan.Grid.grid]
+            layout: 'border', items: [Pengelolaan.Grid.grid]
         };
 
         <?php

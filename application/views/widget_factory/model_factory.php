@@ -4,6 +4,14 @@
 <script>
 ////// Model In View
 
+Ext.define('MInventoryPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_inventory', 
+        'kd_brg', 'no_aset', 
+        'part_number','serial_number',
+        'status_barang','qty','asal_barang'
+    ]
+});
+
 Ext.define('MDetailPenggunaanAngkutan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'tanggal', 'jumlah_penggunaan', 
@@ -468,7 +476,7 @@ Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
 
 Ext.define('MPengadaan', {extend: 'Ext.data.Model',
     fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_number','serial_number','merek','model','nama',
-                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 
+                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 'qty',
                 'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
                 'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
                 'sp2d_no', 'sp2d_tanggal', 'mutasi_no', 'mutasi_tanggal', 
@@ -503,7 +511,14 @@ Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPengelolaan', {extend: 'Ext.data.Model',
-    fields: ['id','nama','no_document','tanggal_document','pembuat','perihal','date_upload','image_url', 'document_url']
+    fields: ['id','nama_operasi','pic','tanggal_mulai','tanggal_selesai',
+             'deskripsi','image_url', 'document_url',
+             'kd_lokasi', 'kode_unor', 'kd_brg','no_aset', 'nama']
+});
+
+Ext.define('MPeraturan', {extend: 'Ext.data.Model',
+    fields: ['id','nama','no_dokumen','tanggal_dokumen','initiator',
+            'perihal','date_upload', 'document']
 });
 
 Ext.define('MUnitKerja', { extend:'Ext.data.Model',

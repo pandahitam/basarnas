@@ -89,6 +89,7 @@
             id: 'Proxy_AngkutanUdara',
             url: AngkutanUdara.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: AngkutanUdara.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 //Params_M_AngkutanUdara = request.operation.params;
                 
@@ -373,7 +374,18 @@
                            
                        }
                     });
-                 
+                
+                if(data.udara_sertifikat_kelaikan_udara_masa_berlaku == "0000-00-00")
+                {
+                    data.udara_sertifikat_kelaikan_udara_masa_berlaku = "";
+
+                }
+                if(data.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku == "0000-00-00")
+                {
+                    data.udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku = "";
+
+                }
+                
                 form.getForm().setValues(data);
             }
 

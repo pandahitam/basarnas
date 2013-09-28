@@ -1,10 +1,10 @@
 <?php
 class MY_Model extends CI_Model{
 	
-	var $table;
-        var $extTable;
-        var $viewTable;
-        var $countTable;
+	var $table = null;
+        var $extTable = null;
+        var $viewTable = null;
+        var $countTable = null;
 	var $limit = 100;
 	var $query_semar = null;
         
@@ -68,7 +68,7 @@ class MY_Model extends CI_Model{
 		}
 	}
 	
-	function Get_By_Query($query)
+	function Get_By_Query($query,$isGridFilter = null)
 	{
 		$extra_qr = $this->extractLimitQuery($query);
 //		$query = $extra_qr['query'];
@@ -166,7 +166,7 @@ class MY_Model extends CI_Model{
 		
 		
 		$r = $this->db->query($query);
-                $count = $this->getQueryCountWithoutLimit($extra_qr['query']);
+                $count = $this->getQueryCountWithoutLimit($extra_qr['query'],$isGridFilter);
 		$data = array();
 		if ($r->num_rows() > 0)
 		{
@@ -188,21 +188,61 @@ class MY_Model extends CI_Model{
                
 	}
         
-        function getQueryCountWithoutLimit($noLimitQuery)
+        function getQueryCountWithoutLimit($noLimitQuery,$isGridFilter)
         {
             $temp = explode('from',$noLimitQuery,2);
             $temp2 = explode('where',$temp[1],2);
             if(isset($temp2[1]))
             {
-                $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
+                if($isGridFilter == true)
+                {
+                    $query = "select count(*) as total from ".$this->viewTable." as t where ".$temp2[1];
+                }
+                else if($this->table != null)
+                {
+                    $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
+                }
+                else
+                {
+                    $query = "";
+                }
+                
             }
             else
             {
-                $query = "select count(*) as total from $this->table";
+                if($isGridFilter == true)
+                {
+                    $query = "select count(*) as total from $this->viewTable";
+                }
+                else
+                {
+                    if($this->countTable != null)
+                    {
+                         $query = "select count(*) as total from $this->countTable";
+                    }
+                    else if($this->table != null)
+                    {
+                         $query = "select count(*) as total from $this->table";
+                    }
+                    else
+                    {
+                        $query = "";
+                    }
+                   
+                }
+                
             }
             
-            $count = $this->db->query($query);
-            return $count->row()->total;
+            if($query != "")
+            {
+                $count = $this->db->query($query);
+                return $count->row()->total;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
 	
 	/**

@@ -66,6 +66,7 @@
             id: 'Proxy_Alatbesar',
             url: Alatbesar.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Alatbesar.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Alatbesar = request.operation.params;
                 
@@ -81,7 +82,7 @@
 
         Alatbesar.Data = new Ext.create('Ext.data.Store', {
             id: 'Data_Alatbesar', storeId: 'DataAlatbesar', model: 'MAlatbesar', pageSize: 50, noCache: false, autoLoad: true,
-            proxy: Alatbesar.proxy, groupField: 'tipe'
+            proxy: Alatbesar.proxy,
         });
         
         Alatbesar.Window.actionSidePanels = function() {

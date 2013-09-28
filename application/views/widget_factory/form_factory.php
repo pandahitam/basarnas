@@ -369,7 +369,7 @@
         }
 
         
-        Form.inventorypenerimaan = function(setting)
+        Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         {
             var pilihPengadaan = [{
                     xtype: 'fieldset',
@@ -398,44 +398,17 @@
                                     valueField: 'id',
                                     displayField: 'no_sppa', emptyText: 'Pilih Pengadaan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 
                             ]
                         }]
                 }];
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.inventory(setting.url, setting.data, setting.isEditing, setting.dataStoreInventoryPerlengkapan);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPengadaan);
             form.insert(2, Form.Component.inventorypenerimaan());
-            form.insert(3, Form.Component.inventoryPerlengkapan());
+            form.insert(3, Form.Component.gridInventoryPerlengkapan(setting_grid_perlengkapan))
+//            form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
         }
@@ -532,7 +505,7 @@
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPenerimaan);
             form.insert(2, Form.Component.inventorypemeriksaan());
-            form.insert(3, Form.Component.inventoryPerlengkapan());
+            form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
         }
@@ -631,7 +604,7 @@
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPemeriksaan);
             form.insert(2, Form.Component.inventorypenyimpanan(setting.isEditing));
-            form.insert(3, Form.Component.inventoryPerlengkapan());
+            form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
         }
@@ -732,7 +705,7 @@
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPerlengkapan);
             form.insert(2, Form.Component.inventorypengeluaran(setting.isEditing));
-            form.insert(3, Form.Component.inventoryPerlengkapan(true));
+            form.insert(3, Form.Component.dataInventoryPerlengkapan(true));
 
             return form;
         }
@@ -979,17 +952,22 @@
             
             return form;
         }
-
-        Form.penghapusan = function(setting)
+        
+        Form.peraturan = function(setting)
         {
-
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, Form.Component.peraturan());
+            form.insert(1, Form.Component.fileUploadDocumentOnly('document','fileupload_peraturan'));
+            
+            return form;
         }
+
         
         Form.pengelolaan = function(setting)
         {
             var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
-            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset,false));
             form.insert(2, Form.Component.pengelolaan(setting.isEditing));
             form.insert(3, Form.Component.fileUpload(setting.isEditing));
             
@@ -1008,6 +986,118 @@
             
             return form;
         }
+        
+        Form.secondaryWindowAsset= function(data,operationType,storeIndex) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: '',
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_perlengkapan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                if(operationType == 'add')
+                                {
+                                    data.add(formValues);
+                                }
+                                if(operationType == 'edit')
+                                {
+                                    var record = data.getAt(storeIndex);
+                                    record.set(formValues);
+                                }
+                                if(operationType == 'remove')
+                                {
+//                                    data.removeAt(storeIndex);
+//                                    data.commitChanges();
+                                }
+                                
+                                
+                                Modal.assetSecondaryWindow.close();
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
+        Form.inventory = function(url, data, edit, dataStoreInventoryPerlengkapan) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function(form,action) {
+                                        var id = action.result.id;
+                                        var grid = Ext.getCmp('grid_inventory_penerimaan_perlengkapan').getStore();
+                                        var new_records = grid.getNewRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
+                                        Ext.each(new_records, function(obj){
+                                            var index = grid.indexOf(obj);
+                                            var record = grid.getAt(index);
+                                            record.set('id_inventory',id);
+                                        });
+                                            grid.sync();
+                     
+                                        
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+//                                        if (edit)
+//                                        {
+//                                            Modal.closeProcessWindow();
+//                                        }
+//                                        else
+//                                        {
+//                                            form.reset();
+//                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    },]
+            });
+
+
+            return _form;
+        };
 
         Form.process = function(url, data, edit, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
@@ -2032,17 +2122,31 @@
                                 store: documentStore,
                                 columnWidth: .5,
                                 width: '100%',
-                                height: 90,
+                                height: 110,
                                 style: {
                                     marginBottom: '10px'
                                 },
                                 columns: [{
                                         text: 'Document Name',
                                         dataIndex: 'name',
-                                        width: 200
+                                        width: 230
                                     }, {
                                         xtype: 'actioncolumn',
-                                        width: 50,
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
                                         items: [{
                                                 icon: '../basarnas/assets/images/icons/delete.png',
                                                 tooltipe: 'Remove Document',
@@ -2175,7 +2279,7 @@
                                 xtype : 'panel',
                                 itemId : 'photoPanel',
                                 frame : true,
-                                height : 90,
+                                height : 110,
                                 style : {
                                     marginBottom: '10px'
                                 },
@@ -2185,14 +2289,15 @@
                                     tpl: [
                                         '<tpl for=".">',
                                         '<div class="thumb-wrap" id="{name}" style="float:left; padding:5px">',
-                                        '<div class="thumb"><img src="{url}" height="70" width="70"></div>',
+                                        '<div class="thumb"><img src="{url}" height="70" width="70"><br/><input type="button" value="Tindakan" id="{name}" class="action_btn" /></div>',
                                         '</div>',
                                         '</tpl>',
                                         '<div class="x-clear"></div>'
                                     ],
                                     height: 80,
                                     emptyText: 'No image',
-                                    itemSelector: 'div.thumb-wrap',
+//                                    itemSelector: 'div.thumb-wrap',
+                                    itemSelector: 'input.action_btn',
                                     prepareData: function(data) {
                                         Ext.apply(data);
                                         return data;
@@ -2203,36 +2308,61 @@
                                         },
                                         itemclick: function(view, record, item, index) {
                                             var data = record.data;
+                                            
+                                            var messageBox = Ext.create('Ext.window.MessageBox', {
+                                                width:300,
+                                                height: 100,
+                                                buttonText: {yes: "Lihat",no: "Hapus",cancel: "Batal"},
 
-                                            var dataSend = {
-                                                file: data.name
-                                            };
+                                           });
+                                           
 
-                                            $.ajax({
-                                                type: 'POST',
-                                                dataType: 'json',
-                                                data: dataSend,
-                                                url: Reference.URL.deleteImage,
-                                                success: function(res) {
-                                                    if (res.success)
+                                            messageBox.show({
+                                                title:'Tindakan',
+                                                msg: 'Pilih Tindakan',
+                                                buttons: Ext.Msg.YESNOCANCEL,
+                                                fn: function(btn){
+                                                    if (btn === 'yes')
                                                     {
-                                                        var recordToRemove = photoStore.findRecord('name', data.name);
-                                                        if (recordToRemove !== null)
-                                                        {
-                                                            photoStore.remove(recordToRemove);
-                                                            console.log(photoStore.count());
-                                                        }
-                                                        else
-                                                        {
-                                                            console.error('could not found the expected image');
-                                                        }
+                                                        window.open(data.url,'_blank');
                                                     }
-                                                    else
+                                                    else if(btn === 'no')
                                                     {
-                                                        console.error('fail to delete image');
+                                                        var dataSend = {
+                                                            file: data.name
+                                                        };
+
+
+
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            dataType: 'json',
+                                                            data: dataSend,
+                                                            url: Reference.URL.deleteImage,
+                                                            success: function(res) {
+                                                                if (res.success)
+                                                                {
+                                                                    var recordToRemove = photoStore.findRecord('name', data.name);
+                                                                    if (recordToRemove !== null)
+                                                                    {
+                                                                        photoStore.remove(recordToRemove);
+                                                                        console.log(photoStore.count());
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        console.error('could not found the expected image');
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    console.error('fail to delete image');
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             });
+                                            
                                         }
                                     }
                                 })
@@ -2280,17 +2410,31 @@
                                 store: documentStore,
                                 columnWidth: .5,
                                 width: '100%',
-                                height: 90,
+                                height: 110,
                                 style: {
                                     marginBottom: '10px'
                                 },
                                 columns: [{
                                         text: 'Document Name',
                                         dataIndex: 'name',
-                                        width: 200
+                                        width: 270
                                     }, {
                                         xtype: 'actioncolumn',
-                                        width: 50,
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
                                         items: [{
                                                 icon: '../basarnas/assets/images/icons/delete.png',
                                                 tooltipe: 'Remove Document',
@@ -2322,7 +2466,8 @@
 
                                                 }
                                             }]
-                                    }]
+                                    },
+                                    ]
                             }, {
                                 xtype: 'filefield',
                                 name: 'userfile',
@@ -2374,7 +2519,7 @@
                 defaultType: 'container',
                 frame: true,
                 items: [{
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
@@ -2387,31 +2532,22 @@
                             }, {
                                 fieldLabel: 'No KIB',
                                 name: 'no_kib'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%',
-                            labelWidth: 80
-                        },
-                        defaultType: 'textfield',
-                        items: [{
+                            },{
                                 fieldLabel: 'Unit Kerja',
                                 name: 'unit_pmk'
-                            }, {
-                                fieldLabel: 'Catatan',
-                                name: 'catatan'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
                             labelWidth: 80
                         },
                         defaultType: 'textfield',
-                        items: [{
+                        items: [ {
+                                fieldLabel: 'Catatan',
+                                name: 'catatan'
+                            },{
                                 fieldLabel: 'Alamat Unit',
                                 name: 'alm_pmk'
                             }, {
@@ -2419,11 +2555,11 @@
                                 name: 'status'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .34,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
-                            labelWidth: 80,
+                            labelWidth: 80
                         },
                         defaultType: 'textfield',
                         items: [{
@@ -2431,17 +2567,21 @@
                                 name: 'kuantitas'
                             }, {
                                 xtype: 'numberfield',
+                                fieldLabel: 'Harga Aset',
+                                name: 'rph_aset'
+                            },{
+                                xtype: 'numberfield',
                                 fieldLabel: 'Harga Wajar',
                                 name: 'rphwajar'
                             }]
-                    }]
+                    }, ]
             };
 
 
             return component;
         };
 
-        Form.Component.selectionAsset = function(cmpSetting) {
+        Form.Component.selectionAsset = function(cmpSetting,isReadOnly) {
 
             var component = {
                 xtype: 'fieldset',
@@ -2462,7 +2602,7 @@
                         items: [{
                                 fieldLabel: 'Kode Barang*',
                                 name: 'kd_brg',
-                                readOnly:true,
+                                readOnly:(isReadOnly == false)?false:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -2476,7 +2616,7 @@
                                 fieldLabel: 'Nama',
                                 name: 'nama',
                                 editable: false,
-                                readOnly:true,
+                                readOnly:(isReadOnly == false)?false:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -3777,39 +3917,117 @@
             return component;
         };
         
-//        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
-//            var component = {
-//                xtype: 'fieldset',
-//                layout:'anchor',
-//                height: (edit == true)?325:150,
-//                anchor: '100%',
-//                title: 'Riwayat Pajak',
-//                border: false,
-//                frame: true,
-//                defaultType: 'container',
-//                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
-//            };
-//
-//            return component;
-//        };
-        
-        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+        Form.Component.gridInventoryPerlengkapan = function(setting) {
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
                 height: 325,
                 anchor: '100%',
-                title: 'Riwayat Pajak',
+                title: 'PERLENGKAPAN',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}]
+                items: [{xtype:'container',height:300,items:[Grid.inventoryPerlengkapan(setting)]}]
             };
 
             return component;
         };
         
+        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: (edit == true)?325:150,
+                anchor: '100%',
+                title: 'Riwayat Pajak',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+            };
+
+            return component;
+        };
+
         
+//        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+//            var component = {
+//                xtype: 'fieldset',
+//                layout:'anchor',
+//                height: 325,
+//                anchor: '100%',
+//                title: 'Riwayat Pajak',
+//                border: false,
+//                frame: true,
+//                defaultType: 'container',
+//                items: [{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}]
+//            };
+//
+//            return component;
+//        };
+//        
+        
+        
+        Form.Component.peraturan = function()
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'PERATURAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'date_upload',
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama'
+                            }, 
+                            {
+                                fieldLabel: 'No Dokumen',
+                                name: 'no_dokumen'
+                            },{
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal Dokumen',
+                                name: 'tanggal_dokumen',
+                                format: 'Y-m-d'
+                            },
+                            {
+                                fieldLabel: 'Initiator',
+                                name: 'initiator'
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Perihal',
+                                name: 'perihal'
+                            },
+                        ]
+                  
+                        
+                    }]
+            };
+
+            return component;
+        
+        };
 
         Form.Component.tambahanBangunanTanah = function() {
             var component = {
@@ -4866,7 +5084,10 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id',
+                                    },
                                     {
                                     xtype: 'combo',
                                     disabled: false,
@@ -4877,38 +5098,36 @@
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 {
                                     fieldLabel: 'Serial Number',
-                                    name: 'serial_number'
+                                    name: 'serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.readOnly = true;
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
+                                                    qtyField.readOnly = false;
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel:'Qty',
+                                    name:'qty',
+                                    id:'pengadaan_data_perlengkapan_qty'
                                 },
                                 {
                                     xtype: 'datefield',
@@ -5636,7 +5855,7 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'PERENCANAAN',
+                    title: 'PENGELOLAAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -5650,23 +5869,20 @@
                             defaultType: 'textfield',
                             items: [
                                 {
-                                    xtype : 'hidden',
-                                    name : 'id'
-                                }, {
                                     fieldLabel: 'Nama Operasi SAR',
-                                    name: 'namaoperasisar',
+                                    name: 'nama_operasi',
                                 }, {
                                     fieldLabel: 'PIC',
                                     name: 'pic'
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Mulai',
-                                    name: 'start_date',
+                                    name: 'tanggal_mulai',
                                     format : 'Y-m-d'
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Selesai',
-                                    name: 'end_date',
+                                    name: 'tanggal_selesai',
                                     format : 'Y-m-d'
                                 }
                             ]
@@ -5681,7 +5897,7 @@
                             items: [
                                 {
                                     fieldLabel: 'Deskripsi',
-                                    name: 'description',
+                                    name: 'deskripsi',
                                     xtype:'textarea',
                                     anchor:'100%',
                                 }
@@ -6202,7 +6418,7 @@
             return component;
         };
         
-        Form.Component.inventoryPerlengkapan = function(readOnly) {
+        Form.Component.dataInventoryPerlengkapan = function(readOnly) {
 
             var component = [{
                     xtype: 'fieldset',
@@ -6213,6 +6429,7 @@
                     defaultType: 'container',
                     frame: true,
                     items: [
+                        
                        {
                             columnWidth: .99,
                             layout: 'anchor',
@@ -6221,7 +6438,14 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
+                            items: [
+                                    {
+                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
                                     readOnly:(readOnly == true)?true:false,
                                     xtype: 'combo',
                                     disabled: false,
@@ -6233,34 +6457,6 @@
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 {
                                     readOnly:(readOnly == true)?true:false,
@@ -6314,6 +6510,16 @@
                                     fieldLabel: 'Asal Barang',
                                     name: 'asal_barang',
                                     id:'inventory_data_perlengkapan_asal_barang'
+                                },
+                                {
+                                    xtype:'hidden',
+                                    name: 'id',
+                                    value:'',
+                                },
+                                {
+                                    xtype:'hidden',
+                                    name: 'id_inventory',
+                                    value:'',
                                 },
                                 
                             ]

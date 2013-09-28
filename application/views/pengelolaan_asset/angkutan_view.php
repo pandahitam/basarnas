@@ -66,6 +66,7 @@
             id: 'Proxy_Angkutan',
             url: Angkutan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Angkutan.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 //Params_M_Angkutan = request.operation.params;
                 

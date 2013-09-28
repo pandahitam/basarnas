@@ -6,7 +6,7 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
 		$this->table = 'asset_angkutan';
                 $this->extTable = 'ext_asset_angkutan';
                 $this->countTable = 'view_asset_angkutan_darat';
-                
+                $this->viewTable = 'view_asset_angkutan_darat';
 //                $this->selectColumn = "SELECT t.kd_lokasi, t.kd_brg, t.no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
 //                            msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
 //                            dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status,
@@ -30,49 +30,103 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
                             darat_jumlah_pajak, darat_keterangan_lainnya";
 	}
 	
-	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null, $gridFilter = null){
                 
+//            if($start != null && $limit != null)
+//            {
+//                $query = "$this->selectColumn from view_asset_angkutan_darat LIMIT $start,$limit";
+//                if($searchTextFilter != null)
+//                {
+//                    $query = "$this->selectColumn from view_asset_angkutan_darat
+//                            where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+//                            LIMIT $start,$limit";
+//                }
+////                $query = "$this->selectColumn
+////                            FROM $this->table AS t
+////                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+////                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+////                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
+////                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+////                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+////                            where t.kd_brg like '30201%' or t.kd_brg like '30202%'
+////                            LIMIT $start,$limit";
+//		
+//            }
+//            else
+//            {
+//                  $query = "$this->selectColumn from view_asset_angkutan_darat";
+//                  if($searchTextFilter != null)
+//                  {
+//                        $query = "$this->selectColumn from view_asset_angkutan_darat
+//                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+//                                ";
+//                  }
+////                $query = "$this->selectColumn
+////                            FROM $this->table AS t
+////                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+////                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+////                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
+////                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+////                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+////                            where t.kd_brg like '30201%' or t.kd_brg like '30202%'
+////                            ";
+//            }
+//            
+//            return $this->Get_By_Query($query);
+            $isGridFilter = false;
             if($start != null && $limit != null)
             {
-                $query = "$this->selectColumn from view_asset_angkutan_darat LIMIT $start,$limit";
+                $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                LIMIT $start, $limit";
                 if($searchTextFilter != null)
                 {
-                    $query = "$this->selectColumn from view_asset_angkutan_darat
-                            where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
-                            LIMIT $start,$limit";
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                LIMIT $start, $limit";
                 }
-//                $query = "$this->selectColumn
-//                            FROM $this->table AS t
-//                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-//                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
-//                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
-//                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-//                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-//                            where t.kd_brg like '30201%' or t.kd_brg like '30202%'
-//                            LIMIT $start,$limit";
-		
+                else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                               FROM $this->viewTable
+                               where $gridFilter
+                               LIMIT $start, $limit
+                                ";
+                    $isGridFilter = true;
+                }
             }
             else
             {
-                  $query = "$this->selectColumn from view_asset_angkutan_darat";
-                  if($searchTextFilter != null)
-                  {
-                        $query = "$this->selectColumn from view_asset_angkutan_darat
-                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                $query = "$this->selectColumn
+                                 FROM $this->viewTable
                                 ";
-                  }
-//                $query = "$this->selectColumn
-//                            FROM $this->table AS t
-//                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-//                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
-//                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
-//                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-//                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-//                            where t.kd_brg like '30201%' or t.kd_brg like '30202%'
-//                            ";
+
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                ";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                               where $gridFilter
+                                ";
+                    $isGridFilter = true;
+                }
             }
-            
-            return $this->Get_By_Query($query);
+
+            if($isGridFilter == true)
+            {
+                return $this->Get_By_Query($query,true);	
+            }
+            else
+            {
+                return $this->Get_By_Query($query);	
+            }	
 			
 	}
         
@@ -82,7 +136,17 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
             {
                 $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan 
                         FROM ext_asset_angkutan_darat_perlengkapan WHERE id_ext_asset = $id_ext_asset";
-                return $this->Get_By_Query($query);
+                $r = $this->db->query($query);
+                $data = array();
+                if ($r->num_rows() > 0)
+		{
+		    foreach ($r->result() as $obj)
+		    {
+			$data[] = $obj;
+		    }  
+		}
+                return $data;
+//                return $this->Get_By_Query($query);
             }
         }
        

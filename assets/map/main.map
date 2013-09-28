@@ -240,7 +240,10 @@ MAP
 			STYLE
 				SYMBOL "star"
 				SIZE 15
-				COLOR 0 115 76
+				#COLOR 0 115 76
+				#OUTLINECOLOR 0 115 76
+				COLOR 76 230 0 
+				#COLOR 0 115 76
 				OUTLINECOLOR 0 115 76
 			END      
 			LABEL
@@ -274,6 +277,8 @@ MAP
 				SYMBOL "Circle"
 				SIZE 6
 				COLOR 76 230 0 
+				#COLOR 0 115 76
+				OUTLINECOLOR 0 115 76
 			END      
 			LABEL
 				COLOR 0 115 76

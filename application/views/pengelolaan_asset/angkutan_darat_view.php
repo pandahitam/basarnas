@@ -88,6 +88,7 @@
             id: 'Proxy_AngkutanDarat',
             url: AngkutanDarat.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: AngkutanDarat.reader,
+            timeout: 600000,
             afterRequest: function(request, success) {
                 //Params_M_AngkutanDarat = request.operation.params;
                 
@@ -374,6 +375,16 @@
                        }
                     });
                     
+                if(data.darat_masa_berlaku_stnk == "0000-00-00")
+                {
+                    data.darat_masa_berlaku_stnk = "";
+
+                }    
+                if(data.darat_masa_berlaku_pajak == "0000-00-00")
+                {
+                    data.darat_masa_berlaku_pajak = "";
+
+                }   
                 
                 form.getForm().setValues(data);
             }

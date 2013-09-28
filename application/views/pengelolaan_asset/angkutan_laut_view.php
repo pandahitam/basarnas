@@ -87,6 +87,7 @@
             id: 'Proxy_AngkutanLaut',
             url: AngkutanLaut.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: AngkutanLaut.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 //Params_M_AngkutanLaut = request.operation.params;
                 
@@ -289,7 +290,7 @@
         };
         
         AngkutanLaut.Form.create = function(data, edit) {
-          
+          debugger;
         var setting_grid_detail_penggunaan = {
                 id:'grid_angkutanLaut_detail_penggunaan',
                 toolbar:{
@@ -376,6 +377,33 @@
                            
                        }
                     });
+                    
+                if(data.laut_stkk_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_stkk_masa_berlaku = "";
+
+                }   
+                if(data.laut_sertifikasi_keselamatan_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_sertifikasi_keselamatan_masa_berlaku = "";
+
+                } 
+                if(data.laut_sertifikasi_radio_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_sertifikasi_radio_masa_berlaku = "";
+
+                } 
+                if(data.laut_surat_ijin_berlayar_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_surat_ijin_berlayar_masa_berlaku = "";
+
+                } 
+                if(data.laut_surat_ukur_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_surat_ukur_masa_berlaku = "";
+
+                } 
+                
                 form.getForm().setValues(data);
             }
 
