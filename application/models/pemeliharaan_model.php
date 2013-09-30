@@ -55,5 +55,13 @@ class Pemeliharaan_Model extends MY_Model{
                 return $this->Get_By_Query($query);
 	}
 	
+	function get_PemeliharaanForPrint($kd_lokasi, $kd_barang, $no_aset)
+	{
+		$query = "$this->selectColumn FROM $this->viewTable where kd_lokasi = '$kd_lokasi' and kd_brg = '$kd_barang' and no_aset = '$no_aset'";
+		$this->load->database();
+		$result = $this->db->query($query)->result_array();
+		$this->db->close();				  
+		return $result;	
+	}
 }
 ?>

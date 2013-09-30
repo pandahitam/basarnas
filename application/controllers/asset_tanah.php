@@ -187,11 +187,9 @@ class Asset_Tanah extends MY_Controller {
 				$xkd_skel = $data_cetak['0']['kd_skel'];
 				$xkd_sskel = $data_cetak['0']['kd_sskel'];
 				
-				
 				$data['dataprn'] = $data_cetak;
 				//$addata = array();
 
-				
 				$query = $this->db->query(" SELECT ur_gol FROM ref_golongan WHERE kd_gol = '$xkd_gol' LIMIT 1 ");
 				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
 				$query = $this->db->query(" SELECT ur_bid FROM ref_bidang WHERE kd_gol = '$xkd_gol' AND  kd_bid = '$xkd_bid' LIMIT 1 ");
@@ -204,20 +202,20 @@ class Asset_Tanah extends MY_Controller {
 				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
 		  
 				$data['bidang'] = $addata;
-				
-				$data['riwayatpajak'] = json_decode(json_encode($this->model->getRiwayatPajak($xid),TRUE),TRUE);
+
+				$data['riwayatpajak'] = json_decode(json_encode($this->model->getRiwayatPajakForPrint($xid),TRUE),TRUE);
 
 				$this->load->model("Pengadaan_Model");
-				$data['pengadaan'] = json_decode(json_encode($this->Pengadaan_Model->get_ByKode($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['pengadaan'] = json_decode(json_encode($this->Pengadaan_Model->get_ByKodeForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->model("Pemeliharaan_Model");
-				$data['pemeliharaan'] = json_decode(json_encode($this->Pemeliharaan_Model->get_Pemeliharaan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['pemeliharaan'] = json_decode(json_encode($this->Pemeliharaan_Model->get_PemeliharaanForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->model("Penghapusan_Model");
-				$data['penghapusan'] = json_decode(json_encode($this->Penghapusan_Model->get_Penghapusan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['penghapusan'] = json_decode(json_encode($this->Penghapusan_Model->get_PenghapusanForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->model("Pendayagunaan_Model");
-				$data['pendayagunaan'] = json_decode(json_encode($this->Pendayagunaan_Model->get_Pendayagunaan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['pendayagunaan'] = json_decode(json_encode($this->Pendayagunaan_Model->get_PendayagunaanForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->view('pengelolaan_asset/tanah_pdf',$data);
 			}

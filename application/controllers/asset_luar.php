@@ -119,16 +119,16 @@ class Asset_Luar extends MY_Controller {
 				$data['bidang'] = $addata;
 				
 				$this->load->model("Pengadaan_Model");
-				$data['pengadaan'] = json_decode(json_encode($this->Pengadaan_Model->get_ByKode($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['pengadaan'] = json_decode(json_encode($this->Pengadaan_Model->get_ByKodeForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->model("Pemeliharaan_Model");
-				$data['pemeliharaan'] = json_decode(json_encode($this->Pemeliharaan_Model->get_Pemeliharaan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['pemeliharaan'] = json_decode(json_encode($this->Pemeliharaan_Model->get_PemeliharaanForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->model("Penghapusan_Model");
-				$data['penghapusan'] = json_decode(json_encode($this->Penghapusan_Model->get_Penghapusan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['penghapusan'] = json_decode(json_encode($this->Penghapusan_Model->get_PenghapusanForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->model("Pendayagunaan_Model");
-				$data['pendayagunaan'] = json_decode(json_encode($this->Pendayagunaan_Model->get_Pendayagunaan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				$data['pendayagunaan'] = json_decode(json_encode($this->Pendayagunaan_Model->get_PendayagunaanForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
 				
 				$this->load->view('pengelolaan_asset/luar_pdf',$data);
 			}

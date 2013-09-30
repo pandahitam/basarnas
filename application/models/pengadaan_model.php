@@ -60,5 +60,14 @@ class Pengadaan_Model extends MY_Model{
 		return $this->Get_By_Query($query);	
 	}
 	
+        function get_ByKodeForPrint($kd_lokasi,$kd_brg,$no_aset)
+	{
+		$query = "$this->selectColumn FROM $this->viewTable
+                                where kd_lokasi = '$kd_lokasi' AND kd_brg = '$kd_brg' AND no_aset = $no_aset";
+		$this->load->database();
+		$result = $this->db->query($query)->result_array();
+		$this->db->close();				  
+		return $result;	
+	}
 }
 ?>
