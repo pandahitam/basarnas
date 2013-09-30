@@ -174,7 +174,7 @@ Penghapusan.Grid.grid = Grid.inventarisGrid(setting,Penghapusan.Data);
 };*/
 var new_tabpanel = {
     id: 'penghapusan_asset', title: 'Penghapusan', iconCls: 'icon-menu_impasing', closable: true, border: false,
-    items: [Penghapusan.Grid.grid]
+    layout: 'border',items: [Region.filterPanelPenghapusanDanMutasi(Penghapusan.Data),Penghapusan.Grid.grid]
 }
       
 <?php }else{ echo "var new_tabpanel_MD = 'GAGAL';"; } ?>

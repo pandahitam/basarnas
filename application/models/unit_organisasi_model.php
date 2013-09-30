@@ -22,8 +22,10 @@ class Unit_Organisasi_Model extends MY_Model {
                             LEFT JOIN ref_unker AS b ON t.kd_lokasi = b.kdlok";
         }
         
-        $result["results"] = $this->Get_By_Query($query);
-        $result["total"] = count($result["results"]);
+        $returnedResult = $this->Get_By_Query($query);
+
+        $result["results"] = $returnedResult['data'];
+        $result["total"] = $returnedResult['count'];
         
         return $result;
     }

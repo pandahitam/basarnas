@@ -44,7 +44,7 @@ MAP
 	WEB
 		TEMPLATE "templates/browse.html"
 		EMPTY "/basarnas/assets/map/templates/empty.html"
-		IMAGEPATH "C:/xampp/htdocs/basarnas/assets/map/tmp/"
+		IMAGEPATH "D:/xampp/htdocs/basarnas/assets/map/tmp/"
 		IMAGEURL "/basarnas/assets/map/tmp/"
 	END
 
@@ -90,7 +90,7 @@ MAP
 	 QUERYMAP
 	 	STATUS ON
 	 	STYLE HILITE
-	 	COLOR 255 255 0
+	 	COLOR 255 0 0
 	 END
 
 	LAYER
@@ -240,7 +240,10 @@ MAP
 			STYLE
 				SYMBOL "star"
 				SIZE 15
-				COLOR 0 115 76
+				#COLOR 0 115 76
+				#OUTLINECOLOR 0 115 76
+				COLOR 76 230 0 
+				#COLOR 0 115 76
 				OUTLINECOLOR 0 115 76
 			END      
 			LABEL
@@ -274,6 +277,8 @@ MAP
 				SYMBOL "Circle"
 				SIZE 6
 				COLOR 76 230 0 
+				#COLOR 0 115 76
+				OUTLINECOLOR 0 115 76
 			END      
 			LABEL
 				COLOR 0 115 76

@@ -771,11 +771,47 @@ class Master_Data extends CI_Controller {
 
     function klasifikasi_aset_lvl3_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $data = $this->Klasifikasi_Aset_Lvl3_Model->get_AllData();
-//			$total = $this->Unit_Kerja_Model->get_CountData();	  
-//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
-            echo '({results:' . json_encode($data) . '})';
+            $resultData = $this->Klasifikasi_Aset_Lvl3_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
         }
+    }
+    
+    function klasifikasi_aset_lvl3_modifyKlasifikasiAsetLvl3() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lvl1','kd_lvl2','kd_lvl3','nama','kd_klasifikasi_aset'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_klasifikasi_aset'] = $data['kd_lvl1'].$data['kd_lvl2'].$data['kd_lvl3'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_klasifikasiaset_lvl3');
+        
+        echo "{success: true}";
+    }
+    
+    function klasifikasi_aset_lvl3_deleteKlasifikasiAsetLvl3()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_klasifikasi_aset', $data['id']);
+           $this->db->delete('ref_klasifikasiaset_lvl3');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
     //MASTER KLASIFIKASI ASET LVL2
@@ -790,11 +826,47 @@ class Master_Data extends CI_Controller {
 
     function klasifikasi_aset_lvl2_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $data = $this->Klasifikasi_Aset_Lvl2_Model->get_AllData();
-//			$total = $this->Unit_Kerja_Model->get_CountData();	  
-//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
-            echo '({results:' . json_encode($data) . '})';
+            $resultData = $this->Klasifikasi_Aset_Lvl2_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
         }
+    }
+    
+    function klasifikasi_aset_lvl2_modifyKlasifikasiAsetLvl2() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lvl1','kd_lvl2','nama','kd_lvl2_brg'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_lvl2_brg'] = $data['kd_lvl1'].$data['kd_lvl2'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_klasifikasiaset_lvl2');
+        
+        echo "{success: true}";
+    }
+    
+    function klasifikasi_aset_lvl2_deleteKlasifikasiAsetLvl2()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_lvl2_brg', $data['id']);
+           $this->db->delete('ref_klasifikasiaset_lvl2');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
     //MASTER KLASIFIKASI ASET LVL1
@@ -809,10 +881,81 @@ class Master_Data extends CI_Controller {
 
     function klasifikasi_aset_lvl1_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $data = $this->Klasifikasi_Aset_Lvl1_Model->get_AllData();
-//			$total = $this->Unit_Kerja_Model->get_CountData();	  
-//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
-            echo '({results:' . json_encode($data) . '})';
+            $resultData = $this->Klasifikasi_Aset_Lvl1_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function klasifikasi_aset_lvl1_modifyKlasifikasiAsetLvl1() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lvl1','nama'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_klasifikasiaset_lvl1');
+        
+        echo "{success: true}";
+    }
+    
+    function klasifikasi_aset_lvl1_deleteKlasifikasiAsetLvl1()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_lvl1', $data['id']);
+           $this->db->delete('ref_klasifikasiaset_lvl1');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdKlasifikasiAset()
+    {
+
+        $key = $_POST['key'];
+        $table_name = $_POST['table_name'];
+        $this->db->from($table_name);
+        $this->db->where($key,$_POST['value']['key']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
         }
     }
 
@@ -828,11 +971,46 @@ class Master_Data extends CI_Controller {
 
     function warehouse_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $data = $this->Warehouse_Model->get_AllData();
-//			$total = $this->Unit_Kerja_Model->get_CountData();	  
-//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
-            echo '({results:' . json_encode($data) . '})';
+            $resultData = $this->Warehouse_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
         }
+    }
+    
+    function warehouse_modifyWarehouse() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','kd_lokasi','nama'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_warehouse');
+        
+        echo "{success: true}";
+    }
+    
+    function warehouse_deleteWarehouse()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_warehouse');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
     //MASTER RUANG
@@ -847,11 +1025,46 @@ class Master_Data extends CI_Controller {
 
     function ruang_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $data = $this->Ruang_Model->get_AllData();
-//			$total = $this->Unit_Kerja_Model->get_CountData();	  
-//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
-            echo '({results:' . json_encode($data) . '})';
+            $resultData = $this->Ruang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
         }
+    }
+    
+    function ruang_modifyRuang() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','warehouse_id','nama'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_warehouseruang');
+        
+        echo "{success: true}";
+    }
+    
+    function ruang_deleteRuang()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_warehouseruang');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
     //MASTER RAK
@@ -866,11 +1079,47 @@ class Master_Data extends CI_Controller {
 
     function rak_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $data = $this->Rak_Model->get_AllData();
+            $resultData = $this->Rak_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
 //			$total = $this->Unit_Kerja_Model->get_CountData();	  
-//   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
-            echo '({results:' . json_encode($data) . '})';
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
         }
+    }
+    
+        function rak_modifyRak() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','warehouseruang_id','nama','warehouse_id',
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_warehouserak');
+        
+        echo "{success: true}";
+    }
+    
+    function rak_deleteRak()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_warehouserak');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
 }

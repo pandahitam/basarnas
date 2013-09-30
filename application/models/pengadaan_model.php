@@ -7,7 +7,7 @@ class Pengadaan_Model extends MY_Model{
 		$this->extTable = 'pengadaan';
     
                 $this->selectColumn = "SELECT id, kd_lokasi, kd_brg, no_aset, kode_unor, part_number, serial_number, merek, model, nama,
-                            nama_unker, nama_unor, id_vendor, nama,
+                            nama_unker, nama_unor, id_vendor, nama, qty,
                             tahun_angaran, perolehan_sumber, perolehan_bmn, no_sppa, 
                             asal_pengadaan, harga_total, deskripsi, perolehan_tanggal, 
                             faktur_no, faktur_tanggal, kuitansi_no, kuitansi_tanggal, 
@@ -18,9 +18,30 @@ class Pengadaan_Model extends MY_Model{
 	}
         
 	
-	function get_AllData(){
-		$query = "$this->selectColumn FROM $this->viewTable";
-
+	function get_AllData($start = null, $limit = null, $searchTextFilter = null){
+		
+                
+                if($start !=null && $limit != null)
+                {
+                    $query = "$this->selectColumn FROM $this->viewTable LIMIT $start, $limit";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        LIMIT $start, $limit";
+                    }
+                }
+                else
+                {
+                    $query = "$this->selectColumn FROM $this->viewTable";
+                    if($searchTextFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        ";
+                    }
+                }
+                
 		return $this->Get_By_Query($query);	
 	}
 	

@@ -88,13 +88,116 @@ class Asset_Angkutan_Darat extends MY_Controller {
                 
 		return $this->deleteData($data);
 	}
+        
+        function getSpecificPerlengkapanAngkutanDarat()
+        {
+            if($_POST['open'] == 1)
+            {
+                $data = $this->model->getSpecificPerlengkapanAngkutanDarat($_POST['id_ext_asset']);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+                
+            }
+        }
+        
+        function modifyPerlengkapanAngkutanDarat()
+        {
+            $dataPerlengkapanDarat = array();
+            $dataPerlengkapanDaratFields = array(
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan'
+            );
+            
+            foreach ($dataPerlengkapanDaratFields as $field) {
+			$dataPerlengkapanDarat[$field] = $this->input->post($field);
+            }
+                $this->db->set($dataPerlengkapanDarat);
+                $this->db->replace('ext_asset_angkutan_darat_perlengkapan');
+               
+        }
+        
+        function deletePerlengkapanAngkutanDarat()
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                foreach($data as $deleted)
+                {
+                    $deletedArray[] =$deleted['id'];
+                }
+                $this->db->where_in('id',$deletedArray);
+                
+		$this->db->delete('ext_asset_angkutan_darat_perlengkapan');
+	}
+        
+        
+        
+        function requestIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $this->db->insert('ext_asset_angkutan',$receivedData);
+            $idExt = $this->db->insert_id();
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
 	
 	function cetak($input){
 		$data_cetak = $this->model->get_SelectedDataPrint($input);
 			if(count($data_cetak)){
-				$data['dataprn'] = $data_cetak['dataasset'];
+				
+				$xid = $data_cetak['0']['id'];
+				$xkd_lokasi = $data_cetak['0']['kd_lokasi'];
+				$xkd_brg = $data_cetak['0']['kd_brg'];
+				$xno_aset = $data_cetak['0']['no_aset'];
+				
+				$xkd_gol = $data_cetak['0']['kd_gol'];
+				$xkd_bid = $data_cetak['0']['kd_bid'];
+				$xkd_kelompok = $data_cetak['0']['kd_kelompok'];
+				$xkd_skel = $data_cetak['0']['kd_skel'];
+				$xkd_sskel = $data_cetak['0']['kd_sskel'];
+				
+				
+				$data['dataprn'] = $data_cetak;
+				//$addata = array();
+
+				
+				$query = $this->db->query(" SELECT ur_gol FROM ref_golongan WHERE kd_gol = '$xkd_gol' LIMIT 1 ");
+				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
+				$query = $this->db->query(" SELECT ur_bid FROM ref_bidang WHERE kd_gol = '$xkd_gol' AND  kd_bid = '$xkd_bid' LIMIT 1 ");
+				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
+				$query = $this->db->query(" SELECT ur_kel FROM ref_kel WHERE kd_gol = '$xkd_gol' AND kd_bid = '$xkd_bid' AND kd_kel = '$xkd_kelompok' LIMIT 1 ");
+				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
+				$query = $this->db->query(" SELECT ur_skel FROM ref_subkel WHERE kd_gol = '$xkd_gol' AND kd_bid = '$xkd_bid' AND kd_kel = '$xkd_kelompok' AND kd_skel = '$xkd_skel' LIMIT 1 ");
+				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
+				$query = $this->db->query(" SELECT ur_sskel FROM ref_subsubkel WHERE kd_gol = '$xkd_gol' AND kd_bid = '$xkd_bid' AND  kd_kel = '$xkd_kelompok' AND kd_skel = '$xkd_skel' AND kd_sskel = '$xkd_sskel' LIMIT 1 ");
+				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
+		  
+				$data['bidang'] = $addata;
+				
+				$this->load->model("Pengadaan_Model");
+				$data['pengadaan'] = json_decode(json_encode($this->Pengadaan_Model->get_ByKode($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				
+				$this->load->model("Pemeliharaan_Model");
+				$data['pemeliharaan'] = json_decode(json_encode($this->Pemeliharaan_Model->get_Pemeliharaan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				
+				$this->load->model("Penghapusan_Model");
+				$data['penghapusan'] = json_decode(json_encode($this->Penghapusan_Model->get_Penghapusan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				
+				$this->load->model("Pendayagunaan_Model");
+				$data['pendayagunaan'] = json_decode(json_encode($this->Pendayagunaan_Model->get_Pendayagunaan($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);
+				
 				$this->load->view('pengelolaan_asset/angkutan_darat_pdf',$data);
 			}
 	}
+        
+        
 }
 ?>

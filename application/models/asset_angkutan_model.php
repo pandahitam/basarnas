@@ -27,7 +27,7 @@ class Asset_Angkutan_Model extends MY_Model{
                             ";
 	}
 	
-	function get_AllData($start=null, $limit=null){
+	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
                 
             if($start != null && $limit != null)
             {
@@ -39,7 +39,18 @@ class Asset_Angkutan_Model extends MY_Model{
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                             LIMIT $start,$limit";
-		
+		if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
+                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                            LIMIT $start,$limit";
+                }
             }
             else
             {
@@ -51,6 +62,18 @@ class Asset_Angkutan_Model extends MY_Model{
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
                             ";
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
+                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                            ";
+                }
             }
             
             return $this->Get_By_Query($query);
@@ -77,10 +100,12 @@ class Asset_Angkutan_Model extends MY_Model{
 		return $kode;
 	}
 	
+	
 	function get_SelectedDataPrint($ids){
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
+		
 		$q = "$this->selectColumn
                         FROM $this->table AS t
                             LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
@@ -97,9 +122,7 @@ class Asset_Angkutan_Model extends MY_Model{
 				$dataasset[] = $row;
 			}
 		}
-	
-		$data = array('dataasset' => $dataasset );
-		return $data;
+		return $dataasset;
 	}
 }
 ?>

@@ -41,7 +41,7 @@
                 data: InventoryPengeluaran.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 
@@ -99,7 +99,9 @@
             var arrayDeleted = [];
             _.each(selected, function(obj) {
                 var data = {
-                    id: obj.data.id
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_barang_keluar: obj.data.qty_barang_keluar,
                 };
                 arrayDeleted.push(data);
             });
@@ -196,7 +198,8 @@
                     {header: 'Date Created', dataIndex: 'date_created', width: 100, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Keterangan', dataIndex: 'keterangan', width: 120, hidden: false, filter: {type: 'string'}},
                     {header: 'Status Barang', dataIndex: 'status_barang', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Qty', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
+                    {header: 'Qty Awal', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
+                    {header: 'Qty Barang Keluar', dataIndex: 'qty_barang_keluar', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Tanggal Pengeluaran', dataIndex: 'tgl_pengeluaran', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Asal Barang', dataIndex: 'asal_barang', width: 90, hidden: false, filter: {type: 'string'}},
                 ]

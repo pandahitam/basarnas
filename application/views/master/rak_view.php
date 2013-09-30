@@ -41,7 +41,7 @@
                 data: Rak.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 
@@ -61,7 +61,7 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.referensiRak(setting);
 
             if (data !== null)
             {
@@ -71,39 +71,39 @@
         };
 
         Rak.Action.add = function() {
-//            var _form = Rak.Form.create(null, false);
-//            Modal.processCreate.setTitle('Create Rak');
-//            Modal.processCreate.add(_form);
-//            Modal.processCreate.show();
+            var _form = Rak.Form.create(null, false);
+            Modal.smallWindow.setTitle('Create Rak');
+            Modal.smallWindow.add(_form);
+            Modal.smallWindow.show();
         };
 
         Rak.Action.edit = function() {
-//            var selected = Rak.Grid.grid.getSelectionModel().getSelection();
-//            if (selected.length === 1)
-//            {
-//                var data = selected[0].data;
-//                delete data.nama_unker;
-//
-//                if (Modal.processEdit.items.length === 0)
-//                {
-//                    Modal.processEdit.setTitle('Edit Rak');
-//                }
-//                var _form = Rak.Form.create(data, true);
-//                Modal.processEdit.add(_form);
-//                Modal.processEdit.show();
-//            }
+            var selected = Rak.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                delete data.nama_unker;
+
+                if (Modal.smallWindow.items.length === 0)
+                {
+                    Modal.smallWindow.setTitle('Edit Rak');
+                }
+                var _form = Rak.Form.create(data, true);
+                Modal.smallWindow.add(_form);
+                Modal.smallWindow.show();
+            }
         };
 
         Rak.Action.remove = function() {
-//            var selected = Rak.Grid.grid.getSelectionModel().getSelection();
-//            var arrayDeleted = [];
-//            _.each(selected, function(obj) {
-//                var data = {
-//                    id: obj.data.id
-//                };
-//                arrayDeleted.push(data);
-//            });
-//            Modal.deleteAlert(arrayDeleted, Rak.URL.remove, Rak.Data);
+            var selected = Rak.Grid.grid.getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id
+                };
+                arrayDeleted.push(data);
+            });
+            Modal.deleteAlert(arrayDeleted, Rak.URL.remove, Rak.Data);
         };
 
         Rak.Action.print = function() {
@@ -185,6 +185,8 @@
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Id Warehouse Ruang', dataIndex: 'warehouseruang_id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id Warehouse', dataIndex: 'warehouse_id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Warehouse', dataIndex: 'nama_warehouse', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Ruang', dataIndex: 'nama_ruang', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
              

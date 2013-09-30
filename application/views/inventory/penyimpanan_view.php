@@ -60,6 +60,7 @@
                     noAsetHidden: false
                 }
             };
+            debugger;
 
             var form = Form.inventorypenyimpanan(setting,id_pemeriksaan);
 
@@ -199,6 +200,10 @@
                     {header: 'Qty', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Tanggal Penyimpanan', dataIndex: 'tgl_penyimpanan', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Asal Barang', dataIndex: 'asal_barang', width: 90, hidden: false, filter: {type: 'string'}},
+                    {header: 'Id Warehouse', dataIndex: 'warehouse_id', width: 90, hidden: true, filter: {type: 'string'}},
+                    {header: 'Id Ruang', dataIndex: 'ruang_id', width: 90, hidden: true, filter: {type: 'string'}},
+                    {header: 'Id Rak', dataIndex: 'rak_id', width: 90, hidden: true, filter: {type: 'string'}},
+                    
                 ]
             },
             search: {

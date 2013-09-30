@@ -65,6 +65,21 @@
                 Modal.processCreate.close();
             }
         };
+        
+        Modal.smallWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: 'fit',
+            width: 450, height: 400, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.smallWindow.removeAll(true);
+                }
+            }
+        }); 
 
         Modal.assetCreate = Ext.create('Ext.window.Window', {
             iconCls: 'icon-course',
@@ -79,7 +94,8 @@
                     Modal.assetCreate.removeAll(true);
                 }
             }
-        }),
+        });
+        
         Modal.assetEdit = Ext.create('Ext.window.Window', {
             iconCls: 'icon-course',
             modal: true,
@@ -180,6 +196,62 @@
                                  debugger;*/
                                 console.log('success to delete');
                                 dataGrid.load();
+                            }
+                        });
+                    }
+                }
+            })
+        };
+        
+        Modal.deleteAlertDetailPenggunaanAngkutan = function(arrayDeleted, url, dataGrid, tipe_angkutan) {
+            /*debugger;*/
+            Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ?',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: url,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                dataGrid.load();
+                                $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{tipe_angkutan:tipe_angkutan,id_ext_asset:arrayDeleted[0]['id_ext_asset']},
+                                    success:function(response, status){
+                                     if(response.status == 'success')
+                                     {
+                                        if(tipe_angkutan == "darat")
+                                        {
+                                            var updateTotalPenggunaan = response.total + ' Km';
+                                            Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                        }
+                                        else if(tipe_angkutan == "laut" || tipe_angkutan == "udara")
+                                        {
+                                            var updateTotalPenggunaan = response.total + ' Jam';
+                                            Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                        }
+                                         
+                                     }
+
+                                    }
+                                 });
                             }
                         });
                     }
@@ -420,7 +492,7 @@
                             'afterrender': {
                                 fn: function()
                                 {
-                                    if(defaultValGol != null || defaultValGol != undefined)
+                                    if(defaultValGol != null && defaultValGol != undefined)
                                     {
                                         this.setValue(defaultValGol);
                                     }
@@ -428,10 +500,10 @@
                             },
                             'change': {
                                 fn: function(obj, value) {
-                                    data.clearFilter();
+//                                    data.clearFilter();
                                     if (value !== null)
                                     {
-                                        data.filter([{property: 'kd_brg', value: value}]);
+//                                        data.filter([{property: 'kd_brg', value: value}]);
                                         var filterByGolongan = value;
                                         var filterByBidang = Ext.getCmp('aset-bidang'+ id);
                                                 if (filterByGolongan !== null && filterByBidang !== null) {
@@ -456,7 +528,7 @@
                         text: 'Bidang',
                         height: 30
                     }, {
-                        readOnly:(defaultValBid !=  null || defaultValBid != undefined)?true:false,
+                        readOnly:(defaultValBid !=  null && defaultValBid != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
                         name: 'aset-bidang'+ id,
@@ -476,7 +548,7 @@
                         'afterrender': {
                              fn: function()
                                 {
-                                    if(defaultValBid != null || defaultValBid != undefined)
+                                    if(defaultValBid != null && defaultValBid != undefined)
                                     {
                                         this.setValue(defaultValBid);
                                     }
@@ -484,7 +556,7 @@
                              },
                             'change': {
                                 fn: function(obj, value) {
-                                    data.clearFilter();
+//                                    data.clearFilter();
                                     if (value !== null)
                                     {
                                         var filterByGolonganValue = Ext.getCmp('aset-golongan'+ id).value;
@@ -514,7 +586,7 @@
                         text: 'Kelompok',
                         height: 30
                     }, {
-                        readOnly:(defaultValGol !=  null || defaultValGol != undefined)?true:false,
+                        readOnly:(defaultValKel !=  null && defaultValKel != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Kelompok',
                         name: 'aset-kelompok'+ id,
@@ -534,7 +606,7 @@
                             'afterrender': {
                                 fn: function()
                                    {
-                                       if(defaultValKel != null || defaultValKel != undefined)
+                                       if(defaultValKel != null && defaultValKel != undefined)
                                        {
                                            this.setValue(defaultValKel);
                                        }
@@ -798,7 +870,7 @@
             return panel;
         };
         
-        Region.filterPanelAsetNoKlasifikasi = function(data,id,defaultValGol,defaultValBid) {
+        Region.filterPanelAsetNoKlasifikasi = function(data,id,defaultValGol,defaultValBid, defaultValKel) {
             var panel = {
                 region: 'west',
                 title: 'Filter',
@@ -818,7 +890,7 @@
                         text: 'Golongan',
                         height: 30
                     }, {
-                        readOnly:(defaultValGol !=  null || defaultValGol != undefined)?true:false,
+                        readOnly:(defaultValGol !=  null && defaultValGol != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Golongan',
                         name: 'aset-golongan' + id,
@@ -836,7 +908,7 @@
                             'afterrender': {
                                 fn: function()
                                 {
-                                    if(defaultValGol != null || defaultValGol != undefined)
+                                    if(defaultValGol != null && defaultValGol != undefined)
                                     {
                                         this.setValue(defaultValGol);
                                     }
@@ -872,7 +944,7 @@
                         text: 'Bidang',
                         height: 30
                     }, {
-                        readOnly:(defaultValBid !=  null || defaultValBid != undefined)?true:false,
+                        readOnly:(defaultValBid !=  null && defaultValBid != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Bidang',
                         name: 'aset-bidang'+ id,
@@ -892,7 +964,7 @@
                         'afterrender': {
                              fn: function()
                                 {
-                                    if(defaultValBid != null || defaultValBid != undefined)
+                                    if(defaultValBid != null && defaultValBid != undefined)
                                     {
                                         this.setValue(defaultValBid);
                                     }
@@ -930,6 +1002,7 @@
                         text: 'Kelompok',
                         height: 30
                     }, {
+                        readOnly:(defaultValKel !=  null && defaultValKel != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Kelompok',
                         name: 'aset-kelompok'+ id,
@@ -1496,6 +1569,77 @@
                                     if (value !== null)
                                     {
                                         data.filter({property: 'tahun_angaran', value: value});
+                                    }
+                                }
+                            }
+                        }
+                    }]
+            };
+
+            return panel;
+        }
+        
+        Region.filterPanelPenghapusanDanMutasi = function(data,id) {
+            var panel = {
+                region: 'west',
+                title: 'Filter',
+                width: 200,
+                split: true,
+                collapsible: true,
+                floatable: false,
+                frame: true,
+                items: [{
+                        xtype: 'label',
+                        text: 'Filter by Unit Kerja',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by Unker',
+                        name: 'unker'+id,
+                        id: 'unker'+id,
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.unker,
+                        valueField: 'kdlok',
+                        displayField: 'ur_upb', emptyText: 'Unit Kerja',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Kerja',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    data.filter([{property: 'kd_lokasi', value: value}]);
+
+                                }
+                            }
+                        }
+                    }, {
+                        xtype: 'label',
+                        text: 'Filter by Tahun Anggaran',
+                        height: 30
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: 'Filter by year',
+                        name: 'year'+id,
+                        id: 'year'+id,
+                        allowBlank: true,
+                        hideLabel: true,
+                        layout: 'anchor',
+                        anchor: '100%',
+                        width: 190,
+                        store: Reference.Data.year,
+                        valueField: 'year',
+                        displayField: 'year', emptyText: 'Year',
+                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
+                        listeners: {
+                            'change': {
+                                fn: function(obj, value) {
+                                    data.clearFilter();
+                                    if (value !== null)
+                                    {
+                                        data.filter({property: 'thn_ang', value: value});
                                     }
                                 }
                             }

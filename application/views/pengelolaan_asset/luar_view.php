@@ -9,6 +9,15 @@
         Ext.namespace('Luar', 'Luar.reader', 'Luar.proxy',
                 'Luar.Data', 'Luar.Grid', 'Luar.Window', 'Luar.Form', 'Luar.Action', 'Luar.URL');
         
+        Luar.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Luar.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -43,7 +52,9 @@
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
             removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
 
         };
 
@@ -55,6 +66,7 @@
             id: 'Proxy_Luar',
             url: Luar.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Luar.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_Luar = request.operation.params;
                 
@@ -72,49 +84,8 @@
             id: 'Data_Luar', storeId: 'DataLuar', model: 'MLuar', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Luar.proxy, groupField: 'tipe'
         });
-
-        Luar.Form.create = function(data, edit) {
-            var form = Form.asset(Luar.URL.createUpdate, Luar.Data, edit);
-            form.insert(0, Form.Component.unit(edit,form));
-            form.insert(1, Form.Component.kode(edit));
-            form.insert(2, Form.Component.klasifikasiAset(edit))
-            form.insert(5, Form.Component.luar());
-            form.insert(6, Form.Component.fileUpload());
-            if (data !== null)
-            {
-                form.getForm().setValues(data);
-            }
-
-            return form;
-        };
-
-        Luar.Form.createPemeliharaan = function(data, dataForm, edit) {
-            var setting = {
-                url: Luar.URL.createUpdatePemeliharaan,
-                data: data,
-                isEditing: edit,
-                isBangunan: false,
-                addBtn: {
-                    isHidden: true,
-                    text: '',
-                    fn: function() {
-                    }
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
-            };
-
-            var form = Form.pemeliharaanInAsset(setting);
-
-            if (dataForm !== null)
-            {
-                form.getForm().setValues(dataForm);
-            }
-            return form;
-        };
-
-        Luar.Window.actionSidePanels = function() {
+        
+          Luar.Window.actionSidePanels = function() {
             var actions = {
                 details: function() {
                     var _tab = Modal.assetEdit.getComponent('asset-window-tab');
@@ -179,6 +150,116 @@
 
             return actions;
         };
+
+        Luar.Form.create = function(data, edit) {
+            var form = Form.asset(Luar.URL.createUpdate, Luar.Data, edit);
+            form.insert(0, Form.Component.unit(edit,form));
+            form.insert(1, Form.Component.kode(edit));
+            form.insert(2, Form.Component.klasifikasiAset(edit))
+            form.insert(5, Form.Component.luar());
+            form.insert(6, Form.Component.fileUpload());
+            if (data !== null)
+            {
+                form.getForm().setValues(data);
+            }
+
+            return form;
+        };
+
+        Luar.Form.createPemeliharaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Luar.URL.createUpdatePemeliharaan,
+                data: data,
+                isEditing: edit,
+                isBangunan: false,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+          var setting_grid_pemeliharaan_part = {
+                id:'grid_luar_pemeliharaan_part',
+                toolbar:{
+                    add: Luar.addPemeliharaanPart,
+                    edit: Luar.editPemeliharaanPart,
+                    remove: Luar.removePemeliharaanPart
+                },
+                dataStore:Luar.dataStorePemeliharaanPart
+            };
+
+            var form = Form.pemeliharaanInAsset(setting,setting_grid_pemeliharaan_part);
+
+            if (dataForm !== null)
+            {
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Luar.addPemeliharaanPart = function(){
+            var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
+            if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+            {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                }
+                    var form = Form.pemeliharaanPart(Luar.URL.createUpdatePemeliharaanPart, Luar.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(id_pemeliharaan));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+            }
+        };
+        
+        Luar.editPemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_luar_pemeliharaan_part').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.pemeliharaanPart(Luar.URL.createUpdatePemeliharaanPart, Luar.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        Luar.removePemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_luar_pemeliharaan_part').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, Luar.URL.removePemeliharaanPart, Luar.dataStorePemeliharaanPart);
+        };
+
+      
         
         Luar.Form.createPendayagunaan = function(data, dataForm, edit) {
             var setting = {
@@ -499,6 +580,7 @@
                 var form = Luar.Form.createPemeliharaan(Luar.dataStorePemeliharaan, dataForm, true);
                 Tab.addToForm(form, 'luar-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
+                Luar.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
 

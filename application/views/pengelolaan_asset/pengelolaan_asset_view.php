@@ -5,15 +5,15 @@
 <script>
 ////PANEL UTAMA MASTER DATA  -------------------------------------------- START
 
-$.ajax({
-    url : BASE_URL + 'services/assetByKode/3010110001/107010900414412000KP/2',
-    type : 'GET',
-    dataType : 'JSON',
-    success : function (data)
-    {
-        console.log(data);
-    }
-});
+//$.ajax({
+//    url : BASE_URL + 'services/assetByKode/3010110001/107010900414412000KP/2',
+//    type : 'GET',
+//    dataType : 'JSON',
+//    success : function (data)
+//    {
+//        console.log(data);
+//    }
+//});
 
 var Tab_PA = Ext.createWidget('tabpanel', {
 	id: 'Tab_PA', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
@@ -76,12 +76,12 @@ var Center_PA = {
                                                 Load_TabPage_Asset('angkutan_udara_panel',BASE_URL+'asset_angkutan_udara/angkutan_udara')
                                             },
                                         },
-                                        {
-                                            text:"Semua", iconCls: 'icon-book',
-                                            handler: function(){
-                                                Load_TabPage_Asset('angkutan_panel',BASE_URL+'asset_angkutan/angkutan')
-                                            },
-                                        },
+//                                        {
+//                                            text:"Semua", iconCls: 'icon-book',
+//                                            handler: function(){
+//                                                Load_TabPage_Asset('angkutan_panel',BASE_URL+'asset_angkutan/angkutan')
+//                                            },
+//                                        },
                                     ]
                             
                                 },

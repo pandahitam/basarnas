@@ -42,7 +42,8 @@ Pengadaan.Form.create = function(data,edit){
                 fn : function() {
                     if (Modal.assetSelection.items.length === 0)
                     {
-                        Modal.assetSelection.add(Grid.selectionReference());
+                        //Modal.assetSelection.add(Grid.selectionReference());
+						Modal.assetSelection.add(Grid.selectionAsset());
                         Modal.assetSelection.show();
                     }
                     else
@@ -182,12 +183,15 @@ var setting = {
                     {header: 'Kode Barang',     dataIndex: 'kd_brg',            width: 150, hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'Nama',            dataIndex: 'nama',              width: 150, hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'Vendor Name',     dataIndex: 'venor_name',        width: 150, hidden:false,   groupable: false,filter:{type:'string'}},
+                    {header: 'Part Number',     dataIndex: 'part_number',       width: 100, hidden:false,   groupable : false,filter:{type:'numeric'}},
+                    {header: 'Serial Number',   dataIndex: 'serial_number',       width: 100, hidden:false,   groupable : false,filter:{type:'numeric'}},
+                    {header: 'Qty',             dataIndex: 'qty',       width: 100, hidden:false,   groupable : false,filter:{type:'numeric'}},
                     {header: 'Tahun Angaran',   dataIndex: 'tahun_angaran',     width: 100, hidden:false,   groupable: false,filter:{type:'string'}},
                     {header: 'Sumber',          dataIndex: 'perolehan_sumber',  width: 100, hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'Perolehan BMN',   dataIndex: 'perolehan_bmn',     width: 120, hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'No Sppa',         dataIndex: 'sppa_no',           width: 70,  hidden:false,   groupable : false,filter:{type:'string'}},
                     {header: 'Asal Pengadaan',  dataIndex: 'asal_pengadaan',    width: 100, hidden:false,   groupable : false,filter:{type:'string'}},
-                    {header: 'Harga Total',     dataIndex: 'harga_total',       width: 100, hidden:false,   groupable : false,filter:{type:'string'}},
+                    {header: 'Harga Total',     dataIndex: 'harga_total',       width: 100, hidden:false,   groupable : false,filter:{type:'numeric'}},
                     {header: 'Deskripsi',       dataIndex: 'deskripsi',         width: 120, hidden:false,filter:{type:'string'}},
                     {header: 'Tgl Perolehan',   dataIndex: 'perolehan_tanggal', width: 90,  hidden:false,filter:{type:'string'}},
                     {header: 'Faktur No',       dataIndex: 'faktur_no',         width: 90,  hidden:true,filter:{type:'string'}},

@@ -174,7 +174,7 @@ Mutasi.Grid.grid = Grid.inventarisGrid(setting,Mutasi.Data);
 };*/
 var new_tabpanel = {
     id: 'mutasi_asset', title: 'Mutasi', iconCls: 'icon-menu_impasing', closable: true, border: false,
-    items: [Mutasi.Grid.grid]
+    layout: 'border',items: [Region.filterPanelPenghapusanDanMutasi(Mutasi.Data),Mutasi.Grid.grid]
 }
       
 <?php }else{ echo "var new_tabpanel_MD = 'GAGAL';"; } ?>

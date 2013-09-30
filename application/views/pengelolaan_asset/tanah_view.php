@@ -65,6 +65,7 @@
             id: 'Proxy_Tanah',
             url: Tanah.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: Tanah.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 Params_M_TB = request.operation.params;
                 
@@ -100,7 +101,7 @@
             var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
-                closable: true,
+                closable: false,
                 border: false,
                 deferredRender: false,
                 bodyStyle:{background:'none'},
@@ -121,7 +122,7 @@
             
             tab.add({
                 title: 'Tambahan',
-                closable: true,
+                closable: false,
                 border: false,
                 layout: 'fit',
                 deferredRender: false,
@@ -618,9 +619,29 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Tambah Riwayat Pajak');
                 }
-                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false);
+                    var uploadRiwayatPajak = {
+                        xtype: 'fieldset',
+                        itemId: 'fileUpload',
+                        layout: 'column',
+                        border: false,
+                        title: 'FILE UPLOAD',
+                        defaultType: 'container',
+                        style: {
+                            marginTop: '10px'
+                        },
+                        items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items:[Form.Component.fileUploadDocumentOnly('file_setoran','TanahRiwayatPajakFile')]
+                    }]
+                    };
+                    
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, false,'tanah');
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id));
-                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    form.insert(1, uploadRiwayatPajak);
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 
@@ -641,9 +662,30 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Edit Riwayat Pajak');
                 }
-                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true);
+                
+                var uploadRiwayatPajak = {
+                        xtype: 'fieldset',
+                        itemId: 'fileUpload',
+                        layout: 'column',
+                        border: false,
+                        title: 'FILE UPLOAD',
+                        defaultType: 'container',
+                        style: {
+                            marginTop: '10px'
+                        },
+                        items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items:[Form.Component.fileUploadDocumentOnly('file_setoran','TanahRiwayatPajakFile')]
+                    }]
+                    };
+                   
+                    var form = Form.riwayatPajak(Tanah.URL.createUpdateRiwayatPajak, Tanah.dataStoreRiwayatPajak, true, 'tanah');
                     form.insert(0, Form.Component.dataRiwayatPajakTanahDanBangunan(data.id_ext_asset));
-                    form.insert(1, Form.Component.fileUploadRiwayatPajak());
+                    form.insert(1, uploadRiwayatPajak);
 //                    form.insert(1, Form.Component.fileUpload());
                     
                     if (data !== null)
@@ -856,6 +898,7 @@
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 150, groupable: true, filter: {type: 'string'}},
                     {header: 'Kuantitas', dataIndex: 'kuantitas', width: 70, groupable: false, filter: {type: 'numeric'}},
                     {header: 'RPH Asset', dataIndex: 'rph_aset', width: 120, groupable: false, filter: {type: 'numeric'}},
+                    {header: 'RPH Wajar', dataIndex: 'rphwajar', width: 90, hidden: false, filter: {type: 'numeric'}},
                     {header: 'No KIB', dataIndex: 'no_kib', width: 70, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Luas Tnhs', dataIndex: 'luas_tnhs', width: 70, hidden: false, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Luas Thnb', dataIndex: 'luas_tnhb', width: 70, hidden: false, groupable: false, filter: {type: 'numeric'}},
@@ -886,7 +929,6 @@
                     {header: 'Catatan', dataIndex: 'catatan', width: 90, hidden: true, filter: {type: 'string'}},
                     {header: 'Tanggal Prl', dataIndex: 'tgl_prl', width: 90, hidden: true, filter: {type: 'string'}},
                     {header: 'Tanggal Buku', dataIndex: 'tgl_buku', width: 90, hidden: true, filter: {type: 'string'}},
-                    {header: 'RPH Wajar', dataIndex: 'rph_wajar', width: 90, hidden: true, filter: {type: 'numeric'}},
                     {header: 'RPH NJOP', dataIndex: 'rphnjop', width: 90, hidden: true, filter: {type: 'numeric'}},
                     {header: 'Status', dataIndex: 'status', width: 90, hidden: true, filter: {type: 'string'}},
                     {header: 'Milik', dataIndex: 'smilik', width: 90, hidden: true, filter: {type: 'string'}},

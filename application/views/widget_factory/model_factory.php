@@ -4,6 +4,29 @@
 <script>
 ////// Model In View
 
+Ext.define('MInventoryPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_inventory', 
+        'kd_brg', 'no_aset', 
+        'part_number','serial_number',
+        'status_barang','qty','asal_barang'
+    ]
+});
+
+Ext.define('MDetailPenggunaanAngkutan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'tanggal', 'jumlah_penggunaan', 
+        'satuan_penggunaan','keterangan'
+    ]
+});
+
+Ext.define('MPemeliharaanPart', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_pemeliharaan', 
+        'id_penyimpanan', 'part_number', 
+        'nama', 'qty_pemeliharaan'
+    ]
+});
+
+
 Ext.define('MWarehouse', {extend: 'Ext.data.Model',
     fields: ['kd_lokasi','nama','id', 
              'nama_unker'
@@ -11,13 +34,13 @@ Ext.define('MWarehouse', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MMasterRuang', {extend: 'Ext.data.Model',
-    fields: ['id','warehouse_id', 
+    fields: ['id','warehouse_id' ,
              'nama', 'nama_warehouse'
     ]
 });
 
 Ext.define('MRak', {extend: 'Ext.data.Model',
-    fields: ['id','warehouseruang_id', 
+    fields: ['id','warehouseruang_id','nama_warehouse','warehouse_id', 
              'nama_ruang','nama'
     ]
 });
@@ -73,14 +96,15 @@ Ext.define('MInventoryPenyimpanan', {extend: 'Ext.data.Model',
     fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pemeriksaan','nama_org',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
-        'status_barang','qty','tgl_penyimpanan','asal_barang','kode_unor']
+        'status_barang','qty','tgl_penyimpanan','asal_barang','kode_unor',
+        'warehouse_id','ruang_id','rak_id']
 });
 
 Ext.define('MInventoryPengeluaran', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penyimpanan',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penyimpanan','nama_org',
         'no_aset', 'part_number','serial_number','date_created',
         'nama_unker','nama_unor', 'keterangan',
-        'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor']
+        'status_barang','qty','tgl_pengeluaran','asal_barang','kode_unor','qty_barang_keluar','kode_unor']
 });
 
 Ext.define('MLuar', {extend: 'Ext.data.Model',
@@ -120,7 +144,7 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'rphnjop', 'status', 'luas_dsr', 
             'luas_bdg', 'jml_lt',
             'id','nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',// Field from ext bangunan
-            'nama_unker', 'nama_unor', 
+            'nama_unker', 'nama_unor',
             'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
             'kode_unor','image_url','document_url',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
@@ -157,6 +181,13 @@ Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
         'kd_lvl1','kd_lvl2','kd_lvl3',
          'darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
          'darat_jumlah_pajak', 'darat_keterangan_lainnya'
+    ]
+});
+
+Ext.define('MAngkutanDaratPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'id_ext_asset', 
+        'jenis_perlengkapan', 'no', 
+        'nama', 'keterangan'
     ]
 });
 
@@ -445,7 +476,7 @@ Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
 
 Ext.define('MPengadaan', {extend: 'Ext.data.Model',
     fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_number','serial_number','merek','model','nama',
-                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 
+                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 'qty',
                 'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
                 'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
                 'sp2d_no', 'sp2d_tanggal', 'mutasi_no', 'mutasi_tanggal', 
@@ -480,7 +511,14 @@ Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPengelolaan', {extend: 'Ext.data.Model',
-    fields: ['id','nama','no_document','tanggal_document','pembuat','perihal','date_upload','image_url', 'document_url']
+    fields: ['id','nama_operasi','pic','tanggal_mulai','tanggal_selesai',
+             'deskripsi','image_url', 'document_url',
+             'kd_lokasi', 'kode_unor', 'kd_brg','no_aset', 'nama']
+});
+
+Ext.define('MPeraturan', {extend: 'Ext.data.Model',
+    fields: ['id','nama','no_dokumen','tanggal_dokumen','initiator',
+            'perihal','date_upload', 'document']
 });
 
 Ext.define('MUnitKerja', { extend:'Ext.data.Model',

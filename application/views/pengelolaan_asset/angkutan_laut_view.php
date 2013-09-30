@@ -9,6 +9,24 @@
         Ext.namespace('AngkutanLaut', 'AngkutanLaut.reader', 'AngkutanLaut.proxy', 'AngkutanLaut.Data', 'AngkutanLaut.Grid', 'AngkutanLaut.Window',
                 'AngkutanLaut.Form', 'AngkutanLaut.Action', 'AngkutanLaut.URL');
         
+        AngkutanLaut.dataStoreDetailPenggunaanAngkutan = new Ext.create('Ext.data.Store', {
+            model: MDetailPenggunaanAngkutan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'asset_angkutan_detail_penggunaan/getSpecificDetailPenggunaanAngkutan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
+        AngkutanLaut.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanLaut.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -54,7 +72,11 @@
             createUpdatePerlengkapanAngkutanLaut: BASE_URL + 'asset_angkutan_laut/modifyPerlengkapanAngkutanLaut',
             removePerlengkapanAngkutanLaut: BASE_URL + 'asset_angkutan_laut/deletePerlengkapanAngkutanLaut',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
+            createUpdateDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutan',
+            removeDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutan'
         };
 
         AngkutanLaut.reader = new Ext.create('Ext.data.JsonReader', {
@@ -65,6 +87,7 @@
             id: 'Proxy_AngkutanLaut',
             url: AngkutanLaut.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
             reader: AngkutanLaut.reader,
+            timeout:600000,
             afterRequest: function(request, success) {
                 //Params_M_AngkutanLaut = request.operation.params;
                 
@@ -82,6 +105,64 @@
             id: 'Data_AngkutanLaut', storeId: 'DataAngkutanLaut', model: 'MAngkutanLaut', pageSize: 50, noCache: false, autoLoad: true,
             proxy: AngkutanLaut.proxy, groupField: 'tipe'
         });
+        
+        AngkutanLaut.Window.actionSidePanels = function() {
+            var actions = {
+                details: function() {
+                    var _tab = Asset.Window.popupEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-details');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.edit();
+                    }
+                },
+                pengadaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-pengadaan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.detail_pengadaan();
+                    }
+                },
+                pemeliharaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-pemeliharaan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.pemeliharaanList();
+                    }
+                }, 
+                penghapusan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-penghapusan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.penghapusanDetail();
+                    }
+                },
+               pemindahan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-pemindahan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.pemindahanList();
+                    }
+                },
+               pendayagunaan: function() {
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('angkutanLaut-pendayagunaan');
+                    if (tabpanels === undefined)
+                    {
+                        AngkutanLaut.Action.pendayagunaanList();
+                    }
+                },
+                printPDF: function() {
+                        AngkutanLaut.Action.printpdf();
+                },
+            };
+
+            return actions;
+        };
         
         AngkutanLaut.addPerlengkapan = function()
         {
@@ -144,8 +225,83 @@
             Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePerlengkapanAngkutanLaut,AngkutanLaut.dataStorePerlengkapanAngkutanLaut);
         };
         
+        AngkutanLaut.addDetailPenggunaan = function()
+        {
+            var selected = AngkutanLaut.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
+                }
+                    var form = Form.detailPenggunaanAngkutan(AngkutanLaut.URL.createUpdateDetailPenggunaanAngkutan, AngkutanLaut.dataStoreDetailPenggunaanAngkutan, false,'laut');
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'laut'));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        AngkutanLaut.editDetailPenggunaan = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanLaut_detail_penggunaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
+                }
+                    var form = Form.detailPenggunaanAngkutan(AngkutanLaut.URL.createUpdateDetailPenggunaanAngkutan, AngkutanLaut.dataStoreDetailPenggunaanAngkutan, true,'laut');
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'laut'));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+        }};
+        
+        AngkutanLaut.removeDetailPenggunaan = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanLaut_detail_penggunaan').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_ext_asset:obj.data.id_ext_asset,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+           Modal.deleteAlertDetailPenggunaanAngkutan(arrayDeleted, AngkutanLaut.URL.removeDetailPenggunaanAngkutan,AngkutanLaut.dataStoreDetailPenggunaanAngkutan,'laut');
+            
+                    
+        };
+        
         AngkutanLaut.Form.create = function(data, edit) {
-           var setting_grid_perlengkapan = {
+          debugger;
+        var setting_grid_detail_penggunaan = {
+                id:'grid_angkutanLaut_detail_penggunaan',
+                toolbar:{
+                    add: AngkutanLaut.addDetailPenggunaan,
+                    edit: AngkutanLaut.editDetailPenggunaan,
+                    remove: AngkutanLaut.removeDetailPenggunaan
+                },
+                dataStore:AngkutanLaut.dataStoreDetailPenggunaanAngkutan,
+            }; 
+        
+          var setting_grid_perlengkapan = {
                 id:'grid_angkutanLaut_perlengkapan',
                 toolbar:{
                     add: AngkutanLaut.addPerlengkapan,
@@ -155,11 +311,11 @@
                 dataStore:AngkutanLaut.dataStorePerlengkapanAngkutanLaut
             };
             
-           var form = Form.asset(AngkutanLaut.URL.createUpdate, AngkutanLaut.Data, edit, true);
+           var form = Form.assetAngkutanLaut(AngkutanLaut.URL.createUpdate, AngkutanLaut.Data, edit, true);
              var tab = Tab.formTabs();
             tab.add({
                 title: 'Utama',
-                closable: true,
+                closable: false,
                 border: false,
                 deferredRender: false,
                 bodyStyle:{background:'none'},
@@ -170,6 +326,7 @@
                         Form.Component.basicAsset(edit),
                         Form.Component.mechanical(),
                         Form.Component.angkutan(),
+                        Form.Component.detailPenggunaanAngkutan(setting_grid_detail_penggunaan,edit),
                         Form.Component.fileUpload(),
                        ],
                 listeners: {
@@ -181,7 +338,7 @@
             
             tab.add({
                 title: 'Tambahan',
-                closable: true,
+                closable: false,
                 border: false,
                 layout: 'fit',
 //                anchor: '100%',
@@ -206,6 +363,47 @@
             
             if (data !== null)
             {
+                $.ajax({
+                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{tipe_angkutan:'laut',id_ext_asset:data.id},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            data.total_detail_penggunaan_angkutan = response.total + ' Jam';
+                        }
+                           
+                       }
+                    });
+                    
+                if(data.laut_stkk_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_stkk_masa_berlaku = "";
+
+                }   
+                if(data.laut_sertifikasi_keselamatan_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_sertifikasi_keselamatan_masa_berlaku = "";
+
+                } 
+                if(data.laut_sertifikasi_radio_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_sertifikasi_radio_masa_berlaku = "";
+
+                } 
+                if(data.laut_surat_ijin_berlayar_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_surat_ijin_berlayar_masa_berlaku = "";
+
+                } 
+                if(data.laut_surat_ukur_masa_berlaku == "0000-00-00")
+                {
+                    data.laut_surat_ukur_masa_berlaku = "";
+
+                } 
+                
                 form.getForm().setValues(data);
             }
 
@@ -229,7 +427,17 @@
                 }
             };
 
-            var form = Form.pemeliharaanInAsset(setting);
+            var setting_grid_pemeliharaan_part = {
+                id:'grid_angkutanLaut_pemeliharaan_part',
+                toolbar:{
+                    add: AngkutanLaut.addPemeliharaanPart,
+                    edit: AngkutanLaut.editPemeliharaanPart,
+                    remove: AngkutanLaut.removePemeliharaanPart
+                },
+                dataStore:AngkutanLaut.dataStorePemeliharaanPart
+            };
+
+            var form = Form.pemeliharaanInAsset(setting,setting_grid_pemeliharaan_part);
 
             if (dataForm !== null)
             {
@@ -237,64 +445,65 @@
             }
             return form;
         };
-
-        AngkutanLaut.Window.actionSidePanels = function() {
-            var actions = {
-                details: function() {
-                    var _tab = Asset.Window.popupEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('angkutanLaut-details');
-                    if (tabpanels === undefined)
+        
+        AngkutanLaut.addPemeliharaanPart = function(){
+                var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
+                if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+                {
+                    if (Modal.assetSecondaryWindow.items.length === 0)
                     {
-                        AngkutanLaut.Action.edit();
+                        Modal.assetSecondaryWindow.setTitle('Tambah Part');
                     }
-                },
-                pengadaan: function() {
-                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('angkutanLaut-pengadaan');
-                    if (tabpanels === undefined)
-                    {
-                        AngkutanLaut.Action.detail_pengadaan();
-                    }
-                },
-                pemeliharaan: function() {
-                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('angkutanLaut-pemeliharaan');
-                    if (tabpanels === undefined)
-                    {
-                        AngkutanLaut.Action.pemeliharaanList();
-                    }
-                }, 
-                penghapusan: function() {
-                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('angkutanLaut-penghapusan');
-                    if (tabpanels === undefined)
-                    {
-                        AngkutanLaut.Action.penghapusanDetail();
-                    }
-                },
-               pemindahan: function() {
-                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('angkutanLaut-pemindahan');
-                    if (tabpanels === undefined)
-                    {
-                        AngkutanLaut.Action.pemindahanList();
-                    }
-                },
-               pendayagunaan: function() {
-                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
-                    var tabpanels = _tab.getComponent('angkutanLaut-pendayagunaan');
-                    if (tabpanels === undefined)
-                    {
-                        AngkutanLaut.Action.pendayagunaanList();
-                    }
-                },
-                printPDF: function() {
-                        AngkutanLaut.Action.printpdf();
-                },
-            };
-
-            return actions;
+                        var form = Form.pemeliharaanPart(AngkutanLaut.URL.createUpdatePemeliharaanPart, AngkutanLaut.dataStorePemeliharaanPart, false);
+                        form.insert(0, Form.Component.dataPemeliharaanPart(id_pemeliharaan));
+                        form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                        Modal.assetSecondaryWindow.add(form);
+                        Modal.assetSecondaryWindow.show();
+                
+                }
         };
+        
+        AngkutanLaut.editPemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_angkutanLaut_pemeliharaan_part').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.pemeliharaanPart(AngkutanLaut.URL.createUpdatePemeliharaanPart, AngkutanLaut.dataStorePemeliharaanPart, false);
+                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    
+                    if (data !== null)
+                    {
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        AngkutanLaut.removePemeliharaanPart = function(){
+            var selected = Ext.getCmp('grid_angkutanLaut_pemeliharaan_part').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_penyimpanan: obj.data.id_penyimpanan,
+                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
+                };
+                arrayDeleted.push(data);
+            });
+            console.log(arrayDeleted);
+            Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePemeliharaanPart, AngkutanLaut.dataStorePemeliharaanPart);
+        };
+
+        
         
         AngkutanLaut.Form.createPendayagunaan = function(data, dataForm, edit) {
             var setting = {
@@ -590,6 +799,7 @@
                 var form = AngkutanLaut.Form.createPemeliharaan(AngkutanLaut.dataStorePemeliharaan, dataForm, true);
                 Tab.addToForm(form, 'angkutanLaut-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
+                AngkutanLaut.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
 
@@ -705,6 +915,7 @@
                     Tab.addToForm(_form, 'angkutanLaut-details', 'Simak Details');
                     Modal.assetEdit.show();
                     AngkutanLaut.dataStorePerlengkapanAngkutanLaut.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                    AngkutanLaut.dataStoreDetailPenggunaanAngkutan.changeParams({params:{open:'1',id_ext_asset:data.id}});
                 }
 
             }

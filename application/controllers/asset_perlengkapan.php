@@ -133,5 +133,12 @@ class Asset_Perlengkapan extends MY_Controller {
 				$this->load->view('pengelolaan_asset/perlengkapan_pdf',$data);
 			}
 	}
+        
+        function getSpecificPerlengkapan()
+        {
+            $id = $this->input->post('id');
+            $result = $this->model->get_Perlengkapan($id);
+            echo json_encode($result);
+        }
 }
 ?>

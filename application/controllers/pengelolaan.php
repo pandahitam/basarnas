@@ -25,17 +25,18 @@ class Pengelolaan extends MY_Controller {
 	
 	function modifyPengelolaan(){
                 $data = array();
-                
+
 	  	$fields = array(
-                    'id', 'nama', 'no_document', 'tanggal_document',
-                    'pembuat', 'perihal', 'document_url', 'image_url'
+                    'id','nama_operasi','pic','tanggal_mulai','tanggal_selesai',
+                    'deskripsi','image_url', 'document_url',
+                    'kd_lokasi', 'kode_unor', 'kd_brg','no_aset', 'nama'
                 );
                 
                 foreach ($fields as $field) {
 			$data[$field] = $this->input->post($field);
 		} 
-                $today = new DateTime();
-                $data['date_upload'] = $today->format('Y-m-d');
+//                $today = new DateTime();
+//                $data['date_upload'] = $today->format('Y-m-d');
                 
 		$this->modifyData(null,$data);
 	}
@@ -47,15 +48,6 @@ class Pengelolaan extends MY_Controller {
 		return $this->deleteProcess($data);
 	}
 	
-	
-	function getSpecificPengelolaan()
-	{
-		$kd_lokasi = $this->input->post("kd_lokasi");
-		$kd_brg = $this->input->post("kd_brg");
-		$no_aset = $this->input->post("no_aset");
-		$data = $this->model->get_Pemeliharaan($kd_lokasi, $kd_brg, $no_aset);
-		$datasend["results"] = $data;
-		echo json_encode($datasend);
-	}
+
 }
 ?>

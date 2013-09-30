@@ -31,7 +31,7 @@
         });
 
         Warehouse.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Warehouse', storeId: 'DataWarehouse', model: 'MWarehouse', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Warehouse', storeId: 'DataWarehouse', model: 'MWarehouse', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Warehouse.proxy, groupField: 'tipe'
         });
 
@@ -41,7 +41,7 @@
                 data: Warehouse.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 
@@ -61,7 +61,7 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.referensiWarehouse(setting);
 
             if (data !== null)
             {
@@ -71,39 +71,39 @@
         };
 
         Warehouse.Action.add = function() {
-//            var _form = Warehouse.Form.create(null, false);
-//            Modal.processCreate.setTitle('Create Warehouse');
-//            Modal.processCreate.add(_form);
-//            Modal.processCreate.show();
+            var _form = Warehouse.Form.create(null, false);
+            Modal.smallWindow.setTitle('Create Warehouse');
+            Modal.smallWindow.add(_form);
+            Modal.smallWindow.show();
         };
 
         Warehouse.Action.edit = function() {
-//            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
-//            if (selected.length === 1)
-//            {
-//                var data = selected[0].data;
-//                delete data.nama_unker;
-//
-//                if (Modal.processEdit.items.length === 0)
-//                {
-//                    Modal.processEdit.setTitle('Edit Warehouse');
-//                }
-//                var _form = Warehouse.Form.create(data, true);
-//                Modal.processEdit.add(_form);
-//                Modal.processEdit.show();
-//            }
+            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                delete data.nama_unker;
+
+                if (Modal.smallWindow.items.length === 0)
+                {
+                    Modal.smallWindow.setTitle('Edit Warehouse');
+                }
+                var _form = Warehouse.Form.create(data, true);
+                Modal.smallWindow.add(_form);
+                Modal.smallWindow.show();
+            }
         };
 
         Warehouse.Action.remove = function() {
-//            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
-//            var arrayDeleted = [];
-//            _.each(selected, function(obj) {
-//                var data = {
-//                    id: obj.data.id
-//                };
-//                arrayDeleted.push(data);
-//            });
-//            Modal.deleteAlert(arrayDeleted, Warehouse.URL.remove, Warehouse.Data);
+            var selected = Warehouse.Grid.grid.getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id
+                };
+                arrayDeleted.push(data);
+            });
+            Modal.deleteAlert(arrayDeleted, Warehouse.URL.remove, Warehouse.Data);
         };
 
         Warehouse.Action.print = function() {

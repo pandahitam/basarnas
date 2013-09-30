@@ -34,11 +34,19 @@
             pengadaan: BASE_URL + 'combo_ref/combo_pengadaan',
             penerimaan: BASE_URL + 'combo_ref/combo_penerimaan',
             pemeriksaan: BASE_URL + 'combo_ref/combo_pemeriksaan',
+            penyimpanan: BASE_URL + 'combo_ref/combo_penyimpanan',
         };
-
+        
+        Reference.Data.penyimpanan = new Ext.create('Ext.data.Store', {
+            fields: ['id','nomor_berita_acara'], storeId: 'DataPenyimpananCombo',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.penyimpanan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         Reference.Data.pengadaan = new Ext.create('Ext.data.Store', {
-            fields: ['id'], storeId: 'DataPengadaanCombo',
+            fields: ['id','no_sppa'], storeId: 'DataPengadaanCombo',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
@@ -156,6 +164,12 @@
             data: [{text: 'Waktu', value: 1}, {text: 'Penggunaan', value: 2}]
         });
         
+        Reference.Data.jenisPerlengkapanAngkutanDarat = new Ext.create('Ext.data.Store', {
+            fields: ['value'],
+            data: [{value:'Alat Navigasi/Komunikasi'}, {value:'Alat Penolong/Rescue'},
+                    {value:'Alat Pemadam Kebakaran'},{value:'Alat Lainnya'}]
+        });
+        
         Reference.Data.jenisPerlengkapanAngkutanLaut = new Ext.create('Ext.data.Store', {
             fields: ['value'],
             data: [{value:'Alat Navigasi/Komunikasi'}, {value:'Alat Penolong/Rescue'},
@@ -181,6 +195,12 @@
         });
         
         Reference.Data.unitPengunaan = new Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
+            data: [{text: 'Meter', value: 1}, {text: 'Kilometer', value: 2}, {text: 'Mil', value: 3},
+                    {text:'Jam Layar', value: 4}, {text:'Jam Terbang', value: 5}]
+        });
+        
+        Reference.Data.unitPengunaanAngkutanDarat = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
             data: [{text: 'Meter', value: 1}, {text: 'Kilometer', value: 2}, {text: 'Mil', value: 3}]
         });
@@ -349,7 +369,7 @@
         }
 
         
-        Form.inventorypenerimaan = function(setting)
+        Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         {
             var pilihPengadaan = [{
                     xtype: 'fieldset',
@@ -371,51 +391,24 @@
                             items: [{
                                     xtype: 'combo',
                                     disabled: false,
-                                    fieldLabel: 'No Pengadaan *',
+                                    fieldLabel: 'No Pengadaan',
                                     name: 'id_pengadaan',
-                                    allowBlank: false,
+                                    allowBlank: true,
                                     store: Reference.Data.pengadaan,
                                     valueField: 'id',
-                                    displayField: 'id', emptyText: 'Pilih Pengadaan',
+                                    displayField: 'no_sppa', emptyText: 'Pilih Pengadaan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 
                             ]
                         }]
                 }];
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.inventory(setting.url, setting.data, setting.isEditing, setting.dataStoreInventoryPerlengkapan);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPengadaan);
             form.insert(2, Form.Component.inventorypenerimaan());
-            form.insert(3, Form.Component.inventoryPerlengkapan());
+            form.insert(3, Form.Component.gridInventoryPerlengkapan(setting_grid_perlengkapan))
+//            form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
         }
@@ -512,7 +505,7 @@
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPenerimaan);
             form.insert(2, Form.Component.inventorypemeriksaan());
-            form.insert(3, Form.Component.inventoryPerlengkapan());
+            form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
         }
@@ -610,8 +603,109 @@
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPemeriksaan);
-            form.insert(2, Form.Component.inventorypenyimpanan());
-            form.insert(3, Form.Component.inventoryPerlengkapan());
+            form.insert(2, Form.Component.inventorypenyimpanan(setting.isEditing));
+            form.insert(3, Form.Component.dataInventoryPerlengkapan());
+
+            return form;
+        }
+        
+        Form.inventorypengeluaran = function(setting,id_perlengkapan)
+        {
+
+            var pilihPerlengkapan = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENGELUARAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'No Penyimpanan *',
+                                    name: 'id_penyimpanan',
+                                    allowBlank: false,
+                                    store: Reference.Data.penyimpanan,
+                                    valueField: 'id',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'beforeRender': {
+                                            fn: function() {
+                                                if(setting.isEditing == true)
+                                                {
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1, excludedValue: id_perlengkapan}});
+                                                }
+                                                else
+                                                {
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1}});
+                                                }
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                    /*
+                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
+                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
+                                                     */
+                                                    
+                                                    Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpanan',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
+                                                                Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setDisabled(false);
+                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setMaxValue(data.qty);
+//                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').validate();
+                                                                if(setting.isEditing == true)
+                                                                {
+                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').value));
+                                                                    Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
+                                                                }
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(1, pilihPerlengkapan);
+            form.insert(2, Form.Component.inventorypengeluaran(setting.isEditing));
+            form.insert(3, Form.Component.dataInventoryPerlengkapan(true));
 
             return form;
         }
@@ -809,12 +903,12 @@
         //end form pendayagunaan
 
 
-        Form.pemeliharaan = function(setting)
+        Form.pemeliharaan = function(setting,setting_grid_pemeliharaan_part)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
-            form.insert(3, Form.Component.fileUpload());
+            form.insert(4, Form.Component.fileUpload());
             
 //            Ext.getCmp('nama_unker').setDisabled(true);
 //            Ext.getCmp('nama_unor').setDisabled(true);
@@ -824,16 +918,27 @@
             }
             else
             {
-                form.insert(2, Form.Component.pemeliharaan());
+                var tipe_angkutan = null;
+                if(setting.tipe_angkutan != undefined && setting.tipe_angkutan != null)
+                {
+                    tipe_angkutan = setting.tipe_angkutan;
+                }
+                
+                form.insert(2, Form.Component.pemeliharaan(tipe_angkutan));
+                if(setting_grid_pemeliharaan_part != null || setting_grid_pemeliharaan_part != undefined)
+                {
+                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+                }
+                
             }
 
             return form;
         };
         
-        Form.pemeliharaanInAsset = function(setting){
+        Form.pemeliharaanInAsset = function(setting,setting_grid_pemeliharaan_part){
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
-            form.insert(3, Form.Component.fileUpload());
+            form.insert(4, Form.Component.fileUpload());
             
             if (setting.isBangunan)
             {
@@ -842,21 +947,27 @@
             else
             {
                 form.insert(2, Form.Component.pemeliharaan(form.getForm()));
+                form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
             }
             
             return form;
         }
-
-        Form.penghapusan = function(setting)
+        
+        Form.peraturan = function(setting)
         {
-
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, Form.Component.peraturan());
+            form.insert(1, Form.Component.fileUploadDocumentOnly('document','fileupload_peraturan'));
+            
+            return form;
         }
+
         
         Form.pengelolaan = function(setting)
         {
             var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing));
-            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset,false));
             form.insert(2, Form.Component.pengelolaan(setting.isEditing));
             form.insert(3, Form.Component.fileUpload(setting.isEditing));
             
@@ -875,6 +986,428 @@
             
             return form;
         }
+        
+        Form.referensiKlasifikasiAsetLvl1 = function(setting)
+        {
+            var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl1','kd_lvl1');
+            form.insert(0, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 1','kd_lvl1',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiKlasifikasiAsetLvl2 = function(setting)
+        {
+            var pilihKlasifikasiAset = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title:'KLASIFIKASI ASET',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Klasifikasi Aset Lvl 1 *',
+                                    name: 'kd_lvl1',
+                                    allowBlank: false,
+                                    store: Reference.Data.klasifikasiAset_lvl1,
+                                    valueField: 'kd_lvl1',
+                                    displayField: 'nama', emptyText: 'Pilih Klasifikasi Aset',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+            
+            var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl2','kd_lvl2_brg');
+            form.insert(0, pilihKlasifikasiAset);
+            form.insert(1, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 2','kd_lvl2',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiKlasifikasiAsetLvl3 = function(setting)
+        {
+            var pilihKlasifikasiAset = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title:'KLASIFIKASI ASET',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Klasifikasi Aset Lvl 1 *',
+                                    name: 'kd_lvl1',
+                                    id:'referensi_klasifikasi_aset_lvl1',
+                                    allowBlank: false,
+                                    store: Reference.Data.klasifikasiAset_lvl1,
+                                    valueField: 'kd_lvl1',
+                                    displayField: 'nama', emptyText: 'Pilih Klasifikasi Aset',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                { 
+                                                    var Lvl2Field = Ext.getCmp('referensi_klasifikasi_aset_lvl2');
+                                                    if (Lvl2Field !== null) {
+                                                        if (!isNaN(value) && value.length > 0) {
+                                                            Lvl2Field.enable();
+                                                            Reference.Data.klasifikasiAset_lvl2.changeParams({params: {id_open: 1, kd_lvl1: value}});
+                                                        }
+                                                        else {
+                                                            Lvl2Field.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Klasifikasi Aset Lvl 2 *',
+                                    name: 'kd_lvl2',
+                                    id:'referensi_klasifikasi_aset_lvl2',
+                                    allowBlank: false,
+                                    store: Reference.Data.klasifikasiAset_lvl2,
+                                    valueField: 'kd_lvl2',
+                                    displayField: 'nama', emptyText: 'Pilih Klasifikasi Aset',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+            
+            var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl3','kd_klasifikasi_aset');
+            form.insert(0, pilihKlasifikasiAset);
+            form.insert(1, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 3','kd_lvl3',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiWarehouse = function(setting)
+        {
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, Form.Component.unitUnkerOnly(setting.isEditing,form));
+            form.insert(1, Form.Component.referensiWarehouseRuangRak('WAREHOUSE'));
+            
+            return form;
+        }
+        
+        Form.referensiRuang = function(setting)
+        {
+            var pilihWarehouse = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'WAREHOUSE',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+//                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'warehouse_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+                
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, pilihWarehouse);
+            form.insert(1, Form.Component.referensiWarehouseRuangRak('RUANG'));
+            
+            return form;
+        }
+        
+        Form.referensiRak = function(setting)
+        {
+            var pilihWarehouse = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'RUANG',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+//                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'warehouse_id',
+                                    id:'referensi_warehouse_combo',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                   var comboRuang = Ext.getCmp('referensi_warehouse_ruang_combo');
+                                                   comboRuang.setDisabled(false);
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+//                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Pilih Ruang *',
+                                    name: 'warehouseruang_id',
+                                    id:'referensi_warehouse_ruang_combo',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+                
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, pilihWarehouse);
+            form.insert(1, Form.Component.referensiWarehouseRuangRak('RAK'));
+            
+            return form;
+        }
+        
+        Form.secondaryWindowAsset= function(data,operationType,storeIndex) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: '',
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_perlengkapan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                if(operationType == 'add')
+                                {
+                                    data.add(formValues);
+                                }
+                                if(operationType == 'edit')
+                                {
+                                    var record = data.getAt(storeIndex);
+                                    record.set(formValues);
+                                }
+                                if(operationType == 'remove')
+                                {
+//                                    data.removeAt(storeIndex);
+//                                    data.commitChanges();
+                                }
+                                
+                                
+                                Modal.assetSecondaryWindow.close();
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
+        Form.inventory = function(url, data, edit, dataStoreInventoryPerlengkapan) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function(form,action) {
+                                        var id = action.result.id;
+                                        var grid = Ext.getCmp('grid_inventory_penerimaan_perlengkapan').getStore();
+                                        var new_records = grid.getNewRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
+                                        Ext.each(new_records, function(obj){
+                                            var index = grid.indexOf(obj);
+                                            var record = grid.getAt(index);
+                                            record.set('id_inventory',id);
+                                        });
+                                            grid.sync();
+                     
+                                        
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+//                                        if (edit)
+//                                        {
+//                                            Modal.closeProcessWindow();
+//                                        }
+//                                        else
+//                                        {
+//                                            form.reset();
+//                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    },]
+            });
+
+
+            return _form;
+        };
 
         Form.process = function(url, data, edit, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
@@ -920,11 +1453,11 @@
                                 documentField.setRawValue(arrayDoc.join());
                             }
                             
-                            console.log(form.getValues());
+//                            console.log(form.getValues());
                             
                             if (form.isValid())
                             {
-                                console.log(form.getValues());
+//                                console.log(form.getValues());
                                 form.submit({
                                     success: function(form) {
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
@@ -939,6 +1472,17 @@
                                         }
                                         else
                                         {
+                                            var ref_combo_warehouse = Ext.getCmp('referensi_warehouse_combo');
+                                            var ref_combo_warehouse_ruang = Ext.getCmp('referensi_warehouse_ruang_combo');
+//                                            if(ref_combo_warehouse !=null)
+//                                            {
+//                                                ref_combo_warehouse.setValue('');
+//                                            }
+                                            if(ref_combo_warehouse_ruang != null)
+                                            {
+                                                ref_combo_warehouse_ruang.setValue('');
+                                                ref_combo_warehouse_ruang.setDisabled(true);
+                                            }
                                             form.reset();
                                         }
 
@@ -956,6 +1500,529 @@
                         text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
                         handler: addBtn.fn
                     }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.referensiKlasifikasiAset = function(url, data, edit, table_name, key) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiKlasifikasiAset',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiKlasifikasiAset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var pk_check = false;
+                            if(formValues.kd_lvl1 != undefined)
+                            {
+                                formValues.key = formValues.kd_lvl1;
+                                if(formValues.kd_lvl2 != undefined)
+                                {
+                                    formValues.key += formValues.kd_lvl2;
+                                    if(formValues.kd_lvl3 != undefined)
+                                    {
+                                         formValues.key += formValues.kd_lvl3;
+                                    }
+
+                                }
+                            }
+                            
+//                            debugger;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdKlasifikasiAset',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{table_name:table_name, key:key, value:formValues, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                var combo_ref_klasifikasi_lvl2 = Ext.getCmp('referensi_klasifikasi_aset_lvl2');
+                                                var combo_ref_klasifikasi_lvl1 = Ext.getCmp('referensi_klasifikasi_aset_lvl1');
+                                                if(combo_ref_klasifikasi_lvl1 != null)
+                                                {
+                                                    combo_ref_klasifikasi_lvl1.setValue('');
+                                                }
+                                                if(combo_ref_klasifikasi_lvl2 != null)
+                                                {
+                                                    combo_ref_klasifikasi_lvl2.setValue('');
+                                                    combo_ref_klasifikasi_lvl2.setDisabled(true);
+                                                }
+                                                form.reset();
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.assetAngkutanLaut = function(url, data, edit, hasTabs) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                             if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            
+                            var laut_stkk_file = form.findField('laut_stkk_file');
+                            var laut_sertifikasi_keselamatan_file = form.findField('laut_sertifikasi_keselamatan_file');
+                            var laut_sertifikasi_radio_file = form.findField('laut_sertifikasi_radio_file');
+                            var laut_surat_ijin_berlayar_file = form.findField('laut_surat_ijin_berlayar_file');
+  
+                            if (laut_stkk_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSTKKFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_stkk_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (laut_sertifikasi_keselamatan_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSertifikasiKeselamatanFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_sertifikasi_keselamatan_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (laut_sertifikasi_radio_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSertifikasiRadioFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_sertifikasi_radio_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (laut_surat_ijin_berlayar_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanLautTambahanSuratIjinBerlayarFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                laut_surat_ijin_berlayar_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+                                        if (!edit)
+                                        {
+                                            Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.assetAngkutanUdara = function(url, data, edit, hasTabs) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                             if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            var udara_sertifikat_kelaikan_udara_file = form.findField('udara_sertifikat_kelaikan_udara_file');
+                            var udara_sertifikat_pendaftaran_pesawat_udara_file = form.findField('udara_sertifikat_pendaftaran_pesawat_udara_file');
+                            var udara_surat_bukti_kepemilikan_file = form.findField('udara_surat_bukti_kepemilikan_file');
+                           
+  
+                            if (udara_sertifikat_kelaikan_udara_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanUdaraTambahanSertifikatKelaikanUdaraFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                udara_sertifikat_kelaikan_udara_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (udara_sertifikat_pendaftaran_pesawat_udara_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanUdaraTambahanSertifikatPendaftaranPesawatUdaraFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                udara_sertifikat_pendaftaran_pesawat_udara_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (udara_surat_bukti_kepemilikan_file !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                
+                                if(form !=null)
+                                {
+                                     documentStore = Ext.getCmp('AngkutanUdaraTambahanSuratBuktiKepemilikanFile').getStore(); 
+                                }
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                udara_surat_bukti_kepemilikan_file.setRawValue(arrayDoc.join());
+                            }
+                            
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+                                        if (!edit)
+                                        {
+                                            Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        
+        Form.assetBangunanDanTanah = function(url, data, edit, hasTabs, storeRiwayatPajak) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                
+                                form.submit({
+                                    success: function(response) {
+                                        debugger;
+                                        storeRiwayatPajak.sync();
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+                                        if (!edit)
+                                        {
+                                            Modal.closeAssetWindow();
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
             });
 
 
@@ -1030,6 +2097,7 @@
                             
                             if (form.isValid())
                             {
+                                
                                 form.submit({
                                     success: function() {
                                         data.load();
@@ -1054,6 +2122,75 @@
             return _form;
         };
         
+        Form.detailPenggunaanAngkutan = function(url, data, edit,tipe_angkutan) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_penggunaan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        
+                                        if (Modal.assetSecondaryWindow.isVisible(true))
+                                        {
+                                            var id_ext_asset = Ext.getCmp('id_ext_asset_detail_penggunaan_angkutan').value;
+                                            $.ajax({
+                                                url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                                                type: "POST",
+                                                dataType:'json',
+                                                async:false,
+                                                data:{tipe_angkutan:tipe_angkutan,id_ext_asset:id_ext_asset},
+                                                success:function(response, status){
+                                                 if(response.status == 'success')
+                                                 {
+                                                     if(tipe_angkutan == "darat")
+                                                    {
+                                                        var updateTotalPenggunaan = response.total + ' Km';
+                                                        Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                                    }
+                                                    else if(tipe_angkutan == "laut" || tipe_angkutan == "udara")
+                                                    {
+                                                        var updateTotalPenggunaan = response.total + ' Jam';
+                                                        Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
+                                                    }
+
+                                                 }
+
+                                                }
+                                             });
+
+                                            Modal.assetSecondaryWindow.close();
+                                        }
+                                        
+                                        
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
         Form.perlengkapanAngkutan = function(url, data, edit) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -1066,7 +2203,7 @@
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_riwayat_pajak', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan', id: 'save_perlengkapan', iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             
@@ -1097,7 +2234,7 @@
             return _form;
         };
         
-        Form.riwayatPajak = function(url, data, edit) {
+        Form.riwayatPajak = function(url, data, edit, jenis) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
                 url: url,
@@ -1117,9 +2254,19 @@
                             if (documentField !== null)
                             {
                                 var arrayDoc = [];
+                                var documentStore = null;
                                 
-                                var documentStore = Utils.getDocumentStore(_form);
-                                
+                                if(form !=null)
+                                {
+                                    if(jenis == 'tanah')
+                                    {
+                                        documentStore = Ext.getCmp('TanahRiwayatPajakFile').getStore(); 
+                                    }
+                                    else if(jenis == 'bangunan')
+                                    {
+                                        documentStore = Ext.getCmp('BangunanRiwayatPajakFile').getStore(); 
+                                    }
+                                }
                                 _.each(documentStore.data.items, function(obj) {
                                     arrayDoc.push(obj.data.name);
                                 });
@@ -1127,6 +2274,39 @@
                                 
                                 documentField.setRawValue(arrayDoc.join());
                             }
+                            
+                            if (form.isValid())
+                            {
+                                var form_values = form.getValues();
+                                data.add(form_values);
+                                Modal.assetSecondaryWindow.close();
+                                
+
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.pemeliharaanPart = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_pemeliharaan_part', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
                             
                             if (form.isValid())
                             {
@@ -1317,6 +2497,235 @@
             return component;
         };
         
+        
+        Form.Component.unitUnkerOnly = function(edit,form,isReadOnly) {
+            var component = {
+                xtype: 'fieldset',
+                itemId : 'unit_selection',
+                title: 'UNIT',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lokasi',
+                                id: 'kd_lokasi',
+                                listeners: {
+                                    change: function(ob, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnker = Ext.getCmp('nama_unker');
+                                            if (comboUnker !== null)
+                                            {
+                                                comboUnker.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId:'column_unker',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Kerja *',
+                                name: 'nama_unker',
+                                id: 'nama_unker',
+                                itemId: 'unker',
+                                allowBlank: true,
+                                readOnly:(isReadOnly == true)?true:false,
+                                store: Reference.Data.unker,
+                                valueField: 'kdlok',
+                                displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(isReadOnly != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+
+                                            if (value !== null)
+                                            {
+                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                if (kodeUnkerField !== null) {
+                                                    if (value.length > 0) {
+                                                        kodeUnkerField.setValue(value);
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            }]
+                    },]
+            };
+
+
+            return component;
+        };
+        
+        /*
+         * @param {string} database_field = the field fileupload field name in database
+         * @param {string} id_fileupload = unique id for fileupload grid     
+         */
+        Form.Component.fileUploadDocumentOnly= function(database_field,id_fileupload)
+        {
+          
+            var documentStore = new Ext.create('Ext.data.Store', {
+                                        fields: ['url', 'name']
+                                    })
+            
+            var component = {
+                xtype: 'container',
+                itemId: 'fileUpload',
+                layout: 'column',
+                border: false,
+//                title: 'FILE',
+                defaultType: 'container',
+                style: {
+                    marginTop: '10px'
+                },
+                items: [{
+                                xtype: 'hidden',
+                                name: database_field,
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                        if (value !== null && value.length > 0)
+                                        {
+                                            _.each(value.split(','), function(doc) {
+                                                var fullPath = Reference.URL.documentBasePath + doc;
+                                                documentStore.add({url: fullPath, name: doc});
+                                            });
+                                        }
+                                    }
+                                }
+                            }, {// DOCUMENT START
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId: 'documentColumn',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [{
+                                xtype: 'gridpanel',
+                                id : id_fileupload,
+                                store: documentStore,
+                                columnWidth: .5,
+                                width: '100%',
+                                height: 110,
+                                style: {
+                                    marginBottom: '10px'
+                                },
+                                columns: [{
+                                        text: 'Document Name',
+                                        dataIndex: 'name',
+                                        width: 230
+                                    }, {
+                                        xtype: 'actioncolumn',
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/delete.png',
+                                                tooltipe: 'Remove Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    var dataSend = {
+                                                        file: record.data.name
+                                                    };
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        dataType: 'json',
+                                                        data: dataSend,
+                                                        url: Reference.URL.deleteDocument,
+                                                        success: function(res) {
+                                                            if (res.success)
+                                                            {
+                                                                console.log(res);
+                                                                documentStore.remove(record);
+                                                            }
+                                                            else
+                                                            {
+                                                                console.error('failed to remove');
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                }
+                                            }]
+                                    }]
+                            }, {
+                                xtype: 'filefield',
+                                name: 'userfile',
+                                width: 100,
+                                buttonOnly: true,
+                                buttonText: 'Add Document',
+                                listeners: {
+                                    'change': {
+                                        fn: function() {
+                                            var tempForm = Ext.create('Ext.form.Panel', {
+                                                url: Reference.URL.upDocument,
+                                                items: this
+                                            });
+
+                                            tempForm.getForm().submit({
+                                                waitMsg: 'Uploading your document...',
+                                                success: function(response, action) {
+                                                    var res = action.result.upload_data;
+                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
+                                                    documentStore.add({url:fullPath, name: res.file_name});
+                                                },
+                                                failure: function(response, action) {
+                                                    console.error('fail');
+                                                    console.log(action);
+                                                    Ext.Msg.alert('Fail',action.result.error);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }]
+                    }]// DOCUMENT END
+            };
+            
+            return component;
+        };
+        
         Form.Component.fileUpload = function(edit) {
             
             var photoStore = new Ext.create('Ext.data.Store', {
@@ -1380,7 +2789,7 @@
                                 xtype : 'panel',
                                 itemId : 'photoPanel',
                                 frame : true,
-                                height : 90,
+                                height : 110,
                                 style : {
                                     marginBottom: '10px'
                                 },
@@ -1390,14 +2799,15 @@
                                     tpl: [
                                         '<tpl for=".">',
                                         '<div class="thumb-wrap" id="{name}" style="float:left; padding:5px">',
-                                        '<div class="thumb"><img src="{url}" height="70" width="70"></div>',
+                                        '<div class="thumb"><img src="{url}" height="70" width="70"><br/><input type="button" value="Tindakan" id="{name}" class="action_btn" /></div>',
                                         '</div>',
                                         '</tpl>',
                                         '<div class="x-clear"></div>'
                                     ],
                                     height: 80,
                                     emptyText: 'No image',
-                                    itemSelector: 'div.thumb-wrap',
+//                                    itemSelector: 'div.thumb-wrap',
+                                    itemSelector: 'input.action_btn',
                                     prepareData: function(data) {
                                         Ext.apply(data);
                                         return data;
@@ -1408,36 +2818,61 @@
                                         },
                                         itemclick: function(view, record, item, index) {
                                             var data = record.data;
+                                            
+                                            var messageBox = Ext.create('Ext.window.MessageBox', {
+                                                width:300,
+                                                height: 100,
+                                                buttonText: {yes: "Lihat",no: "Hapus",cancel: "Batal"},
 
-                                            var dataSend = {
-                                                file: data.name
-                                            };
+                                           });
+                                           
 
-                                            $.ajax({
-                                                type: 'POST',
-                                                dataType: 'json',
-                                                data: dataSend,
-                                                url: Reference.URL.deleteImage,
-                                                success: function(res) {
-                                                    if (res.success)
+                                            messageBox.show({
+                                                title:'Tindakan',
+                                                msg: 'Pilih Tindakan',
+                                                buttons: Ext.Msg.YESNOCANCEL,
+                                                fn: function(btn){
+                                                    if (btn === 'yes')
                                                     {
-                                                        var recordToRemove = photoStore.findRecord('name', data.name);
-                                                        if (recordToRemove !== null)
-                                                        {
-                                                            photoStore.remove(recordToRemove);
-                                                            console.log(photoStore.count());
-                                                        }
-                                                        else
-                                                        {
-                                                            console.error('could not found the expected image');
-                                                        }
+                                                        window.open(data.url,'_blank');
                                                     }
-                                                    else
+                                                    else if(btn === 'no')
                                                     {
-                                                        console.error('fail to delete image');
+                                                        var dataSend = {
+                                                            file: data.name
+                                                        };
+
+
+
+                                                        $.ajax({
+                                                            type: 'POST',
+                                                            dataType: 'json',
+                                                            data: dataSend,
+                                                            url: Reference.URL.deleteImage,
+                                                            success: function(res) {
+                                                                if (res.success)
+                                                                {
+                                                                    var recordToRemove = photoStore.findRecord('name', data.name);
+                                                                    if (recordToRemove !== null)
+                                                                    {
+                                                                        photoStore.remove(recordToRemove);
+                                                                        console.log(photoStore.count());
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        console.error('could not found the expected image');
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    console.error('fail to delete image');
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                 }
                                             });
+                                            
                                         }
                                     }
                                 })
@@ -1485,17 +2920,31 @@
                                 store: documentStore,
                                 columnWidth: .5,
                                 width: '100%',
-                                height: 90,
+                                height: 110,
                                 style: {
                                     marginBottom: '10px'
                                 },
                                 columns: [{
                                         text: 'Document Name',
                                         dataIndex: 'name',
-                                        width: 200
+                                        width: 270
                                     }, {
                                         xtype: 'actioncolumn',
-                                        width: 50,
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
                                         items: [{
                                                 icon: '../basarnas/assets/images/icons/delete.png',
                                                 tooltipe: 'Remove Document',
@@ -1527,7 +2976,8 @@
 
                                                 }
                                             }]
-                                    }]
+                                    },
+                                    ]
                             }, {
                                 xtype: 'filefield',
                                 name: 'userfile',
@@ -1565,129 +3015,7 @@
             return component;
         };
 
-        Form.Component.fileUploadRiwayatPajak = function(edit) {
-            
-                                    
-            var documentStore = new Ext.create('Ext.data.Store', {
-                                        fields: ['url', 'name']
-                                    })
-            
-            var component = {
-                xtype: 'fieldset',
-                itemId: 'fileUpload',
-                layout: 'column',
-                border: false,
-                title: 'FILE UPLOAD',
-                defaultType: 'container',
-                style: {
-                    marginTop: '10px'
-                },
-                items: [{
-                        xtype: 'hidden',
-                        name: 'file_setoran',
-                        listeners: {
-                            change: function(obj, value) {
-                                if (value !== null && value.length > 0)
-                                {
-                                    _.each(value.split(','), function(doc) {
-                                        var fullPath = Reference.URL.documentBasePath + doc;
-                                        documentStore.add({url: fullPath, name: doc});
-                                    });
-                                }
-                            }
-                        }
-                    }, {// DOCUMENT START
-                        columnWidth: .99,
-                        layout: 'anchor',
-                        itemId: 'documentColumn',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        items: [{// DOCUMENT START
-                                xtype: 'gridpanel',
-                                itemId : 'documentGrid',
-                                store: documentStore,
-                                columnWidth: .5,
-                                width: '100%',
-                                height: 90,
-                                style: {
-                                    marginBottom: '10px'
-                                },
-                                columns: [{
-                                        text: 'Document Name',
-                                        dataIndex: 'name',
-                                        width: 200
-                                    }, {
-                                        xtype: 'actioncolumn',
-                                        width: 50,
-                                        items: [{
-                                                icon: '../basarnas/assets/images/icons/delete.png',
-                                                tooltipe: 'Remove Document',
-                                                handler: function(grid, rowIndex, colIndex, obj) {
-                                                    var record = documentStore.getAt(rowIndex);
-
-                                                    var dataSend = {
-                                                        file: record.data.name
-                                                    };
-
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        dataType: 'json',
-                                                        data: dataSend,
-                                                        url: Reference.URL.deleteDocument,
-                                                        success: function(res) {
-                                                            if (res.success)
-                                                            {
-                                                                console.log(res);
-                                                                documentStore.remove(record);
-                                                            }
-                                                            else
-                                                            {
-                                                                console.error('failed to remove');
-                                                            }
-                                                        }
-                                                    });
-
-
-                                                }
-                                            }]
-                                    }]
-                            }, {
-                                xtype: 'filefield',
-                                name: 'userfile',
-                                width: 100,
-                                buttonOnly: true,
-                                buttonText: 'Add Document',
-                                listeners: {
-                                    'change': {
-                                        fn: function() {
-                                            var tempForm = Ext.create('Ext.form.Panel', {
-                                                url: Reference.URL.upDocument,
-                                                items: this
-                                            });
-
-                                            tempForm.getForm().submit({
-                                                waitMsg: 'Uploading your document...',
-                                                success: function(response, action) {
-                                                    var res = action.result.upload_data;
-                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
-                                                    documentStore.add({url:fullPath, name: res.file_name});
-                                                },
-                                                failure: function(response, action) {
-                                                    console.error('fail');
-                                                    console.log(action);
-                                                    Ext.Msg.alert('Fail',action.result.error);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            }]
-                    }]// DOCUMENT END
-            };
-
-            return component;
-        };
+        
         
         
 
@@ -1701,7 +3029,7 @@
                 defaultType: 'container',
                 frame: true,
                 items: [{
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
@@ -1714,31 +3042,22 @@
                             }, {
                                 fieldLabel: 'No KIB',
                                 name: 'no_kib'
-                            }]
-                    }, {
-                        columnWidth: .25,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%',
-                            labelWidth: 80
-                        },
-                        defaultType: 'textfield',
-                        items: [{
+                            },{
                                 fieldLabel: 'Unit Kerja',
                                 name: 'unit_pmk'
-                            }, {
-                                fieldLabel: 'Catatan',
-                                name: 'catatan'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .33,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
                             labelWidth: 80
                         },
                         defaultType: 'textfield',
-                        items: [{
+                        items: [ {
+                                fieldLabel: 'Catatan',
+                                name: 'catatan'
+                            },{
                                 fieldLabel: 'Alamat Unit',
                                 name: 'alm_pmk'
                             }, {
@@ -1746,11 +3065,11 @@
                                 name: 'status'
                             }]
                     }, {
-                        columnWidth: .25,
+                        columnWidth: .34,
                         layout: 'anchor',
                         defaults: {
                             anchor: '95%',
-                            labelWidth: 80,
+                            labelWidth: 80
                         },
                         defaultType: 'textfield',
                         items: [{
@@ -1758,17 +3077,21 @@
                                 name: 'kuantitas'
                             }, {
                                 xtype: 'numberfield',
+                                fieldLabel: 'Harga Aset',
+                                name: 'rph_aset'
+                            },{
+                                xtype: 'numberfield',
                                 fieldLabel: 'Harga Wajar',
                                 name: 'rphwajar'
                             }]
-                    }]
+                    }, ]
             };
 
 
             return component;
         };
 
-        Form.Component.selectionAsset = function(cmpSetting) {
+        Form.Component.selectionAsset = function(cmpSetting,isReadOnly) {
 
             var component = {
                 xtype: 'fieldset',
@@ -1789,7 +3112,7 @@
                         items: [{
                                 fieldLabel: 'Kode Barang*',
                                 name: 'kd_brg',
-                                readOnly:true,
+                                readOnly:(isReadOnly == false)?false:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -1803,7 +3126,7 @@
                                 fieldLabel: 'Nama',
                                 name: 'nama',
                                 editable: false,
-                                readOnly:true,
+                                readOnly:(isReadOnly == false)?false:true,
                             }]
                     }, {
                         columnWidth: .33,
@@ -2462,7 +3785,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                title: 'Perlengkapan Angkutan Laut',
+                title: 'Perlengkapan Angkutan Darat',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -2491,7 +3814,7 @@
                                 name: 'jenis_perlengkapan',
                                 anchor: '100%',
                                 allowBlank: false,
-                                store: Reference.Data.jenisPerlengkapanAngkutanLaut,
+                                store: Reference.Data.jenisPerlengkapanAngkutanDarat,
                                 valueField: 'value',
                                 displayField: 'value', emptyText: 'Pilih Jenis',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Ruangan',
@@ -2529,7 +3852,157 @@
 
             return component;
         
-        }
+        };
+        
+        Form.Component.dataPerlengkapanAngkutanDarat = function (id_ext_asset)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Darat',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype: 'combo',
+                                fieldLabel: 'Jenis Perlengkapan *',
+                                name: 'jenis_perlengkapan',
+                                anchor: '100%',
+                                allowBlank: false,
+                                store: Reference.Data.jenisPerlengkapanAngkutanDarat,
+                                valueField: 'value',
+                                displayField: 'value', emptyText: 'Pilih Jenis',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
+                                listeners: {
+//                                    'focus': {
+//                                        fn: function(comboField) {
+//                                            var store = comboField.getStore();
+//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
+//                                            comboField.expand();
+//                                        },
+//                                        scope: this
+//                                    },
+//                                    'change': {
+//                                        fn: function(obj, value) {
+//
+//                                        },
+//                                        scope: this
+//                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'No',
+                                name: 'no'
+                            }, {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            }]
+                    },]
+            };
+
+            return component;
+        
+        };
+        
+        Form.Component.dataPerlengkapanAngkutanLaut = function (id_ext_asset)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'Perlengkapan Angkutan Laut',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype: 'combo',
+                                fieldLabel: 'Jenis Perlengkapan *',
+                                name: 'jenis_perlengkapan',
+                                anchor: '100%',
+                                allowBlank: false,
+                                store: Reference.Data.jenisPerlengkapanAngkutanLaut,
+                                valueField: 'value',
+                                displayField: 'value', emptyText: 'Pilih Jenis',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
+                                listeners: {
+//                                    'focus': {
+//                                        fn: function(comboField) {
+//                                            var store = comboField.getStore();
+//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
+//                                            comboField.expand();
+//                                        },
+//                                        scope: this
+//                                    },
+//                                    'change': {
+//                                        fn: function(obj, value) {
+//
+//                                        },
+//                                        scope: this
+//                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'No',
+                                name: 'no'
+                            }, {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            }]
+                    },]
+            };
+
+            return component;
+        
+        };
         
         Form.Component.dataPerlengkapanAngkutanUdara = function (id_ext_asset)
         {
@@ -2569,7 +4042,7 @@
                                 store: Reference.Data.jenisPerlengkapanAngkutanUdara,
                                 valueField: 'value',
                                 displayField: 'value', emptyText: 'Pilih Jenis',
-                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Ruangan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
                                 listeners: {
 //                                    'focus': {
 //                                        fn: function(comboField) {
@@ -2631,13 +4104,145 @@
         
         }
         
+        Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan = function(tipe_angkutan)
+        {
+          if(tipe_angkutan == "darat")
+          {
+              var subComponent = {
+                  xtype:'container',
+                  items:[
+                         {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Satuan Penggunaan',
+                                    name: 'satuan_penggunaan',
+                                    allowBlank: false,
+                                    store: Reference.Data.unitPengunaanAngkutanDarat,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Satuan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                             },
+                  ]
+              }
+              
+              return subComponent;
+          }
+          else if(tipe_angkutan == "laut")
+          {
+              var subComponent = {
+                  xtype:'container',
+                  items:[
+                         {
+                            xtype: 'hidden',
+                            name: 'satuan_penggunaan',
+                            value:'4',
+                         },
+                         {
+                             xtype: 'displayfield',
+                             fieldLabel: 'Satuan Penggunaan',
+                             value: 'Jam Layar',
+                         }
+                  ]
+              }
+              
+              return subComponent;
+
+          }
+          else if(tipe_angkutan == "udara")
+          {
+              var subComponent = {
+                  xtype:'container',
+                  items:[
+                         {
+                            xtype: 'hidden',
+                            name: 'satuan_penggunaan',
+                            value:'5',
+                         },
+                         {
+                             xtype: 'displayfield',
+                             fieldLabel: 'Satuan Penggunaan',
+                             value: 'Jam Terbang',
+                         }
+                  ]
+              }
+              
+              return subComponent;
+
+          }
+        };
+        
+        Form.Component.dataDetailPenggunaanAngkutan= function(id_ext_asset,tipe_angkutan)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'DETAIL PENGGUNAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'numberfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_ext_asset',
+                                id:'id_ext_asset_detail_penggunaan_angkutan',
+                                value:id_ext_asset,
+                            },
+                            {
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal',
+                                name: 'tanggal',
+                                format: 'Y-m-d',
+                                allowBlank:false,
+                            },
+                            {
+                                fieldLabel: 'Jumlah Penggunaan',
+                                name: 'jumlah_penggunaan',
+                                allowBlank:false,
+                                minValue:1,
+                            },
+                            Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan(tipe_angkutan)
+                           ]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textarea',
+                        items: [{
+                                fieldLabel: 'Keterangan',
+                                name: 'keterangan'
+                            },
+                        ]
+                    }]
+            };
+
+            return component;
+        
+        };
+        
         Form.Component.dataRiwayatPajakTanahDanBangunan = function(id_ext_asset)
         {
             var component = {
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                title: 'Riwayat Pajak',
+                title: 'RIWAYAT PAJAK',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -2673,7 +4278,8 @@
                             {
                                 fieldLabel: 'Jumlah Setoran',
                                 name: 'jumlah_setoran'
-                            }]
+                            },
+                            ]
                     }, {
                         columnWidth: .50,
                         layout: 'anchor',
@@ -2684,7 +4290,119 @@
                         items: [{
                                 fieldLabel: 'Keterangan',
                                 name: 'keterangan'
-                            }]
+                            },
+                        ]
+                    }]
+            };
+
+            return component;
+        
+        };
+        
+        Form.Component.dataPemeliharaanPart = function(id_pemeliharaan,edit)
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'PEMELIHARAAN PART',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'numberfield',
+                        items: [
+                            {
+                                    readOnly:(edit==true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'No Penyimpanan *',
+                                    name: 'id_penyimpanan',
+                                    allowBlank: false,
+                                    store: Reference.Data.penyimpanan,
+                                    valueField: 'id',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'beforeRender': {
+                                            fn: function() {
+                                                if(setting.isEditing == true)
+                                                {
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1, excludedValue: id_perlengkapan}});
+                                                }
+                                                else
+                                                {
+                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1}});
+                                                }
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                    /*
+                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
+                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
+                                                     */
+                                                    
+                                                    Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpanan',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                Ext.getCmp('pemeliharaan_part_qty').setDisabled(false);
+                                                                Ext.getCmp('pemeliharaan_part_qty').setMaxValue(data.qty);
+                                                                if(edit == true)
+                                                                {
+                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('pemeliharaan_part_qty').value));
+                                                                    Ext.getCmp('pemeliharaan_part_qty').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
+                                                                }
+//                                                                Ext.getCmp('pemeliharaan_part_qty').reset();
+                                                           
+                                                        }
+                                                        });
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'id_pemeliharaan',
+                                value:id_pemeliharaan,
+                            },
+                            {
+                                disabled:true,
+                                xtype:'numberfield',
+                                fieldLabel: 'Qty Pemeliharaan',
+                                name: 'qty_pemeliharaan',
+                                id:'pemeliharaan_part_qty',
+                                minValue:1,
+                            },
+                            ]
                     }]
             };
 
@@ -2692,23 +4410,134 @@
         
         }
         
-        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+        
+        Form.Component.gridPemeliharaanPart = function(setting,edit) {
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: (edit == true)?300:150,
+                height: (edit == true)?325:150,
                 anchor: '100%',
-                title: 'Riwayat Pajak',
+                title: 'PEMELIHARAAN PART',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [(edit==true)?Grid.riwayatPajak(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
             };
 
             return component;
         };
         
+        Form.Component.gridInventoryPerlengkapan = function(setting) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 325,
+                anchor: '100%',
+                title: 'PERLENGKAPAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'container',height:300,items:[Grid.inventoryPerlengkapan(setting)]}]
+            };
+
+            return component;
+        };
         
+        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: (edit == true)?325:150,
+                anchor: '100%',
+                title: 'Riwayat Pajak',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+            };
+
+            return component;
+        };
+
+        
+//        Form.Component.gridRiwayatPajakTanahDanBangunan = function(setting,edit) {
+//            var component = {
+//                xtype: 'fieldset',
+//                layout:'anchor',
+//                height: 325,
+//                anchor: '100%',
+//                title: 'Riwayat Pajak',
+//                border: false,
+//                frame: true,
+//                defaultType: 'container',
+//                items: [{xtype:'container',height:300,items:[Grid.riwayatPajak(setting)]}]
+//            };
+//
+//            return component;
+//        };
+//        
+        
+        
+        Form.Component.peraturan = function()
+        {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                title: 'PERATURAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [
+                            {
+                                xtype:'hidden',
+                                name:'id',
+                            },
+                            {
+                                xtype:'hidden',
+                                name:'date_upload',
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama'
+                            }, 
+                            {
+                                fieldLabel: 'No Dokumen',
+                                name: 'no_dokumen'
+                            },{
+                                xtype:'datefield',
+                                fieldLabel: 'Tanggal Dokumen',
+                                name: 'tanggal_dokumen',
+                                format: 'Y-m-d'
+                            },
+                            {
+                                fieldLabel: 'Initiator',
+                                name: 'initiator'
+                            },
+                            {
+                                xtype:'textarea',
+                                fieldLabel: 'Perihal',
+                                name: 'perihal'
+                            },
+                        ]
+                  
+                        
+                    }]
+            };
+
+            return component;
+        
+        };
 
         Form.Component.tambahanBangunanTanah = function() {
             var component = {
@@ -2982,14 +4811,32 @@
             return component;
         };
         
+        Form.SubComponent.tambahanAngkutanDaratPerlengkapan = function(setting,edit){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                height: (edit==true)?325:150,
+                title: 'Perlengkapan Angkutan Darat',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.angkutanDaratPerlengkapan(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+        };
+                
+            return subcomponent;
+        };
         
-
-        Form.Component.tambahanAngkutanDarat = function() {
-            var component = {
+        
+        Form.SubComponent.tambahanAngkutanDarat = function() {
+            var subcomponent = {
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Darat',
+                title: 'Tambahan',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -3048,6 +4895,24 @@
                     }]
             };
 
+            return subcomponent;
+        };
+        
+        Form.Component.tambahanAngkutanDarat = function(setting_grid_perlengkapan,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                anchor: '100%',
+                title: 'Darat',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [
+                        Form.SubComponent.tambahanAngkutanDarat(),
+                        Form.SubComponent.tambahanAngkutanDaratPerlengkapan(setting_grid_perlengkapan,edit)
+                       ]
+            };
+
             return component;
         };
         
@@ -3088,20 +4953,13 @@
                                    ]
                                 
                             }, {
-                                columnWidth: .5,
-                                layout: 'anchor',
-                                defaults: {
-                                    anchor: '95%'
-                                },
-                                items:[ {
-                                xtype: 'filefield',
-                                fieldLabel: 'File',
-                                name: 'laut_stkk_file',
-                                format: 'Y-m-d'
-                                } 
-                                      ]
-                              
-                            },  
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [Form.Component.fileUploadDocumentOnly('laut_stkk_file','AngkutanLautTambahanSTKKFile')]
+                    }  
                     ]};
             return subcomponent;
         };
@@ -3201,12 +5059,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'laut_sertifikasi_keselamatan_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('laut_sertifikasi_keselamatan_file','AngkutanLautTambahanSertifikasiKeselamatanFile')]
                               
                             },
                 ]};
@@ -3256,12 +5109,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'laut_sertifikasi_radio_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('laut_sertifikasi_radio_file','AngkutanLautTambahanSertifikasiRadioFile')]
                               
                             },
                 ]};
@@ -3311,12 +5159,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'laut_surat_ijin_berlayar_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('laut_surat_ijin_berlayar_file','AngkutanLautTambahanSuratIjinBerlayarFile')]
                               
                             },
                 ]};
@@ -3329,7 +5172,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                height: (edit==true)?300:150,
+                height: (edit==true)?325:150,
                 title: 'Perlengkapan Angkutan Laut',
                 border: false,
                 frame: true,
@@ -3337,7 +5180,7 @@
                 defaults: {
                     layout: 'anchor'
                 },
-                items: [(edit==true)?Grid.angkutanLautPerlengkapan(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.angkutanLautPerlengkapan(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
         };
                 
             return subcomponent;
@@ -3407,12 +5250,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'udara_surat_bukti_kepemilikan_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('udara_surat_bukti_kepemilikan_file','AngkutanUdaraTambahanSuratBuktiKepemilikanFile')]
                               
                             },
                 ]};
@@ -3462,12 +5300,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'udara_sertifikat_pendaftaran_pesawat_udara_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('udara_sertifikat_pendaftaran_pesawat_udara_file','AngkutanUdaraTambahanSertifikatPendaftaranPesawatUdaraFile')]
                               
                             },
                 ]};
@@ -3517,12 +5350,7 @@
                                 defaults: {
                                     anchor: '95%'
                                 },
-                                items:[ {
-                                            xtype: 'filefield',
-                                            fieldLabel: 'File',
-                                            name: 'udara_sertifikat_kelaikan_udara_file',
-                                            format: 'Y-m-d'
-                                    }]
+                                items:[Form.Component.fileUploadDocumentOnly('udara_sertifikat_kelaikan_udara_file','AngkutanUdaraTambahanSertifikatKelaikanUdaraFile')]
                               
                             },
                 ]};
@@ -3535,7 +5363,7 @@
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                height: (edit==true)?300:150,
+                height: (edit==true)?325:150,
                 title: 'Perlengkapan Angkutan Udara',
                 border: false,
                 frame: true,
@@ -3543,7 +5371,7 @@
                 defaults: {
                     layout: 'anchor'
                 },
-                items: [(edit==true)?Grid.angkutanUdaraPerlengkapan(setting):{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]};
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.angkutanUdaraPerlengkapan(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]};
                 
             return subcomponent;
         };
@@ -3606,6 +5434,77 @@
                                 fieldLabel: 'Tanggal Surat',
                                 name: 'surat',
                                 format: 'Y-m-d'
+                            }]
+                    }]
+            };
+
+            return component;
+        };
+        
+        Form.Component.referensiWarehouseRuangRak = function(title) {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: title,
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                xtype:'hidden',
+                                name:'id'
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                                allowBlank:false,
+                            }]
+                    }]
+            };
+
+            return component;
+        };
+        
+         Form.Component.referensiKlasifikasiAset = function(title,field_kd_klasifikasi_aset,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: title,
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                fieldLabel: 'Kode Klasifikasi Aset',
+                                name: field_kd_klasifikasi_aset,
+                                allowBlank:false,
+                                maxLength:10,
+                                readOnly:edit
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                                allowBlank:false,
                             }]
                     }]
             };
@@ -3766,7 +5665,10 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id',
+                                    },
                                     {
                                     xtype: 'combo',
                                     disabled: false,
@@ -3777,38 +5679,36 @@
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 {
                                     fieldLabel: 'Serial Number',
-                                    name: 'serial_number'
+                                    name: 'serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.readOnly = true;
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
+                                                    qtyField.readOnly = false;
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel:'Qty',
+                                    name:'qty',
+                                    id:'pengadaan_data_perlengkapan_qty'
                                 },
                                 {
                                     xtype: 'datefield',
@@ -3857,8 +5757,9 @@
                             },
                             defaultType: 'textfield',
                             items: [{
-                                    fieldLabel: 'No SPPA',
-                                    name: 'no_sppa'
+                                    fieldLabel: 'No SPPA *',
+                                    name: 'no_sppa',
+                                    allowBlank:'false',
                                 }, {
                                     fieldLabel: 'Asal Pengadaan',
                                     name: 'asal_pengadaan'
@@ -3948,7 +5849,7 @@
         Form.Component.hiddenIdentifier = function() {
             var components = [{ xtype : 'hidden', name: 'kd_lokasi'},        
                                 { xtype : 'hidden',name: 'kode_unor'}, 
-                                { xtype : 'hidden', name: 'id' },
+                                { xtype : 'hidden', name: 'id', id:'hidden_identifier_id_pemeliharaan'},
                                 { xtype : 'hidden', name: 'kd_brg'},
                                 { xtype : 'hidden', name: 'no_aset'}
                             ];       
@@ -4057,9 +5958,10 @@
 
             return component;
         };
+        
 
 
-        Form.Component.pemeliharaan = function() {
+        Form.Component.pemeliharaan = function(tipe_angkutan) {
             var component = [{
                     xtype: 'fieldset',
                     layout: 'column',
@@ -4091,7 +5993,13 @@
                                            var selWaktu = Ext.getCmp('unit_waktu').value;
                                            var selPengunaan = Ext.getCmp('unit_pengunaan').value;
                                            var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
-                                           
+                                           var pilihUnitWaktu = Ext.getCmp('unit_waktu');
+                                           var pilihUnitPengunaan = Ext.getCmp('unit_pengunaan');
+                                           var pilihFreqwaktu = Ext.getCmp('freq_waktu');
+                                           var pilihFreqpengunaan = Ext.getCmp('freq_pengunaan');
+                                           var pilihRenwaktu = Ext.getCmp('rencana_waktu');
+                                           var pilihRenpengunaan = Ext.getCmp('rencana_pengunaan');
+                                           var pilihRenketerangan = Ext.getCmp('rencana_keterangan');
                                            
                                             if (value === 1)
                                             {
@@ -4105,10 +6013,24 @@
                                             else if (value === 3)
                                             {
                                                 pilihUnit.disable();
+                                                pilihUnitWaktu.disable();
+                                                pilihUnitPengunaan.disable();
+                                                pilihFreqwaktu.disable();
+                                                pilihFreqpengunaan.disable();
+                                                pilihRenwaktu.disable();
+                                                pilihRenpengunaan.disable();
+                                                pilihRenketerangan.disable();
                                             }
                                             else
                                             {
                                                 pilihUnit.disable();
+                                                pilihUnitWaktu.disable();
+                                                pilihUnitPengunaan.disable();
+                                                pilihFreqwaktu.disable();
+                                                pilihFreqpengunaan.disable();
+                                                pilihRenwaktu.disable();
+                                                pilihRenpengunaan.disable();
+                                                pilihRenketerangan.disable();
                                             }
                                             
                                             if(selWaktu != 0 && selWaktu != null)
@@ -4170,7 +6092,25 @@
                                     valueField: 'year',
                                     displayField: 'year', emptyText: 'Year',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
-                                }]
+                                },
+                                (tipe_angkutan != null)?{
+                                    xtype:'fieldset',
+                                    items:[
+                                        {
+                                            xtype:'label',
+                                            text: 'Status Penggunaan Sampai Saat Ini:',
+                                            
+                                        },
+                                        {
+                                            xtype:'displayfield',
+                                            id:'pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini',
+                                            name:'pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini',
+                                            value:'',
+                                        }
+                                    ]
+                                }:{xtype:'displayfield'}
+                                
+                            ]
                         }, {
                             columnWidth: .33,
                             layout: 'anchor',
@@ -4496,7 +6436,7 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'PERENCANAAN',
+                    title: 'PENGELOLAAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -4510,23 +6450,20 @@
                             defaultType: 'textfield',
                             items: [
                                 {
-                                    xtype : 'hidden',
-                                    name : 'id'
-                                }, {
                                     fieldLabel: 'Nama Operasi SAR',
-                                    name: 'namaoperasisar',
+                                    name: 'nama_operasi',
                                 }, {
                                     fieldLabel: 'PIC',
                                     name: 'pic'
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Mulai',
-                                    name: 'start_date',
+                                    name: 'tanggal_mulai',
                                     format : 'Y-m-d'
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Selesai',
-                                    name: 'end_date',
+                                    name: 'tanggal_selesai',
                                     format : 'Y-m-d'
                                 }
                             ]
@@ -4541,7 +6478,7 @@
                             items: [
                                 {
                                     fieldLabel: 'Deskripsi',
-                                    name: 'description',
+                                    name: 'deskripsi',
                                     xtype:'textarea',
                                     anchor:'100%',
                                 }
@@ -4687,7 +6624,7 @@
                             items: [{
                                     xtype: 'combo',
                                     disabled: false,
-                                    fieldLabel: 'Warehouse *',
+                                    fieldLabel: 'Warehouse',
                                     name: 'combo_warehouse_id',
                                     id : 'combo_warehouse_id',
                                     allowBlank: true,
@@ -4732,7 +6669,7 @@
                                 }, {
                                     xtype: 'combo',
                                     disabled: true,
-                                    fieldLabel: 'Ruang *',
+                                    fieldLabel: 'Ruang',
                                     name: 'combo_ruang_id',
                                     id : 'combo_ruang_id',
                                     allowBlank: false,
@@ -4777,7 +6714,7 @@
                                 }, {
                                     xtype: 'combo',
                                     disabled: true,
-                                    fieldLabel: 'Rak *',
+                                    fieldLabel: 'Rak',
                                     name: 'combo_rak_id',
                                     id : 'combo_rak_id',
                                     allowBlank: false,
@@ -5062,17 +6999,18 @@
             return component;
         };
         
-        Form.Component.inventoryPerlengkapan = function(edit) {
+        Form.Component.dataInventoryPerlengkapan = function(readOnly) {
 
             var component = [{
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'Detail Perlengkapan',
+                    title: 'DETAIL PERLENGKAPAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
                     items: [
+                        
                        {
                             columnWidth: .99,
                             layout: 'anchor',
@@ -5081,7 +7019,15 @@
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
+                            items: [
+                                    {
+                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
+                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Part Number *',
@@ -5092,36 +7038,9 @@
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-//                                        'focus': {
-//                                            fn: function(comboField) {
-//                                                comboField.expand();
-//                                            },
-//                                            scope: this
-//                                        },
-//                                        'change': {
-//                                            fn: function(obj, value) {
-//
-//                                                if (value !== null)
-//                                                {
-//                                                    var fieldPartNumber = Ext.getCmp('part_number');
-//                                                    
-//                                                    if (fieldPartNumber != null) {
-//                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-//                                                            fieldPartNumber.setValue(value);
-//                                                        }
-//                                                    }
-//                                                    else {
-//                                                        console.error('error');
-//                                                    }
-//                                                }
-//
-//                                            },
-//                                            scope: this
-//                                        }
-                                    }
                                 },
                                 {
+                                    readOnly:(readOnly == true)?true:false,
                                     fieldLabel: 'Serial Number',
                                     name: 'serial_number',
                                     id:'inventory_data_perlengkapan_serial_number',
@@ -5147,6 +7066,7 @@
                                     }
                                 },
                                 {
+                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Status Barang',
@@ -5159,17 +7079,28 @@
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
                                 },
                                 {
+                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'numberfield',
                                     fieldLabel: 'Qty',
                                     name: 'qty',
                                     id:'inventory_data_perlengkapan_qty'
                                 },
                                 {
+                                    readOnly:(readOnly == true)?true:false,
                                     disabled: false,
-                                    fieldLabel: 'Asal Barang *',
+                                    fieldLabel: 'Asal Barang',
                                     name: 'asal_barang',
-                                    allowBlank: false,
                                     id:'inventory_data_perlengkapan_asal_barang'
+                                },
+                                {
+                                    xtype:'hidden',
+                                    name: 'id',
+                                    value:'',
+                                },
+                                {
+                                    xtype:'hidden',
+                                    name: 'id_inventory',
+                                    value:'',
                                 },
                                 
                             ]
@@ -5330,6 +7261,185 @@
                             },
                             defaultType: 'textfield',
                             items: [{
+                                xtype:'hidden',
+                                name: 'warehouse_id',
+                                id: 'warehouse_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouse = Ext.getCmp('combo_warehouse_id');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'ruang_id',
+                                id: 'ruang_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'rak_id',
+                                id: 'rak_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRak = Ext.getCmp('combo_rak_id');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'combo_warehouse_id',
+                                    id : 'combo_warehouse_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
+                                                    var fieldWarehouse = Ext.getCmp('warehouse_id');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Ruang',
+                                    name: 'combo_ruang_id',
+                                    id : 'combo_ruang_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = Ext.getCmp('combo_rak_id');
+                                                    var fieldWarehouseRuang = Ext.getCmp('ruang_id');
+                                                    
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Rak',
+                                    name: 'combo_rak_id',
+                                    id : 'combo_rak_id',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = Ext.getCmp('rak_id');
+                                                    
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
                                     xtype: 'datefield',
                                     disabled: false,
                                     fieldLabel: 'Tanggal Berita Acara *',
@@ -5352,6 +7462,79 @@
                                 {
                                     disabled: false,
                                     fieldLabel: 'Nama Penyimpan *',
+                                    name: 'nama_org',
+                                    allowBlank: false,
+                                },
+                                {
+                                    xtype:'textarea',
+                                    fieldLabel: 'Keterangan',
+                                    name: 'keterangan',
+                                },
+                                {
+                                    xtype:'hidden',
+                                    disabled: false,
+                                    fieldLabel: 'Date Created',
+                                    name: 'date_created',
+                                    value: new Date()
+                                }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.inventorypengeluaran = function(edit) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENGELUARAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 130
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'numberfield',
+                                    disabled: true,
+                                    fieldLabel: 'Qty Barang Keluar *',
+                                    name: 'qty_barang_keluar',
+                                    id:'inventory_data_pengeluaran_qty_barang_keluar',
+                                    minValue: 1,
+                                }, 
+                                {
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Berita Acara *',
+                                    name: 'tgl_berita_acara',
+                                    allowBlank: false,
+                                    format:'Y-m-d'
+                                }, {
+                                    disabled: false,
+                                    fieldLabel: 'No Berita Acara *',
+                                    name: 'nomor_berita_acara',
+                                    allowBlank: false,
+                                }, {
+                                    xtype: 'datefield',
+                                    disabled: false,
+                                    fieldLabel: 'Tanggal Pengeluaran *',
+                                    name: 'tgl_pengeluaran',
+                                    allowBlank: false,
+                                    format:'Y-m-d'
+                                },
+                                {
+                                    disabled: false,
+                                    fieldLabel: 'Nama Pengeluar *',
                                     name: 'nama_org',
                                     allowBlank: false,
                                 },
@@ -5447,6 +7630,76 @@
                             ]
                         }]
                 }]
+
+            return component;
+        };
+        
+  
+
+        
+        Form.Component.detailPenggunaanAngkutan = function(setting_grid_penggunaan,edit) {
+            
+        var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'DETAIL PENGGUNAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [
+                                    {
+                                        xtype:'displayfield',
+                                        fieldLabel:'Total Penggunaan',
+                                        name:'total_penggunaan',
+                                        labelWidth: 125,
+                                        id:'total_detail_penggunaan_angkutan',
+                                        value:'',
+                                    },
+//                                    {
+//                                        xtype:'displayfield',
+//                                        fieldLabel:'Satuan',
+//                                        name:'satuan_detail_penggunaan_angkutan',
+//                                        labelWidth: 125,
+//                                        id:'satuan_detail_penggunaan_angkutan',
+//                                        value:'',
+//                                    },
+                                    {
+                                        xtype:'fieldset',
+                                        title:'Daftar Penggunaan',
+                                        height:(edit ==true)?325:150,
+                                        items:[(edit==true)?{xtype:'container',height:300,items:[Grid.detailPenggunaanAngkutan(setting_grid_penggunaan,edit)]}:{xtype:'displayfield', value:'Harap Simpan data terlebih dahulu'}]
+                                    }
+                                    
+                                ]
+                    },
+                    ]
+            };
+
+            return component;
+            
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                anchor: '100%',
+                title: 'DETAIL PENGGUNAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [
+                        
+//                        Form.SubComponent.tambahanAngkutanDaratPerlengkapan(setting_grid_penggunaan,edit)
+                       ]
+            };
 
             return component;
         };

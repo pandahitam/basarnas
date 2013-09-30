@@ -34,6 +34,337 @@
             return grid;
         };
         
+        
+        Grid.inventoryPerlengkapan = function(setting)
+        {
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_inventory', dataIndex: 'id_inventory', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'no_aset', dataIndex: 'no_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Status Barang', dataIndex: 'status_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty', dataIndex: 'qty', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Asal Barang', dataIndex: 'asal_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            
+                        ]
+                    },
+                    search: {
+                        id: 'search_inventory_perlengkapan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_inventory_perlengkapan',
+                        add: {
+                            id: 'button_add_inventory_perlengkapan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_inventory_perlengkapan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_inventory_perlengkapan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+
+              var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
+        
+        
+        
+        Grid.detailPenggunaanAngkutan = function(setting,edit)
+        {
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_ext_angkutan', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tanggal', dataIndex: 'tanggal', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Jumlah Penggunaan', dataIndex: 'jumlah_penggunaan', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Satuan Penggunaan', dataIndex: 'satuan_penggunaan', width: 150, hidden: false, groupable: false, filter: {type: 'string'},
+                            renderer: function(value) {
+                            if (value === '1')
+                            {
+                                return "Meter";
+                            }
+                            else if (value === '2')
+                            {
+                                return "Kilometer";
+                            }
+                            else if (value === '3')
+                            {
+                                return "Mil";
+                            }
+                            else if (value === '4')
+                            {
+                                return "Jam Layar";
+                            }
+                            else if (value === '5')
+                            {
+                                return "Jam Terbang";
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                            
+                        }},
+                            {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            
+                        ]
+                    },
+                    search: {
+                        id: 'search_angkutan_detail_penggunaan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_angkutan_detail_penggunaan',
+                        add: {
+                            id: 'button_add_angkutan_detail_penggunaan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_angkutan_detail_penggunaan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_angkutan_detail_penggunaan',
+                            action: setting.toolbar.remove
+                        }
+                    },
+                    
+                };
+                
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+                var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        }
+        
+        
+        Grid.angkutanDaratPerlengkapan = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_ext_asset', dataIndex: 'id_ext_asset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            
+                        ]
+                    },
+                    search: {
+                        id: 'search_angkutanDarat_perlengkapan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_angkutanDarat_perlengkapan',
+                        add: {
+                            id: 'button_add_angkutanDarat_perlengkapan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_angkutanDarat_perlengkapan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_angkutanDarat_perlengkapan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+                
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+              var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
+        
         Grid.angkutanLautPerlengkapan = function(setting)
         {
  
@@ -72,9 +403,15 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+                var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -175,9 +512,125 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+                
+//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                id: settingGrid.toolbar.id,
+//                items: [{
+//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
+//                        }, '-', {
+//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
+//                    }, '-', {
+//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
+//                        
+//                    }, '->', {
+//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+//                        handler: function() {
+//                            _grid.filters.clearFilters();
+//                        }
+//                    }, search
+//                ]
+//            });
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        }
+        
+        
+        Grid.pemeliharaanPart = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_pemeliharaan', dataIndex: 'id_pemeliharaan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_penyimpanan', dataIndex: 'id_penyimpanan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty', dataIndex: 'qty_pemeliharaan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_pemeliharaan_part'
+                    },
+                    toolbar: {
+                        id: 'toolbar_pemeliharaan_part',
+                        add: {
+                            id: 'button_add_pemeliharaan_part',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_pemeliharaan_part',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_pemeliharaan_part',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+                
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+
+                    var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+                
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -276,9 +729,15 @@
                     }
                 };
                 
-                 var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-                });
+//                 var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//                });
+                    var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
 //                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
 //                id: settingGrid.toolbar.id,
 //                items: [{
@@ -414,9 +873,15 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-            });
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
+var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -510,9 +975,16 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-            });
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
+            
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -719,10 +1191,17 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: settingGrid.search.id, store: setting.dataStore, width: 180
-            });
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
 
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+            
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
@@ -768,12 +1247,16 @@
             }
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
-                ftype: 'filters', autoReload: true, local: false, encode: true
+                ftype: 'filters', autoReload: true, local: false, encode: true, paramPrefix:'gridFilter',
+                updateBuffer: 2000,
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: setting.search.id, store: data, width: 180
-            });
+            var search = [{
+                    xtype:'searchfield',
+                    id:setting.search.id,
+                    store:data,
+                    width:180
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -795,12 +1278,14 @@
                         text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '->', 
+                            {
+                        text: 'Clear Grid Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
-                            _grid.filters.clearFilters();
+                            Ext.getCmp(setting.grid.id).filters.clearFilters();
                         }
-                    }, search
+                    }, 
+                            search
                 ]
             });
 
@@ -825,9 +1310,12 @@
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = new Ext.create('Ext.ux.form.SearchField', {
-                id: setting.search.id, store: data, width: 180
-            });
+            var search = [{
+                    xtype:'searchfield',
+                    id:setting.search.id,
+                    store:data,
+                    width:180
+            }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
 
@@ -869,7 +1357,7 @@
 
         };
 
-        Grid.selectionAsset = function() {
+        Grid.selectionAsset = function(tipe_angkutan) {
 
             var data = new Ext.create('Ext.data.Store', {
                 fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
@@ -879,8 +1367,9 @@
                 })
             });
 
-            var toolbar = ToolbarGrid.selection(true, data);
+            var toolbar = ToolbarGrid.gridSelectionAsset(true, data);
 
+            
             var _grid = Ext.create('Ext.grid.Panel', {
                 store: data,
                 title: 'SELECT ASSET',
@@ -898,12 +1387,39 @@
                 listeners: {
                     itemdblclick: function(dataview, record, item, index, e) {
                         var data = record.data;
-                        debugger;
                         if (data !== null)
                         {
+                            
+                            if(tipe_angkutan != null && tipe_angkutan != undefined)
+                            {
+                                 $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanWithoudIdExtAsset',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{tipe_angkutan:tipe_angkutan,kd_brg:data.kd_brg,kd_lokasi:data.kd_lokasi,no_aset:data.no_aset},
+                                    success:function(response, status){
+                                     if(response.status == 'success')
+                                     {
+                                        if(tipe_angkutan == "darat")
+                                        {
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+                                        }
+                                        else if(tipe_angkutan == "udara" || tipe_angkutan == "laut")
+                                        {
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+                                        }
+                                            
+                                         
+                                     }
+
+                                    }
+                                 });
+                            }
                             var temp = Ext.getCmp('form-process');
                             if (temp !== null && temp != undefined)
                             {
+                                
                                 var form = temp.getForm();
                                 form.setValues(data);
                             }
@@ -1016,11 +1532,35 @@
             return _grid;
         }
 
-        ToolbarGrid.selection = function(WithLokasi, data) {
-            var cmp = ToolbarGrid.component(WithLokasi, data);
+//        ToolbarGrid.selection = function(WithLokasi, data) {
+//            var cmp = ToolbarGrid.component(WithLokasi, data);
+//
+//            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                items: cmp
+//            });
+//
+//
+//            return toolbar;
+//        };
+//        
+//        ToolbarGrid.selectionWrite = function(WithLokasi, data) {
+//            var cmp = ToolbarGrid.componentWrite(WithLokasi, data);
+//
+//            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+//                items: cmp
+//            });
+//
+//
+//            return toolbar;
+//        };
+        
+        ToolbarGrid.gridSelectionAsset = function(WithLokasi, data) {
+            var cmp_selection = ToolbarGrid.component(WithLokasi, data);
+            var cmp_write = ToolbarGrid.componentWrite(WithLokasi, data);
 
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
-                items: cmp
+                layout:'column',
+                items: [cmp_selection,cmp_write]
             });
 
 
@@ -1234,6 +1774,51 @@
 
                 component.splice(0, 0, lokasi);
             }
+
+            return component;
+        };
+        
+        
+        ToolbarGrid.componentWrite = function(WithLokasi, data)
+        {
+            
+            var component = [ 
+                    {
+                        xtype:'textfield',
+                        fieldLabel: 'Kode Lokasi',
+                        id:'grid_selection_asset_component_write_kd_lokasi',
+                        name:'kd_lokasi',
+                        
+                    },
+                    {
+                        xtype:'textfield',
+                        fieldLabel: 'Kode Barang',
+                        id:'grid_selection_asset_component_write_kd_brg',
+                        name:'kd_brg',
+                        
+                    },
+                    {
+                        xtype:'numberfield',
+                        fieldLabel: 'No Aset',
+                        id:'grid_selection_asset_component_write_no_aset',
+                        name:'kd_lokasi',
+                        minValue:0,
+                        
+                    }, '->',{
+                    xtype: 'button',
+                    text: 'search',
+                    frame: true,
+                    border: 1,
+                    handler: function() {
+                            data.changeParams({params: {
+                                    write_filter: 1,
+                                    kd_lokasi: Ext.getCmp('grid_selection_asset_component_write_kd_lokasi').value,
+                                    kd_brg: Ext.getCmp('grid_selection_asset_component_write_kd_brg').value,
+                                    no_aset: Ext.getCmp('grid_selection_asset_component_write_no_aset').value,
+                                }});
+                    }
+                }];
+
 
             return component;
         };
