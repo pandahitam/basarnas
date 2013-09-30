@@ -147,6 +147,7 @@ class Asset_Ruang_Model extends MY_Model{
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
+		
 		$q = "$this->selectColumn
                         FROM $this->table as t 
                         LEFT JOIN $this->extTable as a ON t.kd_lokasi = a.kd_lokasi AND t.kd_brg = a.kd_brg AND t.no_aset = a.no_aset
@@ -164,9 +165,7 @@ class Asset_Ruang_Model extends MY_Model{
 				$dataasset[] = $row;
 			}
 		}
-	
-		$data = array('dataasset' => $dataasset );
-		return $data;
+		return $dataasset;
 	}
 }
 ?>

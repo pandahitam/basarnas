@@ -13,10 +13,17 @@ $html .= "
 ";
 
 if(isset($dataprn) && count($dataprn)){	
-	$Logo = array('src'=> base_url().'assets/images/logo_pemda_150.png','style'=>'width: 150px; padding: 2px 2px 2px 2px;');
+	$Logo = array('src'=> base_url().'assets/images/Logobsnbsr.gif','style'=>'width: 150px; padding: 2px 2px 2px 2px;');
 	$Line = array('src'=> base_url().'assets/images/line_cover.jpg','width'=>'22px','style'=>'padding: 2px 2px 2px 2px;');
 	
 	foreach($dataprn as $row){
+    $gambar = array();
+    if (!empty($row['image_url'])) {
+        $pic = explode(",", $row['image_url']);
+        for ($i=0;$i<count($pic);$i++) {
+            $gambar[] = array('src'=> base_url().'uploads/images/'.$pic[$i],'style'=>'width: 315px; padding: 2px 2px 2px 2px;');
+        }
+    }
 	
 		// COVER ------------------------------------------------- START
 		$html .= "<div id='frame_cover'>";
@@ -28,15 +35,16 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "<div id='data_cover'>";
 		$html .= "<table width='500px' style='border-collapse: collapse;'>\n";
 		$html .= "<tr><td class='txtcover' width='175px'>UNIT KERJA</td><td class='txtcover' width='20px'>:</td><td class='txtcover'>".$row['nama_unker']."</td></tr>";
-		$html .= "<tr><td class='txtcover'>UNIT ORGANISASI</td><td class='txtcover'>:</td><td class='txtcover'>".$row['nama_unor']."</td></tr>";
-		$html .= "<tr><td class='txtcover'>GOLONGAN</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_gol']."</td></tr>";
-      $html .= "<tr><td class='txtcover'>BIDANG</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_bid']."</td></tr>";
-      $html .= "<tr><td class='txtcover'>KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_kelompok']."</td></tr>";
-      $html .= "<tr><td class='txtcover'>SUB KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_skel']."</td></tr>";
-      $html .= "<tr><td class='txtcover'>SUB SUB KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_sskel']."</td></tr>";
+		$html .= "<tr><td class='txtcover'>UNIT ORGANISASI</td><td class='txtcover'>:</td><td class='txtcover'>".strtoupper($row['nama_unor'])."</td></tr>";
+		$html .= "<tr><td class='txtcover'>GOLONGAN</td><td class='txtcover'>:</td><td class='txtcover'>".strtoupper($bidang[0]['ur_gol'])."</td></tr>";
+      $html .= "<tr><td class='txtcover'>BIDANG</td><td class='txtcover'>:</td><td class='txtcover'>".strtoupper($bidang[1]['ur_bid'])."</td></tr>";
+      $html .= "<tr><td class='txtcover'>KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".strtoupper($bidang[2]['ur_kel'])."</td></tr>";
+      $html .= "<tr><td class='txtcover'>SUB KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".strtoupper($bidang[3]['ur_skel'])."</td></tr>";
+      $html .= "<tr><td class='txtcover'>SUB SUB KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".strtoupper($bidang[4]['ur_sskel'])."</td></tr>";
 		$html .= "</table>";
 		$html .= "</div>";
-		$html .= "<div id='foot_cover'>BADAN SAR NASIONAL <br><br><br></div>";
+      $html .= "<br><br><br><br>";
+		$html .= "<div id='foot_cover'>BADAN SAR NASIONAL <br><br></div>";
 		$html .= "</div>";
 		// COVER ------------------------------------------------- END
 		
@@ -113,11 +121,160 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
-      //$html .= "'.$data.'";
       
-		// DATA UTAMA ------------------------------------------------- END
+      $html .= "<div id='subtitle_profil'><br><br>IV. GAMBAR</div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		if (count($gambar) > 0) {
+			$html .= "<tr><td>";
+				for ($i = 0;$i<count($gambar);$i++) {
+					$html .= img($gambar[$i]);
+				}
+			$html .= "</td></tr>";
+		} else {
+			$html .= "<tr><td align='center'>-</td></tr>";
+		}
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
 		
+      $html .= "<div id='title_profil'><br><br>DATA TAMBAHAN</div>";
+	  
+      $html .= "<div id='subtitle_profil'><br><br>DARAT</div>";
+	  $html .= "<div id='subtitle_profil' style='margin-left:20px'>Tambahan</div>";
+		$html .= "<div id='BoxTbl' style='padding-left:40px'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr><td width='100'>No STNK</td><td>".$row['darat_no_stnk']."</td></tr>";
+		$html .= "<tr><td>Masa Berlaku STNK</td><td>".$row['darat_masa_berlaku_stnk']."</td></tr>";
+      $html .= "<tr><td>Jumlah Pajak</td><td>".$row['darat_jumlah_pajak']."</td></tr>";
+      $html .= "<tr><td>Masa Berlaku Pajak</td><td>".$row['darat_masa_berlaku_pajak']."</td></tr>";
+		$html .= "<tr><td>Keterangan</td><td>".$row['darat_keterangan_lainnya']."</td></tr>";
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
 		
+      foreach($pengadaan as $row1){
+      $html .= "<div style='page-break-before: always;'></div>";
+      $html .= "<div id='title_profil'><br><br>PENGADAAN</div>";
+      $html .= "<div id='subtitle_profil'></div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr><td width='100'>Part Number</td><td>".$row1['part_number']."</td></tr>";
+		$html .= "<tr><td>Serial Number</td><td>".$row1['serial_number']."</td></tr>";
+      $html .= "<tr><td>Tahun Anggaran</td><td>".$row1['tahun_angaran']."</td></tr>";
+      $html .= "<tr><td>Sumber</td><td>".$row1['perolehan_sumber']."</td></tr>";
+		$html .= "<tr><td>Perolehan BMN</td><td>".$row1['perolehan_bmn']."</td></tr>";
+      $html .= "<tr><td>Perolehan Tanggal</td><td>".$row1['perolehan_tanggal']."</td></tr>";
+      $html .= "<tr><td>No Kwitansi</td><td>".$row1['kuitansi_no']."</td></tr>";
+      $html .= "<tr><td>Tanggal Kwitansi</td><td>".$row1['kuitansi_tanggal']."</td></tr>";
+      $html .= "<tr><td>Bergaransi</td><td>".$row1['is_garansi']."</td></tr>";
+      $html .= "<tr><td>Garansi Berlaku</td><td>".$row1['garansi_berlaku']."</td></tr>";
+      $html .= "<tr><td>Garansi Ket.</td><td>".$row1['garansi_keterangan']."</td></tr>";
+      $html .= "<tr><td>No SPPA</td><td>".$row1['no_sppa']."</td></tr>";
+      $html .= "<tr><td>Asal Pengadaan</td><td>".$row1['asal_pengadaan']."</td></tr>";
+      $html .= "<tr><td>Total Harga</td><td>".$row1['harga_total']."</td></tr>";
+      $html .= "<tr><td>No SP2D</td><td>".$row1['sp2d_no']."</td></tr>";
+      $html .= "<tr><td>Tanggal SP2D</td><td>".$row1['sp2d_tanggal']."</td></tr>";
+      $html .= "<tr><td>Terpelihara</td><td>".$row1['is_terpelihara']."</td></tr>";
+      $html .= "<tr><td>Pelihara Berlaku</td><td>".$row1['pelihara_berlaku']."</td></tr>";
+      $html .= "<tr><td>Garansi Ket.</td><td>".$row1['garansi_keterangan']."</td></tr>";
+      $html .= "<tr><td>Data Kontrak</td><td>".$row1['data_kontrak']."</td></tr>";
+      $html .= "<tr><td>Deskripsi</td><td>".$row1['deskripsi']."</td></tr>";
+      $html .= "<tr><td>No Faktur</td><td>".$row1['faktur_no']."</td></tr>";
+      $html .= "<tr><td>Tanggal Faktur</td><td>".$row1['faktur_tanggal']."</td></tr>";
+      $html .= "<tr><td>No Mutasi</td><td>".$row1['mutasi_no']."</td></tr>";
+      $html .= "<tr><td>Tanggal Mutasi</td><td>".$row1['mutasi_tanggal']."</td></tr>";
+      $html .= "<tr><td>SPK</td><td>".$row1['is_spk']."</td></tr>";
+      $html .= "<tr><td>SPK Berlaku</td><td>".$row1['spk_berlaku']."</td></tr>";
+      $html .= "<tr><td>SPK Ket.</td><td>".$row1['spk_keterangan']."</td></tr>";
+      $html .= "<tr><td>SPK No.</td><td>".$row1['spk_no']."</td></tr>";
+      $html .= "<tr><td>SPK Jenis</td><td>".$row1['spk_jenis']."</td></tr>";
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      }
+      
+      foreach($pemeliharaan as $row2){
+      
+      $html .= "<div id='title_profil'><br><br>PEMELIHARAAN</div>";
+      $html .= "<div id='subtitle_profil'></div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr><td width='100'>Jenis</td><td>".$row2['jenis']."</td></tr>";
+		$html .= "<tr><td>Sub Jenis</td><td> </td></tr>";
+      $html .= "<tr><td>Tanggal Start Pelaksanaan</td><td></td></tr>";
+      $html .= "<tr><td>Tanggal End Pelaksanaan</td><td></td></tr>";
+		$html .= "<tr><td>Kondisi</td><td></td></tr>";
+      $html .= "<tr><td>Deskripsi</td><td></td></tr>";
+      $html .= "<tr><td>Biaya</td><td></td></tr>";
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      }
+      
+      $html .= "<div id='title_profil'><br><br>PEMINDAHAN</div>";
+      $html .= "<div id='subtitle_profil'></div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr align='center' style='font-weight:bold;background:#D3D3D3'><td>No</td><td>No SPPA</td><td>Kode Barang</td><td>Tahun Anggaran</td><td>Tanggal Perolehan</td><td>Kondisi</td><td>Jenis Trn</td><td>Rph Aset</td><td>Merk Type</td><td>Asal Perolehan</td></tr>";
+		//if ($pemindahan) {
+        //$i=1;
+        //foreach($pendayagunaan as $row3){
+         // $html .= "<tr><td>".$i."</td><td>".$row3['nama_klasifikasi_aset']."</td><td>".$row3['nama_unker']."</td><td></td><td>".$row3['part_number']."</td><td>".$row3['serial_number']."</td><td>".$row3['mode_pendayagunaan']."</td><td>".$row3['pihak_ketiga']."</td> <td>".$row3['tanggal_start']."</td><td>".$row3['tanggal_end']."</td><td>".$row3['description']."</td></tr>";
+         //  $i++;
+        //}
+      //} else {
+      $html .= "<tr><td colspan='10' align='center'>-</td></tr>";
+      //}
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      
+		
+      $html .= "<div id='title_profil'><br><br>PENGHAPUSAN</div>";
+      $html .= "<div id='subtitle_profil'></div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr><td width='100'>No SPPA</td><td></td></tr>";
+		$html .= "<tr><td>Tahun Anggaran</td><td></td></tr>";
+		$html .= "<tr><td>Kode Asset</td><td></td></tr>";
+		$html .= "<tr><td>No Awal</td><td></td></tr>";
+		$html .= "<tr><td>No Akhir</td><td></td></tr>";
+		$html .= "<tr><td>Tanggal Perolehan</td><td></td></tr>";
+		$html .= "<tr><td>Tanggal Buku</td><td></td></tr>";
+		$html .= "<tr><td>No SK</td><td></td></tr>";
+		$html .= "<tr><td>Tanggal SK</td><td></td></tr>";
+		$html .= "<tr><td>Keterangan</td><td></td></tr>";
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      
+      
+      $html .= "<div id='title_profil'><br><br>PENDAYAGUNAAN</div>";
+      $html .= "<div id='subtitle_profil'></div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr align='center' style='font-weight:bold;background:#D3D3D3'><td>No</td><td>Klasifikasi Aset</td><td>Unit Kerja</td><td>Unit Organisasi</td><td>Part Number</td><td>Serial Number</td><td>Mode Pendayagunaan</td><td>Pihak ke-Tiga</td><td>Tanggal Mulai</td><td>Tanggal Selesai</td><td>Deskripsi</td></tr>";
+		if ($pendayagunaan) {
+        $i=1;
+        foreach($pendayagunaan as $row3){
+          $html .= "<tr><td>".$i."</td><td>".$row3['nama_klasifikasi_aset']."</td><td>".$row3['nama_unker']."</td><td></td><td>".$row3['part_number']."</td><td>".$row3['serial_number']."</td><td>".$row3['mode_pendayagunaan']."</td><td>".$row3['pihak_ketiga']."</td>
+          <td>".$row3['tanggal_start']."</td><td>".$row3['tanggal_end']."</td><td>".$row3['description']."</td></tr>";
+          $i++;
+        }
+      } else {
+      $html .= "<tr><td colspan='11' align='center'>-</td></tr>";
+      }
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
 
 		// HALAMAN BARU JIKA PROFIL YANG DICETAK LEBIH DARI SATU PROFIL
 		
@@ -172,6 +329,6 @@ if ( isset($pdf) ) {
 
 
 $html = str_replace('<body>', '<body>'.$script, $html); 
-pdf_create(gzcompress($html,9), "SIMASS BASARNAS - Tanah", false);
+pdf_create(gzcompress($html,9), "SIMASS BASARNAS - Angkutan Darat", false);
 
 ?>

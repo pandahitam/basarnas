@@ -156,6 +156,7 @@ class Asset_Perairan_Model extends MY_Model{
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
+		
 		$q = "$this->selectColumn
                         FROM $this->table AS t
                             LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
@@ -172,9 +173,7 @@ class Asset_Perairan_Model extends MY_Model{
 				$dataasset[] = $row;
 			}
 		}
-	
-		$data = array('dataasset' => $dataasset );
-		return $data;
+		return $dataasset;
 	}
 }
 ?>
