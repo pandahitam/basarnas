@@ -5,7 +5,7 @@ class Rak_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_warehouserak';
             
-            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.nama, c.nama as nama_ruang";
+            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.warehouse_id, t.nama, c.nama as nama_ruang, d.nama as nama_warehouse";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -15,6 +15,7 @@ class Rak_Model extends MY_Model{
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
                         LEFT JOIN ref_warehouseruang as c on t.warehouseruang_id = c.id
+                        LEFT JOIN ref_warehouse as d on t.warehouse_id = d.id
                         LIMIT $start, $limit";
             }
             else
@@ -22,11 +23,12 @@ class Rak_Model extends MY_Model{
                 $query = "$this->selectColumn 
                         FROM $this->table AS t
                         LEFT JOIN ref_warehouseruang as c on t.warehouseruang_id = c.id
+                        LEFT JOIN ref_warehouse as d on t.warehouse_id = d.id
                         ";
             }
             
 
-            return $this->Get_By_Query($query);	
+            return $this->Get_By_Query($query);
 	}
         
 //        function get_ExtAllData($kd_lokasi,$kd_brg,$no_aset){

@@ -20,9 +20,11 @@ class Unit_Kerja_Model extends MY_Model {
                             FROM $this->table AS t
                             ";
         }
+        
+        $returnedResult = $this->Get_By_Query($query);
 
-        $result["results"] = $this->Get_By_Query($query);
-        $result["total"] = count($result["results"]);
+        $result["results"] = $returnedResult['data'];
+        $result["total"] = $returnedResult['count'];
         
         return $result;
     }

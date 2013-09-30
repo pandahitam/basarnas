@@ -31,7 +31,7 @@
         });
 
         MasterRuang.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_MasterRuang', storeId: 'DataMasterRuang', model: 'MMasterRuang', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_MasterRuang', storeId: 'DataMasterRuang', model: 'MMasterRuang', pageSize: 50, noCache: false, autoLoad: true,
             proxy: MasterRuang.proxy, groupField: 'tipe'
         });
 
@@ -41,7 +41,7 @@
                 data: MasterRuang.Data,
                 isEditing: edit,
                 addBtn: {
-                    isHidden: edit,
+                    isHidden: true,
                     text: 'Add Asset',
                     fn: function() {
 
@@ -61,7 +61,7 @@
                 }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.referensiRuang(setting);
 
             if (data !== null)
             {
@@ -71,39 +71,39 @@
         };
 
         MasterRuang.Action.add = function() {
-//            var _form = MasterRuang.Form.create(null, false);
-//            Modal.processCreate.setTitle('Create MasterRuang');
-//            Modal.processCreate.add(_form);
-//            Modal.processCreate.show();
+            var _form = MasterRuang.Form.create(null, false);
+            Modal.smallWindow.setTitle('Create Ruang');
+            Modal.smallWindow.add(_form);
+            Modal.smallWindow.show();
         };
 
         MasterRuang.Action.edit = function() {
-//            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
-//            if (selected.length === 1)
-//            {
-//                var data = selected[0].data;
-//                delete data.nama_unker;
-//
-//                if (Modal.processEdit.items.length === 0)
-//                {
-//                    Modal.processEdit.setTitle('Edit MasterRuang');
-//                }
-//                var _form = MasterRuang.Form.create(data, true);
-//                Modal.processEdit.add(_form);
-//                Modal.processEdit.show();
-//            }
+            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                delete data.nama_unker;
+
+                if (Modal.smallWindow.items.length === 0)
+                {
+                    Modal.smallWindow.setTitle('Edit Ruang');
+                }
+                var _form = MasterRuang.Form.create(data, true);
+                Modal.smallWindow.add(_form);
+                Modal.smallWindow.show();
+            }
         };
 
         MasterRuang.Action.remove = function() {
-//            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
-//            var arrayDeleted = [];
-//            _.each(selected, function(obj) {
-//                var data = {
-//                    id: obj.data.id
-//                };
-//                arrayDeleted.push(data);
-//            });
-//            Modal.deleteAlert(arrayDeleted, MasterRuang.URL.remove, MasterRuang.Data);
+            var selected = MasterRuang.Grid.grid.getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id
+                };
+                arrayDeleted.push(data);
+            });
+            Modal.deleteAlert(arrayDeleted, MasterRuang.URL.remove, MasterRuang.Data);
         };
 
         MasterRuang.Action.print = function() {

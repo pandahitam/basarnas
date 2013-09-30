@@ -14,19 +14,19 @@ class Klasifikasi_Aset_Lvl3_Model extends MY_Model{
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t
-                        LEFT JOIN ref_klasifikasiaset_lvl2 as b on t.kd_lvl2 = b.kd_lvl2
+                        LEFT JOIN ref_klasifikasiaset_lvl2 as b on t.kd_lvl2 = b.kd_lvl2 and t.kd_lvl1 = b.kd_lvl1
                         LIMIT $start, $limit";
             }
             else
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
-                        LEFT JOIN ref_klasifikasiaset_lvl2 as b on t.kd_lvl2 = b.kd_lvl2
+                        LEFT JOIN ref_klasifikasiaset_lvl2 as b on t.kd_lvl2 = b.kd_lvl2 and t.kd_lvl1 = b.kd_lvl1
                         ";
             }
             
 
-            return $this->Get_By_Query($query);	
+            return $this->Get_By_Query($query);
 	}
         
 //        function get_ExtAllData($kd_lokasi,$kd_brg,$no_aset){

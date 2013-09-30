@@ -40,28 +40,9 @@
                 url: KlasifikasiAsetLvl3.URL.createUpdate,
                 data: KlasifikasiAsetLvl3.Data,
                 isEditing: edit,
-                addBtn: {
-                    isHidden: edit,
-                    text: 'Add Asset',
-                    fn: function() {
-
-                        if (Modal.assetSelection.items.length === 0)
-                        {
-                            Modal.assetSelection.add(Grid.selectionAsset());
-                            Modal.assetSelection.show();
-                        }
-                        else
-                        {
-                            console.error('There is existing grid in the popup selection - pemeliharaan');
-                        }
-                    }
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
             };
 
-            var form = Form.pemeliharaan(setting);
+            var form = Form.referensiKlasifikasiAsetLvl3(setting);
 
             if (data !== null)
             {
@@ -71,39 +52,38 @@
         };
 
         KlasifikasiAsetLvl3.Action.add = function() {
-//            var _form = KlasifikasiAsetLvl3.Form.create(null, false);
-//            Modal.processCreate.setTitle('Create KlasifikasiAsetLvl3');
-//            Modal.processCreate.add(_form);
-//            Modal.processCreate.show();
+            var _form = KlasifikasiAsetLvl3.Form.create(null, false);
+            Modal.smallWindow.setTitle('Create KlasifikasiAsetLvl3');
+            Modal.smallWindow.add(_form);
+            Modal.smallWindow.show();
         };
 
         KlasifikasiAsetLvl3.Action.edit = function() {
-//            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
-//            if (selected.length === 1)
-//            {
-//                var data = selected[0].data;
-//                delete data.nama_unker;
-//
-//                if (Modal.processEdit.items.length === 0)
-//                {
-//                    Modal.processEdit.setTitle('Edit KlasifikasiAsetLvl3');
-//                }
-//                var _form = KlasifikasiAsetLvl3.Form.create(data, true);
-//                Modal.processEdit.add(_form);
-//                Modal.processEdit.show();
-//            }
+            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+
+                if (Modal.smallWindow.items.length === 0)
+                {
+                    Modal.smallWindow.setTitle('Edit KlasifikasiAsetLvl3');
+                }
+                var _form = KlasifikasiAsetLvl3.Form.create(data, true);
+                Modal.smallWindow.add(_form);
+                Modal.smallWindow.show();
+            }
         };
 
         KlasifikasiAsetLvl3.Action.remove = function() {
-//            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
-//            var arrayDeleted = [];
-//            _.each(selected, function(obj) {
-//                var data = {
-//                    id: obj.data.id
-//                };
-//                arrayDeleted.push(data);
-//            });
-//            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl3.URL.remove, KlasifikasiAsetLvl3.Data);
+            var selected = KlasifikasiAsetLvl3.Grid.grid.getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.kd_klasifikasi_aset
+                };
+                arrayDeleted.push(data);
+            });
+            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl3.URL.remove, KlasifikasiAsetLvl3.Data);
         };
 
         KlasifikasiAsetLvl3.Action.print = function() {

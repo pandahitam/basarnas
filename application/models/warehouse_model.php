@@ -26,7 +26,7 @@ class Warehouse_Model extends MY_Model{
             }
             
 
-            return $this->Get_By_Query($query);	
+            return $this->Get_By_Query($query);
 	}
         
 //        function get_ExtAllData($kd_lokasi,$kd_brg,$no_aset){

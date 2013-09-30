@@ -65,6 +65,21 @@
                 Modal.processCreate.close();
             }
         };
+        
+        Modal.smallWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: 'fit',
+            width: 450, height: 400, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.smallWindow.removeAll(true);
+                }
+            }
+        }); 
 
         Modal.assetCreate = Ext.create('Ext.window.Window', {
             iconCls: 'icon-course',
@@ -79,7 +94,8 @@
                     Modal.assetCreate.removeAll(true);
                 }
             }
-        }),
+        });
+        
         Modal.assetEdit = Ext.create('Ext.window.Window', {
             iconCls: 'icon-course',
             modal: true,

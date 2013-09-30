@@ -987,6 +987,316 @@
             return form;
         }
         
+        Form.referensiKlasifikasiAsetLvl1 = function(setting)
+        {
+            var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl1','kd_lvl1');
+            form.insert(0, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 1','kd_lvl1',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiKlasifikasiAsetLvl2 = function(setting)
+        {
+            var pilihKlasifikasiAset = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title:'KLASIFIKASI ASET',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Klasifikasi Aset Lvl 1 *',
+                                    name: 'kd_lvl1',
+                                    allowBlank: false,
+                                    store: Reference.Data.klasifikasiAset_lvl1,
+                                    valueField: 'kd_lvl1',
+                                    displayField: 'nama', emptyText: 'Pilih Klasifikasi Aset',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+            
+            var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl2','kd_lvl2_brg');
+            form.insert(0, pilihKlasifikasiAset);
+            form.insert(1, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 2','kd_lvl2',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiKlasifikasiAsetLvl3 = function(setting)
+        {
+            var pilihKlasifikasiAset = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title:'KLASIFIKASI ASET',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Klasifikasi Aset Lvl 1 *',
+                                    name: 'kd_lvl1',
+                                    id:'referensi_klasifikasi_aset_lvl1',
+                                    allowBlank: false,
+                                    store: Reference.Data.klasifikasiAset_lvl1,
+                                    valueField: 'kd_lvl1',
+                                    displayField: 'nama', emptyText: 'Pilih Klasifikasi Aset',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                { 
+                                                    var Lvl2Field = Ext.getCmp('referensi_klasifikasi_aset_lvl2');
+                                                    if (Lvl2Field !== null) {
+                                                        if (!isNaN(value) && value.length > 0) {
+                                                            Lvl2Field.enable();
+                                                            Reference.Data.klasifikasiAset_lvl2.changeParams({params: {id_open: 1, kd_lvl1: value}});
+                                                        }
+                                                        else {
+                                                            Lvl2Field.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Klasifikasi Aset Lvl 2 *',
+                                    name: 'kd_lvl2',
+                                    id:'referensi_klasifikasi_aset_lvl2',
+                                    allowBlank: false,
+                                    store: Reference.Data.klasifikasiAset_lvl2,
+                                    valueField: 'kd_lvl2',
+                                    displayField: 'nama', emptyText: 'Pilih Klasifikasi Aset',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+            
+            var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl3','kd_klasifikasi_aset');
+            form.insert(0, pilihKlasifikasiAset);
+            form.insert(1, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 3','kd_lvl3',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiWarehouse = function(setting)
+        {
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, Form.Component.unitUnkerOnly(setting.isEditing,form));
+            form.insert(1, Form.Component.referensiWarehouseRuangRak('WAREHOUSE'));
+            
+            return form;
+        }
+        
+        Form.referensiRuang = function(setting)
+        {
+            var pilihWarehouse = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'WAREHOUSE',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+//                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'warehouse_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+                
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, pilihWarehouse);
+            form.insert(1, Form.Component.referensiWarehouseRuangRak('RUANG'));
+            
+            return form;
+        }
+        
+        Form.referensiRak = function(setting)
+        {
+            var pilihWarehouse = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'RUANG',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+//                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'warehouse_id',
+                                    id:'referensi_warehouse_combo',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                   var comboRuang = Ext.getCmp('referensi_warehouse_ruang_combo');
+                                                   comboRuang.setDisabled(false);
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+//                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Pilih Ruang *',
+                                    name: 'warehouseruang_id',
+                                    id:'referensi_warehouse_ruang_combo',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value !== '')
+                                                {
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+                
+            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            form.insert(0, pilihWarehouse);
+            form.insert(1, Form.Component.referensiWarehouseRuangRak('RAK'));
+            
+            return form;
+        }
+        
         Form.secondaryWindowAsset= function(data,operationType,storeIndex) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -1147,7 +1457,7 @@
                             
                             if (form.isValid())
                             {
-                                console.log(form.getValues());
+//                                console.log(form.getValues());
                                 form.submit({
                                     success: function(form) {
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
@@ -1162,6 +1472,17 @@
                                         }
                                         else
                                         {
+                                            var ref_combo_warehouse = Ext.getCmp('referensi_warehouse_combo');
+                                            var ref_combo_warehouse_ruang = Ext.getCmp('referensi_warehouse_ruang_combo');
+//                                            if(ref_combo_warehouse !=null)
+//                                            {
+//                                                ref_combo_warehouse.setValue('');
+//                                            }
+                                            if(ref_combo_warehouse_ruang != null)
+                                            {
+                                                ref_combo_warehouse_ruang.setValue('');
+                                                ref_combo_warehouse_ruang.setDisabled(true);
+                                            }
                                             form.reset();
                                         }
 
@@ -1178,6 +1499,109 @@
                     }, {
                         text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
                         handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.referensiKlasifikasiAset = function(url, data, edit, table_name, key) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiKlasifikasiAset',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiKlasifikasiAset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var pk_check = false;
+                            if(formValues.kd_lvl1 != undefined)
+                            {
+                                formValues.key = formValues.kd_lvl1;
+                                if(formValues.kd_lvl2 != undefined)
+                                {
+                                    formValues.key += formValues.kd_lvl2;
+                                    if(formValues.kd_lvl3 != undefined)
+                                    {
+                                         formValues.key += formValues.kd_lvl3;
+                                    }
+
+                                }
+                            }
+                            
+//                            debugger;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdKlasifikasiAset',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{table_name:table_name, key:key, value:formValues, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                var combo_ref_klasifikasi_lvl2 = Ext.getCmp('referensi_klasifikasi_aset_lvl2');
+                                                var combo_ref_klasifikasi_lvl1 = Ext.getCmp('referensi_klasifikasi_aset_lvl1');
+                                                if(combo_ref_klasifikasi_lvl1 != null)
+                                                {
+                                                    combo_ref_klasifikasi_lvl1.setValue('');
+                                                }
+                                                if(combo_ref_klasifikasi_lvl2 != null)
+                                                {
+                                                    combo_ref_klasifikasi_lvl2.setValue('');
+                                                    combo_ref_klasifikasi_lvl2.setDisabled(true);
+                                                }
+                                                form.reset();
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
                     }]
             });
 
@@ -2067,6 +2491,92 @@
                                 }
                             }]
                     }]
+            };
+
+
+            return component;
+        };
+        
+        
+        Form.Component.unitUnkerOnly = function(edit,form,isReadOnly) {
+            var component = {
+                xtype: 'fieldset',
+                itemId : 'unit_selection',
+                title: 'UNIT',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lokasi',
+                                id: 'kd_lokasi',
+                                listeners: {
+                                    change: function(ob, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnker = Ext.getCmp('nama_unker');
+                                            if (comboUnker !== null)
+                                            {
+                                                comboUnker.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId:'column_unker',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Kerja *',
+                                name: 'nama_unker',
+                                id: 'nama_unker',
+                                itemId: 'unker',
+                                allowBlank: true,
+                                readOnly:(isReadOnly == true)?true:false,
+                                store: Reference.Data.unker,
+                                valueField: 'kdlok',
+                                displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(isReadOnly != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+
+                                            if (value !== null)
+                                            {
+                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                if (kodeUnkerField !== null) {
+                                                    if (value.length > 0) {
+                                                        kodeUnkerField.setValue(value);
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            }]
+                    },]
             };
 
 
@@ -4924,6 +5434,77 @@
                                 fieldLabel: 'Tanggal Surat',
                                 name: 'surat',
                                 format: 'Y-m-d'
+                            }]
+                    }]
+            };
+
+            return component;
+        };
+        
+        Form.Component.referensiWarehouseRuangRak = function(title) {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: title,
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                xtype:'hidden',
+                                name:'id'
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                                allowBlank:false,
+                            }]
+                    }]
+            };
+
+            return component;
+        };
+        
+         Form.Component.referensiKlasifikasiAset = function(title,field_kd_klasifikasi_aset,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: title,
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                fieldLabel: 'Kode Klasifikasi Aset',
+                                name: field_kd_klasifikasi_aset,
+                                allowBlank:false,
+                                maxLength:10,
+                                readOnly:edit
+                            },
+                            {
+                                fieldLabel: 'Nama',
+                                name: 'nama',
+                                allowBlank:false,
                             }]
                     }]
             };
