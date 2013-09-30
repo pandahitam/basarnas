@@ -1,57 +1,63 @@
 <?php
+
 class services extends MY_Controller {
 
-	function __construct() {
-		parent::__construct();
- 		
-                $this->load->model('master_model','',TRUE);
-		$this->model = $this->master_model;
-	}
+    function __construct() {
+        parent::__construct();
 
-   	function assetByKode($kd_brg = null, $kd_lokasi = null, $no_aset = null)
-        {
-            $result = null;
-            if (isset($kd_brg) && isset($kd_lokasi) && isset($no_aset))
-            {
-                $temp = $this->model->AssetForMobileServicesWithFilter($kd_brg,$kd_lokasi,$no_aset);
-                $result = $temp[0];
-                $imageArray = explode(",", $result->image_url);
+        $this->load->model('master_model', '', TRUE);
+        $this->model = $this->master_model;
+    }
+
+    function assetByKode($kd_brg = null, $kd_lokasi = null, $no_aset = null) {
+        $result = null;
+        if (isset($kd_brg) && isset($kd_lokasi) && isset($no_aset)) {
+            $asset = $this->model->AssetForMobileServicesWithFilter($kd_brg, $kd_lokasi, $no_aset);
+            if (isset($asset) && count($asset) > 0) {
+                $temp = $asset[0];
                 $images = array();
-                foreach ($imageArray as $str)
-                {
-                    $img_src = base_url() . 'uploads/images/' . $str;
-                    $type = pathinfo($img_src, PATHINFO_EXTENSION);
-                    $imgbinary = file_get_contents($img_src);
-                    $images[] = array("type" => $type, "data" => base64_encode($imgbinary));
-                    clearstatcache();
+                if (isset($temp->image_url)) {
+                    $imageArray = explode(",", $temp->image_url);
+
+
+                    foreach ($imageArray as $str) {
+                        $img_src = base_url() . 'uploads/images/' . $str;
+                        $type = pathinfo($img_src, PATHINFO_EXTENSION);
+                        $imgbinary = file_get_contents($img_src);
+                        $images[] = array("type" => $type, "data" => base64_encode($imgbinary));
+                        clearstatcache();
+                    }
+                } else {
+                    $temp->image_url = "";
                 }
 
-                $result->images = json_encode($images);
-            }
-            
-            
-            
-            echo json_encode($result);
-        }
-        
-        function updateAssetByKode()
-        {
-            $result = 0;
-            $data = $_POST["data"];
-            if (isset($data))
-            {
-                if (isset($data['kd_brg']) && isset($data['kd_lokasi']) && isset($data['no_aset']) && isset($data['table']) )
+                $temp->images = json_encode($images);
+                $result = get_object_vars($temp);
+                
+                foreach($result as $key => $value)
                 {
-                    $result = $this->model->UpdateAssetForMobileServices($data);
+                    $result[$key] = trim($value);
                 }
             }
-            
-            echo json_encode($result);
         }
-	
-        function assetByPart($partNumber = "", $serialNumber = "")
-        {
-            
+
+
+
+        echo json_encode($result);
+    }
+
+    function updateAssetByKode() {
+        $result = 0;
+        $data = $_POST["data"];
+        if (isset($data)) {
+            if (isset($data['kd_brg']) && isset($data['kd_lokasi']) && isset($data['no_aset']) && isset($data['table'])) {
+                $result = $this->model->UpdateAssetForMobileServices($data);
+            }
         }
+
+        echo json_encode($result);
+    }
+
 }
+
 ?>

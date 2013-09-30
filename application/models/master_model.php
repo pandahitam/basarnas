@@ -42,7 +42,7 @@ class master_model extends MY_Model {
         $query = "SELECT master.*, ref.ur_sskel as nama_barang, reflok.ur_upb as nama_unker FROM 
             (SELECT t.kd_brg as kode_barang, t.kd_lokasi as kode_lokasi, t.no_aset, tgl_prl as tanggal_perolehan, b.image_url, dari, no_dana, 
             (CASE WHEN kondisi = '1' THEN 'Baik' WHEN kondisi = '2' THEN 'Rusak Ringan' WHEN kondisi = '3' THEN 'Rusak Berat' END) 
-            as kondisi, 1 as table FROM asset_alatbesar as t LEFT JOIN ext_asset_alatbesar as b ON t.kd_brg = b.kd_brg AND t.kd_lokasi = b.kd_lokasi AND t.no_aset = b.no_aset
+            as kondisi, 1 FROM asset_alatbesar as t LEFT JOIN ext_asset_alatbesar as b ON t.kd_brg = b.kd_brg AND t.kd_lokasi = b.kd_lokasi AND t.no_aset = b.no_aset
             UNION
             SELECT t.kd_brg, t.kd_lokasi, t.no_aset, t.tgl_prl,b.image_url, t.dari, t.no_dana, 
             (CASE WHEN kondisi = '1' THEN 'Baik' WHEN kondisi = '2' THEN 'Rusak Ringan' WHEN kondisi = '3' THEN 'Rusak Berat' END) 
