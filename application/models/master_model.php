@@ -27,14 +27,14 @@ class master_model extends MY_Model {
             FROM `asset_tanah` as t LEFT JOIN ref_subsubkel as b ON t.`kd_brg` = b.`kd_brg` LEFT JOIN ref_unker as c ON t.`kd_lokasi` = c.kdlok)';
 
         $data = $this->Get_By_Query($query);
-        return $data;
+        return $data['data'];
     }
     
     // Return all reference asset from ref_subsubkel table
     function AllRefBarang() {
         $query = 'SELECT kd_gol,kd_bid,kd_kel, kd_skel, kd_sskel, kd_brg, ur_sskel as nama FROM `ref_subsubkel`';
         $data = $this->Get_By_Query($query);
-        return $data;
+        return $data['data'];
     }
 
     // return all type of asset that use in mobile services
@@ -55,7 +55,7 @@ class master_model extends MY_Model {
             ";
 
         $data = $this->Get_By_Query($query);
-        return $data;
+        return $data['data'];
     }
 
     // filtering asset for mobile services by kd_brg, kd_lokasi, no_aset
