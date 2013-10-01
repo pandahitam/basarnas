@@ -111,13 +111,7 @@ class Asset_Perlengkapan_Model extends MY_Model{
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
-		$q = "$this->selectColumn
-                         FROM $this->table as t
-                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-								
-								WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'
-                        ";
+		$q = "$this->selectColumn FROM $this->viewTable as t WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'";
 		$query = $this->db->query($q);
 		if ($query->num_rows() > 0) {
 			foreach ($query->result_array() as $row) {

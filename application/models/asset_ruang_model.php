@@ -147,18 +147,7 @@ class Asset_Ruang_Model extends MY_Model{
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
-		
-		$q = "$this->selectColumn
-                        FROM $this->table as t 
-                        LEFT JOIN $this->extTable as a ON t.kd_lokasi = a.kd_lokasi AND t.kd_brg = a.kd_brg AND t.no_aset = a.no_aset
-                        LEFT JOIN ref_unker AS b ON t.kd_lokasi = b.kdlok
-                        LEFT JOIN ref_unor AS c ON a.kode_unor = c.kode_unor
-                        LEFT JOIN ref_ruang as d ON t.kd_lokasi = d.kd_lokasi AND t.kd_ruang = d.kd_ruang
-                        LEFT JOIN ref_subsubkel as e ON t.kd_brg = e.kd_brg
-                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON a.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-								
-								WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'
-                        ";
+		$q = "$this->selectColumn FROM $this->viewTable as t WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'";
 		$query = $this->db->query($q);
 		if ($query->num_rows() > 0) {
 			foreach ($query->result_array() as $row) {

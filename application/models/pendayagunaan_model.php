@@ -70,5 +70,19 @@ class Pendayagunaan_Model extends MY_Model{
 		
                 return $this->Get_By_Query($query);
 	}
+
+	function get_PendayagunaanForPrint($kd_lokasi, $kd_barang, $no_aset)
+	{
+		$query = "$this->selectColumn
+                        FROM $this->table AS t
+                        LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                        LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
+                        where t.kd_lokasi = '$kd_lokasi' and t.kd_brg = '$kd_barang' and t.no_aset = '$no_aset'";
+		$this->load->database();
+		$result = $this->db->query($query)->result_array();
+		$this->db->close();				  
+		return $result;	
+	}
 }
 ?>

@@ -184,10 +184,7 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
 		$dataasset = array();
 		$idx = array();
 		$idx = explode("||", urldecode($ids));
-		
-		$q = "$this->selectColumn from view_asset_angkutan_laut
-								WHERE kd_lokasi = '".$idx[0]."' and kd_brg = '".$idx[1]."' and no_aset = '".$idx[2]."'
-                        ";
+		$q = "$this->selectColumn from $this->viewTable as t WHERE t.kd_lokasi = '".$idx[0]."' and t.kd_brg = '".$idx[1]."' and t.no_aset = '".$idx[2]."'";
 		$query = $this->db->query($q);
 		if ($query->num_rows() > 0) {
 			foreach ($query->result_array() as $row) {
