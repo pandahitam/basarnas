@@ -5,7 +5,7 @@ class Unit_Organisasi_Model extends MY_Model {
     function __construct() {
         parent::__construct();
         $this->table = 'ref_unor';
-        $this->selectColumn = "SELECT t.kd_lokasi, t.kode_unor, t.nama_unor, t.jabatan_unor, b.ur_upb";
+        $this->selectColumn = "SELECT ID_Unor, b.ur_upb as nama_unker, kode_unor,kd_lokasi,kode_jab,kode_eselon,kode_parent,nama_unor,jabatan_unor,urut_unor,status_data";
     }
 
     function get_AllData($start = null, $limit = null) {
@@ -22,12 +22,7 @@ class Unit_Organisasi_Model extends MY_Model {
                             LEFT JOIN ref_unker AS b ON t.kd_lokasi = b.kdlok";
         }
         
-        $returnedResult = $this->Get_By_Query($query);
-
-        $result["results"] = $returnedResult['data'];
-        $result["total"] = $returnedResult['count'];
-        
-        return $result;
+        return $this->Get_By_Query($query);
     }
 
     function getLast_kode_unor() {

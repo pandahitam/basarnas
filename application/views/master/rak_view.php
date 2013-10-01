@@ -31,7 +31,7 @@
         });
 
         Rak.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Rak', storeId: 'DataRak', model: 'MRak', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_Rak', storeId: 'DataRak', model: 'MRak', pageSize: 50, noCache: false, autoLoad: true,
             proxy: Rak.proxy, groupField: 'tipe'
         });
 

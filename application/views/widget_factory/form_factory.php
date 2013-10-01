@@ -955,9 +955,9 @@
         
         Form.peraturan = function(setting)
         {
-            var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
+            var form = Form.panelPeraturan(setting.url,setting.data,setting.isEditing,setting.addBtn);
             form.insert(0, Form.Component.peraturan());
-            form.insert(1, Form.Component.fileUploadDocumentOnly('document','fileupload_peraturan'));
+            form.insert(1, Form.Component.fileUploadSingleDocumentOnly('document','fileupload_peraturan'));
             
             return form;
         }
@@ -1142,6 +1142,258 @@
             var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl3','kd_klasifikasi_aset');
             form.insert(0, pilihKlasifikasiAset);
             form.insert(1, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 3','kd_lvl3',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiPartNumber = function(setting)
+        {
+            var formComponentPartNumber = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PART NUMBER',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id'
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'vendor_id',
+                                        value: null
+                                    },
+                                                                        {
+                                        fieldLabel:'Nama',
+                                        name: 'nama',
+                                    },
+                                    {
+                                        fieldLabel:'Part Number',
+                                        name: 'part_number',
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Part Number Substitusi',
+                                        name: 'part_number_substitusi',
+                                       
+                                    },
+                                    {
+                                        fieldLabel:'Kode Barang',
+                                        name: 'kd_brg',
+                                       
+                                    },
+                                    {
+                                        fieldLabel:'Merek',
+                                        name: 'merek',
+                                    },
+                                    {
+                                        fieldLabel:'Jenis',
+                                        name: 'jenis',
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiPartNumber(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentPartNumber);
+            
+            return form;
+        }
+        
+        Form.referensiUnitKerja = function(setting)
+        {
+            var formComponentUnitKerja = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'UNIT KERJA',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        fieldLabel:'Kode PEBIN',
+                                        name: 'kd_pebin',
+                                        maxLength: 9,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Kode PBI',
+                                        name: 'kd_pbi',
+                                        maxLength: 6,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Kode PPBI',
+                                        name: 'kd_ppbi',
+                                        maxLength: 12,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Kode UPB',
+                                        name: 'kd_upb',
+                                        maxLength: 18,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Kode Sub UPB',
+                                        name: 'kd_subupb',
+                                        maxLength: 9,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Kode JK',
+                                        name: 'kd_jk',
+                                        maxLength: 6,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Nama',
+                                        name: 'ur_upb',
+                                        maxLength: 300,
+                                        allowBlank:false
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiUnitKerja(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentUnitKerja);
+            
+            return form;
+        }
+        
+        Form.referensiUnitOrganisasi = function(setting)
+        {
+            var formComponentUnitOrganisasi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'UNIT ORGANISASI',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'ID_Unor'
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name: 'kd_lokasi',
+                                        id: 'kd_lokasi',
+                                        listeners: {
+                                            change: function(ob, value) {
+        //                                        if (edit)
+        //                                        {
+                                                    var comboUnker = Ext.getCmp('combo_nama_unker');
+                                                    if (comboUnker !== null)
+                                                    {
+                                                        comboUnker.setValue(value);
+                                                    }
+        //                                        }
+                                            }
+                                        }
+                                    },
+//                                    {
+//                                        xtype:'numberfield',
+//                                        fieldLabel:'No Urut',
+//                                        name: 'urut_unor',
+//                                    },
+                                    {
+                                        xtype:'combo',
+                                        fieldLabel: 'Unit Kerja *',
+                                        name: 'combo_nama_unker',
+                                        id: 'combo_nama_unker',
+                                        itemId: 'unker',
+                                        allowBlank: true,
+                                        readOnly:setting.isEditing,
+                                        store: Reference.Data.unker,
+                                        valueField: 'kdlok',
+                                        displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                        listeners: {
+                                            'focus': {
+                                                fn: function(comboField) {
+                                                    if(setting.isEditing != true)
+                                                    {
+                                                        comboField.expand();
+                                                    }
+
+                                                },
+                                                scope: this
+                                            },
+                                            'change': {
+                                                fn: function(obj, value) {
+
+                                                    if (value !== null)
+                                                    {
+                                                        var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                        if (kodeUnkerField !== null) {
+                                                            if (value.length > 0) {
+                                                                kodeUnkerField.setValue(value);
+                                                            }
+                                                        }
+                                                    }
+
+                                                },
+                                                scope: this
+                                            }
+                                        }
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Kode Unor',
+                                        name:'kode_unor',
+                                        minValue: 1,
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing,
+                                    },
+                                    {
+                                        fieldLabel:'Nama Unit Organisasi',
+                                        name: 'nama_unor',
+                                        allowBlank:false,
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiUnitOrganisasi(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentUnitOrganisasi);
             
             return form;
         }
@@ -1499,6 +1751,320 @@
                     }, {
                         text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
                         handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelPeraturan = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-peraturan',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var documentField = form.findField('document');
+
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Ext.getCmp('fileupload_peraturan').getStore(); 
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+//                            console.log(form.getValues());
+                            
+                            if (form.isValid())
+                            {
+//                                console.log(form.getValues());
+                                form.submit({
+                                    success: function(form) {
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+                                        if (edit)
+                                        {
+                                            Modal.closeProcessWindow();
+                                        }
+                                        else
+                                        {
+                                            form.reset();
+                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiUnitKerja = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiUnitKerja',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiKlasifikasiAset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var pk_check = false;
+                            var kd_lokasi = formValues.kd_pebin + formValues.kd_pbi + formValues.kd_ppbi + formValues.kd_upb + formValues.kd_subupb + formValues.kd_jk;
+//                            debugger;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkUnitKerja',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kd_lokasi:kd_lokasi, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+
+                                                form.reset();
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kombinasi Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+         Form.panelReferensiUnitOrganisasi = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiUnitKerja',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiKlasifikasiAset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kode_unor = formValues.kode_unor;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKodeUnitOrganisasi',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kode_unor:kode_unor, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                form.setValues({kode_unor:parseInt(formValues.kode_unor) + 1});
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Unor Sudah Digunakan!');
+                            }
+
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiPartNumber = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referenPartNumber',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiKlasifikasiAset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var part_number = formValues.part_number;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkPartNumber',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{part_number:part_number, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+
+                                                form.reset();
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Part Number Sudah Digunakan!');
+                            }
+
+                            
+                        }
                     }]
             });
 
@@ -2580,6 +3146,168 @@
             };
 
 
+            return component;
+        };
+        
+        /*
+         * @param {string} database_field = the field fileupload field name in database
+         * @param {string} id_fileupload = unique id for fileupload grid     
+         */
+        Form.Component.fileUploadSingleDocumentOnly= function(database_field,id_fileupload)
+        {
+          
+            var documentStore = new Ext.create('Ext.data.Store', {
+                                        fields: ['url', 'name'],
+                                        listeners:{
+                                            datachanged : function(){
+                                                var count = this.count();
+                                                if(count == 1)
+                                                {
+                                                    Ext.getCmp('add_'+id_fileupload).setDisabled(true);
+                                                }
+                                                else
+                                                {
+                                                    Ext.getCmp('add_'+id_fileupload).setDisabled(false);
+                                                }
+                                            }
+                                        }
+                                    });
+            
+            var component = {
+                xtype: 'container',
+                itemId: 'fileUpload',
+                layout: 'column',
+                border: false,
+//                title: 'FILE',
+                defaultType: 'container',
+                style: {
+                    marginTop: '10px'
+                },
+                items: [{
+                                xtype: 'hidden',
+                                name: database_field,
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                        if (value !== null && value.length > 0)
+                                        {
+                                            _.each(value.split(','), function(doc) {
+                                                var fullPath = Reference.URL.documentBasePath + doc;
+                                                documentStore.add({url: fullPath, name: doc});
+                                            });
+                                        }
+                                    }
+                                }
+                            }, {// DOCUMENT START
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId: 'documentColumn',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [{
+                                xtype: 'gridpanel',
+                                id : id_fileupload,
+                                store: documentStore,
+                                columnWidth: .5,
+                                width: '100%',
+                                height: 110,
+                                style: {
+                                    marginBottom: '10px'
+                                },
+                                listeners: {
+                                    itemdblclick: function(dataview, record, item, index, e) {
+//                                        Ext.getCmp(setting.toolbar.edit.id).handler.call(Ext.getCmp(setting.toolbar.edit.id).scope);
+                                    }
+                                },
+                                columns: [{
+                                        text: 'Document Name',
+                                        dataIndex: 'name',
+                                        width: 230
+                                    }, {
+                                        xtype: 'actioncolumn',
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/disk.png',
+                                                tooltipe: 'View Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    
+                                                    
+                                                    window.open(record.data.url,'_blank');
+                                                }
+                                            }]
+                                    },{
+                                        xtype: 'actioncolumn',
+                                        width: 30,
+                                        items: [{
+                                                icon: '../basarnas/assets/images/icons/delete.png',
+                                                tooltipe: 'Remove Document',
+                                                handler: function(grid, rowIndex, colIndex, obj) {
+                                                    var record = documentStore.getAt(rowIndex);
+
+                                                    var dataSend = {
+                                                        file: record.data.name
+                                                    };
+
+                                                    $.ajax({
+                                                        type: 'POST',
+                                                        dataType: 'json',
+                                                        data: dataSend,
+                                                        url: Reference.URL.deleteDocument,
+                                                        success: function(res) {
+                                                            if (res.success)
+                                                            {
+                                                                console.log(res);
+                                                                documentStore.remove(record);
+                                                            }
+                                                            else
+                                                            {
+                                                                console.error('failed to remove');
+                                                            }
+                                                        }
+                                                    });
+
+
+                                                }
+                                            }]
+                                    }]
+                            }, {
+                                xtype: 'filefield',
+                                name: 'userfile',
+                                id:'add_' + id_fileupload,
+                                width: 100,
+                                buttonOnly: true,
+                                buttonText: 'Add Document',
+                                listeners: {
+                                    'change': {
+                                        fn: function() {
+                                            var tempForm = Ext.create('Ext.form.Panel', {
+                                                url: Reference.URL.upDocument,
+                                                items: this
+                                            });
+
+                                            tempForm.getForm().submit({
+                                                waitMsg: 'Uploading your document...',
+                                                success: function(response, action) {
+                                                    var res = action.result.upload_data;
+                                                    var fullPath = Reference.URL.documentBasePath + res.file_name;
+                                                    documentStore.add({url:fullPath, name: res.file_name});
+                                                },
+                                                failure: function(response, action) {
+                                                    console.error('fail');
+                                                    console.log(action);
+                                                    Ext.Msg.alert('Fail',action.result.error);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            }]
+                    }]// DOCUMENT END
+            };
+            
             return component;
         };
         

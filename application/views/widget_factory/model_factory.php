@@ -522,9 +522,13 @@ Ext.define('MPeraturan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MUnitKerja', { extend:'Ext.data.Model',
-    fields: ['ur_upb', 'kdlok']
+    fields: ['ur_upb', 'kdlok','kd_pebin','kd_pbi','kd_ppbi','kd_upb','kd_subupb','kd_jk']
 })
 
 Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
-    fields: ['kd_lokasi', 'kode_unor', 'nama_unor', 'jabatan_unor', 'ur_upb']
+    fields: ['ID_Unor', 'kode_unor','kd_lokasi','kode_jab','kode_eselon','kode_parent', 'nama_unor', 'jabatan_unor', 'urut_unor','status_data','nama_unker']
+})
+
+Ext.define('MPartNumber', { extend:'Ext.data.Model',
+    fields: ['id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi']
 })

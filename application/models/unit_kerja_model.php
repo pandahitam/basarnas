@@ -5,7 +5,7 @@ class Unit_Kerja_Model extends MY_Model {
     function __construct() {
         parent::__construct();
         $this->table = 'ref_unker';
-        $this->selectColumn = "SELECT kdlok, ur_upb";
+        $this->selectColumn = "SELECT kdlok, ur_upb, kd_pebin,kd_pbi,kd_ppbi,kd_upb,kd_subupb,kd_jk";
     }
 
     function get_AllData($start = null, $limit = null) {
@@ -21,12 +21,12 @@ class Unit_Kerja_Model extends MY_Model {
                             ";
         }
         
-        $returnedResult = $this->Get_By_Query($query);
+        return $this->Get_By_Query($query);
 
-        $result["results"] = $returnedResult['data'];
-        $result["total"] = $returnedResult['count'];
-        
-        return $result;
+//        $result["results"] = $returnedResult['data'];
+//        $result["total"] = $returnedResult['count'];
+//        
+//        return $result;
     }
 
     function get_CountData() {

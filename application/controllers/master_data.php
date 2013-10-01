@@ -16,6 +16,7 @@ class Master_Data extends CI_Controller {
         $this->load->model('Warehouse_Model', '', TRUE);
         $this->load->model('Ruang_Model', '', TRUE);
         $this->load->model('Rak_Model', '', TRUE);
+        $this->load->model('Part_Number_Model', '', TRUE);
 //		$this->load->model('Jabatan_Model','',TRUE);
 //		$this->load->model('TTD_Model','',TRUE);
 //		$this->load->model('Prov_Model','',TRUE);
@@ -189,6 +190,41 @@ class Master_Data extends CI_Controller {
     }
 
     // MASTER UNIT KERJA ------------------------------------------- START
+     function checkUnitKerja()
+    {
+
+        $this->db->from('ref_unker');
+        $this->db->where('kdlok',$_POST['kd_lokasi']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
     function unit_kerja() {
         if ($this->input->post("id_open")) {
             $data['jsscript'] = TRUE;
@@ -197,62 +233,110 @@ class Master_Data extends CI_Controller {
             $this->load->view('master/unit_kerja_view');
         }
     }
-
-    function ext_get_all_unit_kerja() {
+    
+        function unitkerja_getAllData() {
         if ($this->input->get_post("id_open")) {
-            echo json_encode($this->Unit_Kerja_Model->get_AllData());
+            $resultData = $this->Unit_Kerja_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
         }
+    }
+    
+        function unitkerja_modifyUnitKerja() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'ur_upb', 'kdlok','kd_pebin','kd_pbi','kd_ppbi','kd_upb','kd_subupb','kd_jk'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kdlok'] = $data['kd_pebin'].$data['kd_pbi'].$data['kd_ppbi'].$data['kd_upb'].$data['kd_subupb'].$data['kd_jk'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_unker');
+        
+        echo "{success: true}";
+    }
+    
+    function unitkerja_deleteUnitKerja()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kdlok', $data['id']);
+           $this->db->delete('ref_unker');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
-    function ext_insert_unit_kerja() {
-        $Status = $this->Unit_Kerja_Model->Insert_Data();
-        if ($Status == "Exist") {
-            echo "{success:false, info: { reason: 'Nama Unit Kerja sudah ada !' }}";
-        } elseif ($Status == "Updated") {
-            echo "{success:true, info: { reason: 'Sukses merubah data !' }}";
-        } elseif (is_numeric($Status)) {
-            echo "{success:true, info: { reason: '" . $Status . "' }}";
-        } else {
-            echo "{success:false, info: { reason: 'Gagal menambah Data !' }}";
-        }
-    }
 
-    function ext_delete_unit_kerja() {
-        if ($this->Unit_Kerja_Model->Delete_Data() == TRUE) {
-            echo "{success:true}";
-        } else {
-            echo "{success:false, errors: { reason: 'Unit Kerja Induk Tidak dapat dihapus !' }}";
-        }
-    }
-
-    // CETAK UNIT KERJA ---------------------------------------------
-    function print_dialog_unker() {
-        if ($this->input->post("id_open")) {
-            $data['jsscript'] = TRUE;
-            $data['Data_ID'] = 'ID_UK';
-            $data['Grid_ID'] = 'Grid_UK';
-            $data['Params_Print'] = 'Params_M_UK';
-            $data['uri_all'] = 'master_data/cetak_unker/all';
-            $data['uri_selected'] = 'master_data/cetak_unker/selected';
-            $data['uri_by_rows'] = 'master_data/cetak_unker/by_rows/';
-            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
-        } else {
-            $this->load->view('print_dialog/print_dialog_no_ttd_view');
-        }
-    }
-
-    function cetak_unker($p_mode = 'all', $dari = null, $sampai = null) {
-        if ($this->input->post("id_open")) {
-            if ($p_mode == "all") {
-                $data['data_cetak'] = $this->Unit_Kerja_Model->get_AllPrint();
-            } elseif ($p_mode == "selected") {
-                $data['data_cetak'] = $this->Unit_Kerja_Model->get_SelectedPrint();
-            } elseif ($p_mode == "by_rows") {
-                $data['data_cetak'] = $this->Unit_Kerja_Model->get_ByRowsPrint($dari, $sampai);
-            }
-            $this->load->view('master/unit_kerja_pdf', $data);
-        }
-    }
+//    function ext_get_all_unit_kerja() {
+//        if ($this->input->get_post("id_open")) {
+//            echo json_encode($this->Unit_Kerja_Model->get_AllData());
+//        }
+//    }
+//
+//    function ext_insert_unit_kerja() {
+//        $Status = $this->Unit_Kerja_Model->Insert_Data();
+//        if ($Status == "Exist") {
+//            echo "{success:false, info: { reason: 'Nama Unit Kerja sudah ada !' }}";
+//        } elseif ($Status == "Updated") {
+//            echo "{success:true, info: { reason: 'Sukses merubah data !' }}";
+//        } elseif (is_numeric($Status)) {
+//            echo "{success:true, info: { reason: '" . $Status . "' }}";
+//        } else {
+//            echo "{success:false, info: { reason: 'Gagal menambah Data !' }}";
+//        }
+//    }
+//
+//    function ext_delete_unit_kerja() {
+//        if ($this->Unit_Kerja_Model->Delete_Data() == TRUE) {
+//            echo "{success:true}";
+//        } else {
+//            echo "{success:false, errors: { reason: 'Unit Kerja Induk Tidak dapat dihapus !' }}";
+//        }
+//    }
+//
+//    // CETAK UNIT KERJA ---------------------------------------------
+//    function print_dialog_unker() {
+//        if ($this->input->post("id_open")) {
+//            $data['jsscript'] = TRUE;
+//            $data['Data_ID'] = 'ID_UK';
+//            $data['Grid_ID'] = 'Grid_UK';
+//            $data['Params_Print'] = 'Params_M_UK';
+//            $data['uri_all'] = 'master_data/cetak_unker/all';
+//            $data['uri_selected'] = 'master_data/cetak_unker/selected';
+//            $data['uri_by_rows'] = 'master_data/cetak_unker/by_rows/';
+//            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
+//        } else {
+//            $this->load->view('print_dialog/print_dialog_no_ttd_view');
+//        }
+//    }
+//
+//    function cetak_unker($p_mode = 'all', $dari = null, $sampai = null) {
+//        if ($this->input->post("id_open")) {
+//            if ($p_mode == "all") {
+//                $data['data_cetak'] = $this->Unit_Kerja_Model->get_AllPrint();
+//            } elseif ($p_mode == "selected") {
+//                $data['data_cetak'] = $this->Unit_Kerja_Model->get_SelectedPrint();
+//            } elseif ($p_mode == "by_rows") {
+//                $data['data_cetak'] = $this->Unit_Kerja_Model->get_ByRowsPrint($dari, $sampai);
+//            }
+//            $this->load->view('master/unit_kerja_pdf', $data);
+//        }
+//    }
 
     // MASTER UNIT KERJA ------------------------------------------- START
     // MASTER JABATAN ------------------------------------------- START
@@ -329,163 +413,254 @@ class Master_Data extends CI_Controller {
             $this->load->view('master/unit_organisasi_view');
         }
     }
-
-    function ext_get_all_unit_organisasi() {
+    
+    function unitorganisasi_getAllData() {
         if ($this->input->get_post("id_open")) {
-            echo json_encode($this->Unit_Organisasi_Model->get_AllData());
+            $resultData = $this->Unit_Organisasi_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
         }
     }
-
-    function ext_insert_unit_organisasi() {
-        $Status = $this->Unit_Organisasi_Model->Insert_Data();
-        if ($Status == "Exist") {
-            echo "{success:false, info: { reason: 'Nama Unit Organisasi sudah ada !' }}";
-        } elseif ($Status == "Updated") {
-            echo "{success:true, info: { reason: 'Sukses merubah data !' }}";
-        } elseif (is_numeric($Status)) {
-            echo "{success:true, info: { reason: '" . $Status . "' }}";
-        } else {
-            echo "{success:false, info: { reason: 'Gagal menambah Data !' }}";
+    
+    function unitorganisasi_modifyUnitOrganisasi() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'ID_Unor', 'kode_unor','kd_lokasi','kode_jab','kode_eselon','kode_parent', 'nama_unor', 'jabatan_unor', 'urut_unor','status_data'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
         }
+        
+        
+        $this->db->set($data);
+        $this->db->replace('ref_unor');
+        
+        echo "{success: true}";
     }
+    
+    function unitorganisasi_deleteUnitOrganisasi()
+    {
+       $deletedData = $this->input->post('data');
 
-    function ext_delete_unit_organisasi() {
-        $this->Unit_Organisasi_Model->Delete_Data();
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('ID_Unor', $data['id']);
+           $this->db->delete('ref_unor');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
+    
+    function unitorganisasi_getLastKodeUnor()
+    {
+        $this->db->from('ref_unor');
+        $this->db->select('kode_unor');
+        $this->db->order_by('kode_unor','desc');
+        $query = $this->db->get();
+        $result = $query->row();
+        echo $result->kode_unor + 1;
+    }
+    
+    function checkKodeUnitOrganisasi()
+    {
 
-    function get_next_urut_unor() {
-        if ($this->input->post("id_open")) {
-            $data = array();
-            $this->db->select("urut_unor");
-            $this->db->from("tRef_Unor");
-            $this->db->order_by("urut_unor", "DESC");
-            $this->db->limit(1);
-            $Q = $this->db->get();
-            if ($Q->num_rows() > 0) {
-                $data = $Q->row_array();
-                $next_urut_unor = (int) $data['urut_unor'] + 1;
-            } else {
-                $next_urut_unor = 1;
+        $this->db->from('ref_unor');
+        $this->db->where('kode_unor',$_POST['kode_unor']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
             }
-            echo $next_urut_unor;
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
         }
     }
 
-    function print_dialog_tb() {
-        if ($this->input->post("id_open")) {
-            $data['jsscript'] = TRUE;
-            $data['Data_ID'] = 'id';
-            $data['Grid_ID'] = 'grid_tb';
-            $data['Params_Print'] = 'Params_M_TB';
-            $data['uri_all'] = 'master_data/cetak_tb/all';
-            $data['uri_selected'] = 'master_data/cetak_tb/selected';
-            $data['uri_by_rows'] = 'master_data/cetak_tb/by_rows/';
-            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
-        } else {
-            $this->load->view('print_dialog/print_dialog_no_ttd_view');
-        }
-    }
-
-    function cetak_tb($p_mode = 'all', $dari = null, $sampai = null) {
-        if ($this->input->post("id_open")) {
-            $data = array();
-            $dataTanah = array();
-            $dataBangunan = array();
-
-            if ($p_mode == "all" || $p_mode == "by_rows") {
-                $dataTanah = $this->Tasset_tanah_Model->get_AllData();
-                $dataBangunan = $this->Tasset_bangunan_Model->get_AllData();
-            } elseif ($p_mode == "selected") {
-                $idt = $this->input->post('idTanah');
-                $idb = $this->input->post('idBangunan');
-                $selectedTanah = explode('-', $idt);
-                $selectedBangunan = explode('-', $idb);
-                $dataTanah = $this->Tasset_tanah_Model->get_byIDs($selectedTanah);
-                $dataBangunan = $this->Tasset_bangunan_Model->get_byIDs($selectedBangunan);
-            }
-
-            if (count($dataTanah) > 0) {
-                foreach ($dataTanah as $e) {//tanah
-                    $val = array('alamat' => $e->alamat,
-                        'nama' => ' - ',
-                        'nama_unker' => $e->nama_unker,
-                        'jabatan_unor' => $e->jabatan_unor,
-                        'nama_prov' => $e->nama_prov,
-                        'nama_kabkota' => $e->nama_kabkota,
-                        'id' => $e->id,
-                        'kode_pos' => strval($e->kode_pos),
-                        'luas_tanah' => strval($e->luas_tanah),
-                        'luas_bangunan' => ' - ',
-                        'tipe' => 'TANAH'
-                    );
-                    $data[] = $val;
-                }
-            }
-            if (count($dataBangunan) > 0) {
-                foreach ($dataBangunan as $e) {
-                    $val = array('alamat' => $e->alamat,
-                        'nama' => $e->nama,
-                        'nama_unker' => $e->nama_unker,
-                        'jabatan_unor' => $e->jabatan_unor,
-                        'nama_prov' => $e->nama_prov,
-                        'nama_kabkota' => $e->nama_kabkota,
-                        'id' => $e->id,
-                        'kode_pos' => strval($e->kode_pos),
-                        'luas_tanah' => strval($e->luas_tanah),
-                        'luas_bangunan' => strval($e->luas_bangunan),
-                        'tipe' => 'BANGUNAN'
-                    );
-                    $data[] = $val;
-                }
-            }
-
-            if ($p_mode == "by_rows") {
-                if (isset($dari) && isset($sampai)) {
-                    $offset = $dari - 1;
-                    $numrows = $sampai - $offset;
-                    $data = array_slice($data, $offset, $numrows);
-                }
-            }
-
-            $dataSend['data_cetak'] = $data;
-
-
-
-            $this->load->view('pengelolaan_asset/tanah_bangunan_pdf', $dataSend);
-        }
-    }
-
-    // CETAK UNIT ORGANISASI ---------------------------------------------
-    function print_dialog_unor() {
-        if ($this->input->post("id_open")) {
-            $data['jsscript'] = TRUE;
-            $data['Data_ID'] = 'id';
-            $data['Grid_ID'] = 'grid_Unor';
-            $data['Params_Print'] = 'Params_M_Unor';
-            $data['uri_all'] = 'master_data/cetak_unor/all';
-            $data['uri_selected'] = 'master_data/cetak_unor/selected';
-            $data['uri_by_rows'] = 'master_data/cetak_unor/by_rows/';
-            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
-        } else {
-            $this->load->view('print_dialog/print_dialog_no_ttd_view');
-        }
-    }
-
-    function cetak_unor($p_mode = 'all', $dari = null, $sampai = null) {
-        if ($this->input->post("id_open")) {
-            if ($p_mode == "all") {
-                $data = $this->Unit_Organisasi_Model->get_AllPrint();
-                $data['data_cetak'] = $data;
-            } elseif ($p_mode == "selected") {
-                $data = $this->Unit_Organisasi_Model->get_SelectedPrint();
-                $data['data_cetak'] = $data;
-            } elseif ($p_mode == "by_rows") {
-                $data = $this->Unit_Organisasi_Model->get_ByRowsPrint($dari, $sampai);
-                $data['data_cetak'] = $data;
-            }
-            $this->load->view('master/unit_organisasi_pdf', $data);
-        }
-    }
+//    function ext_get_all_unit_organisasi() {
+//        if ($this->input->get_post("id_open")) {
+//            echo json_encode($this->Unit_Organisasi_Model->get_AllData());
+//        }
+//    }
+//
+//    function ext_insert_unit_organisasi() {
+//        $Status = $this->Unit_Organisasi_Model->Insert_Data();
+//        if ($Status == "Exist") {
+//            echo "{success:false, info: { reason: 'Nama Unit Organisasi sudah ada !' }}";
+//        } elseif ($Status == "Updated") {
+//            echo "{success:true, info: { reason: 'Sukses merubah data !' }}";
+//        } elseif (is_numeric($Status)) {
+//            echo "{success:true, info: { reason: '" . $Status . "' }}";
+//        } else {
+//            echo "{success:false, info: { reason: 'Gagal menambah Data !' }}";
+//        }
+//    }
+//
+//    function ext_delete_unit_organisasi() {
+//        $this->Unit_Organisasi_Model->Delete_Data();
+//    }
+//
+//    function get_next_urut_unor() {
+//        if ($this->input->post("id_open")) {
+//            $data = array();
+//            $this->db->select("urut_unor");
+//            $this->db->from("tRef_Unor");
+//            $this->db->order_by("urut_unor", "DESC");
+//            $this->db->limit(1);
+//            $Q = $this->db->get();
+//            if ($Q->num_rows() > 0) {
+//                $data = $Q->row_array();
+//                $next_urut_unor = (int) $data['urut_unor'] + 1;
+//            } else {
+//                $next_urut_unor = 1;
+//            }
+//            echo $next_urut_unor;
+//        }
+//    }
+//
+//    function print_dialog_tb() {
+//        if ($this->input->post("id_open")) {
+//            $data['jsscript'] = TRUE;
+//            $data['Data_ID'] = 'id';
+//            $data['Grid_ID'] = 'grid_tb';
+//            $data['Params_Print'] = 'Params_M_TB';
+//            $data['uri_all'] = 'master_data/cetak_tb/all';
+//            $data['uri_selected'] = 'master_data/cetak_tb/selected';
+//            $data['uri_by_rows'] = 'master_data/cetak_tb/by_rows/';
+//            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
+//        } else {
+//            $this->load->view('print_dialog/print_dialog_no_ttd_view');
+//        }
+//    }
+//
+//    function cetak_tb($p_mode = 'all', $dari = null, $sampai = null) {
+//        if ($this->input->post("id_open")) {
+//            $data = array();
+//            $dataTanah = array();
+//            $dataBangunan = array();
+//
+//            if ($p_mode == "all" || $p_mode == "by_rows") {
+//                $dataTanah = $this->Tasset_tanah_Model->get_AllData();
+//                $dataBangunan = $this->Tasset_bangunan_Model->get_AllData();
+//            } elseif ($p_mode == "selected") {
+//                $idt = $this->input->post('idTanah');
+//                $idb = $this->input->post('idBangunan');
+//                $selectedTanah = explode('-', $idt);
+//                $selectedBangunan = explode('-', $idb);
+//                $dataTanah = $this->Tasset_tanah_Model->get_byIDs($selectedTanah);
+//                $dataBangunan = $this->Tasset_bangunan_Model->get_byIDs($selectedBangunan);
+//            }
+//
+//            if (count($dataTanah) > 0) {
+//                foreach ($dataTanah as $e) {//tanah
+//                    $val = array('alamat' => $e->alamat,
+//                        'nama' => ' - ',
+//                        'nama_unker' => $e->nama_unker,
+//                        'jabatan_unor' => $e->jabatan_unor,
+//                        'nama_prov' => $e->nama_prov,
+//                        'nama_kabkota' => $e->nama_kabkota,
+//                        'id' => $e->id,
+//                        'kode_pos' => strval($e->kode_pos),
+//                        'luas_tanah' => strval($e->luas_tanah),
+//                        'luas_bangunan' => ' - ',
+//                        'tipe' => 'TANAH'
+//                    );
+//                    $data[] = $val;
+//                }
+//            }
+//            if (count($dataBangunan) > 0) {
+//                foreach ($dataBangunan as $e) {
+//                    $val = array('alamat' => $e->alamat,
+//                        'nama' => $e->nama,
+//                        'nama_unker' => $e->nama_unker,
+//                        'jabatan_unor' => $e->jabatan_unor,
+//                        'nama_prov' => $e->nama_prov,
+//                        'nama_kabkota' => $e->nama_kabkota,
+//                        'id' => $e->id,
+//                        'kode_pos' => strval($e->kode_pos),
+//                        'luas_tanah' => strval($e->luas_tanah),
+//                        'luas_bangunan' => strval($e->luas_bangunan),
+//                        'tipe' => 'BANGUNAN'
+//                    );
+//                    $data[] = $val;
+//                }
+//            }
+//
+//            if ($p_mode == "by_rows") {
+//                if (isset($dari) && isset($sampai)) {
+//                    $offset = $dari - 1;
+//                    $numrows = $sampai - $offset;
+//                    $data = array_slice($data, $offset, $numrows);
+//                }
+//            }
+//
+//            $dataSend['data_cetak'] = $data;
+//
+//
+//
+//            $this->load->view('pengelolaan_asset/tanah_bangunan_pdf', $dataSend);
+//        }
+//    }
+//
+//    // CETAK UNIT ORGANISASI ---------------------------------------------
+//    function print_dialog_unor() {
+//        if ($this->input->post("id_open")) {
+//            $data['jsscript'] = TRUE;
+//            $data['Data_ID'] = 'id';
+//            $data['Grid_ID'] = 'grid_Unor';
+//            $data['Params_Print'] = 'Params_M_Unor';
+//            $data['uri_all'] = 'master_data/cetak_unor/all';
+//            $data['uri_selected'] = 'master_data/cetak_unor/selected';
+//            $data['uri_by_rows'] = 'master_data/cetak_unor/by_rows/';
+//            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
+//        } else {
+//            $this->load->view('print_dialog/print_dialog_no_ttd_view');
+//        }
+//    }
+//
+//    function cetak_unor($p_mode = 'all', $dari = null, $sampai = null) {
+//        if ($this->input->post("id_open")) {
+//            if ($p_mode == "all") {
+//                $data = $this->Unit_Organisasi_Model->get_AllPrint();
+//                $data['data_cetak'] = $data;
+//            } elseif ($p_mode == "selected") {
+//                $data = $this->Unit_Organisasi_Model->get_SelectedPrint();
+//                $data['data_cetak'] = $data;
+//            } elseif ($p_mode == "by_rows") {
+//                $data = $this->Unit_Organisasi_Model->get_ByRowsPrint($dari, $sampai);
+//                $data['data_cetak'] = $data;
+//            }
+//            $this->load->view('master/unit_organisasi_pdf', $data);
+//        }
+//    }
 
     // MASTER UNIT ORGANISASI ------------------------------------------- END
     // MASTER PEJABAT PENANDATANGAN ------------------------------------------- START
@@ -1120,6 +1295,187 @@ class Master_Data extends CI_Controller {
                        'success'=>true);
 						
         echo json_encode($result);
+    }
+    
+    //MASTER PART NUMBER
+    function part_number() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/part_number_view', $data);
+        } else {
+            $this->load->view('master/part_number_view');
+        }
+    }
+
+    function partNumber_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Part_Number_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
+        }
+    }
+    
+    function partNumber_modifyPartNumber() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_perlengkapan');
+        
+        echo "{success: true}";
+    }
+    
+    function partNumber_deletePartNumber()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_perlengkapan');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkPartNumber()
+    {
+
+        $this->db->from('ref_perlengkapan');
+        $this->db->where('part_number',$_POST['part_number']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    
+     //MASTER KODE BARANG GOLONGAN
+    function kode_barang_golongan() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/kode_barang_golongan_view', $data);
+        } else {
+            $this->load->view('master/kode_barang_golongan_view');
+        }
+    }
+
+    function kode_barang_golongan_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Part_Number_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+//			$total = $this->Unit_Kerja_Model->get_CountData();	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
+        }
+    }
+    
+    function kode_barang_golongan_modifyGolongan() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','ur_gol'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_golongan');
+        
+        echo "{success: true}";
+    }
+    
+    function kode_barang_golongan_deleteGolongan()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_golongan');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKodeBarangGolongan()
+    {
+
+        $this->db->from('ref_golongan');
+        $this->db->where('kd_gol',$_POST['kd_gol']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
     }
 
 }

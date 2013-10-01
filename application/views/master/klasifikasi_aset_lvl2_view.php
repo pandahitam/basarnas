@@ -31,7 +31,7 @@
         });
 
         KlasifikasiAsetLvl2.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_KlasifikasiAsetLvl2', storeId: 'DataKlasifikasiAsetLvl2', model: 'MKlasifikasiAsetLvl2', pageSize: 20, noCache: false, autoLoad: true,
+            id: 'Data_KlasifikasiAsetLvl2', storeId: 'DataKlasifikasiAsetLvl2', model: 'MKlasifikasiAsetLvl2', pageSize: 50, noCache: false, autoLoad: true,
             proxy: KlasifikasiAsetLvl2.proxy, groupField: 'tipe'
         });
 
