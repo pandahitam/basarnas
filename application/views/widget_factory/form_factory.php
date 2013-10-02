@@ -369,7 +369,67 @@
         }
 
         
-        Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
+Form.inventory = function(url, data, edit, dataStoreInventoryPerlengkapan) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function(form,action) {
+
+                   
+                                        
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+//                                        if (edit)
+//                                        {
+//                                            Modal.closeProcessWindow();
+//                                        }
+//                                        else
+//                                        {
+//                                            form.reset();
+//                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    },]
+            });
+
+
+            return _form;
+        };
+		
+		
+		
+Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         {
             var pilihPengadaan = [{
                     xtype: 'fieldset',
@@ -411,7 +471,7 @@
             form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
-        }
+        };
         
         Form.inventorypemeriksaan = function(setting,id_penerimaan)
         {
