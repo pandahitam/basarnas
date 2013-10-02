@@ -407,8 +407,8 @@
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPengadaan);
             form.insert(2, Form.Component.inventorypenerimaan());
-            form.insert(3, Form.Component.gridInventoryPerlengkapan(setting_grid_perlengkapan))
-//            form.insert(3, Form.Component.dataInventoryPerlengkapan());
+//            form.insert(3, Form.Component.gridInventoryPerlengkapan(setting_grid_perlengkapan))
+            form.insert(3, Form.Component.dataInventoryPerlengkapan());
 
             return form;
         }
@@ -420,7 +420,7 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'PENERIMAAN',
+                    title: 'PEMERIKSAAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -479,14 +479,20 @@
                                                             id: value
                                                         },
                                                         success: function(response){
-                                                            var data = eval ("(" + response.responseText + ")");
-                                                            Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
-                                                            Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
-                                                            Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
-                                                            Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
-                                                            Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
-                                                            Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
-                                                            Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                            if(setting.isEditing == false)
+                                                                {
+                                                                    var data = eval ("(" + response.responseText + ")");
+                                                                    Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
+                                                                    Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
+                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                }
+
                                                             // process server response here
                                                         }
                                                         });
@@ -576,14 +582,19 @@
                                                             id: value
                                                         },
                                                         success: function(response){
-                                                            var data = eval ("(" + response.responseText + ")");
-                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
-                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
-                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
-                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
-                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
-                                                                Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
-                                                                Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                if(setting.isEditing == false)
+                                                                {
+                                                                    var data = eval ("(" + response.responseText + ")");
+                                                                    Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                    Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
+                                                                    Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
+                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                }
                                                             
                                                            
                                                             // process server response here
@@ -680,6 +691,8 @@
                                                                 Ext.getCmp('kode_unor').setValue(data.kode_unor);
                                                                 Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setDisabled(false);
                                                                 Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').setMaxValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
+                                                            
 //                                                                Ext.getCmp('inventory_data_pengeluaran_qty_barang_keluar').validate();
                                                                 if(setting.isEditing == true)
                                                                 {
@@ -1616,18 +1629,8 @@
                             {
                                 form.submit({
                                     success: function(form,action) {
-                                        var id = action.result.id;
-                                        var grid = Ext.getCmp('grid_inventory_penerimaan_perlengkapan').getStore();
-                                        var new_records = grid.getNewRecords();
-//                                        var updated_records = grid.getUpdatedRecords();
-//                                        var removed_records = grid.getRemovedRecords();
-                                        Ext.each(new_records, function(obj){
-                                            var index = grid.indexOf(obj);
-                                            var record = grid.getAt(index);
-                                            record.set('id_inventory',id);
-                                        });
-                                            grid.sync();
-                     
+
+                   
                                         
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
                                         if (data !== null)
@@ -6487,7 +6490,7 @@
                             items: [{
                                     fieldLabel: 'No SPPA *',
                                     name: 'no_sppa',
-                                    allowBlank:'false',
+                                    allowBlank:false,
                                 }, {
                                     fieldLabel: 'Asal Pengadaan',
                                     name: 'asal_pengadaan'
@@ -7820,16 +7823,16 @@
                                     name: 'asal_barang',
                                     id:'inventory_data_perlengkapan_asal_barang'
                                 },
-                                {
-                                    xtype:'hidden',
-                                    name: 'id',
-                                    value:'',
-                                },
-                                {
-                                    xtype:'hidden',
-                                    name: 'id_inventory',
-                                    value:'',
-                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
                                 
                             ]
                         }]
@@ -7938,8 +7941,8 @@
                                 }, {
                                     xtype: 'datefield',
                                     disabled: false,
-                                    fieldLabel: 'Tanggal Penyimpanan *',
-                                    name: 'tgl_penyimpanan',
+                                    fieldLabel: 'Tanggal Pemeriksaan *',
+                                    name: 'tgl_pemeriksaan',
                                     allowBlank: false,
                                     format:'Y-m-d'
                                 },
