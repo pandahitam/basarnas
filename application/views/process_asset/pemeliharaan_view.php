@@ -87,6 +87,14 @@
 
             if (data !== null)
             {
+               if(data.unit_waktu != 0)
+                {
+                    data.comboUnitWaktuOrUnitPenggunaan = 1;
+                }
+                if(data.unit_pengunaan != 0)
+                {
+                    data.comboUnitWaktuOrUnitPenggunaan = 2;
+                }
                 form.getForm().setValues(data);
             }
             return form;
@@ -108,7 +116,7 @@
                 }
                     var form = Form.pemeliharaanPart(Pemeliharaan.URL.createUpdatePemeliharaanPart, Pemeliharaan.dataStorePemeliharaanPart, false);
                     form.insert(0, Form.Component.dataPemeliharaanPart(data.id));
-                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 
@@ -128,7 +136,7 @@
                 }
                     var form = Form.pemeliharaanPart(Pemeliharaan.URL.createUpdatePemeliharaanPart, Pemeliharaan.dataStorePemeliharaanPart, false);
                     form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
-                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     
                     if (data !== null)
                     {

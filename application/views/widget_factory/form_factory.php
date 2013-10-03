@@ -46,9 +46,9 @@
         });
         
         Reference.Data.pengadaan = new Ext.create('Ext.data.Store', {
-            fields: ['id','no_sppa'], storeId: 'DataPengadaanCombo',
+            fields: ['id','no_sppa', 'part_number', 'serial_number'], storeId: 'DataPengadaanCombo',
             proxy: new Ext.data.AjaxProxy({
-                url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+                url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, filterdatapengadaan:true}
             }),
             autoLoad: true
         });
@@ -458,6 +458,26 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     valueField: 'id',
                                     displayField: 'no_sppa', emptyText: 'Pilih Pengadaan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners:{
+                                        change:{
+                                            fn:function(comb, newv){
+                                                var sel = Reference.Data.pengadaan.findRecord('id',newv);
+                                                if(sel!=null){
+                                                    if(sel['data']){
+                                                        var dt = sel['data'];
+                                                        var inventory_data_perlengkapan_part_number = Ext.getCmp('inventory_data_perlengkapan_part_number');
+                                                        var inventory_data_perlengkapan_serial_number = Ext.getCmp('inventory_data_perlengkapan_serial_number');
+                                                        if(inventory_data_perlengkapan_part_number){
+                                                            inventory_data_perlengkapan_part_number.setValue(dt.part_number);
+                                                        }//end if
+                                                        if(inventory_data_perlengkapan_serial_number){
+                                                            inventory_data_perlengkapan_serial_number.setValue(dt.serial_number);
+                                                        }//end if
+                                                    }//end if
+                                                }//end if
+                                            }
+                                        }
+                                    }
                                 },
                                 
                             ]
@@ -862,23 +882,23 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         //start form pendayagunaan
         Form.pendayagunaan = function(setting,dataid)
         {
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelPendayagunaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
             form.insert(2, Form.Component.klasifikasiAset(setting.isEditing))
             form.insert(3, Form.Component.pendayagunaan(dataid));
-            form.insert(4, Form.Component.fileUpload());
+            form.insert(4, Form.Component.fileUploadDocumentOnly('document','fileupload_pendayagunaan'));
 
             return form;
         };
         
         Form.pendayagunaanInAsset = function(setting,dataid)
         {
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelPendayagunaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
             form.insert(2, Form.Component.klasifikasiAset(setting.isEditing));
             form.insert(3, Form.Component.pendayagunaan());
-            form.insert(4, Form.Component.fileUpload());
+            form.insert(4, Form.Component.fileUploadDocumentOnly('document','fileupload_pendayagunaan'));
 
             return form;
         };
@@ -1798,6 +1818,81 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                                 ref_combo_warehouse_ruang.setValue('');
                                                 ref_combo_warehouse_ruang.setDisabled(true);
                                             }
+                                            form.reset();
+                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+         Form.panelPendayagunaan = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var documentField = form.findField('document');
+
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Ext.getCmp('fileupload_pendayagunaan').getStore(); 
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+//                            console.log(form.getValues());
+                            
+                            if (form.isValid())
+                            {
+//                                console.log(form.getValues());
+                                form.submit({
+                                    success: function(form) {
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+                                        if (edit)
+                                        {
+                                            Modal.closeProcessWindow();
+                                        }
+                                        else
+                                        {
                                             form.reset();
                                         }
 
@@ -5158,6 +5253,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                                                 Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
                                                                 Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
                                                                 Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
                                                                 Ext.getCmp('pemeliharaan_part_qty').setDisabled(false);
                                                                 Ext.getCmp('pemeliharaan_part_qty').setMaxValue(data.qty);
                                                                 if(edit == true)
@@ -6737,6 +6833,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     fieldLabel: 'Kondisi',
                                     name: 'kondisi'
                                 }, {
+                                    xtype:'textarea',
                                     fieldLabel: 'Deskripsi',
                                     name: 'deskripsi'
                                 }, {
@@ -6769,7 +6866,8 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
+                            items: [
+                                    {
                                     xtype: 'combo',
                                     fieldLabel: 'Jenis',
                                     name: 'jenis',
@@ -6781,8 +6879,8 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
                                     listeners: {
                                         change: function(obj, value) {
-                                           var selWaktu = Ext.getCmp('unit_waktu').value;
-                                           var selPengunaan = Ext.getCmp('unit_pengunaan').value;
+//                                           var selWaktu = Ext.getCmp('unit_waktu').value;
+//                                           var selPengunaan = Ext.getCmp('unit_pengunaan').value;
                                            var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
                                            var pilihUnitWaktu = Ext.getCmp('unit_waktu');
                                            var pilihUnitPengunaan = Ext.getCmp('unit_pengunaan');
@@ -6824,14 +6922,14 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                                 pilihRenketerangan.disable();
                                             }
                                             
-                                            if(selWaktu != 0 && selWaktu != null)
-                                            {
-                                                pilihUnit.setValue(1);
-                                            }
-                                            else if(selPengunaan != 0 && selPengunaan != null)
-                                            {
-                                                 pilihUnit.setValue(2);
-                                            }
+//                                            if(selWaktu != 0 && selWaktu != null)
+//                                            {
+//                                                pilihUnit.setValue(1);
+//                                            }
+//                                            else if(selPengunaan != 0 && selPengunaan != null)
+//                                            {
+//                                                 pilihUnit.setValue(2);
+//                                            }
                                         }
                                     }
 
@@ -7018,7 +7116,6 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     store: Reference.Data.unitWaktu,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Unit Waktu',
-                                    value: 1,
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu',
                                     listeners: {
                                         change: function(obj, value) {
@@ -7057,7 +7154,6 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     store: Reference.Data.unitPengunaan,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Unit Pengunaan',
-                                    value: 1,
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Pengunaan'
                                 },{
                                     xtype:'numberfield',

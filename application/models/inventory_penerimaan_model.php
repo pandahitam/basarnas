@@ -40,8 +40,7 @@ class Inventory_Penerimaan_Model extends MY_Model{
                 $query = "$this->selectColumn
                             FROM $this->table AS t
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_unor AS d ON b.kode_unor = d.kode_unor
-                            LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
+                            LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
                             LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
                             ";
                 

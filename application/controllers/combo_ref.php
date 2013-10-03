@@ -112,12 +112,23 @@ class Combo_Ref extends CI_Controller {
     function combo_pengadaan()
     {
         $data = array();
+        $spesial_pengadaan = ($this->input->get_post("filterdatapengadaan") ? true : false);
         if($this->input->get_post("id_open"))
         {
-            $query = $this->db->query('select id, no_sppa from pengadaan');
+            $query = $this->db->query('select id, no_sppa, part_number, serial_number from pengadaan');
             foreach($query->result() as $obj)
             {
-                $data[] = $obj;
+                if($spesial_pengadaan){
+                    $query_check = $this->db->query("select * from inventory_penerimaan where id_pengadaan=".$obj->id);
+                    $result_check = $query_check->result();
+                    if(count($result_check) > 0){
+                        //do something...
+                    }else{
+                        $data[] = $obj;
+                    }
+                }else{
+                    $data[] = $obj;
+                }
             }
 
             echo json_encode($data);

@@ -136,7 +136,7 @@ Perencanaan.Action.print = function (){
         }
     }
     var serverSideModelName = "Perencanaan_Model";
-    var title = "Perencaanaan";
+    var title = "Perencanaan";
     var primaryKeys = "id";
 
     my_form=document.createElement('FORM');

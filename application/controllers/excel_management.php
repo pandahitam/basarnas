@@ -35,7 +35,8 @@ class Excel_Management extends CI_Controller{
       $columnKeys = $_POST["primaryKeys"];
       
       $this->load->model($modelName);
-      $data = $this->$modelName->get_AllData();
+      $queryResult = $this->$modelName->get_AllData();
+      $data = $queryResult['data'];
       $this->load->library('PHPExcel');
       $excel = new PHPExcel();
       $header = array();

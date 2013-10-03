@@ -87,9 +87,32 @@
             };
 
             var form = Form.pemeliharaan(setting,setting_grid_pemeliharaan_part);
-
             if (data !== null)
             {
+                if(data.unit_waktu != 0)
+                {
+                    data.comboUnitWaktuOrUnitPenggunaan = 1;
+                }
+                if(data.unit_pengunaan != 0)
+                {
+                    data.comboUnitWaktuOrUnitPenggunaan = 2;
+                }
+                
+                $.ajax({
+                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{tipe_angkutan:'darat',id_ext_asset:data.id},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+                        }
+                           
+                       }
+                    });
+                
                 form.getForm().setValues(data);
             }
             return form;
@@ -111,7 +134,7 @@
                 }
                     var form = Form.pemeliharaanPart(PemeliharaanDarat.URL.createUpdatePemeliharaanPart, PemeliharaanDarat.dataStorePemeliharaanPart, false);
                     form.insert(0, Form.Component.dataPemeliharaanPart(data.id));
-                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 
@@ -131,7 +154,7 @@
                 }
                     var form = Form.pemeliharaanPart(PemeliharaanDarat.URL.createUpdatePemeliharaanPart, PemeliharaanDarat.dataStorePemeliharaanPart, false);
                     form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
-                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     
                     if (data !== null)
                     {
@@ -220,8 +243,8 @@
                 }
             }
 
-            var serverSideModelName = "PemeliharaanDarat_Model";
-            var title = "PemeliharaanDarat Umum";
+            var serverSideModelName = "Pemeliharaan_Darat_Model";
+            var title = "Pemeliharaan Darat";
             var primaryKeys = "id";
 
             my_form = document.createElement('FORM');

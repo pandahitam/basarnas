@@ -89,6 +89,30 @@
 
             if (data !== null)
             {
+                if(data.unit_waktu != 0)
+                {
+                    data.comboUnitWaktuOrUnitPenggunaan = 1;
+                }
+                if(data.unit_pengunaan != 0)
+                {
+                    data.comboUnitWaktuOrUnitPenggunaan = 2;
+                }
+                
+                $.ajax({
+                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{tipe_angkutan:'udara',id_ext_asset:data.id},
+                       success:function(response, status){
+                        if(response.status == 'success')
+                        {
+                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+                        }
+                           
+                       }
+                    });
+                    
                 form.getForm().setValues(data);
             }
             return form;
@@ -110,7 +134,7 @@
                 }
                     var form = Form.pemeliharaanPart(PemeliharaanUdara.URL.createUpdatePemeliharaanPart, PemeliharaanUdara.dataStorePemeliharaanPart, false);
                     form.insert(0, Form.Component.dataPemeliharaanPart(data.id));
-                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 
@@ -130,7 +154,7 @@
                 }
                     var form = Form.pemeliharaanPart(PemeliharaanUdara.URL.createUpdatePemeliharaanPart, PemeliharaanUdara.dataStorePemeliharaanPart, false);
                     form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
-                    form.insert(1, Form.Component.inventoryPerlengkapan(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     
                     if (data !== null)
                     {
@@ -220,8 +244,8 @@
                 }
             }
 
-            var serverSideModelName = "PemeliharaanUdara_Model";
-            var title = "PemeliharaanUdara Umum";
+            var serverSideModelName = "Pemeliharaan_Udara_Model";
+            var title = "Pemeliharaan Udara";
             var primaryKeys = "id";
 
             my_form = document.createElement('FORM');

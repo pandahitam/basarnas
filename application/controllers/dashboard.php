@@ -41,32 +41,40 @@ class Dashboard extends CI_Controller{
   
   function alert_pemeliharaan()
   {
-//      $query = "select ur_upb,nama, max(rencana_waktu) as tanggal_kadaluarsa from pemeliharaan as a
-//                inner join ref_unker as b on a.kd_lokasi = b.kdlok
-//                where DATEDIFF(DATE(rencana_waktu),CURDATE()) <= 0
-//                group by kd_lokasi, kd_brg, no_aset";
-      $query = "SELECT kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
-                FROM pemeliharaan AS a
-                INNER JOIN ref_unker AS b ON a.kd_lokasi = b.kdlok
-                WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE( ) ) <=0
-                AND alert = 1
-                AND
-                NOT EXISTS
-                (
-                        SELECT kd_lokasi,kd_brg,no_aset FROM pemeliharaan
-                        WHERE a.kd_lokasi = pemeliharaan.kd_lokasi
-                        AND
-                        a.kd_brg = pemeliharaan.kd_brg
-                        AND
-                        a.no_aset = pemeliharaan.no_aset
-                        and
-                        DATEDIFF( DATE( rencana_waktu ) , CURDATE( ) ) >=0
-                )
-                GROUP BY kd_lokasi, kd_brg, no_aset";
-      //$this->Get_By_Query($query);
-      $data = $this->Get_By_Query($query);
-      $dataSend['results'] = $data;
-      echo json_encode($dataSend);
+      //      $query = "select ur_upb,nama, max(rencana_waktu) as tanggal_kadaluarsa from pemeliharaan as a
+      //                inner join ref_unker as b on a.kd_lokasi = b.kdlok
+      //                where DATEDIFF(DATE(rencana_waktu),CURDATE()) <= 0
+      //                group by kd_lokasi, kd_brg, no_aset";
+	    $query = "SELECT kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
+		      FROM pemeliharaan AS a
+		      INNER JOIN ref_unker AS b ON a.kd_lokasi = b.kdlok
+		      WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
+		      AND alert = 1
+		      AND
+		      NOT EXISTS
+		      (
+			      SELECT kd_lokasi,kd_brg,no_aset FROM pemeliharaan
+			      WHERE a.kd_lokasi = pemeliharaan.kd_lokasi
+			      AND
+			      a.kd_brg = pemeliharaan.kd_brg
+			      AND
+			      a.no_aset = pemeliharaan.no_aset
+			      and
+			      DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) >=0
+		      )
+		      GROUP BY kd_lokasi, kd_brg, no_aset";
+		      
+	    $newQuery = "SELECT kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
+		      FROM pemeliharaan AS a
+		      INNER JOIN ref_unker AS b ON a.kd_lokasi = b.kdlok
+		      WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
+		      AND alert = 1
+		      GROUP BY kd_lokasi, kd_brg, no_aset";
+		      
+	    //$this->Get_By_Query($query);
+	    $data = $this->Get_By_Query($newQuery);
+	    $dataSend['results'] = $data;
+	    echo json_encode($dataSend);
   }
   
   function grafik_unker_totalaset()

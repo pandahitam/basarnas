@@ -85,9 +85,10 @@ class Pemeliharaan_Part extends MY_Controller {
 	function getSpecificPemeliharaanPart()
 	{
 		$id_pemeliharaan = $this->input->post("id_pemeliharaan");
-		$data = $this->model->get_PemeliharaanPart($id_pemeliharaan);
-		$datasend["results"] = $data;
-		echo json_encode($datasend);
+		$queryData = $this->model->get_PemeliharaanPart($id_pemeliharaan);
+                $dataSend['total'] = $queryData['count'];
+		$dataSend['results'] = $queryData['data'];
+		echo json_encode($dataSend);
 	}
 }
 ?>
