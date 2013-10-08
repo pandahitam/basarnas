@@ -27,7 +27,7 @@ class Perencanaan extends MY_Controller {
                 
 	  	$fields = array(
 			'id', 'kode_unor', 'kd_lokasi',
-                        'kd_brg', 'tahun_angaran', 'nama', 
+                        'kd_brg','no_aset', 'tahun_angaran', 'nama', 
                         'kebutuhan', 'keterangan', 'satuan', 'quantity', 
                         'harga_satuan', 'harga_total', 'is_realisasi','document_url','image_url'
                 );

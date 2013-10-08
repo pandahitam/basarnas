@@ -55,7 +55,7 @@ Perencanaan.Form.create = function(data,edit){
                 }
             },
             selectionAsset: {
-                noAsetHidden : true
+                noAsetHidden : false
             }
         };
         
@@ -63,14 +63,21 @@ Perencanaan.Form.create = function(data,edit){
 
 	if (data !== null)
 	{
-            //form.getForm().setValues(data);
-	    var task = Ext.TaskManager.start({
-		run: function () {
-		    form.getForm().setValues(data)
-		},
-		interval: 1000,
-		repeat:2
-	    });
+            
+            Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+            form.getForm().setValues(data);
+//	    var task = Ext.TaskManager.start({
+//		run: function () {
+//		    form.getForm().setValues(data)
+//		},
+//		interval: 1000,
+//		repeat:2
+//	    });
 	}
         
 	return form;
@@ -90,7 +97,7 @@ Perencanaan.Action.edit = function (){
         var data = selected[0].data;
         if (Modal.processEdit.items.length === 0)
         {
-                Modal.processEdit.setTitle('Edit Perairan');
+                Modal.processEdit.setTitle('Edit Perencanaan');
         }
         var _form = Perencanaan.Form.create(data,true);
         Modal.processEdit.add(_form);
@@ -193,6 +200,7 @@ var setting = {
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor',         width: 150,groupable : false,filter:{type:'string'}},
                     {header: 'Kode Lokasi',     dataIndex: 'kode_lokasi',       width: 130,hidden:true,groupable : false,filter:{type:'string'}},
                     {header: 'Kode Barang',     dataIndex: 'kd_brg',            width: 100,hidden:false,groupable : false,filter:{type:'string'}},
+                    {header: 'No Aset',         dataIndex: 'no_aset',        width: 100,groupable: false,filter:{type:'string'}},
                     {header: 'Nama',            dataIndex: 'nama',              width: 250,groupable: false,filter:{type:'string'}},
                     {header: 'Tahun Angaran',   dataIndex: 'tahun_angaran',     width: 100,groupable : false,filter:{type:'string'}},
                     {header: 'Kebutuhan',       dataIndex: 'kebutuhan',         width: 120,groupable : false,filter:{type:'string'}},

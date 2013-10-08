@@ -6,6 +6,7 @@ class Asset_Tanah_Model extends MY_Model{
 		$this->table = 'asset_tanah';
                 $this->extTable = 'ext_asset_tanah';
                 $this->viewTable = "view_asset_tanah";
+                $this->countTable = 'ext_asset_tanah';
                 
 //                $this->selectColumn = "SELECT t.kd_lokasi, t.kd_brg, t.no_aset, 
 //                        kuantitas, rph_aset, no_kib, luas_tnhs, 
@@ -210,7 +211,22 @@ class Asset_Tanah_Model extends MY_Model{
             {
                 $query = "select id,id_ext_asset,tahun_pajak,tanggal_pembayaran,jumlah_setoran,file_setoran,keterangan 
                         FROM ext_asset_tanah_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
-                return $this->Get_By_Query($query);
+                $countQuery = "select count(*) as total FROM ext_asset_tanah_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
+		$countResult = $this->db->query($countQuery);
+                
+                $r = $this->db->query($query);
+                $data = array();
+                if ($r->num_rows() > 0)
+                {
+                    foreach ($r->result() as $obj)
+                    {
+                        $data[] = $obj;
+                    }  
+                }
+                $returnData['data'] = $data;
+                $returnData['count'] = $countResult->row()->total;
+//                return $this->Get_By_Query($query);
+                return $returnData;
             }
         }
 	
@@ -228,7 +244,8 @@ class Asset_Tanah_Model extends MY_Model{
 	{
 		$query = "select id,id_ext_asset,tahun_pajak,tanggal_pembayaran,jumlah_setoran,file_setoran,keterangan 
 				  FROM ext_asset_tanah_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
-		return $this->Get_By_Query($query);
+                
+                return $this->Get_By_Query($query);
 	}
 	
 	function getRiwayatPajakForPrint($id_ext_asset)

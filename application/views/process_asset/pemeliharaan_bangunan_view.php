@@ -60,11 +60,16 @@ PemeliharaanBangunan.Form.create = function(data,edit){
                 noAsetHidden : false
             }
         };
-        debugger;
 	var form = Form.pemeliharaan(setting);
         
 	if (data !== null)
 	{
+                Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
 		form.getForm().setValues(data);
 	}
 	return form;

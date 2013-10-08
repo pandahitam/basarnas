@@ -118,7 +118,8 @@ class Asset_Tanah extends MY_Controller {
                 $data = $this->model->getSpecificRiwayatPajak($_POST['id_ext_asset']);
                 //                $total = $this->model->get_CountData();
 //                $dataSend['total'] = $total;
-		$dataSend['results'] = $data;
+		$dataSend['results'] = $data['data'];
+                $dataSend['total'] = $data['count'];
 		echo json_encode($dataSend);
                 
             }

@@ -28,9 +28,11 @@
         });
         
         Bangunan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
-            model: 'MPemeliharaanBangunan', autoLoad: false, noCache: false,
+            model: MPemeliharaanBangunan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Pemeliharaan_Bangunan/getSpecificPemeliharaanBangunan', actionMethods: {read: 'POST'}
+                url: BASE_URL + 'Pemeliharaan_Bangunan/getSpecificPemeliharaanBangunan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
         });
         
@@ -84,7 +86,7 @@
                 
                 //USED FOR MAP SEARCH
                 var paramsUnker = request.params.searchUnker;
-                if(paramsUnker != null ||paramsUnker != undefined)
+                if(paramsUnker != null && paramsUnker != undefined)
                 {
                     Bangunan.Data.clearFilter();
                     Bangunan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
@@ -161,6 +163,12 @@
 
             if (data !== null)
             {
+                Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                });
                 form.getForm().setValues(data);
             }
 
@@ -252,6 +260,12 @@
 
             if (dataForm !== null)
             {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
                 form.getForm().setValues(dataForm);
             }
             return form;
@@ -336,6 +350,12 @@
 
             if (dataForm !== null)
             {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
                 form.getForm().setValues(dataForm);
             }
             return form;
@@ -446,9 +466,15 @@
                         
                 var form = Form.penghapusanDanMutasiInAsset(setting);
 
-                if (data !== null || data !== undefined)
+                if (data !== null && data !== undefined)
                 {
-                    form.getForm().setValues(jsonData);
+                    Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                });
+                    form.getForm().setValues(data);
                 }
 
                 if (Modal.assetSecondaryWindow.items.length === 0)
@@ -535,8 +561,14 @@
                         
                         var form = Form.penghapusanDanMutasiInAsset(setting);
 
-                        if (jsonData !== null || jsonData !== undefined)
+                        if (jsonData !== null && jsonData !== undefined)
                         {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                                if(jsonData[key] == '0000-00-00')
+                                {
+                                    jsonData[key] = '';
+                                }
+                            });
                             form.getForm().setValues(jsonData);
                         }
                         Tab.addToForm(form, 'bangunan-penghapusan', 'Penghapusan');
@@ -591,10 +623,18 @@
                             }
                         };
                         var form = Form.pengadaanInAsset(setting);
-                        if (jsonData !== null || jsonData !== undefined)
+                        if (jsonData !== null && jsonData !== undefined)
                         {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                                if(jsonData[key] == '0000-00-00')
+                                {
+                                    jsonData[key] = '';
+                                }
+                            });
                             form.getForm().setValues(jsonData);
                         }
+                        
+                        
                         Tab.addToForm(form, 'bangunan-pengadaan', 'Pengadaan');
                         Modal.assetEdit.show();
                     }
@@ -608,6 +648,7 @@
             {
                 var dataForm = selected[0].data;
                 var form = Bangunan.Form.createPemeliharaan(Bangunan.dataStorePemeliharaan, dataForm, true)
+                
                 Tab.addToForm(form, 'bangunan-edit-pemeliharaan', 'Edit Pemeliharaan');
             }
         };
@@ -786,6 +827,12 @@
                     
                     if (data !== null)
                     {
+                         Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                          form.getForm().setValues(data);
                     }
                     Modal.assetSecondaryWindow.add(form);

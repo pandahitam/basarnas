@@ -64,7 +64,7 @@ class Pengadaan extends MY_Controller {
                 $no_aset = $this->input->post('no_aset');
                 
 		$data = $this->model->get_ByKode($kd_lokasi,$kd_brg,$no_aset);
-		echo json_encode($data);
+		echo json_encode($data['data']);
 	}
 }
 ?>

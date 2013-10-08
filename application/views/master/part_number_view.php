@@ -47,6 +47,12 @@
 
             if (data !== null)
             {
+                Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                 form.getForm().setValues(data);
             }
             return form;
@@ -162,7 +168,7 @@
         var setting = {
             grid: {
                 id: 'grid_PartNumber',
-                title: 'Unit Kerja',
+                title: 'Part Number',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
@@ -173,6 +179,7 @@
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Merek', dataIndex: 'merek', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Jenis', dataIndex: 'jenis', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Umur Maksimum (Jam)', dataIndex: 'umur_maks', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     
              
                 ]

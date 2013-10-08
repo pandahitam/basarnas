@@ -871,7 +871,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         Form.perencanaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
             form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
             form.insert(2, Form.Component.perencanaan());
             form.insert(3, Form.Component.fileUpload());
@@ -1294,6 +1294,11 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     {
                                         fieldLabel:'Jenis',
                                         name: 'jenis',
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Umur Maksimum (Jam)',
+                                        name: 'umur_maks',
                                     },
                                    ]
                         }]
@@ -3001,10 +3006,25 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                             
                             if (form.isValid())
                             {
-                                var form_values = form.getValues();
-                                data.add(form_values);
-                                Modal.assetSecondaryWindow.close();
-                                
+//                                var form_values = form.getValues();
+//                                data.add(form_values);
+//                                Modal.assetSecondaryWindow.close();
+                                  form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (!edit)
+                                        {
+                                            if (Modal.assetSecondaryWindow.isVisible(true))
+                                            {
+                                                Modal.assetSecondaryWindow.close();
+                                            }
+                                        }
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
 
                             }
                         }

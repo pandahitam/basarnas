@@ -27,7 +27,8 @@ class Pemeliharaan_Bangunan extends MY_Controller {
 	
 	function modifyPemeliharaanBangunan(){
                 $data = array();
-                
+//                var_dump($_POST);
+//                die;
 	  	$fields = array(
                    'id','kd_brg', 'kd_lokasi', 'no_aset', 'kode_unor', 
                     'jenis', 'subjenis', 'pelaksana_nama', 'pelaksana_startdate', 
@@ -82,7 +83,10 @@ class Pemeliharaan_Bangunan extends MY_Controller {
 		$kd_brg = $this->input->post("kd_brg");
 		$no_aset = $this->input->post("no_aset");
 		$data = $this->model->get_Pemeliharaan($kd_lokasi, $kd_brg, $no_aset);
-		echo json_encode($data);
+                
+                $datasend["results"] = $data['data'];
+                $datasend["total"] = $data['count'];
+		echo json_encode($datasend);
 	}
 }
 ?>

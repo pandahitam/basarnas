@@ -173,7 +173,22 @@ class Asset_Bangunan_Model extends MY_Model{
             {
                 $query = "select id,id_ext_asset,tahun_pajak,tanggal_pembayaran,jumlah_setoran,file_setoran,keterangan 
                         FROM ext_asset_bangunan_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
-                return $this->Get_By_Query($query);
+                $countQuery = "select count(*) as total FROM ext_asset_bangunan_riwayat_pajak WHERE id_ext_asset = $id_ext_asset";
+		$countResult = $this->db->query($countQuery);
+                
+                $r = $this->db->query($query);
+                $data = array();
+                if ($r->num_rows() > 0)
+                {
+                    foreach ($r->result() as $obj)
+                    {
+                        $data[] = $obj;
+                    }  
+                }
+                $returnData['data'] = $data;
+                $returnData['count'] = $countResult->row()->total;
+//                return $this->Get_By_Query($query);
+                return $returnData;
             }
         }
 	

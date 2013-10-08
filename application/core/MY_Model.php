@@ -132,6 +132,7 @@ class MY_Model extends CI_Model{
                 }
                 else
                 {
+                    
                     if($this->countTable != null)
                     {
                          $query = "select count(*) as total from $this->countTable";
@@ -151,8 +152,9 @@ class MY_Model extends CI_Model{
             
             if($query != "")
             {
-                $count = $this->db->query($query);
-                return $count->row()->total;
+                    $count = $this->db->query($query);
+                    return $count->row()->total;
+                
             }
             else
             {

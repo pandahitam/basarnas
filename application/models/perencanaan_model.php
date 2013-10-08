@@ -8,24 +8,20 @@ class Perencanaan_Model extends MY_Model{
 	}
 	
 	function get_AllData($start = null, $limit = null, $searchTextFilter = null){
-		$query = 'SELECT id, kd_lokasi, kd_brg,
+		$query = 'SELECT id, kd_lokasi, kd_brg, no_aset,
                             kode_unor, kode_unker, nama_unker, nama_unor,tahun_angaran, nama, 
                             kebutuhan, keterangan, satuan, quantity, 
                             harga_satuan, harga_total, is_realisasi, image_url, document_url FROM ' . $this->viewTable;
-                
-                
-                
-                
-                
+
                 if($start !=null && $limit != null)
                 {
-                    $query = "SELECT id, kd_lokasi, kd_brg,
+                    $query = "SELECT id, kd_lokasi, kd_brg, no_aset,
                             kode_unor, kode_unker, nama_unker, nama_unor,tahun_angaran, nama, 
                             kebutuhan, keterangan, satuan, quantity, 
                             harga_satuan, harga_total, is_realisasi, image_url, document_url FROM $this->viewTable LIMIT $start, $limit";
                     if($searchTextFilter != null)
                     {
-                        $query = "SELECT id, kd_lokasi, kd_brg,
+                        $query = "SELECT id, kd_lokasi, kd_brg,no_aset,
                             kode_unor, kode_unker, nama_unker, nama_unor,tahun_angaran, nama, 
                             kebutuhan, keterangan, satuan, quantity, 
                             harga_satuan, harga_total, is_realisasi, image_url, document_url FROM $this->viewTable
@@ -35,13 +31,13 @@ class Perencanaan_Model extends MY_Model{
                 }
                 else
                 {
-                    $query = "SELECT id, kd_lokasi, kd_brg,
+                    $query = "SELECT id, kd_lokasi, kd_brg,no_aset,
                             kode_unor, kode_unker, nama_unker, nama_unor,tahun_angaran, nama, 
                             kebutuhan, keterangan, satuan, quantity, 
                             harga_satuan, harga_total, is_realisasi, image_url, document_url FROM $this->viewTable";
                     if($searchTextFilter != null)
                     {
-                        $query = "SELECT id, kd_lokasi, kd_brg,
+                        $query = "SELECT id, kd_lokasi, kd_brg, no_aset,
                             kode_unor, kode_unker, nama_unker, nama_unor,tahun_angaran, nama, 
                             kebutuhan, keterangan, satuan, quantity, 
                             harga_satuan, harga_total, is_realisasi, image_url, document_url FROM $this->viewTable

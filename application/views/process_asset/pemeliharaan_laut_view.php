@@ -99,6 +99,14 @@
                     data.comboUnitWaktuOrUnitPenggunaan = 2;
                 }
                 
+                Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                
+                
                 $.ajax({
                        url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
                        type: "POST",
@@ -159,6 +167,12 @@
                     
                     if (data !== null)
                     {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                          form.getForm().setValues(data);
                     }
                     Modal.assetSecondaryWindow.add(form);

@@ -91,7 +91,7 @@
             width: Measurement.windowWidth, height: Measurement.windowHeight, bodyStyle: 'padding: 5px;',
             listeners: {
                 'beforeclose': function() {
-                    Modal.assetCreate.removeAll(true);
+                    Modal.assetCreate.removeAll();
                 }
             }
         });

@@ -1323,7 +1323,7 @@ class Master_Data extends CI_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi'
+            'id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks'
         );
         
         foreach ($dataFields as $field) {

@@ -29,7 +29,7 @@ Penghapusan.proxy = new Ext.create('Ext.data.AjaxProxy', {
 
         //USED FOR MAP SEARCH
         var paramsUnker = request.params.searchUnker;
-        if(paramsUnker != null ||paramsUnker != undefined)
+        if(paramsUnker != null && paramsUnker != undefined)
         {
             Penghapusan.Data.clearFilter();
             Penghapusan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);

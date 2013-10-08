@@ -126,12 +126,6 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor']
 });
 
-Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
-    fields: ['id','kd_brg', 'kd_lokasi', 'no_aset',
-                            'kode_unor', 'jenis', 'subjenis', 'pelaksana_nama', 'pelaksana_startdate', 
-							'pelaksana_endate', 'deskripsi', 'biaya', 'image_url', 'document_url','nama','kondisi']
-});
-
 
 Ext.define('MBangunan', {extend: 'Ext.data.Model',
   	fields: ['kd_lokasi', 'kd_brg', 'no_aset', // field from asset bangunan
@@ -487,7 +481,7 @@ Ext.define('MPengadaan', {extend: 'Ext.data.Model',
 
 Ext.define('MPerencanaan', {extend: 'Ext.data.Model',
     fields: ['id', 'kode_unor','nama_unker','nama_unor','kd_lokasi',
-                'kd_brg', 'tahun_angaran', 'nama', 
+                'kd_brg','no_aset', 'tahun_angaran', 'nama', 
                 'kebutuhan', 'keterangan', 'satuan', 'quantity', 
                 'harga_satuan', 'harga_total', 'is_realisasi','image_url','document_url']
 });
@@ -530,5 +524,5 @@ Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
 })
 
 Ext.define('MPartNumber', { extend:'Ext.data.Model',
-    fields: ['id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi']
+    fields: ['id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
 })

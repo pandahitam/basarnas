@@ -26,9 +26,9 @@
         });
         
         Tanah.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
-            model: MPemeliharaan, autoLoad: false, noCache: false,
+            model: MPemeliharaanBangunan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Pemeliharaan/getSpecificPemeliharaan', actionMethods: {read: 'POST'},
+                url: BASE_URL + 'Pemeliharaan_Bangunan/getSpecificPemeliharaanBangunan', actionMethods: {read: 'POST'},
                 reader: new Ext.data.JsonReader({
                     root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
@@ -71,7 +71,7 @@
                 
                 //USED FOR MAP SEARCH
                 var paramsUnker = request.params.searchUnker;
-                if(paramsUnker != null ||paramsUnker != undefined)
+                if(paramsUnker != null && paramsUnker != undefined)
                 {
                     Tanah.Data.clearFilter();
 					Tanah.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
@@ -153,9 +153,17 @@
 //            form.insert(8, Form.Component.fileUpload());
             if (data !== null)
             {
+                Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                });
+                
                 form.getForm().setValues(data);
             }
-
+            
+            
             return form;
         };
 
@@ -180,6 +188,12 @@
 
             if (dataForm !== null)
             {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
                 form.getForm().setValues(dataForm);
             }
             return form;
@@ -263,6 +277,13 @@
 
             if (dataForm !== null)
             {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
+                
                 form.getForm().setValues(dataForm);
             }
             return form;
@@ -373,9 +394,15 @@
                         
                 var form = Form.penghapusanDanMutasiInAsset(setting);
 
-                if (data !== null || data !== undefined)
+                if (data !== null && data !== undefined)
                 {
-                    form.getForm().setValues(jsonData);
+                    Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                    });
+                    form.getForm().setValues(data);
                 }
 
                 if (Modal.assetSecondaryWindow.items.length === 0)
@@ -462,8 +489,14 @@
                         
                         var form = Form.penghapusanDanMutasiInAsset(setting);
 
-                        if (jsonData !== null || jsonData !== undefined)
+                        if (jsonData !== null && jsonData !== undefined)
                         {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                                if(jsonData[key] == '0000-00-00')
+                                {
+                                    jsonData[key] = '';
+                                }
+                            });
                             form.getForm().setValues(jsonData);
                         }
                         Tab.addToForm(form, 'tanah-penghapusan', 'Penghapusan');
@@ -521,8 +554,14 @@
                         };
                         var form = Form.pengadaanInAsset(setting);
 
-                        if (jsonData !== null || jsonData !== undefined)
+                        if (jsonData !== null && jsonData !== undefined)
                         {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                                if(jsonData[key] == '0000-00-00')
+                                {
+                                    jsonData[key] = '';
+                                }
+                            });
                             form.getForm().setValues(jsonData);
                         }
                         Tab.addToForm(form, 'tanah-pengadaan', 'Pengadaan');
@@ -539,6 +578,12 @@
             {
                 var dataForm = selected[0].data;
                 var form = Tanah.Form.createPemeliharaan(Tanah.dataStorePemeliharaan, dataForm, true);
+//                if (Modal.assetSecondaryWindow.items.length === 0)
+//                {
+//                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+//                }
+//                Modal.assetSecondaryWindow.add(form);
+//                Modal.assetSecondaryWindow.show();
                 Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
                 Modal.assetEdit.show();
             }
@@ -555,7 +600,6 @@
                     };
                     arrayDeleted.push(data);
                 });
-                console.log(arrayDeleted);
                 Modal.deleteAlert(arrayDeleted, Tanah.URL.removePemeliharaan, Tanah.dataStorePemeliharaan);
             }
         };
@@ -570,8 +614,15 @@
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
-
+            
             var form = Tanah.Form.createPemeliharaan(Tanah.dataStorePemeliharaan, dataForm, false);
+//            if (Modal.assetSecondaryWindow.items.length === 0)
+//            {
+//                Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+//            }
+//            Modal.assetSecondaryWindow.add(form);
+//            Modal.assetSecondaryWindow.show();
+            
             Tab.addToForm(form, 'tanah-add-pemeliharaan', 'Add Pemeliharaan');
         };
 
@@ -597,7 +648,7 @@
                     data: data,
                     dataStore: Tanah.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
-                    isBangunan: false
+                    isBangunan: true,
                 };
                 
                 var _tanahPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
@@ -690,6 +741,12 @@
                     
                     if (data !== null)
                     {
+                         Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                          form.getForm().setValues(data);
                     }
                     Modal.assetSecondaryWindow.add(form);

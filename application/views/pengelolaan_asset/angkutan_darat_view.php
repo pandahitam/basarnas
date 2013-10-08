@@ -94,7 +94,7 @@
                 
                 //USED FOR MAP SEARCH
                 var paramsUnker = request.params.searchUnker;
-                if(paramsUnker != null ||paramsUnker != undefined)
+                if(paramsUnker != null && paramsUnker != undefined)
                 {
                     AngkutanDarat.Data.clearFilter();
                     AngkutanDarat.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
@@ -205,6 +205,12 @@
                     
                     if (data !== null)
                     {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                          form.getForm().setValues(data);
                     }
                     Modal.assetSecondaryWindow.add(form);
@@ -266,6 +272,12 @@
                     
                     if (data !== null)
                     {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                          form.getForm().setValues(data);
                     }
                     Modal.assetSecondaryWindow.add(form);
@@ -375,16 +387,12 @@
                        }
                     });
                     
-                if(data.darat_masa_berlaku_stnk == "0000-00-00")
-                {
-                    data.darat_masa_berlaku_stnk = "";
-
-                }    
-                if(data.darat_masa_berlaku_pajak == "0000-00-00")
-                {
-                    data.darat_masa_berlaku_pajak = "";
-
-                }   
+                Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                 
                 form.getForm().setValues(data);
             }
@@ -423,6 +431,12 @@
 
             if (dataForm !== null)
             {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                            if(dataForm[key] == '0000-00-00')
+                            {
+                                dataForm[key] = '';
+                            }
+                        });
                 form.getForm().setValues(dataForm);
             }
             return form;
@@ -431,7 +445,7 @@
         AngkutanDarat.addPemeliharaanPart = function(){
                 
                 var id_pemeliharaan = Ext.getCmp('hidden_identifier_id_pemeliharaan').value;
-                if(id_pemeliharaan != null || id_pemeliharaan != undefined)
+                if(id_pemeliharaan != null && id_pemeliharaan != undefined)
                 {
                     if (Modal.assetSecondaryWindow.items.length === 0)
                     {
@@ -464,6 +478,12 @@
                     
                     if (data !== null)
                     {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
                          form.getForm().setValues(data);
                     }
                     Modal.assetSecondaryWindow.add(form);
@@ -510,6 +530,12 @@
 
             if (dataForm !== null)
             {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                            if(dataForm[key] == '0000-00-00')
+                            {
+                                dataForm[key] = '';
+                            }
+                        });
                 form.getForm().setValues(dataForm);
             }
             return form;
@@ -618,9 +644,15 @@
                         
                 var form = Form.penghapusanDanMutasiInAsset(setting);
 
-                if (data !== null || data !== undefined)
+                if (data !== null && data !== undefined)
                 {
-                    form.getForm().setValues(jsonData);
+                    Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                    form.getForm().setValues(data);
                 }
 
                 if (Modal.assetSecondaryWindow.items.length === 0)
@@ -707,8 +739,14 @@
                         
                         var form = Form.penghapusanDanMutasiInAsset(setting);
 
-                        if (jsonData !== null || jsonData !== undefined)
+                        if (jsonData !== null && jsonData !== undefined)
                         {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                            if(jsonData[key] == '0000-00-00')
+                            {
+                                jsonData[key] = '';
+                            }
+                        });
                             form.getForm().setValues(jsonData);
                         }
                         Tab.addToForm(form, 'angkutanDarat-penghapusan', 'Penghapusan');
@@ -763,8 +801,14 @@
                             }
                         };
                         var form = Form.pengadaanInAsset(setting);
-                        if (jsonData !== null || jsonData !== undefined)
+                        if (jsonData !== null && jsonData !== undefined)
                         {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                            if(jsonData[key] == '0000-00-00')
+                            {
+                                jsonData[key] = '';
+                            }
+                        });
                             form.getForm().setValues(jsonData);
                         }
                         Tab.addToForm(form, 'angkutanDarat-pengadaan', 'Pengadaan');

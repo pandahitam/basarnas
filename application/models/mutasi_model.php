@@ -288,7 +288,7 @@ class Mutasi_Model extends MY_Model{
                         u.rph_sat,u.rph_aset,u.flag_kor,u.keterangan,u.merk_type,u.asal_perlh,u.no_bukti,u.no_dsr_mts,
                         u.tgl_dsr_mts,u.flag_ttp,u.flag_krm,u.kdblu,u.setatus,u.noreg,u.kdbapel,u.kdkpknl,u.umeko,u.rph_res,u.kdkppn 
                         FROM t_masteru u
-                        WHERE u.jns_trn IN ('102','302','506','507','392')
+                        WHERE jns_trn IN ('102','302','506','507','392')
                         AND kd_lokasi = '$kd_lokasi' AND kd_brg = '$kd_barang' AND no_aset = '$no_aset' ";
 		
                 return $this->Get_By_Query($query);
