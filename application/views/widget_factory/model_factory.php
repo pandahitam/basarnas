@@ -127,6 +127,14 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
 });
 
 
+//Used for grid in pengadaan
+Ext.define('MParts', {extend: 'Ext.data.Model',
+    fields: ['id','id_source',
+        'serial_number', 'part_number','kd_brg',
+        'kondisi', 'qty', 'asal_barang']
+});
+
+
 Ext.define('MBangunan', {extend: 'Ext.data.Model',
   	fields: ['kd_lokasi', 'kd_brg', 'no_aset', // field from asset bangunan
             'kuantitas', 'no_kib', 'type', 
@@ -526,3 +534,10 @@ Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
 Ext.define('MPartNumber', { extend:'Ext.data.Model',
     fields: ['id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
 })
+
+//Used for grid in pengadaan
+Ext.define('MParts', {extend: 'Ext.data.Model',
+    fields: ['id','id_source',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang']
+});

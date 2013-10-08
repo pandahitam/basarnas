@@ -7,6 +7,28 @@
 var Params_M_Pengadaan = null;
 Ext.namespace('Pengadaan','Pengadaan.reader', 'Pengadaan.proxy', 'Pengadaan.Data','Pengadaan.Grid','Pengadaan.Window','Pengadaan.Form','Pengadaan.Action','Pengadaan.URL');
 
+Pengadaan.dataStoreParts = new Ext.create('Ext.data.Store', {
+            model: MParts, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificPengadaanPerlengkapan',
+                create: BASE_URL + 'inventory_perlengkapan/createPengadaanPerlengkapan',
+                update: BASE_URL + 'inventory_perlengkapan/updatePengadaanPerlengkapan',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyPengadaanPerlengkapan'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+
 Pengadaan.URL = {
     read : BASE_URL + 'pengadaan/getAllData',
     createUpdate : BASE_URL + 'pengadaan/modifyPengadaan',
@@ -32,6 +54,17 @@ Pengadaan.Data = new Ext.create('Ext.data.Store', {
 });
 
 Pengadaan.Form.create = function(data,edit){
+    
+    var setting_grid_pengadaan_parts = {
+                id:'grid_pengadaan_parts',
+                toolbar:{
+                    add: Pengadaan.addParts,
+                    edit: Pengadaan.editParts,
+                    remove: Pengadaan.removeParts
+                },
+                dataStore:Pengadaan.dataStoreParts,
+            };
+    
     var setting = {
             url : Pengadaan.URL.createUpdate,
             data : Pengadaan.Data,
@@ -57,7 +90,7 @@ Pengadaan.Form.create = function(data,edit){
             }
     };
     
-    var form = Form.pengadaan(setting);
+    var form = Form.pengadaan(setting, setting_grid_pengadaan_parts);
 
     if (data !== null)
     {
@@ -73,11 +106,84 @@ Pengadaan.Form.create = function(data,edit){
     return form;
 };
 
+Pengadaan.addParts = function()
+{
+        if (Modal.assetSecondaryWindow.items.length === 0)
+        {
+            Modal.assetSecondaryWindow.setTitle('Tambah Part');
+        }
+            var form = Form.secondaryWindowAsset(Pengadaan.dataStoreParts,'add');
+            form.insert(0, Form.Component.dataInventoryPerlengkapan());
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+};
+        
+Pengadaan.editParts = function()
+{
+    var grid = Ext.getCmp('grid_pengadaan_parts');
+    var selected = grid.getSelectionModel().getSelection();
+    if (selected.length === 1)
+    {
+
+        var data = selected[0].data;
+        var storeIndex = grid.store.indexOf(selected[0]);
+
+        if (Modal.assetSecondaryWindow.items.length === 0)
+        {
+            Modal.assetSecondaryWindow.setTitle('Edit Part');
+        }
+            var form = Form.secondaryWindowAsset(Pengadaan.dataStoreParts, 'edit',storeIndex);
+            form.insert(0, Form.Component.dataInventoryPerlengkapan());
+
+            if (data !== null)
+            {
+                Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                });
+                 form.getForm().setValues(data);
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+
+}};
+        
+Pengadaan.removeParts = function()
+{
+    var grid = Ext.getCmp('grid_pengadaan_parts');
+    var selected = grid.getSelectionModel().getSelection();
+    if(selected.length > 0)
+    {
+        Ext.Msg.show({
+            title: 'Konfirmasi',
+            msg: 'Apakah Anda yakin untuk menghapus ?',
+            buttons: Ext.Msg.YESNO,
+            icon: Ext.Msg.Question,
+            fn: function(btn) {
+                if (btn === 'yes')
+                {
+                    Ext.each(selected, function(obj){
+                        var storeIndex = grid.store.indexOf(obj);
+                        var record = grid.store.getAt(storeIndex);
+                        grid.store.remove(record);
+                    });
+                }
+            }
+        });
+    }
+};
+
 Pengadaan.Action.add = function (){
     var _form = Pengadaan.Form.create(null,false);
     Modal.processCreate.setTitle('Create Pengadaan');
     Modal.processCreate.add(_form);
+    Pengadaan.dataStoreParts.changeParams({params:{open:'0'}});
+    Pengadaan.dataStoreParts.removed = [];
     Modal.processCreate.show();
+
+   
 };
 
 Pengadaan.Action.edit = function (){
@@ -91,6 +197,9 @@ Pengadaan.Action.edit = function (){
         }
         var _form = Pengadaan.Form.create(data,true);
         Modal.processEdit.add(_form);
+        
+        Pengadaan.dataStoreParts.changeParams({params:{open:'1',id_source:data.id}});
+        Pengadaan.dataStoreParts.removed = [];
         Modal.processEdit.show();
     }
 };

@@ -583,6 +583,93 @@
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         }
         
+        Grid.PartsPengadaan = function(setting)
+        {
+ 
+            var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_source', dataIndex: 'id_source', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Status Barang', dataIndex: 'status_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty', dataIndex: 'qty', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Asal Barang', dataIndex: 'asal_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_parts_pengadaan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_parts_pengadaan',
+                        add: {
+                            id: 'button_add_parts_pengadaan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_parts_pengadaan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_parts_pengadaan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+
+                    var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+                
+            
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+           
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        }
         
         Grid.pemeliharaanPart = function(setting)
         {

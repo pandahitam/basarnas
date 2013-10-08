@@ -40,7 +40,21 @@ class Pengadaan extends MY_Controller {
                         $data[$field] = $this->input->post($field);
 		} 
                 
-		$this->modifyData(null,$data);
+//		$this->modifyData(null,$data);
+                if($data['id'] == '')
+                {
+                    $this->db->insert('pengadaan',$data);
+                    $id = $this->db->insert_id();
+                    
+                }
+                else
+                {
+                    $id = $data['id'];
+                    $this->db->set($data);
+                    $this->db->replace('pengadaan');
+                }
+                
+                echo "{success:true, id:$id}";
 	}
 	
 	function deletePengadaan()

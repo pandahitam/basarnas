@@ -803,9 +803,9 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
             return form;
         }
         
-        Form.pengadaan = function(setting)
+        Form.pengadaan = function(setting,setting_grid_parts)
         {
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelPengadaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, {
                 xtype: 'fieldset',
                 layout: 'column',
@@ -841,7 +841,8 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                         }]
             });
             form.insert(2, Form.Component.pengadaan());
-            form.insert(3, Form.Component.fileUpload());
+            form.insert(3, Form.Component.gridPartsPengadaan(setting_grid_parts));
+            form.insert(4, Form.Component.fileUpload());
 
             return form;
         };
@@ -860,7 +861,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         
         Form.pengadaanInAsset = function(setting)
         {
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelPengadaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.fileUpload());
@@ -1825,6 +1826,97 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                             }
                                             form.reset();
                                         }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelPengadaan = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_process', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+//                            console.log(form.getValues());
+                            
+                            if (form.isValid())
+                            {
+//                                console.log(form.getValues());
+                                form.submit({
+                                    success: function(form, action) {
+                                        var id = action.result.id;
+                                        var grid = Ext.getCmp('grid_pengadaan_parts').getStore();
+                                        var new_records = grid.getNewRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
+                                        Ext.each(new_records, function(obj){
+                                            var index = grid.indexOf(obj);
+                                            var record = grid.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                            grid.sync();
+                     
+                                        
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
 
 
 
@@ -5317,6 +5409,21 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         
         }
         
+        Form.Component.gridPartsPengadaan = function(setting,edit) {
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 325,
+                anchor: '100%',
+                title: 'PARTS',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'container',height:300,items:[Grid.PartsPengadaan(setting)]}]
+            };
+
+            return component;
+        };
         
         Form.Component.gridPemeliharaanPart = function(setting,edit) {
             var component = {
@@ -6576,46 +6683,19 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                         xtype:'hidden',
                                         name:'id',
                                     },
-                                    {
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'Part Number',
-                                    name: 'part_number',
-                                    allowBlank: true,
-                                    store: Reference.Data.partNumber,
-                                    valueField: 'part_number',
-                                    displayField: 'nama', emptyText: 'Pilih Part Number',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                {
+                                    fieldLabel: 'No SPPA *',
+                                    name: 'no_sppa',
+                                    allowBlank:false,
                                 },
                                 {
-                                    fieldLabel: 'Serial Number',
-                                    name: 'serial_number',
-                                    listeners: {
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null || value != '')
-                                                {
-                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
-                                                    qtyField.setValue(1);
-                                                    qtyField.readOnly = true;
-                                                }
-                                                else
-                                                {
-                                                    var qtyField = Ext.getCmp('pengadaan_data_perlengkapan_qty');
-                                                    qtyField.readOnly = false;
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
+                                    fieldLabel: 'Asal Pengadaan',
+                                    name: 'asal_pengadaan'
                                 },
                                 {
-                                    xtype:'numberfield',
-                                    fieldLabel:'Qty',
-                                    name:'qty',
-                                    id:'pengadaan_data_perlengkapan_qty'
+                                    xtype:'textarea',
+                                    fieldLabel: 'Deskripsi',
+                                    name: 'deskripsi'
                                 },
                                 {
                                     xtype: 'datefield',
@@ -6638,24 +6718,10 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     name: 'kuitansi_no'
                                 }, {
                                     xtype: 'datefield',
-                                    fieldLabel: 'Tanggal Kuintansi',
+                                    fieldLabel: 'Tanggal Kuitansi',
                                     name: 'kuitansi_tanggal',
                                     format: 'Y-m-d'
-                                }, {
-                                    xtype: 'checkboxfield',
-                                    inputValue: 1,
-                                    fieldLabel: 'Bergaransi',
-                                    name: 'is_garansi',
-                                    boxLabel: 'Yes'
-                                }, {
-                                    xtype: 'datefield',
-                                    fieldLabel: 'Garansi Berlaku',
-                                    name: 'garansi_berlaku',
-                                    format: 'Y-m-d'
-                                }, {
-                                    fieldLabel: 'Garansi Ket.',
-                                    name: 'garansi_keterangan'
-                                }]
+                                },]
                         }, {
                             columnWidth: .33,
                             layout: 'anchor',
@@ -6663,14 +6729,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 anchor: '95%'
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                    fieldLabel: 'No SPPA *',
-                                    name: 'no_sppa',
-                                    allowBlank:false,
-                                }, {
-                                    fieldLabel: 'Asal Pengadaan',
-                                    name: 'asal_pengadaan'
-                                }, {
+                            items: [  {
                                     xtype: 'numberfield',
                                     fieldLabel: 'Total Harga',
                                     name: 'harga_total'
@@ -6694,11 +6753,27 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     name: 'pelihara_berlaku',
                                     format: 'Y-m-d'
                                 }, {
-                                    fieldLabel: 'Garansi Ket.',
+                                    xtype:'textarea',
+                                    fieldLabel: 'Pelihara Ket.',
                                     name: 'pelihara_keterangan'
                                 }, {
                                     fieldLabel: 'Data Kontrak',
                                     name: 'data_kontrak'
+                                },
+                                {
+                                    xtype: 'checkboxfield',
+                                    inputValue: 1,
+                                    fieldLabel: 'Bergaransi',
+                                    name: 'is_garansi',
+                                    boxLabel: 'Yes'
+                                }, {
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Garansi Berlaku',
+                                    name: 'garansi_berlaku',
+                                    format: 'Y-m-d'
+                                }, {
+                                    fieldLabel: 'Garansi Ket.',
+                                    name: 'garansi_keterangan'
                                 }]
                         }, {
                             columnWidth: .33,
@@ -6707,10 +6782,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 anchor: '100%'
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                    fieldLabel: 'Deskirpsi',
-                                    name: 'deskripsi'
-                                }, {
+                            items: [ {
                                     fieldLabel: 'No Faktur',
                                     name: 'faktur_no'
                                 }, {
@@ -6738,6 +6810,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     name: 'spk_berlaku',
                                     format: 'Y-m-d'
                                 }, {
+                                    xtype:'textarea',
                                     fieldLabel: 'Spk Ket.',
                                     name: 'spk_keterangan'
                                 }, {

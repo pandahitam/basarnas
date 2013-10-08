@@ -27,13 +27,13 @@ class Asset_Perlengkapan_Model extends MY_Model{
                             }
 	
 	function get_AllData($start=null,$limit=null, $searchTextFilter = null, $gridFilter = null){
-////		$query = "$this->selectColumn
-////                            FROM $this->table AS t
-////                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-////                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
-////                            LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
-////                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
-////                            LIMIT 0,$this->limit";
+//		$query = "$this->selectColumn
+//                            FROM $this->table AS t
+//                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+//                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
+//                            LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
+//                            LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
+//                            LIMIT 0,$this->limit";
 //            if($start != null && $limit != null)
 //            {
 //                $query = "$this->selectColumn
@@ -71,9 +71,39 @@ class Asset_Perlengkapan_Model extends MY_Model{
 //                }
 //                
 //            }
-//            
-//
-//		return $this->Get_By_Query($query);	
+            
+            if($start != null && $limit != null)
+            {
+                $query = "$this->selectColumn
+                            FROM $this->viewTable 
+                            LIMIT $start,$limit";
+                
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->viewTable
+                             where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                            LIMIT $start,$limit";
+                }
+            }
+            else
+            {
+                $query = "$this->selectColumn
+                            FROM $this->viewTable
+                            ";
+                
+                if($searchTextFilter != null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->viewTable
+                             where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                            ";
+                }
+                
+            }
+            
+
+		return $this->Get_By_Query($query);	
 	}
 	
         function deleteData($id)
