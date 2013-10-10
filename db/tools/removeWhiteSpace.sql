@@ -1,3 +1,4 @@
+USE db_asset_basarnas;
 UPDATE asset_alatbesar 
 	SET
 	`kd_lokasi` = TRIM(`kd_lokasi`), 
@@ -410,3 +411,6 @@ asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b`
 ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
 SET `b`.`kode_unor` = "44"
 WHERE `b`.`kd_klasifikasi_aset` <> "999999";
+UPDATE ext_asset_angkutan
+SET kode_unor = "73", kd_klasifikasi_aset="040306"
+WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3020101002" AND no_aset>=7 AND no_aset<=10;
