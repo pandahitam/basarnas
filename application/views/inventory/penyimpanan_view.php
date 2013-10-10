@@ -7,6 +7,29 @@
         var Params_M_InventoryPenyimpanan = null;
 
         Ext.namespace('InventoryPenyimpanan', 'InventoryPenyimpanan.reader', 'InventoryPenyimpanan.proxy', 'InventoryPenyimpanan.Data', 'InventoryPenyimpanan.Grid', 'InventoryPenyimpanan.Window', 'InventoryPenyimpanan.Form', 'InventoryPenyimpanan.Action', 'InventoryPenyimpanan.URL');
+        
+        InventoryPenyimpanan.dataStoreParts = new Ext.create('Ext.data.Store', {
+            model: MPartsPenyimpanan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPenyimpananPerlengkapan',
+                create: BASE_URL + 'inventory_perlengkapan/createInventoryPenyimpananPerlengkapan',
+                update: BASE_URL + 'inventory_perlengkapan/updateInventoryPenyimpananPerlengkapan',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyInventoryPenyimpananPerlengkapan'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+        
         InventoryPenyimpanan.URL = {
             read: BASE_URL + 'inventory_penyimpanan/getAllData',
             createUpdate: BASE_URL + 'inventory_penyimpanan/modifyInventoryPenyimpanan',
@@ -35,7 +58,18 @@
             proxy: InventoryPenyimpanan.proxy, groupField: 'tipe'
         });
 
-        InventoryPenyimpanan.Form.create = function(data, edit,id_pemeriksaan) {
+        InventoryPenyimpanan.Form.create = function(data, edit) {
+            
+            var setting_grid_parts = {
+                id:'grid_inventory_penyimpanan_parts',
+                toolbar:{
+                    add: InventoryPenyimpanan.addParts,
+                    edit: InventoryPenyimpanan.editParts,
+                    remove: InventoryPenyimpanan.removeParts
+                },
+                dataStore:InventoryPenyimpanan.dataStoreParts,
+            };
+            
             var setting = {
                 url: InventoryPenyimpanan.URL.createUpdate,
                 data: InventoryPenyimpanan.Data,
@@ -60,9 +94,8 @@
                     noAsetHidden: false
                 }
             };
-            debugger;
 
-            var form = Form.inventorypenyimpanan(setting,id_pemeriksaan);
+            var form = Form.inventoryPenyimpanan(setting,setting_grid_parts);
 
             if (data !== null)
             {
@@ -76,11 +109,84 @@
             }
             return form;
         };
+        
+        
+        InventoryPenyimpanan.addParts = function()
+        {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                }
+                    var form = Form.secondaryWindowAssetInventoryPenyimpanan(InventoryPenyimpanan.dataStoreParts,'add');
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanWithWarehouse());
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+        };
+
+        InventoryPenyimpanan.editParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_penyimpanan_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+
+                var data = selected[0].data;
+                var storeIndex = grid.store.indexOf(selected[0]);
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.secondaryWindowAssetInventoryPenyimpanan(InventoryPenyimpanan.dataStoreParts, 'edit',storeIndex);
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanWithWarehouse());
+
+                    if (data !== null)
+                    {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+        }};
+
+        InventoryPenyimpanan.removeParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_penyimpanan_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if(selected.length > 0)
+            {
+                Ext.Msg.show({
+                    title: 'Konfirmasi',
+                    msg: 'Apakah Anda yakin untuk menghapus ?',
+                    buttons: Ext.Msg.YESNO,
+                    icon: Ext.Msg.Question,
+                    fn: function(btn) {
+                        if (btn === 'yes')
+                        {
+                            Ext.each(selected, function(obj){
+                                var storeIndex = grid.store.indexOf(obj);
+                                var record = grid.store.getAt(storeIndex);
+                                grid.store.remove(record);
+                            });
+                        }
+                    }
+                });
+            }
+        };
 
         InventoryPenyimpanan.Action.add = function() {
             var _form = InventoryPenyimpanan.Form.create(null, false);
             Modal.processCreate.setTitle('Create Inventory Penyimpanan');
             Modal.processCreate.add(_form);
+            InventoryPenyimpanan.dataStoreParts.changeParams({params:{open:'0'}});
+            InventoryPenyimpanan.dataStoreParts.removed = [];
             Modal.processCreate.show();
         };
 
@@ -95,8 +201,10 @@
                 {
                     Modal.processEdit.setTitle('Edit Inventory Penyimpanan');
                 }
-                var _form = InventoryPenyimpanan.Form.create(data, true,data.id_pemeriksaan);
+                var _form = InventoryPenyimpanan.Form.create(data, true);
                 Modal.processEdit.add(_form);
+                InventoryPenyimpanan.dataStoreParts.changeParams({params:{open:'1',id_source:data.id}});
+                InventoryPenyimpanan.dataStoreParts.removed = [];
                 Modal.processEdit.show();
             }
         };
@@ -194,22 +302,12 @@
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 180, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Barang', dataIndex: 'kd_brg', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'No Aset', dataIndex: 'no_aset', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Tanggal Berita Acara', dataIndex: 'tgl_berita_acara', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nomor Berita Acara', dataIndex: 'nomor_berita_acara', width: 90, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Part Number', dataIndex: 'part_number', width: 120, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Serial Number', dataIndex: 'serial_number', width: 70, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Date Created', dataIndex: 'date_created', width: 100, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Keterangan', dataIndex: 'keterangan', width: 120, hidden: false, filter: {type: 'string'}},
-                    {header: 'Status Barang', dataIndex: 'status_barang', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Qty', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Tanggal Penyimpanan', dataIndex: 'tgl_penyimpanan', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Asal Barang', dataIndex: 'asal_barang', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Id Warehouse', dataIndex: 'warehouse_id', width: 90, hidden: true, filter: {type: 'string'}},
-                    {header: 'Id Ruang', dataIndex: 'ruang_id', width: 90, hidden: true, filter: {type: 'string'}},
-                    {header: 'Id Rak', dataIndex: 'rak_id', width: 90, hidden: true, filter: {type: 'string'}},
-                    
+                  
                 ]
             },
             search: {
@@ -240,7 +338,7 @@
 
         var new_tabpanel = {
             xtype: 'panel',
-            id: 'inventorypenyimpanan_asset', title: 'Inventory - Penyimpanan', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            id: 'inventory_penyimpanan_panel', title: 'Inventory - Penyimpanan', iconCls: 'icon-menu_impasing', border: false, closable: true,
             layout: 'border', items: [InventoryPenyimpanan.Grid.grid]
         };
      

@@ -32,8 +32,7 @@
             klasifikasiAset_lvl2: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl2',
             klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
             pengadaan: BASE_URL + 'combo_ref/combo_pengadaan',
-            penerimaan: BASE_URL + 'combo_ref/combo_penerimaan',
-            pemeriksaan: BASE_URL + 'combo_ref/combo_pemeriksaan',
+            penerimaanPemeriksaan: BASE_URL + 'combo_ref/combo_penerimaan_pemeriksaan',
             penyimpanan: BASE_URL + 'combo_ref/combo_penyimpanan',
         };
         
@@ -48,23 +47,16 @@
         Reference.Data.pengadaan = new Ext.create('Ext.data.Store', {
             fields: ['id','no_sppa', 'part_number', 'serial_number'], storeId: 'DataPengadaanCombo',
             proxy: new Ext.data.AjaxProxy({
-                url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, filterdatapengadaan:true}
+                url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1 }
             }),
             autoLoad: true
         });
         
-        Reference.Data.penerimaan = new Ext.create('Ext.data.Store', {
-            fields: ['id','nomor_berita_acara'], storeId: 'DataPenerimaanCombo',
-            proxy: new Ext.data.AjaxProxy({
-                url: Reference.URL.penerimaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
-            }),
-            autoLoad: true
-        });
         
-        Reference.Data.pemeriksaan = new Ext.create('Ext.data.Store', {
-            fields: ['id','nomor_berita_acara'], storeId: 'DataPemeriksaan Combo',
+        Reference.Data.penerimaanPemeriksaan = new Ext.create('Ext.data.Store', {
+            fields: ['id','nomor_berita_acara'], storeId: 'DataPenerimaanPemeriksaanCombo',
             proxy: new Ext.data.AjaxProxy({
-                url: Reference.URL.pemeriksaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+                url: Reference.URL.penerimaanPemeriksaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
             autoLoad: true
         });
@@ -368,68 +360,9 @@
             return dataStore;
         }
 
-        
-Form.inventory = function(url, data, edit, dataStoreInventoryPerlengkapan) {
-            var _form = Ext.create('Ext.form.Panel', {
-                id : 'form-process',
-                frame: true,
-                url: url,
-                bodyStyle: 'padding:5px',
-                width: '100%',
-                height: '100%',
-                autoScroll:true,
-                trackResetOnLoad:true,
-                fieldDefaults: {
-                    msgTarget: 'side'
-                },
-                buttons: [{
-                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
-                        handler: function() {
-                            var form = _form.getForm();
-                            
-                            
-                            if (form.isValid())
-                            {
-                                form.submit({
-                                    success: function(form,action) {
-
-                   
-                                        
-                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        if (data !== null)
-                                        {
-                                            data.load();
-                                        }
-                                        Modal.closeProcessWindow();
-//                                        if (edit)
-//                                        {
-//                                            Modal.closeProcessWindow();
-//                                        }
-//                                        else
-//                                        {
-//                                            form.reset();
-//                                        }
-
-
-
-                                    },
-                                    failure: function() {
-                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
-                                    }
-                                });
-                            }
-                            
-                        }
-                    },]
-            });
-
-
-            return _form;
-        };
 		
 		
-		
-Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
+Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         {
             var pilihPengadaan = [{
                     xtype: 'fieldset',
@@ -450,8 +383,10 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                             defaultType: 'textfield',
                             items: [{
                                     xtype: 'combo',
+                                    readOnly:setting.isEditing,
+                                    editable:false,
                                     disabled: false,
-                                    fieldLabel: 'No Pengadaan',
+                                    fieldLabel: 'No. SPPA Pengadaan',
                                     name: 'id_pengadaan',
                                     allowBlank: true,
                                     store: Reference.Data.pengadaan,
@@ -460,21 +395,37 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners:{
                                         change:{
-                                            fn:function(comb, newv){
-                                                var sel = Reference.Data.pengadaan.findRecord('id',newv);
-                                                if(sel!=null){
-                                                    if(sel['data']){
-                                                        var dt = sel['data'];
-                                                        var inventory_data_perlengkapan_part_number = Ext.getCmp('inventory_data_perlengkapan_part_number');
-                                                        var inventory_data_perlengkapan_serial_number = Ext.getCmp('inventory_data_perlengkapan_serial_number');
-                                                        if(inventory_data_perlengkapan_part_number){
-                                                            inventory_data_perlengkapan_part_number.setValue(dt.part_number);
-                                                        }//end if
-                                                        if(inventory_data_perlengkapan_serial_number){
-                                                            inventory_data_perlengkapan_serial_number.setValue(dt.serial_number);
-                                                        }//end if
-                                                    }//end if
-                                                }//end if
+                                            fn:function(obj, value){
+                                                  
+                                                if (value !== 0 && value !== '')
+                                                {
+                                                    /*
+                                                     * If is edit, the combo box will present all id_pengadaan that isn't used yet + the current selected value
+                                                     * if not is edit, the combo box will only present all id_pengadaan that isn't used yet
+                                                     */
+                                                    if(setting.isEditing == false)
+                                                    {
+                                                        Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_perlengkapan/getSpecificPengadaanPerlengkapan',
+                                                        params: {
+                                                            id_source: value
+                                                        },
+                                                        success: function(response){
+                                                            var convertedResponseData = eval ("(" + response.responseText + ")");
+                                                            var data = convertedResponseData.results;
+                                                            var dataStoreInventoryPenerimaanPemeriksaan = Ext.getCmp('grid_inventory_penerimaan_pemeriksaan_parts').getStore();
+                                                            dataStoreInventoryPenerimaanPemeriksaan.removeAll();
+                                                            
+                                                            Ext.Array.each(data,function(key,index,myself){
+                                                                data[index].id = '';
+                                                                data[index].id_source = '';
+                                                            });
+                                                            dataStoreInventoryPenerimaanPemeriksaan.add(data);
+                                                        }
+                                                        });
+                                                    }
+                                                    
+                                                }
                                             }
                                         }
                                     }
@@ -483,127 +434,25 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                             ]
                         }]
                 }];
-            var form = Form.inventory(setting.url, setting.data, setting.isEditing, setting.dataStoreInventoryPerlengkapan);
+            var form = Form.panelInventory(setting.url, setting.data, setting.isEditing, setting_grid_parts.dataStore);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPengadaan);
-            form.insert(2, Form.Component.inventorypenerimaan());
-//            form.insert(3, Form.Component.gridInventoryPerlengkapan(setting_grid_perlengkapan))
-            form.insert(3, Form.Component.dataInventoryPerlengkapan());
+            form.insert(2, Form.Component.inventoryPenerimaanPemeriksaan());
+            form.insert(3, Form.Component.gridParts(setting_grid_parts));
 
             return form;
         };
         
-        Form.inventorypemeriksaan = function(setting,id_penerimaan)
-        {
-//            debugger;
-            var pilihPenerimaan = [{
-                    xtype: 'fieldset',
-                    layout: 'column',
-                    anchor: '100%',
-                    title: 'PEMERIKSAAN',
-                    border: false,
-                    defaultType: 'container',
-                    frame: true,
-                    items: [
-                       {
-                            columnWidth: .99,
-                            layout: 'anchor',
-                            defaults: {
-                                anchor: '95%',
-                                labelWidth: 120
-                            },
-                            defaultType: 'textfield',
-                            items: [{
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'No Penerimaan *',
-                                    name: 'id_penerimaan',
-                                    allowBlank: false,
-                                    store: Reference.Data.penerimaan,
-                                    valueField: 'id',
-                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penerimaan',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'beforeRender': {
-                                            fn: function() {
-                                                if(setting.isEditing == true)
-                                                {
-                                                    Reference.Data.penerimaan.changeParams({params: {id_open: 1, excludedValue: id_penerimaan}});
-                                                }
-                                                else
-                                                {
-                                                    Reference.Data.penerimaan.changeParams({params: {id_open: 1}});
-                                                }
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
 
-                                                if (value !== null || value !== '')
-                                                {
-                                                    /*
-                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
-                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
-                                                     */
-                                                    
-                                                    Ext.Ajax.request({
-                                                        url: BASE_URL + 'inventory_penerimaan/getSpecificInventoryPenerimaan',
-                                                        params: {
-                                                            id: value
-                                                        },
-                                                        success: function(response){
-                                                            if(setting.isEditing == false)
-                                                                {
-                                                                    var data = eval ("(" + response.responseText + ")");
-                                                                    Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
-                                                                    Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
-                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
-                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
-                                                                }
-
-                                                            // process server response here
-                                                        }
-                                                        });
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                },
-                                
-                            ]
-                        }]
-                }];
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing,form));
-            form.insert(1, pilihPenerimaan);
-            form.insert(2, Form.Component.inventorypemeriksaan());
-            form.insert(3, Form.Component.dataInventoryPerlengkapan());
-
-            return form;
-        }
         
-        Form.inventorypenyimpanan = function(setting,id_pemeriksaan)
+        Form.inventoryPenyimpanan = function(setting,setting_grid_parts)
         {
 
-            var pilihPemeriksaan = [{
+            var pilihPenerimaanPemeriksaan = [{
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'PEMERIKSAAN',
+                    title: 'PENERIMAAN/PEMERIKSAAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -613,35 +462,32 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                             layout: 'anchor',
                             defaults: {
                                 anchor: '95%',
-                                labelWidth: 120
+                                labelWidth: 250
                             },
                             defaultType: 'textfield',
                             items: [{
                                     xtype: 'combo',
+                                    readOnly:setting.isEditing,
                                     disabled: false,
-                                    fieldLabel: 'No Pemeriksaan *',
-                                    name: 'id_pemeriksaan',
+                                    editable:false,
+                                    fieldLabel: 'No. Berita Acara Penerimaan/Pemeriksaan *',
+                                    name: 'id_penerimaan_pemeriksaan',
+                                    id:'combo_inventory_penyimpanan_berita_acara',
                                     allowBlank: false,
-                                    store: Reference.Data.pemeriksaan,
+                                    store: Reference.Data.penerimaanPemeriksaan,
                                     valueField: 'id',
-                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Pemeriksaan',
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penerimaan/Pemeriksaan',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
                                         'beforeRender': {
                                             fn: function() {
                                                 if(setting.isEditing == true)
                                                 {
-                                                    Reference.Data.pemeriksaan.changeParams({params: {id_open: 1, excludedValue: id_pemeriksaan}});
+                                                    Reference.Data.penerimaanPemeriksaan.changeParams({params: {id_open: 1, excludedValue: Ext.getCmp('combo_inventory_penyimpanan_berita_acara').value}});
                                                 }
                                                 else
                                                 {
-                                                    Reference.Data.pemeriksaan.changeParams({params: {id_open: 1}});
+                                                    //Reference.Data.penerimaanPemeriksaan.changeParams({params: {id_open: 1}});
                                                 }
                                             },
                                             scope: this
@@ -651,29 +497,36 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
 
                                                 if (value !== null || value !== '')
                                                 {
+                                                    var number_of_invalid_fields = parseInt(0);
+                                                    
                                                     /*
                                                      * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
                                                      * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
                                                      */
                                                     
                                                     Ext.Ajax.request({
-                                                        url: BASE_URL + 'inventory_pemeriksaan/getSpecificInventoryPemeriksaan',
+                                                        url: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPenerimaanPemeriksaanPerlengkapan',
                                                         params: {
-                                                            id: value
+                                                            id_source: value
                                                         },
                                                         success: function(response){
                                                                 if(setting.isEditing == false)
                                                                 {
-                                                                    var data = eval ("(" + response.responseText + ")");
-                                                                    Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
-                                                                    Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
-                                                                    Ext.getCmp('kd_lokasi').setValue(data.kd_lokasi);
-                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
-                                                                    Ext.getCmp('kode_unor').setValue(data.kode_unor);
+                                                                    var convertedResponseData = eval ("(" + response.responseText + ")");
+                                                                    var data = convertedResponseData.results;
+                                                                    var dataStoreInventoryPenyimpanan = Ext.getCmp('grid_inventory_penyimpanan_parts').getStore();
+                                                                    dataStoreInventoryPenyimpanan.removeAll();
+
+                                                                    Ext.Array.each(data,function(key,index,myself){
+                                                                        data[index].id = '';
+                                                                        data[index].id_source = '';
+                                                                        if(data[index].id_warehouse == undefined || data[index].id_warehouse_ruang == undefined)
+                                                                        {
+                                                                            number_of_invalid_fields++;
+                                                                        }
+                                                                    });
+                                                                    dataStoreInventoryPenyimpanan.add(data);
+                                                                    Ext.getCmp('inventory_penyimpanan_grid_invalid_data').setValue(parseInt(number_of_invalid_fields));
                                                                 }
                                                             
                                                            
@@ -691,11 +544,11 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                             ]
                         }]
                 }];
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelInventory(setting.url, setting.data, setting.isEditing,setting_grid_parts.dataStore);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
-            form.insert(1, pilihPemeriksaan);
-            form.insert(2, Form.Component.inventorypenyimpanan(setting.isEditing));
-            form.insert(3, Form.Component.dataInventoryPerlengkapan());
+            form.insert(1, pilihPenerimaanPemeriksaan);
+            form.insert(2, Form.Component.inventoryPenyimpanan(setting.isEditing));
+            form.insert(3, Form.Component.gridPartsInventoryPenyimpanan(setting_grid_parts));
 
             return form;
         }
@@ -805,6 +658,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         
         Form.pengadaan = function(setting,setting_grid_parts)
         {
+            
             var form = Form.panelPengadaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(0, {
                 xtype: 'fieldset',
@@ -841,7 +695,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                         }]
             });
             form.insert(2, Form.Component.pengadaan());
-            form.insert(3, Form.Component.gridPartsPengadaan(setting_grid_parts));
+            form.insert(3, Form.Component.gridParts(setting_grid_parts));
             form.insert(4, Form.Component.fileUpload());
 
             return form;
@@ -1648,6 +1502,62 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
             return form;
         }
         
+        Form.secondaryWindowAssetInventoryPenyimpanan= function(data,operationType,storeIndex) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: '',
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_perlengkapan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                if(operationType == 'add')
+                                {
+                                    data.add(formValues);
+                                }
+                                if(operationType == 'edit')
+                                {
+                                    var record = data.getAt(storeIndex);
+                                    record.set(formValues);
+                                    var gridStoreRecords = Ext.getCmp('grid_inventory_penyimpanan_parts').getStore().getRange();
+                                    var count_of_invalid_values = parseInt(0);
+                                    Ext.Array.each(gridStoreRecords,function(key,index,self)
+                                    {
+                                        if(gridStoreRecords[index].data.id_warehouse == '' || gridStoreRecords[index].data.id_warehouse_ruang == '')
+                                        {
+                                            count_of_invalid_values++;
+                                        }
+                                    });
+                                    Ext.getCmp('inventory_penyimpanan_grid_invalid_data').setValue(count_of_invalid_values);
+                                }
+                                
+                                if(operationType == 'remove')
+                                {
+//                                    data.removeAt(storeIndex);
+//                                    data.commitChanges();
+                                }
+                                
+                                
+                                Modal.assetSecondaryWindow.close();
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
+        
         Form.secondaryWindowAsset= function(data,operationType,storeIndex) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -1692,7 +1602,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
             return _form;
         };
         
-        Form.inventory = function(url, data, edit, dataStoreInventoryPerlengkapan) {
+        Form.panelInventory = function(url, data, edit, dataStoreParts) {
             var _form = Ext.create('Ext.form.Panel', {
                 id : 'form-process',
                 frame: true,
@@ -1710,12 +1620,21 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                         handler: function() {
                             var form = _form.getForm();
                             
-                            
                             if (form.isValid())
                             {
                                 form.submit({
                                     success: function(form,action) {
-
+                                        var id = action.result.id;
+                                        var gridStore = dataStoreParts;
+                                        var new_records = gridStore.getNewRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
+                                        Ext.each(new_records, function(obj){
+                                            var index = gridStore.indexOf(obj);
+                                            var record = gridStore.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                            gridStore.sync();
                    
                                         
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
@@ -1899,16 +1818,16 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 form.submit({
                                     success: function(form, action) {
                                         var id = action.result.id;
-                                        var grid = Ext.getCmp('grid_pengadaan_parts').getStore();
-                                        var new_records = grid.getNewRecords();
+                                        var gridStore = Ext.getCmp('grid_pengadaan_parts').getStore();
+                                        var new_records = gridStore.getNewRecords();
 //                                        var updated_records = grid.getUpdatedRecords();
 //                                        var removed_records = grid.getRemovedRecords();
                                         Ext.each(new_records, function(obj){
-                                            var index = grid.indexOf(obj);
-                                            var record = grid.getAt(index);
+                                            var index = gridStore.indexOf(obj);
+                                            var record = gridStore.getAt(index);
                                             record.set('id_source',id);
                                         });
-                                            grid.sync();
+                                            gridStore.sync();
                      
                                         
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
@@ -3233,7 +3152,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 name: 'nama_unker',
                                 id: 'nama_unker',
                                 itemId: 'unker',
-                                allowBlank: true,
+                                allowBlank: false,
                                 readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unker,
                                 valueField: 'kdlok',
@@ -5409,7 +5328,9 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         
         }
         
-        Form.Component.gridPartsPengadaan = function(setting,edit) {
+        Form.Component.gridParts = function(setting) {
+    
+
             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
@@ -5419,7 +5340,33 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [{xtype:'container',height:300,items:[Grid.PartsPengadaan(setting)]}]
+                items: [{xtype:'container',height:300,items:[Grid.parts(setting,false)]}]
+            };
+
+            return component;
+        };
+        
+         Form.Component.gridPartsInventoryPenyimpanan = function(setting) {
+            
+            Ext.apply(Ext.form.field.VTypes, {
+                ZeroOnly:  function(v) {
+                    return /0$/.test(v);
+                },
+                ZeroOnlyText: 'Terdapat kesalahan pada data di grid',
+                ZeroOnlyMask: ''
+            });
+    
+
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 350,
+                anchor: '100%',
+                title: 'PARTS',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'textfield', readOnly:true, vtype:'ZeroOnly', labelWidth:240, id:'inventory_penyimpanan_grid_invalid_data', fieldLabel:'Jumlah data pada grid yang harus diperbaiki', name:'invalid_grid_field_count',value:0},{xtype:'container',height:300,items:[Grid.parts(setting,true)]}]
             };
 
             return component;
@@ -6698,10 +6645,14 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     name: 'deskripsi'
                                 },
                                 {
-                                    xtype: 'datefield',
+                                    xtype: 'combo',
                                     fieldLabel: 'Tahun Anggaran',
                                     name: 'tahun_angaran',
-                                    format: 'Y-m-d'
+                                    allowBlank: true,
+                                    store: Reference.Data.year,
+                                    valueField: 'year',
+                                    displayField: 'year', emptyText: '',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
                                 }, {
                                     fieldLabel: 'Sumber',
                                     name: 'perolehan_sumber'
@@ -7067,12 +7018,12 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                     name: 'kode_angaran'
                                 }, {
                                     xtype: 'combo',
-                                    fieldLabel: 'Tahun Angaran',
+                                    fieldLabel: 'Tahun Anggaran',
                                     name: 'tahun_angaran',
                                     allowBlank: true,
                                     store: Reference.Data.year,
                                     valueField: 'year',
-                                    displayField: 'year', emptyText: 'Year',
+                                    displayField: 'year', emptyText: '',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
                                 },
                                 (tipe_angkutan != null)?{
@@ -7979,6 +7930,311 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
             return component;
         };
         
+        
+         Form.Component.dataInventoryPerlengkapanWithWarehouse = function(readOnly) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL PERLENGKAPAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                        
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'hidden',
+                                name: 'id_warehouse',
+                                id: 'inventory_perlengkapan_id_warehouse',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouse = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'id_warehouse_ruang',
+                                id: 'inventory_perlengkapan_id_warehouse_ruang',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouseRuang = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_ruang');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'id_warehouse_rak',
+                                id: 'inventory_perlengkapan_id_warehouse_rak',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouseRak = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_rak');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_warehouse',
+                                id: 'inventory_perlengkapan_nama_warehouse',
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_ruang',
+                                id: 'inventory_perlengkapan_nama_warehouse_ruang',
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_rak',
+                                id: 'inventory_perlengkapan_nama_warehouse_rak',
+                            },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'combo_warehouse_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_ruang');
+                                                    var fieldWarehouse = Ext.getCmp('inventory_perlengkapan_id_warehouse');
+                                                    var fieldNamaWarehouse = Ext.getCmp('inventory_perlengkapan_nama_warehouse');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            fieldNamaWarehouse.setValue(obj.rawValue);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Ruang',
+                                    name: 'combo_ruang_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse_ruang',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_rak');
+                                                    var fieldWarehouseRuang = Ext.getCmp('inventory_perlengkapan_id_warehouse_ruang');
+                                                    var fieldNamaWarehouseRuang = Ext.getCmp('inventory_perlengkapan_nama_warehouse_ruang');
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            fieldNamaWarehouseRuang.setValue(obj.rawValue);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Rak',
+                                    name: 'combo_rak_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse_rak',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = Ext.getCmp('inventory_perlengkapan_id_warehouse_rak');
+                                                    var fieldNamaWarehouseRak = Ext.getCmp('inventory_perlengkapan_nama_warehouse_rak');
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                            fieldNamaWarehouseRak.setValue(obj.rawValue);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                    {
+                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
+                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Part Number *',
+                                    name: 'part_number',
+                                    id:'inventory_data_perlengkapan_part_number',
+                                    allowBlank: false,
+                                    store: Reference.Data.partNumber,
+                                    valueField: 'part_number',
+                                    displayField: 'nama', emptyText: 'Pilih Part Number',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                },
+                                {
+                                    readOnly:(readOnly == true)?true:false,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.readOnly = true;
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.readOnly = false;
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
+                                },
+                                {
+                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
         Form.Component.dataInventoryPerlengkapan = function(readOnly) {
 
             var component = [{
@@ -8091,13 +8347,13 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
         };
         
         
-        Form.Component.inventorypenerimaan = function(edit) {
+        Form.Component.inventoryPenerimaanPemeriksaan = function(edit) {
 
             var component = [{
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
-                    title: 'PENERIMAAN',
+                    title: 'PENERIMAAN/PEMERIKSAAN',
                     border: false,
                     defaultType: 'container',
                     frame: true,
@@ -8125,14 +8381,14 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 }, {
                                     xtype: 'datefield',
                                     disabled: false,
-                                    fieldLabel: 'Tanggal Penerimaan *',
+                                    fieldLabel: 'Tanggal Penerimaan/Pemeriksaan *',
                                     name: 'tgl_penerimaan',
                                     allowBlank: false,
                                     format:'Y-m-d'
                                 },
                                 {
                                     disabled: false,
-                                    fieldLabel: 'Nama Penerima *',
+                                    fieldLabel: 'Nama Penerima/Pemeriksa *',
                                     name: 'nama_org',
                                     allowBlank: false,
                                 },
@@ -8156,72 +8412,9 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
             return component;
         };
         
-        Form.Component.inventorypemeriksaan = function(edit) {
-
-            var component = [{
-                    xtype: 'fieldset',
-                    layout: 'column',
-                    anchor: '100%',
-                    title: 'PEMERIKSAAN',
-                    border: false,
-                    defaultType: 'container',
-                    frame: true,
-                    items: [
-                       {
-                            columnWidth: .99,
-                            layout: 'anchor',
-                            defaults: {
-                                anchor: '95%',
-                                labelWidth: 130
-                            },
-                            defaultType: 'textfield',
-                            items: [{
-                                    xtype: 'datefield',
-                                    disabled: false,
-                                    fieldLabel: 'Tanggal Berita Acara *',
-                                    name: 'tgl_berita_acara',
-                                    allowBlank: false,
-                                    format:'Y-m-d'
-                                }, {
-                                    disabled: false,
-                                    fieldLabel: 'No Berita Acara *',
-                                    name: 'nomor_berita_acara',
-                                    allowBlank: false,
-                                }, {
-                                    xtype: 'datefield',
-                                    disabled: false,
-                                    fieldLabel: 'Tanggal Pemeriksaan *',
-                                    name: 'tgl_pemeriksaan',
-                                    allowBlank: false,
-                                    format:'Y-m-d'
-                                },
-                                {
-                                    disabled: false,
-                                    fieldLabel: 'Nama Pemeriksa *',
-                                    name: 'nama_org',
-                                    allowBlank: false,
-                                },
-                                {
-                                    xtype:'textarea',
-                                    fieldLabel: 'Keterangan',
-                                    name: 'keterangan',
-                                },
-                                {
-                                    xtype:'hidden',
-                                    disabled: false,
-                                    fieldLabel: 'Date Created',
-                                    name: 'date_created',
-                                    value: new Date()
-                                }
-                                
-                            ]
-                        }]
-                }]
-
-            return component;
-        };
         
-        Form.Component.inventorypenyimpanan = function(edit) {
+        
+        Form.Component.inventoryPenyimpanan = function(edit) {
 
             var component = [{
                     xtype: 'fieldset',
@@ -8240,185 +8433,7 @@ Form.inventorypenerimaan = function(setting, setting_grid_perlengkapan)
                                 labelWidth: 130
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                xtype:'hidden',
-                                name: 'warehouse_id',
-                                id: 'warehouse_id',
-                                listeners: {
-                                    change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboWarehouse = Ext.getCmp('combo_warehouse_id');
-                                            if (comboWarehouse !== null)
-                                            {
-                                                comboWarehouse.setValue(value);
-                                            }
-                                        }
-                                    }
-                                }
-                            }, {
-                                xtype:'hidden',
-                                name: 'ruang_id',
-                                id: 'ruang_id',
-                                listeners: {
-                                    change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
-                                            if (comboWarehouseRuang !== null)
-                                            {
-                                                comboWarehouseRuang.setValue(value);
-                                            }
-                                        }
-                                    }
-                                }
-                            }, {
-                                xtype:'hidden',
-                                name: 'rak_id',
-                                id: 'rak_id',
-                                listeners: {
-                                    change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboWarehouseRak = Ext.getCmp('combo_rak_id');
-                                            if (comboWarehouseRak !== null)
-                                            {
-                                                comboWarehouseRak.setValue(value);
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                                {
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'Warehouse',
-                                    name: 'combo_warehouse_id',
-                                    id : 'combo_warehouse_id',
-                                    allowBlank: false,
-                                    store: Reference.Data.warehouse,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                        listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
-                                                    var fieldWarehouse = Ext.getCmp('warehouse_id');
-                                                    
-                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            comboWarehouseRuang.enable();
-                                                            fieldWarehouse.setValue(value);
-                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
-                                                        }
-                                                        else {
-                                                            comboWarehouseRuang.disable();
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                }, {
-                                    xtype: 'combo',
-                                    disabled: true,
-                                    fieldLabel: 'Ruang',
-                                    name: 'combo_ruang_id',
-                                    id : 'combo_ruang_id',
-                                    allowBlank: false,
-                                    store: Reference.Data.warehouseRuang,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Ruang',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var comboWarehouseRak = Ext.getCmp('combo_rak_id');
-                                                    var fieldWarehouseRuang = Ext.getCmp('ruang_id');
-                                                    
-                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            comboWarehouseRak.enable();
-                                                            fieldWarehouseRuang.setValue(value);
-                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
-                                                        }
-                                                        else {
-                                                            comboWarehouseRak.disable();
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                }, {
-                                    xtype: 'combo',
-                                    disabled: true,
-                                    fieldLabel: 'Rak',
-                                    name: 'combo_rak_id',
-                                    id : 'combo_rak_id',
-                                    allowBlank: true,
-                                    store: Reference.Data.warehouseRak,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Rak',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var fieldWarehouseRak = Ext.getCmp('rak_id');
-                                                    
-                                                    if (fieldWarehouseRak != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            fieldWarehouseRak.setValue(value);
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                },
+                            items: [
                                 {
                                     xtype: 'datefield',
                                     disabled: false,

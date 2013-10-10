@@ -5,9 +5,10 @@ class Pengadaan_Model extends MY_Model{
 		parent::__construct();
                 $this->viewTable = 'view_pengadaan';
 		$this->extTable = 'pengadaan';
+                $this->countTable = 'view_pengadaan';
     
-                $this->selectColumn = "SELECT id, kd_lokasi, kd_brg, no_aset, kode_unor, part_number, serial_number, merek, model, nama,
-                            nama_unker, nama_unor, id_vendor, nama, qty,
+                $this->selectColumn = "SELECT id, kd_lokasi, kd_brg, no_aset, kode_unor, merek, model, nama,
+                            nama_unker, nama_unor, id_vendor, nama,
                             tahun_angaran, perolehan_sumber, perolehan_bmn, no_sppa, 
                             asal_pengadaan, harga_total, deskripsi, perolehan_tanggal, 
                             faktur_no, faktur_tanggal, kuitansi_no, kuitansi_tanggal, 

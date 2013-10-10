@@ -583,10 +583,54 @@
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         }
         
-        Grid.PartsPengadaan = function(setting)
+        Grid.parts = function(setting,isInventoryPenyimpanan)
         {
- 
-            var settingGrid = {
+            if(isInventoryPenyimpanan == true)
+            {
+                 var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_source', dataIndex: 'id_source', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_warehouse', dataIndex: 'id_warehouse', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_warehouse_ruang', dataIndex: 'id_warehouse_ruang', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_warehouse_rak', dataIndex: 'id_warehouse_rak', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Warehouse', dataIndex: 'nama_warehouse', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Ruang', dataIndex: 'nama_ruang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Rak', dataIndex: 'nama_rak', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Status Barang', dataIndex: 'status_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty', dataIndex: 'qty', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Asal Barang', dataIndex: 'asal_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_parts'
+                    },
+                    toolbar: {
+                        id: 'toolbar_parts',
+                        add: {
+                            id: 'button_add_parts',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_parts',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_parts',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+            }
+            else
+            {
+                var settingGrid = {
                     grid: {
                         id: setting.id,
                         column: [
@@ -602,24 +646,27 @@
                         ]
                     },
                     search: {
-                        id: 'search_parts_pengadaan'
+                        id: 'search_parts'
                     },
                     toolbar: {
-                        id: 'toolbar_parts_pengadaan',
+                        id: 'toolbar_parts',
                         add: {
-                            id: 'button_add_parts_pengadaan',
+                            id: 'button_add_parts',
                             action: setting.toolbar.add
                         },
                         edit: {
-                            id: 'button_edit_parts_pengadaan',
+                            id: 'button_edit_parts',
                             action: setting.toolbar.edit
                         },
                         remove: {
-                            id: 'button_remove_parts_pengadaan',
+                            id: 'button_remove_parts',
                             action: setting.toolbar.remove
                         }
                     }
                 };
+            }
+            
+            
 
                     var search = [{
                     xtype:'searchfield',

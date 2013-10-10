@@ -122,6 +122,7 @@
             });
             
             Ext.onReady(function() {
+                
                 var clock = Ext.create('Ext.toolbar.TextItem', {text: Ext.Date.format(new Date(), 'd M Y, g:i:s A')});
 
                 var Content_Header = {
@@ -272,20 +273,12 @@
                                     {text: 'Inventory', iconCls: 'icon-menu_impasing', id: 'm_inventory',
                                         menu: {
                                             items: [{
-                                                    text: 'Penerimaan ',
+                                                    text: 'Penerimaan/Pemeriksaan ',
                                                     iconCls: 'icon-menu_impasing',
-                                                    id: 'm_inventory_penerimaan',
+                                                    id: 'm_inventory_penerimaan_pemeriksaan',
                                                     handler: function() {
 
-                                                        Load_TabPage('inventory_penerimaan', BASE_URL + 'inventory_penerimaan');
-                                                    }
-                                                },
-                                                {
-                                                    text: 'Pemeriksaan',
-                                                    iconCls: 'icon-menu_impasing',
-                                                    id: 'm_inventory_pemeriksaan',
-                                                    handler: function() {
-                                                        Load_TabPage('inventory_pemeriksaan', BASE_URL + 'inventory_pemeriksaan');
+                                                        Load_TabPage('inventory_penerimaan_pemeriksaan', BASE_URL + 'inventory_penerimaan_pemeriksaan');
                                                     }
                                                 },
                                                 {

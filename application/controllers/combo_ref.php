@@ -61,7 +61,7 @@ class Combo_Ref extends CI_Controller {
         }
     }
     
-    function combo_pemeriksaan()
+    function combo_penerimaan_pemeriksaan()
     {
         $data = array();
         if($this->input->get_post("id_open"))
@@ -69,11 +69,11 @@ class Combo_Ref extends CI_Controller {
             if($this->input->get_post("excludedValue"))
             {
                 $excludedValue = $this->input->post('excludedValue');
-                $query = $this->db->query("select id, nomor_berita_acara from inventory_pemeriksaan where id NOT IN(select id_pemeriksaan from inventory_penyimpanan where id_pemeriksaan NOT LIKE '$excludedValue') ");
+                $query = $this->db->query("select id, nomor_berita_acara from inventory_penerimaan_pemeriksaan where id NOT IN(select id_penerimaan_pemeriksaan from inventory_penyimpanan where id_penerimaan_pemeriksaan NOT LIKE '$excludedValue') ");
             }
             else
             {
-                 $query = $this->db->query('select id, nomor_berita_acara from inventory_pemeriksaan where id NOT IN(select id_pemeriksaan from inventory_penyimpanan)');
+                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penerimaan_pemeriksaan where id NOT IN(select id_penerimaan_pemeriksaan from inventory_penyimpanan)');
             }
             
             foreach($query->result() as $obj)
@@ -112,27 +112,39 @@ class Combo_Ref extends CI_Controller {
     function combo_pengadaan()
     {
         $data = array();
-        $spesial_pengadaan = ($this->input->get_post("filterdatapengadaan") ? true : false);
+//        $spesial_pengadaan = ($this->input->get_post("filterdatapengadaan") ? true : false);
+//        if($this->input->get_post("id_open"))
+//        {
+//            $query = $this->db->query('select id, no_sppa from pengadaan');
+//            foreach($query->result() as $obj)
+//            {
+//                if($spesial_pengadaan){
+//                    $query_check = $this->db->query("select * from inventory_penerimaan_pemeriksaan where id_pengadaan=".$obj->id);
+//                    $result_check = $query_check->result();
+//                    if(count($result_check) > 0){
+//                        //do something...
+//                    }else{
+//                        $data[] = $obj;
+//                    }
+//                }else{
+//                    $data[] = $obj;
+//                }
+//            }
+        //            echo json_encode($data);
+//        }
+        
         if($this->input->get_post("id_open"))
         {
-            $query = $this->db->query('select id, no_sppa, part_number, serial_number from pengadaan');
+            $query = $this->db->query('select id, no_sppa from pengadaan');
             foreach($query->result() as $obj)
             {
-                if($spesial_pengadaan){
-                    $query_check = $this->db->query("select * from inventory_penerimaan where id_pengadaan=".$obj->id);
-                    $result_check = $query_check->result();
-                    if(count($result_check) > 0){
-                        //do something...
-                    }else{
-                        $data[] = $obj;
-                    }
-                }else{
-                    $data[] = $obj;
-                }
+                $data[] = $obj;
             }
 
             echo json_encode($data);
         }
+
+
     }
     
     function combo_klasifikasiAset_lvl1()

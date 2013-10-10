@@ -78,26 +78,25 @@ Ext.define('MRiwayatPajakTanahDanBangunan', {extend: 'Ext.data.Model',
         'file_setoran','keterangan']
 });
 
-Ext.define('MInventoryPenerimaan', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pengadaan','nama_org',
-        'no_aset', 'part_number','serial_number','date_created',
+Ext.define('MInventoryPenerimaanPemeriksaan', {extend: 'Ext.data.Model',
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_lokasi','id_pengadaan','nama_org',
+        'no_aset','date_created',
         'nama_unker','nama_unor', 'keterangan',
-        'status_barang','qty','tgl_penerimaan','asal_barang','kode_unor']
+        'status_barang','tgl_penerimaan','kode_unor']
 });
 
-Ext.define('MInventoryPemeriksaan', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penerimaan','nama_org',
-        'no_aset', 'part_number','serial_number','date_created',
-        'nama_unker','nama_unor', 'keterangan',
-        'status_barang','qty','tgl_pemeriksaan','asal_barang','kode_unor']
-});
+//Ext.define('MInventoryPemeriksaan', {extend: 'Ext.data.Model',
+//    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_penerimaan','nama_org',
+//        'no_aset', 'part_number','serial_number','date_created',
+//        'nama_unker','nama_unor', 'keterangan',
+//        'status_barang','qty','tgl_pemeriksaan','asal_barang','kode_unor']
+//});
 
 Ext.define('MInventoryPenyimpanan', {extend: 'Ext.data.Model',
-    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_brg','kd_lokasi','id_pemeriksaan','nama_org',
-        'no_aset', 'part_number','serial_number','date_created',
-        'nama_unker','nama_unor', 'keterangan',
-        'status_barang','qty','tgl_penyimpanan','asal_barang','kode_unor',
-        'warehouse_id','ruang_id','rak_id']
+    fields: ['id','tgl_berita_acara','nomor_berita_acara','kd_lokasi','id_penerimaan_pemeriksaan','nama_org',
+            'date_created','nama_unker','nama_unor', 'keterangan',
+            'tgl_penyimpanan','kode_unor',
+        ]
 });
 
 Ext.define('MInventoryPengeluaran', {extend: 'Ext.data.Model',
@@ -477,8 +476,8 @@ Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPengadaan', {extend: 'Ext.data.Model',
-    fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','part_number','serial_number','merek','model','nama',
-                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal', 'qty',
+    fields: ['id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','merek','model','nama',
+                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal',
                 'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
                 'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
                 'sp2d_no', 'sp2d_tanggal', 'mutasi_no', 'mutasi_tanggal', 
@@ -535,9 +534,20 @@ Ext.define('MPartNumber', { extend:'Ext.data.Model',
     fields: ['id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
 })
 
-//Used for grid in pengadaan
+//Used for grid in pengadaan, Penerimaan/Pemeriksaan
 Ext.define('MParts', {extend: 'Ext.data.Model',
     fields: ['id','id_source',
         'serial_number', 'part_number','kd_brg',
         'status_barang', 'qty', 'asal_barang']
+});
+
+Ext.define('MPartsPenyimpanan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang',
+        'id_warehouse','id_warehouse_ruang','id_warehouse_rak',
+        'nama_warehouse','nama_ruang','nama_rak','invalid_grid_field_count'],
+//    validations:[
+//        {type:'inclusion', name:'invalid_grid_field_count', list:['0']}
+//    ]
 });

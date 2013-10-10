@@ -26,8 +26,8 @@ class Pengadaan extends MY_Controller {
                 $data = array();
                 
 	  	$fields = array(
-			'id', 'kode_unker', 'kode_unor', 'id_vendor', 'kd_lokasi','kd_brg','no_aset','part_number','serial_number','merek','model','nama',
-                        'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal','qty', 
+			'id', 'kode_unker', 'kode_unor', 'id_vendor', 'kd_lokasi','kd_brg','no_aset','merek','model','nama',
+                        'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal',
                         'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
                         'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
                         'sp2d_no', 'sp2d_tanggal', 'mutasi_no', 'mutasi_tanggal', 

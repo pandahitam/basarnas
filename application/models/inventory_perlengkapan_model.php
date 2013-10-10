@@ -67,9 +67,19 @@ class Inventory_Perlengkapan_Model extends MY_Model{
             $query = "select * 
                      FROM $table where id_source = $id";
 		
-                $returnedQuery = $this->Get_By_Query($query); 
-                return $returnedQuery['data'];
+                return $this->Get_By_Query($query); 
 	}
+        
+        function get_InventoryPerlengkapanPenyimpanan($id)
+        {
+            $query = "select t.*, a.nama as nama_warehouse, b.nama as nama_ruang, c.nama as nama_rak
+                      FROM inventory_penyimpanan_data_perlengkapan as t
+                      LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
+                      LEFT JOIN ref_warehouseruang as b on b.id = t.id_warehouse_ruang
+                      LEFT JOIN ref_warehouserak as c on c.id =  t.id_warehouse_rak
+                      where id_source =$id";
+            return $this->Get_By_Query($query); 
+        }
 	
 	
 //	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){

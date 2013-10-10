@@ -106,48 +106,49 @@ class inventory_perlengkapan extends MY_Controller {
             {
                 $id = $this->input->post('id_source');
                 $data = $this->model->get_InventoryPerlengkapan($id,'pengadaan_data_perlengkapan');
+                $datasend["results"] = $data['data'];
+                $datasend["total"] = $data['count'];
+                echo json_encode($datasend);
             }
             
-            $datasend["results"] = $data;
-            echo json_encode($datasend);
+            
         }
         
         /*
          * INVENTORY PENERIMAAN/PEMERIKSAAN
          */
-        
-	function createInventoryPenerimaanPerlengkapan(){
+	function createInventoryPenerimaanPemeriksaanPerlengkapan(){
             $data = json_decode($this->input->post('data'));
            
             if(count($data) > 1)
             {
                 foreach($data as $row)
                 {
-                    $this->db->insert('inventory_penerimaan_data_perlengkapan',$row);
+                    $this->db->insert('inventory_penerimaan_pemeriksaan_data_perlengkapan',$row);
                 }
             }
             else
             {
-                $this->db->insert('inventory_penerimaan_data_perlengkapan',$data);
+                $this->db->insert('inventory_penerimaan_pemeriksaan_data_perlengkapan',$data);
             }
             
             echo "{success:true}";
 	}
         
-       function updateInventoryPenerimaanPerlengkapan(){
+       function updateInventoryPenerimaanPemeriksaanPerlengkapan(){
             $data = json_decode($this->input->post('data'));
             if(count($data) > 1)
             {
                 foreach($data as $row)
                 {
                     $this->db->set($row);
-                    $this->db->replace('inventory_penerimaan_data_perlengkapan');
+                    $this->db->replace('inventory_penerimaan_pemeriksaan_data_perlengkapan');
                 }
             }
             else
             {
                     $this->db->set($data);
-                    $this->db->replace('inventory_penerimaan_data_perlengkapan');
+                    $this->db->replace('inventory_penerimaan_pemeriksaan_data_perlengkapan');
             }
             
            
@@ -155,35 +156,118 @@ class inventory_perlengkapan extends MY_Controller {
             echo "{success:true}"; 
        }
 	
-	function destroyInventoryPenerimaanPerlengkapan()
+	function destroyInventoryPenerimaanPemeriksaanPerlengkapan()
 	{
             $data = json_decode($this->input->post('data'));
             if(count($data) > 1)
             {
                 foreach($data as $row)
                 {
-                    $this->db->delete('inventory_penerimaan_data_perlengkapan', array('id' => $row->id));
+                    $this->db->delete('inventory_penerimaan_pemeriksaan_data_perlengkapan', array('id' => $row->id));
                 }
             }
             else
             {
-                    $this->db->delete('inventory_penerimaan_data_perlengkapan', array('id' => $data->id));
+                    $this->db->delete('inventory_penerimaan_pemeriksaan_data_perlengkapan', array('id' => $data->id));
             }
             
 		 echo "{success:true}"; 
 	}
         
-        function getSpecificInventoryPenerimaanPerlengkapan()
+        function getSpecificInventoryPenerimaanPemeriksaanPerlengkapan()
         {
             $data = array();
-            if(isset($_POST['id_inventory']))
+            if(isset($_POST['id_source']))
             {
-                $id = $this->input->post('id_inventory');
-                $data = $this->model->get_InventoryPerlengkapan($id,'inventory_penerimaan_data_perlengkapan');
+                $id = $this->input->post('id_source');
+                $data = $this->model->get_InventoryPerlengkapan($id,'inventory_penerimaan_pemeriksaan_data_perlengkapan');
+                $datasend["results"] = $data['data'];
+                $datasend["total"] = $data['count'];
+                echo json_encode($datasend);
+                
             }
             
-            $datasend["results"] = $data;
-            echo json_encode($datasend);
+            
+        }
+        
+        
+        /*
+         * INVENTORY PENYIMPANAN
+         */
+	function createInventoryPenyimpananPerlengkapan(){
+            $data = json_decode($this->input->post('data'));
+           
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    unset($row->nama_warehouse,$row->nama_ruang,$row->nama_rak,$row->invalid_grid_field_count);
+                    $this->db->insert('inventory_penyimpanan_data_perlengkapan',$row);
+                }
+            }
+            else
+            {
+                unset($data->nama_warehouse,$data->nama_ruang,$data->nama_rak,$data->invalid_grid_field_count);
+                $this->db->insert('inventory_penyimpanan_data_perlengkapan',$data);
+            }
+            
+            echo "{success:true}";
+	}
+        
+       function updateInventoryPenyimpananPerlengkapan(){
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    unset($row->nama_warehouse,$row->nama_ruang,$row->nama_rak,$row->invalid_grid_field_count);
+                    $this->db->set($row);
+                    $this->db->replace('inventory_penyimpanan_data_perlengkapan');
+                }
+            }
+            else
+            {
+                    unset($data->nama_warehouse,$data->nama_ruang,$data->nama_rak,$data->invalid_grid_field_count);
+                    $this->db->set($data);
+                    $this->db->replace('inventory_penyimpanan_data_perlengkapan');
+            }
+            
+           
+
+            echo "{success:true}"; 
+       }
+	
+	function destroyInventoryPenyimpananPerlengkapan()
+	{
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    $this->db->delete('inventory_penyimpanan_data_perlengkapan', array('id' => $row->id));
+                }
+            }
+            else
+            {
+                    $this->db->delete('inventory_penyimpanan_data_perlengkapan', array('id' => $data->id));
+            }
+            
+		 echo "{success:true}"; 
+	}
+        
+        function getSpecificInventoryPenyimpananPerlengkapan()
+        {
+            $data = array();
+            if(isset($_POST['id_source']))
+            {
+                $id = $this->input->post('id_source');
+                $data = $this->model->get_InventoryPerlengkapanPenyimpanan($id);
+                $datasend["results"] = $data['data'];
+                $datasend["total"] = $data['count'];
+                echo json_encode($datasend);
+            }
+            
+            
         }
         
         
