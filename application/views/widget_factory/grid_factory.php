@@ -583,7 +583,7 @@
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         }
         
-        Grid.parts = function(setting,isInventoryPenyimpanan)
+        Grid.parts = function(setting,isInventoryPenyimpanan, isInventoryPengeluaran)
         {
             if(isInventoryPenyimpanan == true)
             {
@@ -606,6 +606,41 @@
                             {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Qty', dataIndex: 'qty', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Asal Barang', dataIndex: 'asal_barang', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_parts'
+                    },
+                    toolbar: {
+                        id: 'toolbar_parts',
+                        add: {
+                            id: 'button_add_parts',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_parts',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_parts',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+            }
+            else if(isInventoryPengeluaran == true)
+            {
+                var settingGrid = {
+                    grid: {
+                        id: setting.id,
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_penyimpanan', dataIndex: 'id_penyimpanan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'id_penyimpanan_data_perlengkapan', dataIndex: 'id_penyimpanan_data_perlengkapan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'No. Berita Acara Penyimpanan', dataIndex: 'nomor_berita_acara', width: 180, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Qty Keluar', dataIndex: 'qty_keluar', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                         ]
                     },
                     search: {

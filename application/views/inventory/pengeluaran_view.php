@@ -7,6 +7,29 @@
         var Params_M_InventoryPengeluaran = null;
 
         Ext.namespace('InventoryPengeluaran', 'InventoryPengeluaran.reader', 'InventoryPengeluaran.proxy', 'InventoryPengeluaran.Data', 'InventoryPengeluaran.Grid', 'InventoryPengeluaran.Window', 'InventoryPengeluaran.Form', 'InventoryPengeluaran.Action', 'InventoryPengeluaran.URL');
+        
+        InventoryPengeluaran.dataStoreParts = new Ext.create('Ext.data.Store', {
+            model: MPartsPengeluaran, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPengeluaranPerlengkapan',
+                create: BASE_URL + 'inventory_perlengkapan/createInventoryPengeluaranPerlengkapan',
+                update: BASE_URL + 'inventory_perlengkapan/updateInventoryPengeluaranPerlengkapan',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyInventoryPengeluaranPerlengkapan'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+    
         InventoryPengeluaran.URL = {
             read: BASE_URL + 'inventory_pengeluaran/getAllData',
             createUpdate: BASE_URL + 'inventory_pengeluaran/modifyInventoryPengeluaran',
@@ -36,6 +59,17 @@
         });
 
         InventoryPengeluaran.Form.create = function(data, edit) {
+            
+            var setting_grid_parts = {
+                id:'grid_inventory_pengeluaran_parts',
+                toolbar:{
+                    add: InventoryPengeluaran.addParts,
+                    edit: InventoryPengeluaran.editParts,
+                    remove: InventoryPengeluaran.removeParts
+                },
+                dataStore:InventoryPengeluaran.dataStoreParts,
+            };
+            
             var setting = {
                 url: InventoryPengeluaran.URL.createUpdate,
                 data: InventoryPengeluaran.Data,
@@ -61,7 +95,7 @@
                 }
             };
 
-            var form = Form.inventorypengeluaran(setting);
+            var form = Form.inventoryPengeluaran(setting,setting_grid_parts);
 
             if (data !== null)
             {
@@ -75,11 +109,85 @@
             }
             return form;
         };
+        
+        InventoryPengeluaran.addParts = function()
+        {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                }
+                    var form = Form.secondaryWindowAsset(InventoryPengeluaran.dataStoreParts,'add');
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanPengeluaran());
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+        };
+
+        InventoryPengeluaran.editParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_pengeluaran_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+
+                var data = selected[0].data;
+                var storeIndex = grid.store.indexOf(selected[0]);
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Part');
+                }
+                    var form = Form.secondaryWindowAsset(InventoryPengeluaran.dataStoreParts, 'edit',storeIndex);
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanPengeluaran(true));
+                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+
+                    if (data !== null)
+                    {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+        }};
+
+        InventoryPengeluaran.removeParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_pengeluaran_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if(selected.length > 0)
+            {
+                Ext.Msg.show({
+                    title: 'Konfirmasi',
+                    msg: 'Apakah Anda yakin untuk menghapus ?',
+                    buttons: Ext.Msg.YESNO,
+                    icon: Ext.Msg.Question,
+                    fn: function(btn) {
+                        if (btn === 'yes')
+                        {
+                            Ext.each(selected, function(obj){
+                                var storeIndex = grid.store.indexOf(obj);
+                                var record = grid.store.getAt(storeIndex);
+                                grid.store.remove(record);
+                            });
+                        }
+                    }
+                });
+            }
+        };
 
         InventoryPengeluaran.Action.add = function() {
             var _form = InventoryPengeluaran.Form.create(null, false);
             Modal.processCreate.setTitle('Create Inventory Pengeluaran');
             Modal.processCreate.add(_form);
+            InventoryPengeluaran.dataStoreParts.changeParams({params:{open:'0'}});
+            InventoryPengeluaran.dataStoreParts.removed = [];
             Modal.processCreate.show();
         };
 
@@ -96,6 +204,8 @@
                 }
                 var _form = InventoryPengeluaran.Form.create(data, true);
                 Modal.processEdit.add(_form);
+                InventoryPengeluaran.dataStoreParts.changeParams({params:{open:'1',id_source:data.id}});
+                InventoryPengeluaran.dataStoreParts.removed = [];
                 Modal.processEdit.show();
             }
         };
@@ -106,8 +216,6 @@
             _.each(selected, function(obj) {
                 var data = {
                     id: obj.data.id,
-                    id_penyimpanan: obj.data.id_penyimpanan,
-                    qty_barang_keluar: obj.data.qty_barang_keluar,
                 };
                 arrayDeleted.push(data);
             });
@@ -195,19 +303,11 @@
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 180, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Kode Barang', dataIndex: 'kd_brg', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'No Aset', dataIndex: 'no_aset', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Tanggal Berita Acara', dataIndex: 'tgl_berita_acara', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nomor Berita Acara', dataIndex: 'nomor_berita_acara', width: 90, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Part Number', dataIndex: 'part_number', width: 120, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Serial Number', dataIndex: 'serial_number', width: 70, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Date Created', dataIndex: 'date_created', width: 100, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Keterangan', dataIndex: 'keterangan', width: 120, hidden: false, filter: {type: 'string'}},
-                    {header: 'Status Barang', dataIndex: 'status_barang', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Qty Awal', dataIndex: 'qty', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Qty Barang Keluar', dataIndex: 'qty_barang_keluar', width: 90, hidden: false, filter: {type: 'string'}},
                     {header: 'Tanggal Pengeluaran', dataIndex: 'tgl_pengeluaran', width: 90, hidden: false, filter: {type: 'string'}},
-                    {header: 'Asal Barang', dataIndex: 'asal_barang', width: 90, hidden: false, filter: {type: 'string'}},
                 ]
             },
             search: {
@@ -238,7 +338,7 @@
 
         var new_tabpanel = {
             xtype: 'panel',
-            id: 'inventorypengeluaran_asset', title: 'Inventory - Pengeluaran', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            id: 'inventory_pengeluaran_panel', title: 'Inventory - Pengeluaran', iconCls: 'icon-menu_impasing', border: false, closable: true,
             layout: 'border', items: [InventoryPengeluaran.Grid.grid]
         };
      

@@ -63,5 +63,32 @@ class inventory_penyimpanan extends MY_Controller {
             $result = $this->model->get_InventoryPenyimpanan($id);
             echo json_encode($result);
         }
+        
+        function checkServerQuantity()
+        {
+            $data = $this->input->post('data');
+            $check_result = array();
+            $i = 0;
+            foreach($data as $row)
+            {
+                $check_result[] = $this->model->checkServerQuantity($row['id_penyimpanan_data_perlengkapan'],$row['qty_keluar'],$row['id_penyimpanan']);
+                if($check_result[$i] === true)
+                {
+                    echo "pass";
+                    die;
+                }
+                else
+                {
+                    if($check_result[$i] === false)
+                    {
+                        echo "Error pada server. Harap coba lagi atau hubungi teknisi";
+                        die;
+                    }
+                }
+                $i++;
+            }
+            
+            echo json_encode($check_result);
+        }
 }
 ?>

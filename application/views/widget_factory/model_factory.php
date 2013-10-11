@@ -546,8 +546,10 @@ Ext.define('MPartsPenyimpanan', {extend: 'Ext.data.Model',
         'serial_number', 'part_number','kd_brg',
         'status_barang', 'qty', 'asal_barang',
         'id_warehouse','id_warehouse_ruang','id_warehouse_rak',
-        'nama_warehouse','nama_ruang','nama_rak','invalid_grid_field_count'],
-//    validations:[
-//        {type:'inclusion', name:'invalid_grid_field_count', list:['0']}
-//    ]
+        'nama_warehouse','nama_ruang','nama_rak','invalid_grid_field_count']
+});
+
+Ext.define('MPartsPengeluaran', {extend: 'Ext.data.Model',
+    fields: ['id','id_penyimpanan','id_source','id_penyimpanan_data_perlengkapan',
+            'qty_keluar','qty','nomor_berita_acara','part_number']
 });

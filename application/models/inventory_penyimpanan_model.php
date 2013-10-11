@@ -58,11 +58,53 @@ class Inventory_Penyimpanan_Model extends MY_Model{
 	
         function get_InventoryPenyimpanan($id)
 	{		
-            $this->db->from($this->table);
+            $this->db->from('inventory_penyimpanan_data_perlengkapan');
             $this->db->where('id',$id);
             $query = $this->db->get();
             return $query->row();
 	}
+        
+        function checkServerQuantity($id_penyimpanan_perlengkapan, $qty_keluar, $id_penyimpanan)
+        {
+            $this->db->where('id',$id_penyimpanan_perlengkapan);
+            $query_perlengkapan = $this->db->get('inventory_penyimpanan_data_perlengkapan');
+            if($query_perlengkapan->num_rows == 1)
+            {
+                $result_perlengkapan = $query_perlengkapan->row();
+                if(($result_perlengkapan->qty - $qty_keluar) >= 0 )
+                {
+                    return true;
+                }
+                else
+                {
+                    
+                    $this->db->where('id',$id_penyimpanan);
+                    $query_penyimpanan = $this->db->get('inventory_penyimpanan');
+                    if($query_penyimpanan->num_rows == 1)
+                    {
+                        
+                        $result_penyimpanan = $query_penyimpanan->row();
+                        $data_failed = array(
+                            'nomor_berita_acara'=>$result_penyimpanan->nomor_berita_acara,
+                            'part_number'=>$result_perlengkapan->part_number
+                        );
+                        
+                        return $data_failed;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
+                    
+                }
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
 	
 	
 //	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){

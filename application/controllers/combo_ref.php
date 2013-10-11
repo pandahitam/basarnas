@@ -37,20 +37,64 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_parts_inventory_pengeluaran()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+//            if($this->input->get_post("excludedValue"))
+//            {
+//                $excludedValue = $this->input->post('excludedValue');
+//                $query = $this->db->query("select id, nomor_berita_acara from inventory_penyimpanan where id=$excludedValue");
+//            }
+//            else
+//            {
+//                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan where qty > 0');
+//            }
+            
+           
+            if($this->input->get_post("id_penyimpanan"))
+            {
+                if($this->input->get_post("excluded_id_penyimpanan_data_perlengkapan") != '')
+                {
+                     $query = $this->db->query('select t.id, a.nama from inventory_penyimpanan_data_perlengkapan as t LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number where id_source='.$this->input->get_post("id_penyimpanan").' AND t.id NOT IN('.$this->input->get_post("excluded_id_penyimpanan_data_perlengkapan").')');
+                }
+                else
+                {
+                    $query = $this->db->query('select t.id, a.nama from inventory_penyimpanan_data_perlengkapan as t LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number where id_source='.$this->input->get_post("id_penyimpanan"));
+                }
+                
+            }
+            else
+            {
+                 $query = $this->db->query('select t.id, a.nama  from inventory_penyimpanan_data_perlengkapan as t LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number');
+            }
+            
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_penyimpanan()
     {
         $data = array();
         if($this->input->get_post("id_open"))
         {
-            if($this->input->get_post("excludedValue"))
-            {
-                $excludedValue = $this->input->post('excludedValue');
-                $query = $this->db->query("select id, nomor_berita_acara from inventory_penyimpanan where id=$excludedValue");
-            }
-            else
-            {
-                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan where qty > 0');
-            }
+//            if($this->input->get_post("excludedValue"))
+//            {
+//                $excludedValue = $this->input->post('excludedValue');
+//                $query = $this->db->query("select id, nomor_berita_acara from inventory_penyimpanan where id=$excludedValue");
+//            }
+//            else
+//            {
+//                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan where qty > 0');
+//            }
+            
+            $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan');
             
             foreach($query->result() as $obj)
             {

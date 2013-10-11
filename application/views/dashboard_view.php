@@ -278,7 +278,7 @@
                                                     id: 'm_inventory_penerimaan_pemeriksaan',
                                                     handler: function() {
 
-                                                        Load_TabPage('inventory_penerimaan_pemeriksaan', BASE_URL + 'inventory_penerimaan_pemeriksaan');
+                                                        Load_TabPage('inventory_penerimaan_pemeriksaan_panel', BASE_URL + 'inventory_penerimaan_pemeriksaan');
                                                     }
                                                 },
                                                 {
@@ -286,7 +286,7 @@
                                                     iconCls: 'icon-menu_impasing',
                                                     id: 'm_inventory_penyimpanan',
                                                     handler: function() {
-                                                        Load_TabPage('inventory_penyimpanan', BASE_URL + 'inventory_penyimpanan');
+                                                        Load_TabPage('inventory_penyimpanan_panel', BASE_URL + 'inventory_penyimpanan');
                                                     }
                                                 },
                                                 {
@@ -294,7 +294,7 @@
                                                     iconCls: 'icon-menu_impasing',
                                                     id: 'm_inventory_pengeluaran',
                                                     handler: function() {
-                                                        Load_TabPage('inventory_pengeluaran', BASE_URL + 'inventory_pengeluaran');
+                                                        Load_TabPage('inventory_pengeluaran_panel', BASE_URL + 'inventory_pengeluaran');
                                                     }
                                                 }]
                                         }

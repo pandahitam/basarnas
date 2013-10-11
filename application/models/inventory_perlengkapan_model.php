@@ -62,13 +62,16 @@ class Inventory_Perlengkapan_Model extends MY_Model{
 			
 	}
 	
-        function get_InventoryPerlengkapan($id,$table)
+        function get_InventoryPerlengkapan($id,$table,$table_source)
 	{
-            $query = "select * 
-                     FROM $table where id_source = $id";
+            $query = "select t.*, a.kd_lokasi,a.kode_unor
+                     FROM $table as t
+                     LEFT JOIN $table_source as a on a.id = t.id_source
+                     where id_source = $id";
 		
                 return $this->Get_By_Query($query); 
 	}
+        
         
         function get_InventoryPerlengkapanPenyimpanan($id)
         {
@@ -78,6 +81,16 @@ class Inventory_Perlengkapan_Model extends MY_Model{
                       LEFT JOIN ref_warehouseruang as b on b.id = t.id_warehouse_ruang
                       LEFT JOIN ref_warehouserak as c on c.id =  t.id_warehouse_rak
                       where id_source =$id";
+            return $this->Get_By_Query($query); 
+        }
+        
+        function get_InventoryPerlengkapanPengeluaran($id)
+        {
+            $query = "select t.*, a.nomor_berita_acara, b.part_number
+                      FROM inventory_pengeluaran_data_perlengkapan as t
+                      LEFT JOIN inventory_penyimpanan as a on a.id = t.id_penyimpanan
+                      LEFT JOIN inventory_penyimpanan_data_perlengkapan as b on b.id = t.id_penyimpanan_data_perlengkapan
+                      where t.id_source =$id";
             return $this->Get_By_Query($query); 
         }
 	
