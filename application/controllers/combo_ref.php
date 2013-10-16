@@ -37,6 +37,21 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_asset_perlengkapan_part()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            $query = $this->db->query('select id, part_number, serial_number from asset_perlengkapan');
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_parts_inventory_pengeluaran()
     {
         $data = array();

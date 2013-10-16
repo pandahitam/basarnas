@@ -790,7 +790,7 @@
 
         var setting = {
             grid: {
-                id: 'grid_bangunan',
+                id: 'grid_asset_ruang',
                 title: 'DAFTAR ASSET RUANG',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
@@ -816,24 +816,24 @@
                 ]
             },
             search: {
-                id: 'search_bangunan'
+                id: 'search_ruang'
             },
             toolbar: {
-                id: 'toolbar_bangunan',
+                id: 'toolbar_ruang',
                 add: {
-                    id: 'button_add_bangunan',
+                    id: 'button_add_ruang',
                     action: Ruang.Action.add
                 },
                 edit: {
-                    id: 'button_edit_bangunan',
+                    id: 'button_edit_ruang',
                     action: Ruang.Action.edit
                 },
                 remove: {
-                    id: 'button_remove_bangunan',
+                    id: 'button_remove_ruang',
                     action: Ruang.Action.remove
                 },
                 print: {
-                    id: 'button_pring_bangunan',
+                    id: 'button_pring_ruang',
                     action: Ruang.Action.print
                 }
             }

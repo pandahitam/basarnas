@@ -9,10 +9,19 @@
         Ext.namespace('AngkutanUdara', 'AngkutanUdara.reader', 'AngkutanUdara.proxy', 'AngkutanUdara.Data', 'AngkutanUdara.Grid', 'AngkutanUdara.Window',
                 'AngkutanUdara.Form', 'AngkutanUdara.Action', 'AngkutanUdara.URL');
         
-        AngkutanUdara.dataStoreDetailPenggunaanAngkutan = new Ext.create('Ext.data.Store', {
+        AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1 = new Ext.create('Ext.data.Store', {
             model: MDetailPenggunaanAngkutan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'asset_angkutan_detail_penggunaan/getSpecificDetailPenggunaanAngkutan', actionMethods: {read: 'POST'},
+                url: BASE_URL + 'asset_angkutan_detail_penggunaan/getSpecificDetailPenggunaanAngkutanUdara/1', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
+        AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin2 = new Ext.create('Ext.data.Store', {
+            model: MDetailPenggunaanAngkutan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'asset_angkutan_detail_penggunaan/getSpecificDetailPenggunaanAngkutanUdara/2', actionMethods: {read: 'POST'},
                 reader: new Ext.data.JsonReader({
                     root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
@@ -77,8 +86,10 @@
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
             removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
-            createUpdateDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutan',
-            removeDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutan'
+            createUpdateDetailPenggunaanAngkutanUdaraMesin1: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutanUdara/1',
+            createUpdateDetailPenggunaanAngkutanUdaraMesin2: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutanUdara/2',
+            removeDetailPenggunaanAngkutanUdaraMesin1: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutanUdara/1',
+            removeDetailPenggunaanAngkutanUdaraMesin2: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutanUdara/2'
         };
 
         AngkutanUdara.reader = new Ext.create('Ext.data.JsonReader', {
@@ -233,7 +244,7 @@
             Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePerlengkapanAngkutanUdara,AngkutanUdara.dataStorePerlengkapanAngkutanUdara);
         };
         
-        AngkutanUdara.addDetailPenggunaan = function()
+        AngkutanUdara.addDetailPenggunaanMesin1 = function()
         {
             var selected = AngkutanUdara.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
@@ -247,7 +258,7 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
                 }
-                    var form = Form.detailPenggunaanAngkutan(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutan, AngkutanUdara.dataStoreDetailPenggunaanAngkutan, false,'udara');
+                    var form = Form.detailPenggunaanAngkutanUdara(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutanUdaraMesin1, AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1, false,'1');
                     form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara'));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
@@ -255,9 +266,9 @@
             }
         };
         
-        AngkutanUdara.editDetailPenggunaan = function()
+        AngkutanUdara.editDetailPenggunaanMesin1 = function()
         {
-            var selected = Ext.getCmp('grid_angkutanUdara_detail_penggunaan').getSelectionModel().getSelection();
+            var selected = Ext.getCmp('grid_angkutanUdara_detail_penggunaan_mesin1').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                
@@ -268,7 +279,7 @@
                 {
                     Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
                 }
-                    var form = Form.detailPenggunaanAngkutan(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutan, AngkutanUdara.dataStoreDetailPenggunaanAngkutan, true,'udara');
+                    var form = Form.detailPenggunaanAngkutanUdara(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutanUdaraMesin1, AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1, true,'1');
                     form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara'));
                     
                     if (data !== null)
@@ -286,9 +297,9 @@
                 
         }};
         
-        AngkutanUdara.removeDetailPenggunaan = function()
+        AngkutanUdara.removeDetailPenggunaanMesin1 = function()
         {
-            var selected = Ext.getCmp('grid_angkutanUdara_detail_penggunaan').getSelectionModel().getSelection();
+            var selected = Ext.getCmp('grid_angkutanUdara_detail_penggunaan_mesin1').getSelectionModel().getSelection();
             var arrayDeleted = [];
             _.each(selected, function(obj) {
                 var data = {
@@ -297,22 +308,101 @@
                 };
                 arrayDeleted.push(data);
             });
-            console.log(arrayDeleted);
-           Modal.deleteAlertDetailPenggunaanAngkutan(arrayDeleted, AngkutanUdara.URL.removeDetailPenggunaanAngkutan,AngkutanUdara.dataStoreDetailPenggunaanAngkutan,'udara');
+           Modal.deleteAlertDetailPenggunaanAngkutanUdara(arrayDeleted, AngkutanUdara.URL.removeDetailPenggunaanAngkutanUdaraMesin1,AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1,'udara','1');
+            
+                    
+        };
+        
+        
+        AngkutanUdara.addDetailPenggunaanMesin2 = function()
+        {
+            var selected = AngkutanUdara.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                delete data.nama_unker;
+                delete data.nama_unor;
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
+                }
+                    var form = Form.detailPenggunaanAngkutanUdara(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutanUdaraMesin2, AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin2, false,'2');
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara'));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+            }
+        };
+        
+        AngkutanUdara.editDetailPenggunaanMesin2 = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanUdara_detail_penggunaan_mesin2').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+               
+                var data = selected[0].data;
+                
+                
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
+                }
+                    var form = Form.detailPenggunaanAngkutanUdara(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutanUdaraMesin2, AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin2, true,'2');
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara'));
+                    
+                    if (data !== null)
+                    {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+                
+        }};
+        
+        AngkutanUdara.removeDetailPenggunaanMesin2 = function()
+        {
+            var selected = Ext.getCmp('grid_angkutanUdara_detail_penggunaan_mesin2').getSelectionModel().getSelection();
+            var arrayDeleted = [];
+            _.each(selected, function(obj) {
+                var data = {
+                    id: obj.data.id,
+                    id_ext_asset:obj.data.id_ext_asset,
+                };
+                arrayDeleted.push(data);
+            });
+           Modal.deleteAlertDetailPenggunaanAngkutanUdara(arrayDeleted, AngkutanUdara.URL.removeDetailPenggunaanAngkutanUdaraMesin2,AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin2,'udara','2');
             
                     
         };
 
         AngkutanUdara.Form.create = function(data, edit) {
             
-            var setting_grid_detail_penggunaan = {
-                id:'grid_angkutanUdara_detail_penggunaan',
+            var setting_grid_detail_penggunaan_mesin1 = {
+                id:'grid_angkutanUdara_detail_penggunaan_mesin1',
                 toolbar:{
-                    add: AngkutanUdara.addDetailPenggunaan,
-                    edit: AngkutanUdara.editDetailPenggunaan,
-                    remove: AngkutanUdara.removeDetailPenggunaan
+                    add: AngkutanUdara.addDetailPenggunaanMesin1,
+                    edit: AngkutanUdara.editDetailPenggunaanMesin1,
+                    remove: AngkutanUdara.removeDetailPenggunaanMesin1
                 },
-                dataStore:AngkutanUdara.dataStoreDetailPenggunaanAngkutan,
+                dataStore:AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1,
+            };
+    
+            var setting_grid_detail_penggunaan_mesin2 = {
+                id:'grid_angkutanUdara_detail_penggunaan_mesin2',
+                toolbar:{
+                    add: AngkutanUdara.addDetailPenggunaanMesin2,
+                    edit: AngkutanUdara.editDetailPenggunaanMesin2,
+                    remove: AngkutanUdara.removeDetailPenggunaanMesin2
+                },
+                dataStore:AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin2,
             };
             
             var setting_grid_perlengkapan = {
@@ -339,7 +429,8 @@
                         Form.Component.basicAsset(edit),
                         Form.Component.mechanical(),
                         Form.Component.angkutan(),
-                        Form.Component.detailPenggunaanAngkutan(setting_grid_detail_penggunaan,edit),
+                        Form.Component.detailPenggunaanAngkutanUdara(setting_grid_detail_penggunaan_mesin1,edit,'1'),
+                        Form.Component.detailPenggunaanAngkutanUdara(setting_grid_detail_penggunaan_mesin2,edit,'2'),
                         Form.Component.fileUpload(),
                        ],
                 listeners: {
@@ -373,7 +464,7 @@
             if (data !== null)
             {
                 $.ajax({
-                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara',
                        type: "POST",
                        dataType:'json',
                        async:false,
@@ -381,7 +472,8 @@
                        success:function(response, status){
                         if(response.status == 'success')
                         {
-                            data.total_detail_penggunaan_angkutan = response.total + ' Jam';
+                            data.total_penggunaan_mesin1 = response.total_mesin1 + ' Jam';
+                            data.total_penggunaan_mesin2 = response.total_mesin2 + ' Jam';
                         }
                            
                        }
@@ -941,7 +1033,8 @@
                     Tab.addToForm(_form, 'angkutanUdara-details', 'Simak Details');
                     Modal.assetEdit.show();
                     AngkutanUdara.dataStorePerlengkapanAngkutanUdara.changeParams({params:{open:'1',id_ext_asset:data.id}});
-                    AngkutanUdara.dataStoreDetailPenggunaanAngkutan.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                    AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                    AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin2.changeParams({params:{open:'1',id_ext_asset:data.id}});
                 }
 
             }

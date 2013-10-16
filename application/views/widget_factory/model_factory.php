@@ -188,7 +188,7 @@ Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanDaratPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan'
+        'nama', 'keterangan','id_asset_perlengkapan'
     ]
 });
 
@@ -229,7 +229,7 @@ Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanLautPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan'
+        'nama', 'keterangan','id_asset_perlengkapan'
     ]
 });
 
@@ -268,7 +268,7 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanUdaraPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','part_number','serial_number'
+        'nama', 'keterangan','part_number','serial_number','id_asset_perlengkapan'
     ]
 });
   

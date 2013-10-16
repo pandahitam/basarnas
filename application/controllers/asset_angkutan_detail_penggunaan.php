@@ -17,8 +17,8 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
             {
                 $data = $this->model->getSpecificDetailPenggunaanAngkutan($_POST['id_ext_asset']);
                 //                $total = $this->model->get_CountData();
-//                $dataSend['total'] = $total;
-		$dataSend['results'] = $data;
+                $dataSend['total'] = $data['count'];
+		$dataSend['results'] = $data['data'];
 		echo json_encode($dataSend);
                 
             }
@@ -51,6 +51,76 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 
 		$this->db->delete('ext_asset_angkutan_detail_penggunaan');
 	}
+        
+        function getSpecificDetailPenggunaanAngkutanUdara($mesin)
+        {
+            if($_POST['open'] == 1)
+            {
+                $data = $this->model->getSpecificDetailPenggunaanAngkutanUDara($_POST['id_ext_asset'],$mesin);
+                //                $total = $this->model->get_CountData();
+                $dataSend['total'] = $data['count'];
+		$dataSend['results'] = $data['data'];
+		echo json_encode($dataSend);
+                
+            }
+        }
+        
+        function modifyDetailPenggunaanAngkutanUdara($mesin)
+        {
+            $dataPenggunaan = array();
+            $dataPenggunaanFields = array(
+                'id','id_ext_asset','tanggal','jumlah_penggunaan','satuan_penggunaan','keterangan'
+            );
+            
+            foreach ($dataPenggunaanFields as $field) {
+			$dataPenggunaan[$field] = $this->input->post($field);
+            }
+                $this->db->set($dataPenggunaan);
+                $this->db->replace("ext_asset_angkutan_udara_detail_penggunaan_mesin$mesin");
+               
+        }
+        
+        function deleteDetailPenggunaanAngkutanUdara($mesin)
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                foreach($data as $deleted)
+                {
+                    $deletedArray[] =$deleted['id'];
+                }
+                $this->db->where_in('id',$deletedArray);
+                
+		$this->db->delete("ext_asset_angkutan_udara_detail_penggunaan_mesin$mesin");
+	}
+        
+        function getTotalPenggunaanAngkutanUdara()
+        {
+            $receivedData = array(
+              'tipe_angkutan'=>$_POST['tipe_angkutan'],
+              'id_ext_asset'=>$_POST['id_ext_asset'],
+            );
+            
+            $queryMesin1 = $this->db->query("select SUM(jumlah_penggunaan) AS jumlah_penggunaan_mesin1
+                                FROM ext_asset_angkutan_udara_detail_penggunaan_mesin1
+                                where id_ext_asset =".$receivedData['id_ext_asset']);
+            $queryMesin2 = $this->db->query("SELECT SUM(jumlah_penggunaan) AS jumlah_penggunaan_mesin2
+                                FROM ext_asset_angkutan_udara_detail_penggunaan_mesin2
+                                where id_ext_asset =".$receivedData['id_ext_asset']);
+            $resultMesin1 = $queryMesin1->row();
+            $resultMesin2 = $queryMesin2->row();
+            $totalPenggunaanMesin1 = $resultMesin1->jumlah_penggunaan_mesin1;
+            $totalPenggunaanMesin2 = $resultMesin2->jumlah_penggunaan_mesin2;
+                
+            
+            
+            $sendData = array(
+                    'total_mesin1' => $totalPenggunaanMesin1,
+                    'total_mesin2' =>$totalPenggunaanMesin2,
+                    'status' => 'success'
+                    );
+            echo json_encode($sendData);
+        }
+        
         
         function getTotalPenggunaan()
         {
@@ -120,7 +190,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 }
                 
             }
-            else if($receivedData['tipe_angkutan'] == 'laut' || $receivedData['tipe_angkutan'] == 'udara')
+            else if($receivedData['tipe_angkutan'] == 'laut')
             {
                 foreach($query->result() as $row)
                 {

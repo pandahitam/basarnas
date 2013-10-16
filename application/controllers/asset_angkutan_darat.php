@@ -106,7 +106,7 @@ class Asset_Angkutan_Darat extends MY_Controller {
         {
             $dataPerlengkapanDarat = array();
             $dataPerlengkapanDaratFields = array(
-                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan'
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','id_asset_perlengkapan'
             );
             
             foreach ($dataPerlengkapanDaratFields as $field) {

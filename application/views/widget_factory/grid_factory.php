@@ -168,52 +168,32 @@
                         ]
                     },
                     search: {
-                        id: 'search_angkutan_detail_penggunaan'
+                        id: 'search_angkutan_detail_penggunaan'+setting.id
                     },
                     toolbar: {
-                        id: 'toolbar_angkutan_detail_penggunaan',
+                        id: 'toolbar_angkutan_detail_penggunaan'+setting.id,
                         add: {
-                            id: 'button_add_angkutan_detail_penggunaan',
+                            id: 'button_add_angkutan_detail_penggunaan'+setting.id,
                             action: setting.toolbar.add
                         },
                         edit: {
-                            id: 'button_edit_angkutan_detail_penggunaan',
+                            id: 'button_edit_angkutan_detail_penggunaan'+setting.id,
                             action: setting.toolbar.edit
                         },
                         remove: {
-                            id: 'button_remove_angkutan_detail_penggunaan',
+                            id: 'button_remove_angkutan_detail_penggunaan'+setting.id,
                             action: setting.toolbar.remove
                         }
                     },
                     
                 };
                 
-//                 var search = new Ext.create('Ext.ux.form.SearchField', {
-//                id: settingGrid.search.id, store: setting.dataStore, width: 180
-//                });
                 var search = [{
                     xtype:'searchfield',
                     id:settingGrid.search.id,
                     store:setting.dataStore,
                     width:180
             }];
-//                var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
-//                id: settingGrid.toolbar.id,
-//                items: [{
-//                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', action:settingGrid.toolbar.add.action
-//                        }, '-', {
-//                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', action:settingGrid.toolbar.edit.action
-//                    }, '-', {
-//                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', action:settingGrid.toolbar.remove.action
-//                        
-//                    }, '->', {
-//                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
-//                        handler: function() {
-//                            _grid.filters.clearFilters();
-//                        }
-//                    }, search
-//                ]
-//            });
             
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
                 ftype: 'filters', autoReload: true, local: true, encode: true
@@ -256,6 +236,8 @@
 
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         }
+        
+        
         
         
         Grid.angkutanDaratPerlengkapan = function(setting)
@@ -1057,16 +1039,8 @@ var search = [{
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: settingGrid.toolbar.id,
                 items: [{
-                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
-                            settingGrid.toolbar.add.action();
-                        }
-                    }, '-', {
-                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                        text: 'Lihat', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
                             settingGrid.toolbar.edit.action();
-                        }
-                    }, '-', {
-                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
-                            settingGrid.toolbar.remove.action();
                         }
                     }, '->', {
                         text: 'Clear Filter', iconCls: 'icon-filter_clear',
@@ -1428,7 +1402,6 @@ var search = [{
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
-
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: setting.toolbar.id,
                 items: [{
@@ -1442,6 +1415,57 @@ var search = [{
                     }, '-', {
                         text: 'Hapus', id: setting.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             setting.toolbar.remove.action();
+                        }
+                    }, '-', {
+                        text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
+                            setting.toolbar.print.action();
+                        }
+                    }, '->', 
+                            {
+                        text: 'Clear Grid Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            Ext.getCmp(setting.grid.id).filters.clearFilters();
+                        }
+                    }, 
+                            search
+                ]
+            });
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(setting, data, feature_list);
+        };
+        
+        Grid.mutasiGridNoCRUD = function(setting, data) {
+            if (setting === null)
+            {
+                console.log('setting is null');
+                return;
+            }
+
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: false, encode: true, paramPrefix:'gridFilter',
+                updateBuffer: 2000,
+            });
+
+            var search = [{
+                    xtype:'searchfield',
+                    id:setting.search.id,
+                    store:data,
+                    width:180
+            }];
+
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: setting.toolbar.id,
+                items: [ {
+                        text: 'Lihat', id: setting.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            setting.toolbar.edit.action();
                         }
                     }, '-', {
                         text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {

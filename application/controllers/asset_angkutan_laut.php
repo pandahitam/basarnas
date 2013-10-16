@@ -112,7 +112,7 @@ class Asset_Angkutan_Laut extends MY_Controller {
         {
             $dataPerlengkapanLaut = array();
             $dataPerlengkapanLautFields = array(
-                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan'
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','id_asset_perlengkapan',
             );
             
             foreach ($dataPerlengkapanLautFields as $field) {

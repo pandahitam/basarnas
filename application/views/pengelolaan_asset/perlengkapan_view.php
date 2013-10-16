@@ -703,7 +703,7 @@
 		
         var setting = {
             grid: {
-                id: 'grid_perlengkapan',
+                id: 'grid_aset_perlengkapan',
                 title: 'DAFTAR ASSET PERLENGKAPAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},

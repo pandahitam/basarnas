@@ -45,7 +45,7 @@ Mutasi.Data = new Ext.create('Ext.data.Store', {
 });
 
 Mutasi.Form.create = function(data,edit){
-            var form = Form.asset(null, Mutasi.Data, edit);
+            var form = Form.assetNoButton(null, Mutasi.Data, edit);
             form.insert(0, Form.Component.penghapusanDanMutasi());
             if (data !== null)
             {
@@ -146,17 +146,9 @@ var setting = {
         },
         toolbar : {
             id : 'toolbar_Mutasi',
-            add : {
-                id : 'button_add_Mutasi',
-               /* action : Mutasi.Action.add*/
-            },
             edit : {
                 id : 'button_edit_Mutasi',
                 action : Mutasi.Action.edit
-            },
-            remove : {
-                id : 'button_remove_Mutasi',
-                /*action : Mutasi.Action.remove*/
             },
             print : {
                 id : 'button_pring_Mutasi',
@@ -165,7 +157,7 @@ var setting = {
         }
 };
 
-Mutasi.Grid.grid = Grid.inventarisGrid(setting,Mutasi.Data);
+Mutasi.Grid.grid = Grid.mutasiGridNoCRUD(setting,Mutasi.Data);
 
 /*var new_tabpanel = {
     xtype:'panel',

@@ -203,6 +203,61 @@
             })
         };
         
+        Modal.deleteAlertDetailPenggunaanAngkutanUdara = function(arrayDeleted, url, dataGrid, tipe_angkutan,mesin) {
+            /*debugger;*/
+            Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ?',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: url,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                dataGrid.load();
+                                $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara/'+mesin,
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{tipe_angkutan:tipe_angkutan,id_ext_asset:arrayDeleted[0]['id_ext_asset']},
+                                    success:function(response, status){
+                                     if(response.status == 'success')
+                                     {
+                                        var updateTotalPenggunaanMesin1 = response.total_mesin1 + ' Jam';
+                                        var updateTotalPenggunaanMesin2 = response.total_mesin2 + ' Jam';
+                                        if(mesin == '1')
+                                        {
+                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin_'+mesin).setValue(updateTotalPenggunaanMesin1);
+                                        }
+                                        else if(mesin == '2')
+                                        {
+                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin_'+mesin).setValue(updateTotalPenggunaanMesin2);
+                                        }
+                                         
+                                     }
+
+                                    }
+                                 });
+                            }
+                        });
+                    }
+                }
+            })
+        };
+        
         Modal.deleteAlertDetailPenggunaanAngkutan = function(arrayDeleted, url, dataGrid, tipe_angkutan) {
             /*debugger;*/
             Ext.Msg.show({
@@ -226,7 +281,6 @@
                             success: function(data) {
                                 /*var a = dataGrid;
                                  debugger;*/
-                                console.log('success to delete');
                                 dataGrid.load();
                                 $.ajax({
                                     url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',

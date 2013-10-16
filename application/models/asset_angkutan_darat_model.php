@@ -134,7 +134,7 @@ class Asset_Angkutan_Darat_Model extends MY_Model{
         {
             if($_POST['open'] == 1)
             {
-                $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan 
+                $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan , id_asset_perlengkapan
                         FROM ext_asset_angkutan_darat_perlengkapan WHERE id_ext_asset = $id_ext_asset";
                 $r = $this->db->query($query);
                 $data = array();
