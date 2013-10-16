@@ -104,9 +104,8 @@
                                 data[key] = '';
                             }
                         });
-                
                 $.ajax({
-                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara',
                        type: "POST",
                        dataType:'json',
                        async:false,
@@ -114,11 +113,37 @@
                        success:function(response, status){
                         if(response.status == 'success')
                         {
-                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+                            if(response.total_mesin1 == null)
+                            {
+                                response.total_mesin1 = 0;
+                            }
+                            
+                            if(response.total_mesin2 == null)
+                            {
+                                response.total_mesin2 = 0;
+                            }
+                            var total_penggunaan_mesin1 = response.total_mesin1 + ' Jam';
+                            var total_penggunaan_mesin2 = response.total_mesin2 + ' Jam';
+                            
+                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = 'Mesin 1:' + total_penggunaan_mesin1  +'<br />' + 'Mesin 2:' + total_penggunaan_mesin2;
                         }
                            
                        }
                     });
+//                $.ajax({
+//                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+//                       type: "POST",
+//                       dataType:'json',
+//                       async:false,
+//                       data:{tipe_angkutan:'udara',id_ext_asset:data.id},
+//                       success:function(response, status){
+//                        if(response.status == 'success')
+//                        {
+//                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+//                        }
+//                           
+//                       }
+//                    });
                     
                 form.getForm().setValues(data);
             }

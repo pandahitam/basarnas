@@ -116,6 +116,31 @@ class master_model extends MY_Model {
         return array_values($filteredData);
     }
     
+    
+    function AssetWithWriteFilter($kd_lokasi,$kd_brg,$no_aset)
+    {
+        $data = $this->AllAsset();
+        
+        $filterComponent = array();
+        if($kd_lokasi != '')
+        {
+            $filterComponent['kd_lokasi'] = $kd_lokasi;
+        }
+        if($kd_brg != '')
+        {
+            $filterComponent['kd_brg'] = $kd_brg;
+        }
+        if($no_aset != '')
+        {
+            $filterComponent['no_aset'] = $no_aset;
+        }
+        
+        
+        $filteredData = $this->FilteredArray($data, $filterComponent);
+        
+        return array_values($filteredData);
+    }
+    
     // filtering asset reference by kd_brg, kd_lokasi, no_aset
     function RefBarangWithFilter($kd_gol, $kd_bid, $kd_kel, $kd_skel, $kd_sskel) {
         $data = $this->AllRefBarang();
