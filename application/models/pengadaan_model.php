@@ -19,9 +19,9 @@ class Pengadaan_Model extends MY_Model{
 	}
         
 	
-	function get_AllData($start = null, $limit = null, $searchTextFilter = null){
+	function get_AllData($start = null, $limit = null, $searchTextFilter = null,$gridFilter=null){
 		
-                
+                 $isGridFilter = false;
                 if($start !=null && $limit != null)
                 {
                     $query = "$this->selectColumn FROM $this->viewTable LIMIT $start, $limit";
@@ -30,6 +30,14 @@ class Pengadaan_Model extends MY_Model{
                         $query = "$this->selectColumn FROM $this->viewTable
                         where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
                         LIMIT $start, $limit";
+                    }
+                     else if($gridFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                                   where $gridFilter
+                                   LIMIT $start, $limit
+                                    ";
+                        $isGridFilter = true;
                     }
                 }
                 else
@@ -41,9 +49,23 @@ class Pengadaan_Model extends MY_Model{
                         where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
                         ";
                     }
+                    else if($gridFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                                   where $gridFilter
+                                    ";
+                        $isGridFilter = true;
+                    }
                 }
                 
-		return $this->Get_By_Query($query);	
+                if($isGridFilter == true)
+                {
+                    return $this->Get_By_Query($query,true);	
+                }
+                else
+                {
+                    return $this->Get_By_Query($query);	
+                }
 	}
 	
 	function get_ByID($id)
