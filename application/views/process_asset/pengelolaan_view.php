@@ -54,7 +54,7 @@
                     }
                 },
                 selectionAsset: {
-                    noAsetHidden: true
+                    noAsetHidden: false
                 }
             };
 //            debugger;

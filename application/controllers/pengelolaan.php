@@ -47,6 +47,17 @@ class Pengelolaan extends MY_Controller {
                 
 		return $this->deleteProcess($data);
 	}
+        
+        function getSpecificPengelolaan()
+	{
+		$kd_lokasi = $this->input->post("kd_lokasi");
+		$kd_brg = $this->input->post("kd_brg");
+		$no_aset = $this->input->post("no_aset");
+		$data = $this->model->get_Pengelolaan($kd_lokasi, $kd_brg, $no_aset);
+		$datasend["results"] = $data['data'];
+                $datasend["total"] = $data['count'];
+		echo json_encode($datasend);
+	}
 	
 
 }

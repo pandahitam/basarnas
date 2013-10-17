@@ -1747,15 +1747,17 @@
                         textAlign: 'left',
                         width: 150,
                         handler: actions.details
-                    }, '-', {
-                        xtype: 'button',
-                        text: 'Data Tambahan',
-                        textAlign: 'left',
-                        width: 150,
-                        handler: function() {
-                            console.log('Button Press');
-                        }
-                    }, '-', {
+                    }, '-', 
+//                    {
+//                        xtype: 'button',
+//                        text: 'Data Tambahan',
+//                        textAlign: 'left',
+//                        width: 150,
+//                        handler: function() {
+//                            console.log('Button Press');
+//                        }
+//                    },'-', 
+                      {
                         text: 'Pengadaan',
                         textAlign: 'left',
                         handler: actions.pengadaan
@@ -1775,7 +1777,11 @@
                         text: 'Pendayagunaan',
                         textAlign: 'left',
                         handler: actions.pendayagunaan
-                    },  '-', {
+                    },  '-',{
+                        text: 'Pengelolaan',
+                        textAlign: 'left',
+                        handler: actions.pengelolaan
+                    },  '-',  {
                         text: 'Cetak Laporan',
                         iconCls: 'icon-printer',
                         textAlign: 'left',

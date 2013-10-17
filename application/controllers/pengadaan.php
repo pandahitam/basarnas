@@ -45,16 +45,19 @@ class Pengadaan extends MY_Controller {
                 {
                     $this->db->insert('pengadaan',$data);
                     $id = $this->db->insert_id();
+                    $kd_lokasi = $data['kd_lokasi'];
                     
                 }
                 else
                 {
                     $id = $data['id'];
+                    $kd_lokasi = $data['kd_lokasi'];
                     $this->db->set($data);
                     $this->db->replace('pengadaan');
                 }
                 
-                echo "{success:true, id:$id}";
+                
+                echo "{success:true,id:$id}";
 	}
 	
 	function deletePengadaan()
@@ -80,5 +83,6 @@ class Pengadaan extends MY_Controller {
 		$data = $this->model->get_ByKode($kd_lokasi,$kd_brg,$no_aset);
 		echo json_encode($data['data']);
 	}
+        
 }
 ?>

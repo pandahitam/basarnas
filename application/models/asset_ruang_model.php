@@ -15,7 +15,7 @@ class Asset_Ruang_Model extends MY_Model{
                 
                 $this->selectColumn = "SELECT kd_lokasi, kd_brg, no_aset, kd_pemilik, kd_ruang, id, kode_unor, image_url, document_url,
                         nama_unker, nama_unor, ruang, pejabat_ruang, nip_pjrug, ur_sskel,
-                        kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel
+                        kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel
                         ,nama_klasifikasi_aset, kd_klasifikasi_aset,
                         kd_lvl1,kd_lvl2,kd_lvl3";
 	}

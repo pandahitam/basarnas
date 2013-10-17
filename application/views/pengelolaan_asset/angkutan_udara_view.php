@@ -9,6 +9,15 @@
         Ext.namespace('AngkutanUdara', 'AngkutanUdara.reader', 'AngkutanUdara.proxy', 'AngkutanUdara.Data', 'AngkutanUdara.Grid', 'AngkutanUdara.Window',
                 'AngkutanUdara.Form', 'AngkutanUdara.Action', 'AngkutanUdara.URL');
         
+        AngkutanUdara.dataStorePengelolaan = new Ext.create('Ext.data.Store', {
+            model: MPengelolaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pengelolaan/getSpecificPengelolaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         AngkutanUdara.dataStoreDetailPenggunaanAngkutanMesin1 = new Ext.create('Ext.data.Store', {
             model: MDetailPenggunaanAngkutan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -89,7 +98,10 @@
             createUpdateDetailPenggunaanAngkutanUdaraMesin1: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutanUdara/1',
             createUpdateDetailPenggunaanAngkutanUdaraMesin2: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutanUdara/2',
             removeDetailPenggunaanAngkutanUdaraMesin1: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutanUdara/1',
-            removeDetailPenggunaanAngkutanUdaraMesin2: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutanUdara/2'
+            removeDetailPenggunaanAngkutanUdaraMesin2: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutanUdara/2',
+            createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
+            removePengelolaan: BASE_URL + 'pengelolaan/deletePengelolaan'
+
         };
 
         AngkutanUdara.reader = new Ext.create('Ext.data.JsonReader', {
@@ -172,9 +184,132 @@
                 printPDF: function() {
                         AngkutanUdara.Action.printpdf();
                 },
+                pengelolaan: function(){
+                   var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                   var tabpanels = _tab.getComponent('angkutanUdara-pengelolaan');
+                   if (tabpanels === undefined)
+                   {
+                       AngkutanUdara.Action.pengelolaanList();
+                   }
+              },
             };
 
             return actions;
+        };
+        
+        AngkutanUdara.Form.createPengelolaan = function(data, dataForm, edit) {
+            var setting = {
+                url: AngkutanUdara.URL.createUpdatePengelolaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pengelolaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
+                
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        AngkutanUdara.Action.pengelolaanEdit = function() {
+            var selected = Ext.getCmp('angkutanUdara_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = AngkutanUdara.Form.createPengelolaan(AngkutanUdara.dataStorePengelolaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pengelolaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        AngkutanUdara.Action.pengelolaanRemove = function() {
+            var selected = Ext.getCmp('angkutanUdara_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePengelolaan, AngkutanUdara.dataStorePengelolaan);
+            }
+        };
+
+
+        AngkutanUdara.Action.pengelolaanAdd = function()
+        {
+            var selected = AngkutanUdara.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset,
+                nama:data.ur_sskel,
+            };
+
+            var form = AngkutanUdara.Form.createPengelolaan(AngkutanUdara.dataStorePengelolaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pengelolaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'tanah-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        AngkutanUdara.Action.pengelolaanList = function() {
+            var selected = AngkutanUdara.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                AngkutanUdara.dataStorePengelolaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                AngkutanUdara.dataStorePengelolaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                AngkutanUdara.dataStorePengelolaan.getProxy().extraParams.no_aset = data.no_aset;
+                AngkutanUdara.dataStorePengelolaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "angkutanUdara_grid_pengelolaan",
+                    edit : AngkutanUdara.Action.pengelolaanEdit,
+                    add : AngkutanUdara.Action.pengelolaanAdd,
+                    remove : AngkutanUdara.Action.pengelolaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: AngkutanUdara.dataStorePengelolaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _angkutanUdaraPendayagunaanGrid = Grid.pengelolaanGrid(setting);
+                Tab.addToForm(_angkutanUdaraPendayagunaanGrid, 'angkutanUdara-pengelolaan', 'Pengelolaan');
+            }
         };
         
         AngkutanUdara.addPerlengkapan = function()

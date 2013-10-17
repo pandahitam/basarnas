@@ -31,29 +31,48 @@ class inventory_perlengkapan extends MY_Controller {
             {
                 foreach($data as $row)
                 {
-                    $this->db->insert('pengadaan_data_perlengkapan',$row);
+                   
+                    if($row->kd_brg == '')
+                    {
+                        $row->kd_brg = '-';
+                    }
+                    $no_aset = $this->noAssetGenerator($row->kd_brg,$row->kd_lokasi);
                     $asset_perlengkapan_data = array(
                         'kd_brg'=>$row->kd_brg,
+                        'kd_lokasi'=>$row->kd_lokasi,
                         'part_number'=>$row->part_number,
                         'kondisi'=>$row->status_barang,
                         'dari'=>$row->asal_barang,
                         'serial_number'=>$row->serial_number,
                         'kuantitas'=>$row->qty,
+                        'no_aset'=>$no_aset
                     );
+                    unset($row->kd_lokasi);
+                     $this->db->insert('pengadaan_data_perlengkapan',$row);
                     $this->db->insert('asset_perlengkapan',$asset_perlengkapan_data);
+                    
                 }
             }
             else
             {
-                $this->db->insert('pengadaan_data_perlengkapan',$data);
+                
+                if($data->kd_brg == '')
+                {
+                    $data->kd_brg = '-';
+                }
+                $no_aset = $this->noAssetGenerator($data->kd_brg,$data->kd_lokasi);
                 $asset_perlengkapan_data = array(
                         'kd_brg'=>$data->kd_brg,
+                        'kd_lokasi'=>$data->kd_lokasi,
                         'part_number'=>$data->part_number,
                         'kondisi'=>$data->status_barang,
                         'dari'=>$data->asal_barang,
                         'serial_number'=>$data->serial_number,
                         'kuantitas'=>$data->qty,
+                        'no_aset'=>$no_aset
                     );
+                unset($data->kd_lokasi);
+                $this->db->insert('pengadaan_data_perlengkapan',$data);
                 $this->db->insert('asset_perlengkapan',$asset_perlengkapan_data);
             }
             

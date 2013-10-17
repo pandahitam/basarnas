@@ -21,7 +21,7 @@ class Asset_Perlengkapan extends MY_Controller {
 	}
 	
 	function modifyPerlengkapan(){
-
+            
                 $dataSimak = array();
                 $dataKlasifikasiAset = array();
                 
@@ -65,13 +65,19 @@ class Asset_Perlengkapan extends MY_Controller {
                 
                 $partNumberDetails = $this->model->get_partNumberDetails($dataSimak['part_number']);
                 $dataSimak['kd_brg'] = $partNumberDetails->kd_brg;
-                
+                if($dataSimak['kd_brg'] == '' || $dataSimak['kd_brg'] == null)
+                {
+                    $dataSimak['kd_brg'] == '-';
+                }
                 foreach($klasifikasiAsetFields as $field)
                 {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);
                 }
+                if($dataKlasifikasiAset != '')
+                {
+                    $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
+                }
                 
-                $dataSimak['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
                 
                 //GENERATE NO ASET
                 if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")

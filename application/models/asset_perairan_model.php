@@ -19,7 +19,7 @@ class Asset_Perairan_Model extends MY_Model{
                             dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, tgl_buku, kons_sist, rphwajar, status, 
                             id, kode_unor, image_url, document_url,  
                             nama_unker, nama_unor,
-                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel
+                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel,ur_sskel
                             ,nama_klasifikasi_aset, kd_klasifikasi_aset,
                             kd_lvl1,kd_lvl2,kd_lvl3";
 	}

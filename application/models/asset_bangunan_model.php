@@ -31,7 +31,7 @@ class Asset_Bangunan_Model extends MY_Model{
                         id, kode_unor, image_url, document_url,
                         nop, njkp, waktu_pembayaran, setoran_pajak, keterangan,
                         nama_unker, nama_unor,
-                        kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel
+                        kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel
                         ,nama_klasifikasi_aset, kd_klasifikasi_aset,
                         kd_lvl1,kd_lvl2,kd_lvl3";
 	}

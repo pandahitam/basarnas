@@ -107,21 +107,21 @@ class Asset_Angkutan_Udara extends MY_Controller {
         {
             $dataPerlengkapanUdara = array();
             $dataPerlengkapanUdaraFields = array(
-                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','part_number','serial_number'
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','id_asset_perlengkapan'
             );
             
             foreach ($dataPerlengkapanUdaraFields as $field) {
 			$dataPerlengkapanUdara[$field] = $this->input->post($field);
             }
             
-            if($dataPerlengkapanUdara['part_number'] == '' || $dataPerlengkapanUdara['part_number'] == null)
-            {
-                $dataPerlengkapanUdara['part_number'] = '-';
-            }
-            if($dataPerlengkapanUdara['serial_number'] == '' || $dataPerlengkapanUdara['serial_number'] == null)
-            {
-                $dataPerlengkapanUdara['serial_number'] = '-';
-            }
+//            if($dataPerlengkapanUdara['part_number'] == '' || $dataPerlengkapanUdara['part_number'] == null)
+//            {
+//                $dataPerlengkapanUdara['part_number'] = '-';
+//            }
+//            if($dataPerlengkapanUdara['serial_number'] == '' || $dataPerlengkapanUdara['serial_number'] == null)
+//            {
+//                $dataPerlengkapanUdara['serial_number'] = '-';
+//            }
             if($dataPerlengkapanUdara['keterangan'] == '' || $dataPerlengkapanUdara['keterangan'] == null)
             {
                 $dataPerlengkapanUdara['keterangan'] = '-';

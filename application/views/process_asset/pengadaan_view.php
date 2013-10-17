@@ -8,7 +8,7 @@ var Params_M_Pengadaan = null;
 Ext.namespace('Pengadaan','Pengadaan.reader', 'Pengadaan.proxy', 'Pengadaan.Data','Pengadaan.Grid','Pengadaan.Window','Pengadaan.Form','Pengadaan.Action','Pengadaan.URL');
 
 Pengadaan.dataStoreParts = new Ext.create('Ext.data.Store', {
-            model: MParts, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            model: MPartsPengadaan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
             proxy: new Ext.data.AjaxProxy({
                 actionMethods: {read: 'POST'},
                 api: {

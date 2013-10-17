@@ -614,7 +614,8 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         {
             
             var form = Form.panelPengadaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, {
+             form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(1, {
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
@@ -623,7 +624,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 defaultType: 'container',
                 frame: true,
                 items: [{
-                            columnWidth: .5,
+                            columnWidth: .33,
                             layout: 'anchor',
                             defaults: {
                                 anchor: '95%',
@@ -631,11 +632,13 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items : [{
-                                    fieldLabel : "Kode Barang",
-                                    name : "kd_brg"
+                                    allowBlank:false,
+                                    fieldLabel : "Kode Barang *",
+                                    name : "kd_brg",
+                                    readOnly:true,
                             }]
                         },{
-                            columnWidth: .5,
+                            columnWidth: .33,
                             layout: 'anchor',
                             defaults: {
                                 anchor: '100%',
@@ -644,10 +647,59 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             defaultType: 'textfield',
                             items : [{
                                     fieldLabel : "Nama",
-                                    name : "nama"
+                                    name : "nama",
+                                    readOnly:true,
+                            }]
+                        },{
+                            columnWidth: .34,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '100%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items : [{
+                                    allowBlank:false,
+                                    fieldLabel : "No Aset *",
+                                    name : "no_aset",
+                                    readOnly:true,
                             }]
                         }]
             });
+//            form.insert(1, {
+//                xtype: 'fieldset',
+//                layout: 'column',
+//                anchor: '100%',
+//                title: 'Reference',
+//                border: false,
+//                defaultType: 'container',
+//                frame: true,
+//                items: [{
+//                            columnWidth: .5,
+//                            layout: 'anchor',
+//                            defaults: {
+//                                anchor: '95%',
+//                                labelWidth: 120
+//                            },
+//                            defaultType: 'textfield',
+//                            items : [{
+//                                    fieldLabel : "Kode Barang ",
+//                                    name : "kd_brg"
+//                            }]
+//                        },{
+//                            columnWidth: .5,
+//                            layout: 'anchor',
+//                            defaults: {
+//                                anchor: '100%',
+//                                labelWidth: 120
+//                            },
+//                            defaultType: 'textfield',
+//                            items : [{
+//                                    fieldLabel : "Nama",
+//                                    name : "nama"
+//                            }]
+//                        }]
+//            });
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.gridParts(setting_grid_parts,false));
             form.insert(4, Form.Component.fileUpload());
@@ -708,6 +760,17 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //            form.insert(2, Form.Component.klasifikasiAset(setting.isEditing));
             form.insert(3, Form.Component.pendayagunaan());
             form.insert(4, Form.Component.fileUploadDocumentOnly('document','fileupload_pendayagunaan'));
+
+            return form;
+        };
+        
+        Form.pengelolaanInAsset = function(setting)
+        {
+            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(1, Form.Component.hiddenIdentifier());
+//            form.insert(2, Form.Component.klasifikasiAset(setting.isEditing));
+            form.insert(2, Form.Component.pengelolaan(setting.isEditing));
+            form.insert(3, Form.Component.fileUpload(setting.isEditing));
 
             return form;
         };
@@ -1878,6 +1941,20 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 form.submit({
                                     success: function(form, action) {
                                         var id = action.result.id;
+                                        var kd_lokasi = '';
+                                        $.ajax({
+                                                url:BASE_URL + 'pengadaan/getByID',
+                                                type: "POST",
+                                                dataType:'json',
+                                                async:false,
+                                                data:{id_pengadaan:id},
+                                                success:function(response, status){
+                                                 
+                                                     kd_lokasi = response.data[0].kd_lokasi;
+                                                 
+
+                                                }
+                                             });
                                         var gridStore = Ext.getCmp('grid_pengadaan_parts').getStore();
                                         var new_records = gridStore.getNewRecords();
 //                                        var updated_records = grid.getUpdatedRecords();
@@ -1886,6 +1963,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             var index = gridStore.indexOf(obj);
                                             var record = gridStore.getAt(index);
                                             record.set('id_source',id);
+                                            record.set('kd_lokasi',kd_lokasi);
                                         });
                                             gridStore.sync();
                      
@@ -5202,14 +5280,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         fn: function(obj, value) {
                                             if(value == "Part Pesawat")
                                             {
-                                                Ext.getCmp('perlengkapan_angkutan_udara_part_number').setDisabled(false);
-                                                Ext.getCmp('perlengkapan_angkutan_udara_serial_number').setDisabled(false);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_part').setDisabled(false);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setDisabled(false);
                                                 Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(true);
                                             }
                                             else
                                             {
-                                                Ext.getCmp('perlengkapan_angkutan_udara_part_number').setDisabled(true);
-                                                Ext.getCmp('perlengkapan_angkutan_udara_serial_number').setDisabled(true);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_part').setDisabled(true);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setDisabled(true);
                                                 Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(false);
                                             }
                                             
@@ -5233,16 +5311,35 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             {
                                 disabled:true,
-                                fieldLabel: 'Part Number',
-                                name: 'part_number',
-                                id:'perlengkapan_angkutan_udara_part_number'
+                                xtype: 'combo',
+                                id:'angkutan_udara_asset_perlengkapan_part',
+                                fieldLabel: 'Part Number Asset Perlengkapan',
+                                name: 'id_asset_perlengkapan',
+                                anchor: '100%',
+                                allowBlank: true,
+                                store: Reference.Data.assetPerlengkapanPart,
+                                valueField: 'id',
+                                editable:false,
+                                displayField: 'part_number', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var serial_number = obj.valueModels[0].data.serial_number;
+                                           Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setValue(serial_number);
+                                        },
+                                        scope: this
+                                    }
+                                }
                             },
                             {
                                 disabled:true,
-                                fieldLabel: 'Serial Number',
-                                name: 'serial_number',
-                                id:'perlengkapan_angkutan_udara_serial_number'
-                            }]
+                                xtype:'textfield',
+                                fieldLabel:'Serial Number Asset Perlengkapan',
+                                name:'serial_number',
+                                id:'angkutan_udara_asset_perlengkapan_serial_number',
+                                readOnly:true,
+                            },]
                     },]
             };
 
@@ -7011,7 +7108,8 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 { xtype : 'hidden',name: 'kode_unor'}, 
                                 { xtype : 'hidden', name: 'id', id:'hidden_identifier_id_pemeliharaan'},
                                 { xtype : 'hidden', name: 'kd_brg'},
-                                { xtype : 'hidden', name: 'no_aset'}
+                                { xtype : 'hidden', name: 'no_aset'},
+                                { xtype : 'hidden', name: 'nama'}
                             ];       
             return components;
         };
@@ -7612,19 +7710,23 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 {
                                     fieldLabel: 'Nama Operasi SAR',
                                     name: 'nama_operasi',
+                                    allowBlank:false,
                                 }, {
                                     fieldLabel: 'PIC',
-                                    name: 'pic'
+                                    name: 'pic',
+                                    allowBlank:false,
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Mulai',
                                     name: 'tanggal_mulai',
-                                    format : 'Y-m-d'
+                                    format : 'Y-m-d',
+                                    allowBlank:false,
                                 }, {
                                     xtype: 'datefield',
                                     fieldLabel: 'Tanggal Selesai',
                                     name: 'tanggal_selesai',
-                                    format : 'Y-m-d'
+                                    format : 'Y-m-d',
+                                    allowBlank:false,
                                 }
                             ]
                         }, {
@@ -7930,6 +8032,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     allowBlank: false,
                                     store: Reference.Data.partNumber,
                                     valueField: 'part_number',
+                                    editable:false,
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
@@ -7947,9 +8050,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                     var fieldPartNumber = Ext.getCmp('part_number');
                                                     
                                                     if (fieldPartNumber != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                        
                                                             fieldPartNumber.setValue(value);
-                                                        }
+                                                        
                                                     }
                                                     else {
                                                         console.error('error');
@@ -7965,6 +8068,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     fieldLabel: 'Serial Number',
                                     name: 'serial_number'
                                 },
+//                                {
+//                                    fieldLabel: 'Kode Barang',
+//                                    name: 'kd_brg'
+//                                },
                                 {
                                     xtype: 'combo',
                                     disabled: false,

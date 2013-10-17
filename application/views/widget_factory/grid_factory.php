@@ -468,8 +468,8 @@
                             {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             
                         ]
@@ -1066,27 +1066,27 @@ var search = [{
                 var settingGrid = {
                     grid: {
                         id: setting.toolbar.idGrid,
-                        title: 'Pendayagunaan',
+                        title: 'PENDAYAGUNAAN',
                         column: [
                             {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                             {header: 'ID', dataIndex: 'id', flex:0.5, hidden: true, groupable: false, filter: {type: 'number'}},
-                            {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
-                            {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
-                            {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
-                            {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
-                            {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset',flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Kode Klasifikasi Aset Level 1', dataIndex: 'kd_lvl1', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Kode Klasifikasi Aset Level 2', dataIndex: 'kd_lvl2', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'Unit Kerja', dataIndex: 'nama_unker', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Unit Organisasi', dataIndex: 'nama_unor', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'Kode Barang', dataIndex: 'kd_brg', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'No Aset', dataIndex: 'no_aset', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
-                            {header: 'Part Number', dataIndex: 'part_number', flex:1, groupable: false, filter: {type: 'string'}},
-                            {header: 'Serial Number', dataIndex: 'serial_number', flex:1, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Part Number', dataIndex: 'part_number', flex:1, groupable: false, filter: {type: 'string'}},
+//                            {header: 'Serial Number', dataIndex: 'serial_number', flex:1, groupable: false, filter: {type: 'string'}},
                             {header: 'Mode Pendayagunaan', dataIndex: 'mode_pendayagunaan', flex:1.5, groupable: false, filter: {type: 'string'}},
                             {header: 'Pihak Ke-Tiga', dataIndex: 'pihak_ketiga', flex:1, hidden: false, groupable: false},
                             {header: 'Tanggal Mulai', dataIndex: 'tanggal_start', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Tanggal Selesai', dataIndex: 'tanggal_end', flex:1, hidden: false, groupable: false, filter: {type: 'string'}},
-                            {header: 'Deksiprisi', dataIndex: 'description', flex:1, hidden: false, groupable: false},
+                            {header: 'Deskripsi', dataIndex: 'description', flex:1, hidden: false, groupable: false},
                             {header: 'Document', dataIndex: 'document', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'Nama Aset', dataIndex: 'nama', flex:1, hidden: true, groupable: false, filter: {type: 'string'}},
                         ]
@@ -1106,6 +1106,103 @@ var search = [{
                         },
                         remove: {
                             id: 'button_remove_pendayagunaan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+            
+
+
+
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
+            
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '->', {
+                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, search
+                ]
+            });
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
+        
+        
+        Grid.pengelolaanGrid = function(setting) {
+                var settingGrid = {
+                    grid: {
+                        id: setting.toolbar.idGrid,
+                        title: 'PENGELOLAAN',
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'ID', dataIndex: 'id', flex:0.5, groupable: false, hidden:true, filter: {type: 'number'}},
+                            {header: 'Nama Operasi SAR', dataIndex: 'nama_operasi', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'PIC', dataIndex: 'pic', flex: 1, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tanggal Mulai', dataIndex: 'tanggal_mulai', flex: 1, groupable: false, filter: {type: 'string'}},
+                            {header: 'Tanggal Mulai', dataIndex: 'tanggal_selesai', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Deskripsi', dataIndex: 'deskripsi', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'No Aset', dataIndex: 'no_aset', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Nama Barang', dataIndex: 'nama', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Image Url', dataIndex: 'image_url', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Document Url', dataIndex: 'document_url', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_pengelolaan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_pengelolaan',
+                        add: {
+                            id: 'button_add_pengelolaan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_pengelolaan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_pengelolaan',
                             action: setting.toolbar.remove
                         }
                     }

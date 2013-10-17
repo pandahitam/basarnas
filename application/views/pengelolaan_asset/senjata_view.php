@@ -8,6 +8,16 @@
 
         Ext.namespace('Senjata', 'Senjata.reader', 'Senjata.proxy', 'Senjata.Data', 'Senjata.Grid', 'Senjata.Window', 'Senjata.Form', 'Senjata.Action', 'Senjata.URL');
         
+        
+        Senjata.dataStorePengelolaan = new Ext.create('Ext.data.Store', {
+            model: MPengelolaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pengelolaan/getSpecificPengelolaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Senjata.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
             model: MPemeliharaanPart, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -53,7 +63,9 @@
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
-            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
+            createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
+            removePengelolaan: BASE_URL + 'pengelolaan/deletePengelolaan'
         };
 
         Senjata.reader = new Ext.create('Ext.data.JsonReader', {
@@ -136,9 +148,132 @@
                 printPDF: function() {
                         Senjata.Action.printpdf();
                 },
+                pengelolaan: function(){
+                           var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                           var tabpanels = _tab.getComponent('senjata-pengelolaan');
+                           if (tabpanels === undefined)
+                           {
+                               Senjata.Action.pengelolaanList();
+                           }
+                      },
             };
 
             return actions;
+        };
+        
+        Senjata.Form.createPengelolaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Senjata.URL.createUpdatePengelolaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pengelolaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
+                
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Senjata.Action.pengelolaanEdit = function() {
+            var selected = Ext.getCmp('senjata_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Senjata.Form.createPengelolaan(Senjata.dataStorePengelolaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pengelolaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Senjata.Action.pengelolaanRemove = function() {
+            var selected = Ext.getCmp('senjata_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                Modal.deleteAlert(arrayDeleted, Senjata.URL.removePengelolaan, Senjata.dataStorePengelolaan);
+            }
+        };
+
+
+        Senjata.Action.pengelolaanAdd = function()
+        {
+            var selected = Senjata.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset,
+                nama:data.ur_sskel,
+            };
+
+            var form = Senjata.Form.createPengelolaan(Senjata.dataStorePengelolaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pengelolaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'tanah-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Senjata.Action.pengelolaanList = function() {
+            var selected = Senjata.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Senjata.dataStorePengelolaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Senjata.dataStorePengelolaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Senjata.dataStorePengelolaan.getProxy().extraParams.no_aset = data.no_aset;
+                Senjata.dataStorePengelolaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "senjata_grid_pengelolaan",
+                    edit : Senjata.Action.pengelolaanEdit,
+                    add : Senjata.Action.pengelolaanAdd,
+                    remove : Senjata.Action.pengelolaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Senjata.dataStorePengelolaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _senjataPendayagunaanGrid = Grid.pengelolaanGrid(setting);
+                Tab.addToForm(_senjataPendayagunaanGrid, 'senjata-pengelolaan', 'Pengelolaan');
+            }
         };
 
         Senjata.Form.create = function(data, edit) {

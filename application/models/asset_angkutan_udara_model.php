@@ -25,7 +25,7 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status,
                             id, kode_unor, image_url, document_url, 
                             nama_unker, nama_unor,
-                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel
+                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel
                             ,nama_klasifikasi_aset, kd_klasifikasi_aset,
                             kd_lvl1,kd_lvl2,kd_lvl3,
                             udara_surat_bukti_kepemilikan_no,udara_surat_bukti_kepemilikan_keterangan,udara_surat_bukti_kepemilikan_file,
@@ -140,7 +140,7 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
         {
             if($_POST['open'] == 1)
             {
-                $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan,part_number,serial_number 
+                $query = "select id,id_ext_asset,id_asset_perlengkapan,jenis_perlengkapan,no,nama,keterangan
                         FROM ext_asset_angkutan_udara_perlengkapan WHERE id_ext_asset = $id_ext_asset";
 //                return $this->Get_By_Query($query);
                 $r = $this->db->query($query);

@@ -9,6 +9,16 @@
         Ext.namespace('Perlengkapan', 'Perlengkapan.reader', 'Perlengkapan.proxy', 'Perlengkapan.Data', 'Perlengkapan.Grid', 'Perlengkapan.Window', 'Perlengkapan.Form', 'Perlengkapan.Action',
                 'Perlengkapan.URL');
         
+        
+        Perlengkapan.dataStorePengelolaan = new Ext.create('Ext.data.Store', {
+            model: MPengelolaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pengelolaan/getSpecificPengelolaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Perlengkapan.dataStorePendayagunaan = new Ext.create('Ext.data.Store', {
             model: MPendayagunaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -41,7 +51,9 @@
             createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/modifyPemeliharaanPerlengkapan',
             removePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/deletePemeliharaanPerlengkapan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
-            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan'
+            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+            createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
+            removePengelolaan: BASE_URL + 'pengelolaan/deletePengelolaan'
 
         };
 
@@ -74,7 +86,7 @@
 
         Perlengkapan.Form.create = function(data, edit) {
             var form = Form.asset(Perlengkapan.URL.createUpdate, Perlengkapan.Data, edit);
-            form.insert(0, Form.Component.unit(edit));
+            form.insert(0, Form.Component.unit(edit,form));
 //            form.insert(3, Form.Component.address());
 //            form.insert(4, Form.Component.perlengkapan());
 //            form.insert(5, Form.Component.tambahanPerlengkapanPerlengkapan());
@@ -177,12 +189,135 @@
                         Perlengkapan.Action.pendayagunaanList();
                     }
                 },
-                printPDF: function() {
+               printPDF: function() {
                         Perlengkapan.Action.printpdf();
                 },
+               pengelolaan: function(){
+                    var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                    var tabpanels = _tab.getComponent('perlengkapan-pengelolaan');
+                    if (tabpanels === undefined)
+                    {
+                        Perlengkapan.Action.pengelolaanList();
+                    }
+               },
             };
 
             return actions;
+        };
+        
+        Perlengkapan.Form.createPengelolaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Perlengkapan.URL.createUpdatePengelolaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pengelolaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
+                
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Perlengkapan.Action.pengelolaanEdit = function() {
+            var selected = Ext.getCmp('perlengkapan_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Perlengkapan.Form.createPengelolaan(Perlengkapan.dataStorePengelolaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pengelolaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Perlengkapan.Action.pengelolaanRemove = function() {
+            var selected = Ext.getCmp('perlengkapan_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                Modal.deleteAlert(arrayDeleted, Perlengkapan.URL.removePengelolaan, Perlengkapan.dataStorePengelolaan);
+            }
+        };
+
+
+        Perlengkapan.Action.pengelolaanAdd = function()
+        {
+            var selected = Perlengkapan.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset,
+                nama:data.ur_sskel,
+            };
+
+            var form = Perlengkapan.Form.createPengelolaan(Perlengkapan.dataStorePengelolaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pengelolaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'tanah-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Perlengkapan.Action.pengelolaanList = function() {
+            var selected = Perlengkapan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Perlengkapan.dataStorePengelolaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perlengkapan.dataStorePengelolaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perlengkapan.dataStorePengelolaan.getProxy().extraParams.no_aset = data.no_aset;
+                Perlengkapan.dataStorePengelolaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "perlengkapan_grid_pengelolaan",
+                    edit : Perlengkapan.Action.pengelolaanEdit,
+                    add : Perlengkapan.Action.pengelolaanAdd,
+                    remove : Perlengkapan.Action.pengelolaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Perlengkapan.dataStorePengelolaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _perlengkapanPendayagunaanGrid = Grid.pengelolaanGrid(setting);
+                Tab.addToForm(_perlengkapanPendayagunaanGrid, 'perlengkapan-pengelolaan', 'Pengelolaan');
+            }
         };
         
         Perlengkapan.Form.createPendayagunaan = function(data, dataForm, edit) {

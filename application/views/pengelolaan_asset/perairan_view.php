@@ -8,6 +8,15 @@
 
         Ext.namespace('Perairan', 'Perairan.reader', 'Perairan.proxy', 'Perairan.Data', 'Perairan.Grid', 'Perairan.Window', 'Perairan.Form', 'Perairan.Action', 'Perairan.URL');
         
+        Perairan.dataStorePengelolaan = new Ext.create('Ext.data.Store', {
+            model: MPengelolaan, autoLoad: false, noCache: false,
+            proxy: new Ext.data.AjaxProxy({
+                url: BASE_URL + 'pengelolaan/getSpecificPengelolaan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+            })
+        });
+        
         Perairan.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
             model: MPemeliharaanPart, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
@@ -53,7 +62,9 @@
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
-            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
+            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
+            createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
+            removePengelolaan: BASE_URL + 'pengelolaan/deletePengelolaan'
 
         };
 
@@ -137,9 +148,132 @@
                 printPDF: function() {
                         Perairan.Action.printpdf();
                 },
-            };
+                pengelolaan: function(){
+                   var _tab = Modal.assetEdit.getComponent('asset-window-tab');
+                   var tabpanels = _tab.getComponent('perairan-pengelolaan');
+                   if (tabpanels === undefined)
+                   {
+                       Perairan.Action.pengelolaanList();
+                   }
+              },
+           };
 
             return actions;
+        };
+        
+        Perairan.Form.createPengelolaan = function(data, dataForm, edit) {
+            var setting = {
+                url: Perairan.URL.createUpdatePengelolaan,
+                data: data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: '',
+                    fn: function() {
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+            };
+
+            var form = Form.pengelolaanInAsset(setting);
+
+            if (dataForm !== null)
+            {
+                Ext.Object.each(dataForm,function(key,value,myself){
+                    if(dataForm[key] == '0000-00-00')
+                    {
+                        dataForm[key] = '';
+                    }
+                });
+                
+                form.getForm().setValues(dataForm);
+            }
+            return form;
+        };
+        
+        Perairan.Action.pengelolaanEdit = function() {
+            var selected = Ext.getCmp('perairan_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var dataForm = selected[0].data;
+                var form = Perairan.Form.createPengelolaan(Perairan.dataStorePengelolaan, dataForm, true);
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pengelolaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+//                Tab.addToForm(form, 'tanah-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+            }
+        };
+
+        Perairan.Action.pengelolaanRemove = function() {
+            var selected = Ext.getCmp('perairan_grid_pengelolaan').getSelectionModel().getSelection();
+            if (selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id
+                    };
+                    arrayDeleted.push(data);
+                });
+                Modal.deleteAlert(arrayDeleted, Perairan.URL.removePengelolaan, Perairan.dataStorePengelolaan);
+            }
+        };
+
+
+        Perairan.Action.pengelolaanAdd = function()
+        {
+            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
+            var data = selected[0].data;
+            var dataForm = {
+                kd_lokasi: data.kd_lokasi,
+                kd_brg: data.kd_brg,
+                no_aset: data.no_aset,
+                nama:data.ur_sskel,
+            };
+
+            var form = Perairan.Form.createPengelolaan(Perairan.dataStorePengelolaan, dataForm, false);
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pengelolaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+//            Tab.addToForm(form, 'tanah-add-pendayagunaan', 'Add Pendayagunaan');
+        };
+        
+        Perairan.Action.pengelolaanList = function() {
+            var selected = Perairan.Grid.grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+                var data = selected[0].data;
+                
+                Perairan.dataStorePengelolaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                Perairan.dataStorePengelolaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                Perairan.dataStorePengelolaan.getProxy().extraParams.no_aset = data.no_aset;
+                Perairan.dataStorePengelolaan.load();
+                
+                var toolbarIDs = {
+                    idGrid : "perairan_grid_pengelolaan",
+                    edit : Perairan.Action.pengelolaanEdit,
+                    add : Perairan.Action.pengelolaanAdd,
+                    remove : Perairan.Action.pengelolaanRemove,
+                };
+
+                var setting = {
+                    data: data,
+                    dataStore: Perairan.dataStorePengelolaan,
+                    toolbar: toolbarIDs,
+                };
+                
+                var _perairanPendayagunaanGrid = Grid.pengelolaanGrid(setting);
+                Tab.addToForm(_perairanPendayagunaanGrid, 'perairan-pengelolaan', 'Pengelolaan');
+            }
         };
 
         Perairan.Form.create = function(data, edit) {
