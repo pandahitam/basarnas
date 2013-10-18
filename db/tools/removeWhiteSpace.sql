@@ -1,4 +1,7 @@
 USE db_asset_basarnas;
+
+UPDATE asset_angkutan SET rph_aset = 2674741245 WHERE rph_aset = 2674741245000; -- Salah entri data
+
 UPDATE asset_alatbesar 
 	SET
 	`kd_lokasi` = TRIM(`kd_lokasi`), 
@@ -388,29 +391,3 @@ UPDATE db_asset_basarnas.t_masteru
 	`umeko` = TRIM(`umeko`),
 	`rph_res` = TRIM(`rph_res`),
 	`kdkppn` = TRIM(`kdkppn`);
-	
-UPDATE asset_angkutan SET rph_aset = 2674741245 WHERE rph_aset = 2674741245000;
-UPDATE ext_asset_angkutan SET kode_unor="44" WHERE kd_brg = "3020501005";
-UPDATE
-asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b`
-ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
-SET `b`.`kd_klasifikasi_aset` = "020200"
-WHERE `a`.`merk` LIKE "%rescue%boat%" OR `a`.`type` LIKE "%rescue%boat%";
-UPDATE
-asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b`
-ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
-SET `b`.`kd_klasifikasi_aset` = "010100"
-WHERE `a`.`merk` LIKE "%rescue%truc%" OR `a`.`type` LIKE "%rescue%truc%";
-UPDATE
-asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b`
-ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
-SET `b`.`kd_klasifikasi_aset` = "010201"
-WHERE `a`.`merk` LIKE "%rescue%car%" OR `a`.`type` LIKE "%rescue%car%";
-UPDATE
-asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b`
-ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
-SET `b`.`kode_unor` = "44"
-WHERE `b`.`kd_klasifikasi_aset` <> "999999";
-UPDATE ext_asset_angkutan
-SET kode_unor = "73", kd_klasifikasi_aset="040306"
-WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3020101002" AND no_aset>=7 AND no_aset<=10;
