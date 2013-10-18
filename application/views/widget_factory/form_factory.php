@@ -2981,10 +2981,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
 
-                                        if (!edit)
-                                        {
+//                                        if (!edit)
+//                                        {
+//                                            Modal.closeAssetWindow();
+//                                        }
                                             Modal.closeAssetWindow();
-                                        }
                                     },
                                     failure: function() {
                                         Ext.MessageBox.alert('Fail', 'Changes saved fail.');
@@ -7822,7 +7823,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             {
                                                 comboUnitWaktu.setValue(value);
                                             }
-                                            if(value != 0 || value != null)
+                                            if(value != 0 && value != null)
                                             {
                                                 var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
                                                 pilihUnit.setValue(1);
@@ -7843,7 +7844,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             {
                                                 comboUnitFreq.setValue(value);
                                             }
-                                            if(value != 0 || value != null)
+                                            if(value != 0 && value != null)
                                             {
                                                 var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
                                                 pilihUnit.setValue(2);
@@ -8066,7 +8067,27 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 },
                                 {
                                     fieldLabel: 'Serial Number',
-                                    name: 'serial_number'
+                                    name: 'serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null && value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('asset_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('asset_perlengkapan_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
                                 },
 //                                {
 //                                    fieldLabel: 'Kode Barang',
@@ -8087,6 +8108,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 {
                                     xtype: 'numberfield',
                                     fieldLabel: 'Kuantitas',
+                                    id:'asset_perlengkapan_qty',
                                     name: 'kuantitas'
                                 }, {
                                     fieldLabel: 'Dari',
@@ -8513,12 +8535,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 {
                                                     var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
                                                     qtyField.setValue(1);
-                                                    qtyField.readOnly = true;
+                                                    qtyField.setReadOnly(true);
                                                 }
                                                 else
                                                 {
                                                     var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
-                                                    qtyField.readOnly = false;
+                                                    qtyField.setReadOnly(false);
                                                 }
 
                                             },
@@ -8625,12 +8647,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 {
                                                     var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
                                                     qtyField.setValue(1);
-                                                    qtyField.readOnly = true;
+                                                    qtyField.setReadOnly(true);
                                                 }
                                                 else
                                                 {
                                                     var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
-                                                    qtyField.readOnly = false;
+                                                    qtyField.setReadOnly(false);
                                                 }
 
                                             },

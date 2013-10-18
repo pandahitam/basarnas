@@ -953,7 +953,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-    function klasifikasi_aset_lvl3_modifyKlasifikasiAsetLvl3() {
+    function klasifikasi_aset_lvl3_createKlasifikasiAsetLvl3() {
         
         $data = array();
         
@@ -969,6 +969,28 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_klasifikasiaset_lvl3');
+        
+        echo "{success: true}";
+    }
+    
+    function klasifikasi_aset_lvl3_modifyKlasifikasiAsetLvl3() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lvl1','kd_lvl2','kd_lvl3','nama','kd_klasifikasi_aset'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_klasifikasi_aset'] = $data['kd_lvl1'].$data['kd_lvl2'].$data['kd_lvl3'];
+        $this->db->where('kd_lvl1',$data['kd_lvl1']);
+        $this->db->where('kd_lvl2',$data['kd_lvl2']);
+        $this->db->where('kd_lvl3',$data['kd_lvl3']);
+        unset($data['kd_lvl1'],$data['kd_lvl2'],$data['kd_lvl3']);
+        $this->db->update('ref_klasifikasiaset_lvl3',$data);
         
         echo "{success: true}";
     }
@@ -1008,7 +1030,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-    function klasifikasi_aset_lvl2_modifyKlasifikasiAsetLvl2() {
+    function klasifikasi_aset_lvl2_createKlasifikasiAsetLvl2() {
         
         $data = array();
         
@@ -1024,6 +1046,28 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_klasifikasiaset_lvl2');
+        
+        echo "{success: true}";
+    }
+    
+    function klasifikasi_aset_lvl2_modifyKlasifikasiAsetLvl2() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lvl1','kd_lvl2','nama','kd_lvl2_brg'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_lvl2_brg'] = $data['kd_lvl1'].$data['kd_lvl2'];
+        
+        $this->db->where('kd_lvl1',$data['kd_lvl1']);
+        $this->db->where('kd_lvl2',$data['kd_lvl2']);
+        unset($data['kd_lvl1'],$data['kd_lvl2']);
+        $this->db->update('ref_klasifikasiaset_lvl2',$data);
         
         echo "{success: true}";
     }
@@ -1063,7 +1107,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-    function klasifikasi_aset_lvl1_modifyKlasifikasiAsetLvl1() {
+    function klasifikasi_aset_lvl1_createKlasifikasiAsetLvl1() {
         
         $data = array();
         
@@ -1077,6 +1121,26 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_klasifikasiaset_lvl1');
+        
+        echo "{success: true}";
+    }
+    
+    function klasifikasi_aset_lvl1_modifyKlasifikasiAsetLvl1() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lvl1','nama'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        
+        $this->db->where('kd_lvl1', $data['kd_lvl1']);
+        unset($data['kd_lvl1']);
+        $this->db->update('ref_klasifikasiaset_lvl1',$data);
         
         echo "{success: true}";
     }

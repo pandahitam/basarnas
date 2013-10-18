@@ -100,12 +100,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -213,12 +213,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -323,12 +323,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->', search
                 ]
             });
            
@@ -430,12 +430,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -541,12 +541,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -711,12 +711,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -818,12 +818,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -925,12 +925,12 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
            
@@ -1042,12 +1042,12 @@ var search = [{
                         text: 'Lihat', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
                             settingGrid.toolbar.edit.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
 
@@ -1145,12 +1145,12 @@ var search = [{
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
 
@@ -1242,12 +1242,12 @@ var search = [{
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
 
@@ -1458,12 +1458,12 @@ var search = [{
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
 
@@ -1491,11 +1491,22 @@ var search = [{
                 updateBuffer: 2000,
             });
 
-            var search = [{
+            var searchCode = [{
                     xtype:'searchfield',
-                    id:setting.search.id,
+                    id:setting.search.id + 'code',
                     store:data,
-                    width:180
+                    width:180,
+                    emptyText:'Scan Barcode/RFID',
+                    paramName:'query'
+            }];
+        
+            var searchField = [{
+                    xtype:'searchfield',
+                    id:setting.search.id + 'field',
+                    store:data,
+                    width:180,
+                    emptyText:'Cari',
+                    paramName:'search'
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -1517,20 +1528,18 @@ var search = [{
                         text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
-                    }, '->', 
+                    }, '-', 
                             {
-                        text: 'Clear Grid Filter', iconCls: 'icon-filter_clear',
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             Ext.getCmp(setting.grid.id).filters.clearFilters();
                         }
-                    }, 
-                            search
+                    }, '->',searchField,searchCode
                 ]
             });
 
             var feature_list = {
                 filter: filter,
-                search: search,
                 selmode: selMode,
                 toolbar: toolbar
             };
@@ -1568,13 +1577,13 @@ var search = [{
                         text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
-                    }, '->', 
+                    }, '-', 
                             {
-                        text: 'Clear Grid Filter', iconCls: 'icon-filter_clear',
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             Ext.getCmp(setting.grid.id).filters.clearFilters();
                         }
-                    }, 
+                    }, '->',
                             search
                 ]
             });
@@ -1627,12 +1636,12 @@ var search = [{
                         text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
-                    }, '->', {
-                        text: 'Clear Filter', iconCls: 'icon-filter_clear',
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, search
+                    }, '->',search
                 ]
             });
 

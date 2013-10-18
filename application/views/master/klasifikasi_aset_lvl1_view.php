@@ -9,7 +9,8 @@
         Ext.namespace('KlasifikasiAsetLvl1', 'KlasifikasiAsetLvl1.reader', 'KlasifikasiAsetLvl1.proxy', 'KlasifikasiAsetLvl1.Data', 'KlasifikasiAsetLvl1.Grid', 'KlasifikasiAsetLvl1.Window', 'KlasifikasiAsetLvl1.Form', 'KlasifikasiAsetLvl1.Action', 'KlasifikasiAsetLvl1.URL');
         KlasifikasiAsetLvl1.URL = {
             read: BASE_URL + 'master_data/klasifikasi_aset_lvl1_getAllData',
-            createUpdate: BASE_URL + 'master_data/klasifikasi_aset_lvl1_modifyKlasifikasiAsetLvl1',
+            update: BASE_URL + 'master_data/klasifikasi_aset_lvl1_modifyKlasifikasiAsetLvl1',
+            create: BASE_URL + 'master_data/klasifikasi_aset_lvl1_createKlasifikasiAsetLvl1',
             remove: BASE_URL + 'master_data/klasifikasi_aset_lvl1_deleteKlasifikasiAsetLvl1'
         };
 
@@ -36,11 +37,24 @@
         });
 
         KlasifikasiAsetLvl1.Form.create = function(data, edit) {
-            var setting = {
-                url: KlasifikasiAsetLvl1.URL.createUpdate,
-                data: KlasifikasiAsetLvl1.Data,
-                isEditing: edit,
-            };
+            
+            if(edit == true)
+            {
+                var setting = {
+                    url: KlasifikasiAsetLvl1.URL.update,
+                    data: KlasifikasiAsetLvl1.Data,
+                    isEditing: edit,
+                };
+            }
+            else
+            {
+                var setting = {
+                    url: KlasifikasiAsetLvl1.URL.create,
+                    data: KlasifikasiAsetLvl1.Data,
+                    isEditing: edit,
+                };
+            }
+            
 
             var form = Form.referensiKlasifikasiAsetLvl1(setting);
 
