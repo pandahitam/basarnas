@@ -166,16 +166,16 @@ class MY_Model extends CI_Model{
         function GetAsset_byKode($kd_lokasi,$kd_brg,$no_aset)
         {
             $query = "SELECT * FROM $this->table WHERE kd_brg = $kd_brg AND kd_lokasi = '$kd_lokasi' AND no_aset = $no_aset";
-            
-            return $this->Get_By_Query($query)['data'][0];
+            $tmp1 = $this->Get_By_Query($query); $tmp2 = $tmp1['data'];
+            return $tmp2[0];
             
         }
         
         function GetExtAsset_byKode($kd_lokasi,$kd_brg,$no_aset)
         {
             $query = "SELECT * FROM $this->extTable WHERE kd_brg = $kd_brg AND kd_lokasi = '$kd_lokasi' AND no_aset = $no_aset";
-            
-            return $this->Get_By_Query($query)['data'][0];
+            $tmp1 = $this->Get_By_Query($query); $tmp2 = $tmp1['data'];
+            return $tmp2[0];
         }
 	
 	/**
