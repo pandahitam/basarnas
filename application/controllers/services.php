@@ -15,7 +15,7 @@ class services extends MY_Controller {
             $asset = $this->model->AssetForMobileServicesWithFilter($kd_brg, $kd_lokasi, $no_aset);
             if (isset($asset) && count($asset) > 0) {
                 $temp = $asset[0];
-                $images = array();
+                $images = array(); $imgCheck = 0;
                 if (isset($temp->image_url)) {
                     $imageArray = explode(",", $temp->image_url);
 
@@ -23,7 +23,8 @@ class services extends MY_Controller {
                     foreach ($imageArray as $str) {
                         $img_src = base_url() . 'uploads/images/' . $str;
                         $type = pathinfo($img_src, PATHINFO_EXTENSION);
-                        $imgbinary = file_get_contents($img_src);
+                        $imgbinary = @file_get_contents($img_src);
+						if($imgbinary == FALSE) $imgCheck++;
                         $images[] = array("type" => $type, "data" => base64_encode($imgbinary));
                         clearstatcache();
                     }
@@ -31,7 +32,7 @@ class services extends MY_Controller {
                     $temp->image_url = "";
                 }
 
-                $temp->images = json_encode($images);
+                if(!$imgCheck) $temp->images = json_encode($images);
                 $result = get_object_vars($temp);
                 
                 foreach($result as $key => $value)

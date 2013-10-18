@@ -38,7 +38,7 @@ class master_model extends MY_Model {
     }
 
     // return all type of asset that use in mobile services
-    function AllAssetForMobileServices() {
+    /*function AllAssetForMobileServices() {
         $query = "SELECT master.*, ref.ur_sskel as nama_barang, reflok.ur_upb as nama_unker FROM 
             (SELECT t.kd_brg as kode_barang, t.kd_lokasi as kode_lokasi, t.no_aset, tgl_prl as tanggal_perolehan, b.image_url, dari, no_dana, 
             (CASE WHEN kondisi = '1' THEN 'Baik' WHEN kondisi = '2' THEN 'Rusak Ringan' WHEN kondisi = '3' THEN 'Rusak Berat' END) 
@@ -56,29 +56,66 @@ class master_model extends MY_Model {
 
         $data = $this->Get_By_Query($query);
         return $data['data'];
-    }
+    }*/
 
     // filtering asset for mobile services by kd_brg, kd_lokasi, no_aset
     function AssetForMobileServicesWithFilter($kd_brg, $kd_lokasi, $no_aset) {
-        $data = $this->AllAssetForMobileServices();
+        $kondisi = Array("-" => "-", "1"=>"Baik", "2"=>"Rusak Ringan", "3"=>"Rusak Berat");
+		$query /* kayaknya paling panjang */ = " 
+				SELECT `x`.*, `y`.`ur_sskel` AS `nama_barang`, `z`.`ur_upb` AS `nama_unker`
+				FROM
+				(
+					SELECT `m`.`kd_brg` AS `kode_barang`, `m`.kd_lokasi AS `kode_lokasi`, `m`.no_aset, `m`.tgl_prl AS `tanggal_perolehan`, `e`.image_url, `m`.dari, `m`.no_dana, `m`.kondisi
+							FROM 
+							( SELECT kd_brg, kd_lokasi, no_aset, tgl_prl, dari, no_dana, kondisi FROM asset_alatbesar WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `m`
+							INNER JOIN
+							( SELECT kd_brg, kd_lokasi, no_aset, image_url FROM ext_asset_alatbesar WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `e`
+							ON `m`.`kd_brg` = `e`.`kd_brg` AND `m`.`kd_lokasi` = `e`.`kd_lokasi` AND `m`.`no_aset` = `e`.`no_aset`
+					UNION
+					SELECT `m`.`kd_brg` AS `kode_barang`, `m`.kd_lokasi AS `kode_lokasi`, `m`.no_aset, `m`.tgl_prl AS `tanggal_perolehan`, `e`.image_url, `m`.dari, `m`.no_dana, `m`.kondisi
+							FROM 
+							( SELECT kd_brg, kd_lokasi, no_aset, tgl_prl, dari, no_dana, kondisi FROM asset_angkutan WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `m`
+							INNER JOIN
+							( SELECT kd_brg, kd_lokasi, no_aset, image_url FROM ext_asset_angkutan WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `e`
+							ON `m`.`kd_brg` = `e`.`kd_brg` AND `m`.`kd_lokasi` = `e`.`kd_lokasi` AND `m`.`no_aset` = `e`.`no_aset`
+					UNION
+					SELECT `m`.`kd_brg` AS `kode_barang`, `m`.kd_lokasi AS `kode_lokasi`, `m`.no_aset, `m`.tgl_prl AS `tanggal_perolehan`, `e`.image_url, `m`.dari, `m`.no_dana, `m`.kondisi
+							FROM 
+							( SELECT kd_brg, kd_lokasi, no_aset, tgl_prl, dari, no_dana, kondisi FROM asset_bangunan WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `m`
+							INNER JOIN
+							( SELECT kd_brg, kd_lokasi, no_aset, image_url FROM ext_asset_bangunan WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `e`
+							ON `m`.`kd_brg` = `e`.`kd_brg` AND `m`.`kd_lokasi` = `e`.`kd_lokasi` AND `m`.`no_aset` = `e`.`no_aset`
+					UNION
+					SELECT `m`.`kd_brg` AS `kode_barang`, `m`.kd_lokasi AS `kode_lokasi`, `m`.no_aset, `m`.tgl_prl AS `tanggal_perolehan`, `e`.image_url, `m`.dari, `m`.no_dana, `m`.kondisi
+							FROM 
+							( SELECT kd_brg, kd_lokasi, no_aset, tgl_prl, dari, no_dana, kondisi FROM asset_perairan WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `m`
+							INNER JOIN
+							( SELECT kd_brg, kd_lokasi, no_aset, image_url FROM ext_asset_perairan WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `e`
+							ON `m`.`kd_brg` = `e`.`kd_brg` AND `m`.`kd_lokasi` = `e`.`kd_lokasi` AND `m`.`no_aset` = `e`.`no_aset`
+					UNION
+					SELECT `m`.`kd_brg` AS `kode_barang`, `m`.kd_lokasi AS `kode_lokasi`, `m`.no_aset, `m`.tgl_prl AS `tanggal_perolehan`, `e`.image_url, `m`.dari, `m`.no_dana, `m`.kondisi
+							FROM 
+							( SELECT kd_brg, kd_lokasi, no_aset, tgl_prl, dari, no_dana, kondisi FROM asset_senjata WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `m`
+							INNER JOIN
+							( SELECT kd_brg, kd_lokasi, no_aset, image_url FROM ext_asset_senjata WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `e`
+							ON `m`.`kd_brg` = `e`.`kd_brg` AND `m`.`kd_lokasi` = `e`.`kd_lokasi` AND `m`.`no_aset` = `e`.`no_aset`
+					UNION
+					SELECT `m`.`kd_brg` AS `kode_barang`, `m`.kd_lokasi AS `kode_lokasi`, `m`.no_aset, `m`.tgl_prl AS `tanggal_perolehan`, `e`.image_url, `m`.dari, `m`.no_dana, `m`.kondisi
+							FROM 
+							( SELECT kd_brg, kd_lokasi, no_aset, tgl_prl, dari, no_dana, \"-\" as `kondisi` FROM asset_tanah WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `m`
+							INNER JOIN
+							( SELECT kd_brg, kd_lokasi, no_aset, image_url FROM ext_asset_tanah WHERE kd_brg=\"$kd_brg\" AND kd_lokasi =\"$kd_lokasi\" AND no_aset=\"$no_aset\" ) AS `e`
+							ON `m`.`kd_brg` = `e`.`kd_brg` AND `m`.`kd_lokasi` = `e`.`kd_lokasi` AND `m`.`no_aset` = `e`.`no_aset`
+				) AS `x`
+				INNER JOIN ref_subsubkel AS `y` ON `x`.`kode_barang` = `y`.kd_brg
+				INNER JOIN ref_unker AS `z` ON `x`.kode_lokasi = `z`.kdlok
+		";
 
-        $filterComponent = array();
+        $data = $this->Get_By_Query($query);
+		$tmp = $data['data'];
+		if(isset($tmp[0] -> kondisi)) $tmp[0] -> kondisi = $kondisi[$tmp[0]->kondisi];
 
-        if (strlen($kd_brg) > 0) {
-            $filterComponent['kode_barang'] = $kd_brg;
-        }
-
-        if (strlen($kd_lokasi) > 0) {
-            $filterComponent['kode_lokasi'] = $kd_lokasi;
-        }
-
-        if (strlen($no_aset) > 0) {
-            $filterComponent['no_aset'] = $no_aset;
-        }
-
-        $filteredData = $this->FilteredArray($data, $filterComponent);
-
-        return array_values($filteredData);
+		return($tmp);
     }
 
     // filtering all asset by kd_brg, kd_lokasi, no_aset
