@@ -69,7 +69,7 @@ Ext.define('MPendayagunaan', {extend: 'Ext.data.Model',
               'tanggal_end','document','nama_unker','pihak_ketiga','description',
               'kd_gol','kd_bid','kd_kelompok','kd_skel', 'kd_sskel',
               'nama_klasifikasi_aset', 'kd_klasifikasi_aset',
-              'kd_lvl1','kd_lvl2','kd_lvl3'
+              'kd_lvl1','kd_lvl2','kd_lvl3','kode_unor','nama_unor'
     ]
 });
 
@@ -116,7 +116,7 @@ Ext.define('MLuar', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
-    fields: ['id','warehouse_id','ruang_id','rak_id',
+    fields: ['id','warehouse_id','ruang_id','rak_id','nama_warehouse','nama_ruang','nama_rak',
         'serial_number', 'part_number','kd_brg','kd_lokasi',
         'no_aset','kondisi', 'kuantitas', 'dari',
         'tanggal_perolehan','no_dana','penggunaan_waktu',

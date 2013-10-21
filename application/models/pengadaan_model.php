@@ -19,17 +19,30 @@ class Pengadaan_Model extends MY_Model{
 	}
         
 	
-	function get_AllData($start = null, $limit = null, $searchTextFilter = null,$gridFilter=null){
+	function get_AllData($start = null, $limit = null, $searchByBarcode = null,$gridFilter=null,$searchByField = null){
 		
                  $isGridFilter = false;
                 if($start !=null && $limit != null)
                 {
                     $query = "$this->selectColumn FROM $this->viewTable LIMIT $start, $limit";
-                    if($searchTextFilter != null)
+                    if($searchByBarcode != null)
                     {
                         $query = "$this->selectColumn FROM $this->viewTable
-                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode' 
                         LIMIT $start, $limit";
+                    }
+                    else if($searchByField != null)
+                    {
+                        $query = "$this->selectColumn
+                                    FROM $this->viewTable
+                                    where
+                                    kd_brg like '%$searchByField%' OR
+                                    kd_lokasi like '%$searchByField%' OR
+                                    nama_unker like '%$searchByField%' OR
+                                    nama_unor like '%$searchByField%' OR
+                                    nama like '%$searchByField%' OR
+                                    tahun_angaran like '%$searchByField%'
+                                    LIMIT $start, $limit";
                     }
                      else if($gridFilter != null)
                     {
@@ -43,11 +56,24 @@ class Pengadaan_Model extends MY_Model{
                 else
                 {
                     $query = "$this->selectColumn FROM $this->viewTable";
-                    if($searchTextFilter != null)
+                    if($searchByBarcode != null)
                     {
                         $query = "$this->selectColumn FROM $this->viewTable
-                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode' 
                         ";
+                    }
+                    else if($searchByField != null)
+                    {
+                        $query = "$this->selectColumn
+                                    FROM $this->viewTable
+                                    where
+                                    kd_brg like '%$searchByField%' OR
+                                    kd_lokasi like '%$searchByField%' OR
+                                    nama_unker like '%$searchByField%' OR
+                                    nama_unor like '%$searchByField%' OR
+                                    nama like '%$searchByField%' OR
+                                    tahun_angaran like '%$searchByField%'
+                                    ";
                     }
                     else if($gridFilter != null)
                     {
@@ -61,6 +87,10 @@ class Pengadaan_Model extends MY_Model{
                 if($isGridFilter == true)
                 {
                     return $this->Get_By_Query($query,true);	
+                }
+                else if($searchByField != null)
+                {
+                    return $this->Get_By_Query($query,false,'view_pengadaan');	
                 }
                 else
                 {

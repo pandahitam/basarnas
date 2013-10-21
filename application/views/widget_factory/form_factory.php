@@ -632,7 +632,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items : [{
-                                    allowBlank:false,
+                                    allowBlank:true,
                                     fieldLabel : "Kode Barang *",
                                     name : "kd_brg",
                                     readOnly:true,
@@ -659,7 +659,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items : [{
-                                    allowBlank:false,
+                                    allowBlank:true,
                                     fieldLabel : "No Aset *",
                                     name : "no_aset",
                                     readOnly:true,
@@ -732,8 +732,8 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         Form.perencanaan = function(setting)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
-            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
-            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(0, Form.Component.unit(setting.isEditing,form,false));
+            form.insert(1, Form.Component.kode(setting.isEditing));
             form.insert(2, Form.Component.perencanaan());
             form.insert(3, Form.Component.fileUpload());
 
@@ -6984,7 +6984,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     fieldLabel: 'Sumber',
                                     name: 'perolehan_sumber'
                                 }, {
-                                    fieldLabel: 'Perolehan BMN',
+                                    fieldLabel: 'Nama Vendor',
                                     name: 'perolehan_bmn'
                                 }, {
                                     xtype: 'datefield',

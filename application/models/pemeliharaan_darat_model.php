@@ -4,7 +4,7 @@ class Pemeliharaan_Darat_Model extends MY_Model{
 	function __construct(){
 		parent::__construct();
 		$this->extTable = 'pemeliharaan';
-                $this->viewTable = 'view_pemeliharaan';
+                $this->viewTable = 'view_pemeliharaan_darat';
                 $this->countTable = 'view_pemeliharaan_darat';
                 
                 $this->selectColumn = "SELECT id, kd_brg, kd_lokasi, no_aset,
@@ -16,34 +16,85 @@ class Pemeliharaan_Darat_Model extends MY_Model{
                             rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert";
 	}
 	
-	function get_AllData($start=null,$limit=null, $searchTextFilter = null){
+	function get_AllData($start=null,$limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
 //		$query = "$this->selectColumn FROM $this->viewTable
 //                        where kd_brg like '30201%' or kd_brg like '30202%'";
 
-                
-            if($start !=null && $limit != null)
-            {
-                   $query = "$this->selectColumn FROM view_pemeliharaan_darat
-                    LIMIT $start, $limit";
-                   if($searchTextFilter != null)
-                   {
-                       $query = "$this->selectColumn FROM view_pemeliharaan_darat
-                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
-                        LIMIT $start, $limit";
-                   }
-            }
-            else
-            {
-                 $query = "$this->selectColumn FROM view_pemeliharaan_darat";
-                 if($searchTextFilter != null)
+            $isGridFilter = false;    
+             if($start !=null && $limit != null)
+                {
+                    $query = "$this->selectColumn FROM $this->viewTable LIMIT $start, $limit";
+                    if($searchByBarcode != null)
                     {
-                        $query = "$this->selectColumn FROM view_pemeliharaan_darat
-                         where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
-                         ";
+                        $query = "$this->selectColumn FROM $this->viewTable
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode' 
+                        LIMIT $start, $limit";
                     }
-            }
-
-		return $this->Get_By_Query($query);	
+                    else if($searchByField != null)
+                    {
+                        $query = "$this->selectColumn
+                                    FROM $this->viewTable
+                                    where
+                                    kd_brg like '%$searchByField%' OR
+                                    kd_lokasi like '%$searchByField%' OR
+                                    nama_unker like '%$searchByField%' OR
+                                    nama_unor like '%$searchByField%' OR
+                                    nama like '%$searchByField%' OR
+                                    tahun_angaran like '%$searchByField%'
+                                    LIMIT $start, $limit";
+                    }
+                     else if($gridFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                                   where $gridFilter
+                                   LIMIT $start, $limit
+                                    ";
+                        $isGridFilter = true;
+                    }
+                }
+                else
+                {
+                    $query = "$this->selectColumn FROM $this->viewTable";
+                    if($searchByBarcode != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                        where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode' 
+                        ";
+                    }
+                    else if($searchByField != null)
+                    {
+                        $query = "$this->selectColumn
+                                    FROM $this->viewTable
+                                    where
+                                    kd_brg like '%$searchByField%' OR
+                                    kd_lokasi like '%$searchByField%' OR
+                                    nama_unker like '%$searchByField%' OR
+                                    nama_unor like '%$searchByField%' OR
+                                    nama like '%$searchByField%' OR
+                                    tahun_angaran like '%$searchByField%'
+                                    ";
+                    }
+                    else if($gridFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->viewTable
+                                   where $gridFilter
+                                    ";
+                        $isGridFilter = true;
+                    }
+                }
+                
+                if($isGridFilter == true)
+                {
+                    return $this->Get_By_Query($query,true);	
+                }
+                else if($searchByField != null)
+                {
+                    return $this->Get_By_Query($query,false,'view_pemeliharaan_darat');	
+                }
+                else
+                {
+                    return $this->Get_By_Query($query);	
+                }
 	}
 	
 	function get_Pemeliharaan($kd_lokasi, $kd_barang, $no_aset)

@@ -39,7 +39,7 @@ Perencanaan.Form.create = function(data,edit){
             data : Perencanaan.Data,
             isEditing : edit,
             addBtn : {
-                isHidden : edit,
+                isHidden : true,
                 text : 'Add Reference',
                 fn : function() {
                     if(Modal.assetSelection.items.length === 0)
@@ -55,7 +55,7 @@ Perencanaan.Form.create = function(data,edit){
                 }
             },
             selectionAsset: {
-                noAsetHidden : false
+                noAsetHidden :true
             }
         };
         

@@ -36,6 +36,12 @@ class Perencanaan extends MY_Controller {
 			$data[$field] = $this->input->post($field);
 		} 
                 
+                   //GENERASI NO_ASET 
+                if($data['no_aset'] == null || $data['no_aset'] == "")
+                {
+                    $data['no_aset'] = $this->noAssetGenerator($data['kd_brg'], $data['kd_lokasi']);
+                }
+                
 		$this->modifyData(null,$data);
 	}
 	

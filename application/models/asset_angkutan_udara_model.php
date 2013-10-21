@@ -34,15 +34,15 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             ";
 	}
 	
-	function get_AllData($start=null, $limit=null, $searchTextFilter=null, $gridFilter = null){
+	function get_AllData($start=null, $limit=null, $searchByBarcode=null, $gridFilter = null, $searchByField = null){
                 
 //            if($start != null && $limit != null)
 //            {
 //                $query = "$this->selectColumn FROM view_asset_angkutan_udara LIMIT $start,$limit";
-//                if($searchTextFilter != null)
+//                if($searchByBarcode != null)
 //                {
 //                    $query = "$this->selectColumn FROM view_asset_angkutan_udara 
-//                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+//                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode' 
 //                                LIMIT $start,$limit";
 //                }
 ////                $query = "$this->selectColumn
@@ -69,10 +69,10 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
 ////                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
 ////                            where t.kd_brg like '30205%'
 ////                            ";
-//                if($searchTextFilter != null)
+//                if($searchByBarcode != null)
 //                {
 //                    $query = "$this->selectColumn FROM view_asset_angkutan_udara 
-//                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter' 
+//                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode' 
 //                               ";
 //                }
 //            }
@@ -85,12 +85,27 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                 $query = "$this->selectColumn
                                 FROM $this->viewTable
                                 LIMIT $start, $limit";
-                if($searchTextFilter != null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
-                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
                                 LIMIT $start, $limit";
+                }
+                else if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                nama_unker like '%$searchByField%' OR
+                                nama_unor like '%$searchByField%' OR
+                                nama_klasifikasi_aset like '%$searchByField%' OR
+                                merk like '%$searchByField%' OR
+                                type like '%$searchByField%'
+                                LIMIT $start, $limit
+                                ";
                 }
                 else if($gridFilter != null)
                 {
@@ -108,11 +123,25 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                                  FROM $this->viewTable
                                 ";
 
-                if($searchTextFilter != null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
-                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                ";
+                }
+                else if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                nama_unker like '%$searchByField%' OR
+                                nama_unor like '%$searchByField%' OR
+                                nama_klasifikasi_aset like '%$searchByField%' OR
+                                merk like '%$searchByField%' OR
+                                type like '%$searchByField%'
                                 ";
                 }
                 else if($gridFilter != null)
@@ -128,6 +157,10 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
             if($isGridFilter == true)
             {
                 return $this->Get_By_Query($query,true);	
+            }
+            else if($searchByField != null)
+            {
+                return $this->Get_By_Query($query,false,'view_asset_angkutan_udara');	
             }
             else
             {

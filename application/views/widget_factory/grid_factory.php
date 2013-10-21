@@ -1559,11 +1559,22 @@ var search = [{
                 updateBuffer: 2000,
             });
 
-            var search = [{
+            var searchCode = [{
                     xtype:'searchfield',
-                    id:setting.search.id,
+                    id:setting.search.id + 'code',
                     store:data,
-                    width:180
+                    width:180,
+                    emptyText:'Scan Barcode/RFID',
+                    paramName:'query'
+            }];
+        
+            var searchField = [{
+                    xtype:'searchfield',
+                    id:setting.search.id + 'field',
+                    store:data,
+                    width:180,
+                    emptyText:'Cari',
+                    paramName:'search'
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -1584,13 +1595,13 @@ var search = [{
                             Ext.getCmp(setting.grid.id).filters.clearFilters();
                         }
                     }, '->',
-                            search
+                            searchField,searchCode
                 ]
             });
 
             var feature_list = {
                 filter: filter,
-                search: search,
+
                 selmode: selMode,
                 toolbar: toolbar
             };
@@ -1609,11 +1620,22 @@ var search = [{
                 ftype: 'filters', autoReload: true, local: true, encode: true
             });
 
-            var search = [{
+            var searchCode = [{
                     xtype:'searchfield',
-                    id:setting.search.id,
+                    id:setting.search.id + 'code',
                     store:data,
-                    width:180
+                    width:180,
+                    emptyText:'Scan Barcode/RFID',
+                    paramName:'query'
+            }];
+        
+            var searchField = [{
+                    xtype:'searchfield',
+                    id:setting.search.id + 'field',
+                    store:data,
+                    width:180,
+                    emptyText:'Cari',
+                    paramName:'search'
             }];
 
             var selMode = new Ext.create('Ext.selection.CheckboxModel');
@@ -1641,13 +1663,13 @@ var search = [{
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',searchField,searchCode
                 ]
             });
 
             var feature_list = {
                 filter: filter,
-                search: search,
+
                 selmode: selMode,
                 toolbar: toolbar
             };

@@ -88,10 +88,12 @@ class MY_Controller extends CI_Controller{
 //                var_dump(json_decode($_POST['filter']));
 //                die;
             
-		$searchTextFilter =  null;
+		$searchByBarcode =  null;
                 $start = null;
                 $limit = null;
                 $filterString = null;
+                $searchByField = null;
+                
                 
                 if(isset($_POST['gridFilter']))
                 {
@@ -101,15 +103,23 @@ class MY_Controller extends CI_Controller{
                 if(isset($_POST['query']))
                 {
                     //$this->model->get_FilteredData(json_decode($_POST['filter']));
-		    $searchTextFilter = $_POST['query'];
+		    $searchByBarcode = $_POST['query'];
                 }
+                
+                if(isset($_POST['search']))
+                {
+                    //$this->model->get_FilteredData(json_decode($_POST['filter']));
+		    $searchByField = $_POST['search'];
+                }
+                
+                
                 if(isset($_POST['start']) && isset($_POST['limit']))
                 {
                     $start = $_POST['start'];
                     $limit = $_POST['limit'];
                 }
                 
-		$queryData = $this->model->get_AllData($start,$limit,$searchTextFilter,$filterString);
+		$queryData = $this->model->get_AllData($start,$limit,$searchByBarcode,$filterString,$searchByField);
 //                $total = $this->model->get_CountData();
 //                $countData = $this->model->get_AllData();              
 //                $total = count($countData);

@@ -16,7 +16,7 @@ class Asset_Perlengkapan_Model extends MY_Model{
 //                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
 //                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
                 
-                $this->selectColumn = "SELECT id,warehouse_id,ruang_id,rak_id,
+                $this->selectColumn = "SELECT id,warehouse_id,ruang_id,rak_id,nama_warehouse,nama_rak,nama_ruang,
                             serial_number, part_number,kd_brg,kd_lokasi,
                             no_aset,kondisi, kuantitas, dari,
                             tanggal_perolehan,no_dana,penggunaan_waktu,
@@ -26,7 +26,7 @@ class Asset_Perlengkapan_Model extends MY_Model{
                             kd_lvl1,kd_lvl2,kd_lvl3";
                             }
 	
-	function get_AllData($start=null,$limit=null, $searchTextFilter = null, $gridFilter = null){
+	function get_AllData($start=null,$limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
 //		$query = "$this->selectColumn
 //                            FROM $this->table AS t
 //                            LEFT JOIN $this->extTable AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
@@ -42,13 +42,13 @@ class Asset_Perlengkapan_Model extends MY_Model{
 //                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
 //                            LIMIT $start,$limit";
 //                
-//                if($searchTextFilter != null)
+//                if($searchByBarcode != null)
 //                {
 //                    $query = "$this->selectColumn
 //                            FROM $this->table as t
 //                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
 //                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-//                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+//                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchByBarcode'
 //                            LIMIT $start,$limit";
 //                }
 //            }
@@ -60,30 +60,51 @@ class Asset_Perlengkapan_Model extends MY_Model{
 //                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
 //                            ";
 //                
-//                if($searchTextFilter != null)
+//                if($searchByBarcode != null)
 //                {
 //                    $query = "$this->selectColumn
 //                            FROM $this->table as t
 //                            LEFT JOIN ref_unker c ON t.kd_lokasi = c.kdlok
 //                            LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON t.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-//                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+//                             where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchByBarcode'
 //                            ";
 //                }
 //                
 //            }
-            
+            $isGridFilter = false;
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn
                             FROM $this->viewTable 
                             LIMIT $start,$limit";
                 
-                if($searchTextFilter != null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
-                            FROM $this->viewTable
-                             where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
-                            LIMIT $start,$limit";
+                                FROM $this->viewTable
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                LIMIT $start, $limit";
+                }
+                else if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                serial_number like '%$searchByField%' OR
+                                part_number like '%$searchByField%' OR
+                                nama_klasifikasi_aset like '%$searchByField%'
+                                LIMIT $start, $limit";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                               FROM $this->viewTable
+                               where $gridFilter
+                               LIMIT $start, $limit
+                                ";
+                    $isGridFilter = true;
                 }
             }
             else
@@ -92,18 +113,48 @@ class Asset_Perlengkapan_Model extends MY_Model{
                             FROM $this->viewTable
                             ";
                 
-                if($searchTextFilter != null)
+               if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
-                            FROM $this->viewTable
-                             where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
-                            ";
+                                FROM $this->viewTable
+                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                ";
+                }
+                else if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                serial_number like '%$searchByField%' OR
+                                part_number like '%$searchByField%' OR
+                                nama_klasifikasi_aset like '%$searchByField%'
+                                ";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                               where $gridFilter
+                                ";
+                    $isGridFilter = true;
                 }
                 
             }
             
-
-		return $this->Get_By_Query($query);	
+            if($isGridFilter == true)
+            {
+                return $this->Get_By_Query($query,true);	
+            }
+            else if($searchByField != null)
+            {
+                return $this->Get_By_Query($query,false,'view_asset_perlengkapan');	
+            }
+            else
+            {
+                return $this->Get_By_Query($query);	
+            }
 	}
 	
         function deleteData($id)

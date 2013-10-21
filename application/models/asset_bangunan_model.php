@@ -36,7 +36,7 @@ class Asset_Bangunan_Model extends MY_Model{
                         kd_lvl1,kd_lvl2,kd_lvl3";
 	}
 	
-	function get_AllData($start=null, $limit=null, $searchTextFilter = null, $gridFilter = null){
+	function get_AllData($start=null, $limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
             
 //            if($start !=null && $limit !=null)
 //            {
@@ -49,7 +49,7 @@ class Asset_Bangunan_Model extends MY_Model{
 //                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
 //                        LIMIT $start, $limit";
 //                
-//                if($searchTextFilter != null)
+//                if($searchByBarcode != null)
 //                {
 //                    $query = "$this->selectColumn 
 //                        FROM $this->table AS t 
@@ -58,7 +58,7 @@ class Asset_Bangunan_Model extends MY_Model{
 //                        LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
 //                        LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
 //                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-//                         where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+//                         where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchByBarcode'
 //                        LIMIT $start, $limit";
 //                }
 //            }
@@ -73,7 +73,7 @@ class Asset_Bangunan_Model extends MY_Model{
 //                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
 //                        ";
 //                
-//                if($searchTextFilter != null)
+//                if($searchByBarcode != null)
 //                {
 //                    $query = "$this->selectColumn 
 //                        FROM $this->table AS t 
@@ -82,7 +82,7 @@ class Asset_Bangunan_Model extends MY_Model{
 //                        LEFT JOIN ref_unor d ON b.kode_unor = d.kode_unor
 //                        LEFT JOIN ref_subsubkel AS e ON t.kd_brg = e.kd_brg
 //                        LEFT JOIN ref_klasifikasiaset_lvl3 AS f ON b.kd_klasifikasi_aset = f.kd_klasifikasi_aset
-//                         where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+//                         where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchByBarcode'
 //                        ";
 //                }
 //            }
@@ -96,11 +96,22 @@ class Asset_Bangunan_Model extends MY_Model{
                 $query = "$this->selectColumn
                                 FROM $this->viewTable
                                 LIMIT $start, $limit";
-                if($searchTextFilter != null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
-                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                LIMIT $start, $limit";
+                }
+                else if($searchByField !=null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where 
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                nama_unker like '%$searchByField%' OR
+                                nama_unor like '%$searchByField%'                                   
                                 LIMIT $start, $limit";
                 }
                 else if($gridFilter != null)
@@ -119,11 +130,22 @@ class Asset_Bangunan_Model extends MY_Model{
                                  FROM $this->viewTable
                                 ";
 
-                if($searchTextFilter != null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
-                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                ";
+                }
+                else if($searchByField !=null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->viewTable
+                                where 
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                nama_unker like '%$searchByField%' OR
+                                nama_unor like '%$searchByField%'                                   
                                 ";
                 }
                 else if($gridFilter != null)
@@ -139,6 +161,10 @@ class Asset_Bangunan_Model extends MY_Model{
             if($isGridFilter == true)
             {
                 return $this->Get_By_Query($query,true);	
+            }
+            else if($searchByField != null)
+            {
+                return $this->Get_By_Query($query,false,'view_asset_bangunan');	
             }
             else
             {

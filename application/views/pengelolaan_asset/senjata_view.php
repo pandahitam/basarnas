@@ -936,7 +936,7 @@
         var setting = {
             grid: {
                 id: 'grid_Senjata',
-                title: 'DAFTAR ASSET Senjata',
+                title: 'DAFTAR ASSET SENJATA',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},

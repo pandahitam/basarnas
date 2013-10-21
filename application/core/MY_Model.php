@@ -67,11 +67,11 @@ class MY_Model extends CI_Model{
 		}
 	}
 	
-	function Get_By_Query($query,$isGridFilter = null)
+	function Get_By_Query($query,$isGridFilter = null, $searchByFieldTable =null)
 	{	
             $extra_qr = $this->extractLimitQuery($query);
             $r = $this->db->query($query);
-            $count = $this->getQueryCountWithoutLimit($extra_qr['query'],$isGridFilter);
+            $count = $this->getQueryCountWithoutLimit($extra_qr['query'],$isGridFilter,$searchByFieldTable);
             $data = array();
             if ($r->num_rows() > 0)
             {
@@ -104,19 +104,36 @@ class MY_Model extends CI_Model{
 //	    return $data;
 	}
         
-        function getQueryCountWithoutLimit($noLimitQuery,$isGridFilter)
+        function getQueryCountWithoutLimit($noLimitQuery,$isGridFilter,$searchByFieldTable)
         {
             $temp = explode('from',$noLimitQuery,2);
             $temp2 = explode('where',$temp[1],2);
             if(isset($temp2[1]))
             {
+//                if($isGridFilter == true)
+//                {
+//                    $query = "select count(*) as total from ".$this->viewTable." as t where ".$temp2[1];
+//                }
+//                else if($this->table != null)
+//                {
+//                    $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
+//                }
+//                else
+//                {
+//                    $query = "";
+//                }
+                
                 if($isGridFilter == true)
                 {
-                    $query = "select count(*) as total from ".$this->viewTable." as t where ".$temp2[1];
+                    $query = "select count(*) as total from ".$this->viewTable." where ".$temp2[1];
+                }
+                else if($searchByFieldTable != null)
+                {
+                     $query = "select count(*) as total from ".$searchByFieldTable." where ".$temp2[1];
                 }
                 else if($this->table != null)
                 {
-                    $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
+                         $query = "select count(*) as total from ".$this->table." as t where ".$temp2[1];
                 }
                 else
                 {
