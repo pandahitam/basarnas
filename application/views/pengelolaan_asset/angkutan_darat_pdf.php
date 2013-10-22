@@ -59,9 +59,9 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
-		$html .= "<tr><td width='100'>Level 1</td><td>".$row['kd_lvl1']."</td></tr>";
-		$html .= "<tr><td>Level 2</td><td>".$row['kd_lvl2']."</td></tr>";
-      $html .= "<tr><td>Level 3</td><td>".$row['kd_lvl3']."</td></tr>";
+		$html .= "<tr><td width='100'>Level 1</td><td>".$klasifikasi_lvl1->nama."</td></tr>";
+		$html .= "<tr><td>Level 2</td><td>".$klasifikasi_lvl2->nama."</td></tr>";
+      $html .= "<tr><td>Level 3</td><td>".$klasifikasi_lvl3->nama."</td></tr>";
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
@@ -70,7 +70,7 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
-		$html .= "<tr><td width='100'>Kondisi</td><td>xx</td></tr>";
+		$html .= "<tr><td width='100'>Kondisi</td><td>".$row['kondisi']."</td></tr>";
 		$html .= "<tr><td>Unit Kerja</td><td>".$row['unit_pmk']."</td></tr>";
       $html .= "<tr><td>Alamat Unit</td><td>".$row['alm_pmk']."</td></tr>";
       $html .= "<tr><td>Kuantitas</td><td>".$row['kuantitas']."</td></tr>";
@@ -101,8 +101,10 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
+
+		$html .= "<div style='page-break-after:always'></div>";
       
-      $html .= "<div id='subtitle_profil'><br><br>III. DETAIL ANGKUTAN</div>";
+      $html .= "<div id='subtitle_profil' >IV. DETAIL ANGKUTAN</div>";
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
@@ -122,28 +124,36 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "</table>";
 		$html .= "</div>";
       
-      $html .= "<div id='subtitle_profil'><br><br>IV. GAMBAR</div>";
+      
+      
+      $html .= "<div id='subtitle_profil'><br><br>V. DETAIL PENGGUNAAN</div>";
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
-		if (count($gambar) > 0) {
-			$html .= "<tr><td>";
-				for ($i = 0;$i<count($gambar);$i++) {
-					$html .= img($gambar[$i]);
-				}
-			$html .= "</td></tr>";
-		} else {
-			$html .= "<tr><td align='center'>-</td></tr>";
-		}
+		$html .= "<tr align='center' style='font-weight:bold;background:#D3D3D3'><td>No</td><td>Tanggal</td><td>Jumlah Penggunaan</td><td>Satuan Penggunaan</td><td>Keterangan</td></tr>";
+		if ($penggunaan) {
+        $i=1;
+        foreach($penggunaan as $row5){
+          $html .= "<tr><td>".$i."</td><td>".$row5['tanggal']."</td><td>".$row5['jumlah_penggunaan']."</td><td>".$row5['satuan_penggunaan']."</td><td>".$row5['keterangan']."</td></tr>";
+          $i++;
+        }
+      } else {
+      $html .= "<tr><td colspan='11' align='center'>-</td></tr>";
+      }
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
+      
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      
+      
 		
       $html .= "<div id='title_profil'><br><br>DATA TAMBAHAN</div>";
 	  
-      $html .= "<div id='subtitle_profil'><br><br>DARAT</div>";
-	  $html .= "<div id='subtitle_profil' style='margin-left:20px'>Tambahan</div>";
-		$html .= "<div id='BoxTbl' style='padding-left:40px'>";
+	  $html .= "<div id='subtitle_profil'>I. Tambahan</div>";
+		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
 		$html .= "<tr><td width='100'>No STNK</td><td>".$row['darat_no_stnk']."</td></tr>";
@@ -154,67 +164,160 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
-		
-      foreach($pengadaan as $row1){
+      
+      $html .= "<br>";
+      $html .= "<div id='subtitle_profil'>II. Perlengkapan Angkutan Darat</div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr align='center' style='font-weight:bold;background:#D3D3D3'><td>No</td><td>Jenis Perlengkapan</td><td>No</td><td>Nama</td><td>Keterangan</td></tr>";
+		if ($perlengkapan) {
+        $i=1;
+        foreach($perlengkapan as $row6){
+          $html .= "<tr><td>".$i."</td><td>".$row6['jenis_perlengkapan']."</td><td>".$row6['no']."</td><td>".$row6['nama']."</td><td>".$row6['keterangan']."</td></tr>";
+          $i++;
+        }
+      } else {
+      $html .= "<tr><td colspan='11' align='center'>-</td></tr>";
+      }
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      
+		if ($pengadaan) {
+         foreach($pengadaan as $row1){
+            $x_part_number = $row1['part_number'];
+            $x_serial_number = $row1['serial_number'];
+            $x_tahun_angaran = $row1['tahun_angaran'];
+            $x_perolehan_sumber = $row1['perolehan_sumber'];
+            $x_perolehan_bmn = $row1['perolehan_bmn'];
+            $x_perolehan_tanggal = $row1['perolehan_tanggal'];
+            $x_kuitansi_no = $row1['kuitansi_no'];
+            $x_kuitansi_tanggal = $row1['kuitansi_tanggal'];
+            $x_is_garansi = $row1['is_garansi'];
+            $x_garansi_berlaku = $row1['garansi_berlaku'];
+            $x_garansi_keterangan = $row1['garansi_keterangan'];
+            $x_no_sppa = $row1['no_sppa'];
+            $x_asal_pengadaan = $row1['asal_pengadaan'];
+            $x_harga_total = $row1['harga_total'];
+            $x_sp2d_no = $row1['sp2d_no'];
+            $x_sp2d_tanggal = $row1['sp2d_tanggal'];
+            $x_is_terpelihara = $row1['is_terpelihara'];
+            $x_pelihara_berlaku = $row1['pelihara_berlaku'];
+            $x_garansi_keterangan = $row1['garansi_keterangan'];
+            $x_data_kontrak = $row1['data_kontrak'];
+            $x_deskripsi = $row1['deskripsi'];
+            $x_faktur_no = $row1['faktur_no'];
+            $x_faktur_tanggal = $row1['faktur_tanggal'];
+            $x_mutasi_no = $row1['mutasi_no'];
+            $x_mutasi_tanggal = $row1['mutasi_tanggal'];
+            $x_is_spk = $row1['is_spk'];
+            $x_spk_berlaku = $row1['spk_berlaku'];
+            $x_spk_keterangan = $row1['spk_keterangan'];
+            $x_spk_no = $row1['spk_no'];
+            $x_spk_jenis = $row1['spk_jenis'];
+         }
+      } else {
+         $x_part_number = '';
+            $x_serial_number = '';
+            $x_tahun_angaran = '';
+            $x_perolehan_sumber = '';
+            $x_perolehan_bmn = '';
+            $x_perolehan_tanggal = '';
+            $x_kuitansi_no = '';
+            $x_kuitansi_tanggal = '';
+            $x_is_garansi = '';
+            $x_garansi_berlaku = '';
+            $x_garansi_keterangan = '';
+            $x_no_sppa = '';
+            $x_asal_pengadaan = '';
+            $x_harga_total = '';
+            $x_sp2d_no = '';
+            $x_sp2d_tanggal = '';
+            $x_is_terpelihara = '';
+            $x_pelihara_berlaku = '';
+            $x_garansi_keterangan = '';
+            $x_data_kontrak = '';
+            $x_deskripsi = '';
+            $x_faktur_no = '';
+            $x_faktur_tanggal = '';
+            $x_mutasi_no = '';
+            $x_mutasi_tanggal = '';
+            $x_is_spk = '';
+            $x_spk_berlaku = '';
+            $x_spk_keterangan = '';
+            $x_spk_no = '';
+            $x_spk_jenis = '';
+      }
+      
       $html .= "<div style='page-break-before: always;'></div>";
       $html .= "<div id='title_profil'><br><br>PENGADAAN</div>";
       $html .= "<div id='subtitle_profil'></div>";
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
-		$html .= "<tr><td width='100'>Part Number</td><td>".$row1['part_number']."</td></tr>";
-		$html .= "<tr><td>Serial Number</td><td>".$row1['serial_number']."</td></tr>";
-      $html .= "<tr><td>Tahun Anggaran</td><td>".$row1['tahun_angaran']."</td></tr>";
-      $html .= "<tr><td>Sumber</td><td>".$row1['perolehan_sumber']."</td></tr>";
-		$html .= "<tr><td>Perolehan BMN</td><td>".$row1['perolehan_bmn']."</td></tr>";
-      $html .= "<tr><td>Perolehan Tanggal</td><td>".$row1['perolehan_tanggal']."</td></tr>";
-      $html .= "<tr><td>No Kwitansi</td><td>".$row1['kuitansi_no']."</td></tr>";
-      $html .= "<tr><td>Tanggal Kwitansi</td><td>".$row1['kuitansi_tanggal']."</td></tr>";
-      $html .= "<tr><td>Bergaransi</td><td>".$row1['is_garansi']."</td></tr>";
-      $html .= "<tr><td>Garansi Berlaku</td><td>".$row1['garansi_berlaku']."</td></tr>";
-      $html .= "<tr><td>Garansi Ket.</td><td>".$row1['garansi_keterangan']."</td></tr>";
-      $html .= "<tr><td>No SPPA</td><td>".$row1['no_sppa']."</td></tr>";
-      $html .= "<tr><td>Asal Pengadaan</td><td>".$row1['asal_pengadaan']."</td></tr>";
-      $html .= "<tr><td>Total Harga</td><td>".$row1['harga_total']."</td></tr>";
-      $html .= "<tr><td>No SP2D</td><td>".$row1['sp2d_no']."</td></tr>";
-      $html .= "<tr><td>Tanggal SP2D</td><td>".$row1['sp2d_tanggal']."</td></tr>";
-      $html .= "<tr><td>Terpelihara</td><td>".$row1['is_terpelihara']."</td></tr>";
-      $html .= "<tr><td>Pelihara Berlaku</td><td>".$row1['pelihara_berlaku']."</td></tr>";
-      $html .= "<tr><td>Garansi Ket.</td><td>".$row1['garansi_keterangan']."</td></tr>";
-      $html .= "<tr><td>Data Kontrak</td><td>".$row1['data_kontrak']."</td></tr>";
-      $html .= "<tr><td>Deskripsi</td><td>".$row1['deskripsi']."</td></tr>";
-      $html .= "<tr><td>No Faktur</td><td>".$row1['faktur_no']."</td></tr>";
-      $html .= "<tr><td>Tanggal Faktur</td><td>".$row1['faktur_tanggal']."</td></tr>";
-      $html .= "<tr><td>No Mutasi</td><td>".$row1['mutasi_no']."</td></tr>";
-      $html .= "<tr><td>Tanggal Mutasi</td><td>".$row1['mutasi_tanggal']."</td></tr>";
-      $html .= "<tr><td>SPK</td><td>".$row1['is_spk']."</td></tr>";
-      $html .= "<tr><td>SPK Berlaku</td><td>".$row1['spk_berlaku']."</td></tr>";
-      $html .= "<tr><td>SPK Ket.</td><td>".$row1['spk_keterangan']."</td></tr>";
-      $html .= "<tr><td>SPK No.</td><td>".$row1['spk_no']."</td></tr>";
-      $html .= "<tr><td>SPK Jenis</td><td>".$row1['spk_jenis']."</td></tr>";
+		$html .= "<tr><td width='100'>Part Number</td><td>".$x_part_number."</td></tr>";
+		$html .= "<tr><td>Serial Number</td><td>".$x_serial_number."</td></tr>";
+      $html .= "<tr><td>Tahun Anggaran</td><td>".$x_tahun_angaran."</td></tr>";
+      $html .= "<tr><td>Sumber</td><td>".$x_perolehan_sumber."</td></tr>";
+		$html .= "<tr><td>Perolehan BMN</td><td>".$x_perolehan_bmn."</td></tr>";
+      $html .= "<tr><td>Perolehan Tanggal</td><td>".$x_perolehan_tanggal."</td></tr>";
+      $html .= "<tr><td>No Kwitansi</td><td>".$x_kuitansi_no."</td></tr>";
+      $html .= "<tr><td>Tanggal Kwitansi</td><td>".$x_kuitansi_tanggal."</td></tr>";
+      $html .= "<tr><td>Bergaransi</td><td>".$x_is_garansi."</td></tr>";
+      $html .= "<tr><td>Garansi Berlaku</td><td>".$x_garansi_berlaku."</td></tr>";
+      $html .= "<tr><td>Garansi Ket.</td><td>".$x_garansi_keterangan."</td></tr>";
+      $html .= "<tr><td>No SPPA</td><td>".$x_no_sppa."</td></tr>";
+      $html .= "<tr><td>Asal Pengadaan</td><td>".$x_asal_pengadaan."</td></tr>";
+      $html .= "<tr><td>Total Harga</td><td>".$x_harga_total."</td></tr>";
+      $html .= "<tr><td>No SP2D</td><td>".$x_sp2d_no."</td></tr>";
+      $html .= "<tr><td>Tanggal SP2D</td><td>".$x_sp2d_tanggal."</td></tr>";
+      $html .= "<tr><td>Terpelihara</td><td>".$x_is_terpelihara."</td></tr>";
+      $html .= "<tr><td>Pelihara Berlaku</td><td>".$x_pelihara_berlaku."</td></tr>";
+      $html .= "<tr><td>Garansi Ket.</td><td>".$x_garansi_keterangan."</td></tr>";
+      $html .= "<tr><td>Data Kontrak</td><td>".$x_data_kontrak."</td></tr>";
+      $html .= "<tr><td>Deskripsi</td><td>".$x_deskripsi."</td></tr>";
+      $html .= "<tr><td>No Faktur</td><td>".$x_faktur_no."</td></tr>";
+      $html .= "<tr><td>Tanggal Faktur</td><td>".$x_faktur_tanggal."</td></tr>";
+      $html .= "<tr><td>No Mutasi</td><td>".$x_mutasi_no."</td></tr>";
+      $html .= "<tr><td>Tanggal Mutasi</td><td>".$x_mutasi_tanggal."</td></tr>";
+      $html .= "<tr><td>SPK</td><td>".$x_is_spk."</td></tr>";
+      $html .= "<tr><td>SPK Berlaku</td><td>".$x_spk_berlaku."</td></tr>";
+      $html .= "<tr><td>SPK Ket.</td><td>".$x_spk_keterangan."</td></tr>";
+      $html .= "<tr><td>SPK No.</td><td>".$x_spk_no."</td></tr>";
+      $html .= "<tr><td>SPK Jenis</td><td>".$x_spk_jenis."</td></tr>";
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
-      }
       
-      foreach($pemeliharaan as $row2){
+      $html .= "<div style='page-break-after:always'></div>";
       
-      $html .= "<div id='title_profil'><br><br>PEMELIHARAAN</div>";
+      $html .= "<div id='title_profil'>PEMELIHARAAN</div>";
       $html .= "<div id='subtitle_profil'></div>";
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
-		$html .= "<tr><td width='100'>Jenis</td><td>".$row2['jenis']."</td></tr>";
-		$html .= "<tr><td>Sub Jenis</td><td> </td></tr>";
-      $html .= "<tr><td>Tanggal Start Pelaksanaan</td><td></td></tr>";
-      $html .= "<tr><td>Tanggal End Pelaksanaan</td><td></td></tr>";
-		$html .= "<tr><td>Kondisi</td><td></td></tr>";
-      $html .= "<tr><td>Deskripsi</td><td></td></tr>";
-      $html .= "<tr><td>Biaya</td><td></td></tr>";
+		$html .= "<tr align='center' style='font-weight:bold;background:#D3D3D3'><td>No</td><td>Jenis</td><td>Pelaksana Tanggal</td><td>Deskripsi</td><td>Harga</td><td>Status</td><td>Rencana Waktu</td><td>Rencana Penggunaan</td></tr>";
+		if ($pemeliharaan) {
+        $i=1;
+        foreach($pemeliharaan as $row2){
+          $html .= "<tr><td>".$i."</td><td>".$row2['jenis']."</td><td>".$row2['pelaksana_tgl']."</td><td>".$row2['deskripsi']."</td><td>".$row2['harga']."</td><td>".$row2['status']."</td><td>".$row2['rencana_waktu']."</td>
+          <td>".$row2['rencana_pengunaan']."</td></tr>";
+          $i++;
+        }
+      } else {
+      $html .= "<tr><td colspan='11' align='center'>-</td></tr>";
+      }
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
-      }
+      
+      
+      
       
       $html .= "<div id='title_profil'><br><br>PEMINDAHAN</div>";
       $html .= "<div id='subtitle_profil'></div>";
@@ -255,6 +358,7 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "</table>";
 		$html .= "</div>";
       
+      $html .= "<div style='page-break-after:always'></div>";
       
       $html .= "<div id='title_profil'><br><br>PENDAYAGUNAAN</div>";
       $html .= "<div id='subtitle_profil'></div>";
@@ -276,8 +380,24 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "</table>";
 		$html .= "</div>";
 
-		// HALAMAN BARU JIKA PROFIL YANG DICETAK LEBIH DARI SATU PROFIL
-		
+      
+      $html .= "<div id='subtitle_profil'><br><br>GAMBAR</div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		if (count($gambar) > 0) {
+			$html .= "<tr><td>";
+				for ($i = 0;$i<count($gambar);$i++) {
+					$html .= img($gambar[$i]);
+				}
+			$html .= "</td></tr>";
+		} else {
+			$html .= "<tr><td align='center'>-</td></tr>";
+		}
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+      
 	}
 }
 

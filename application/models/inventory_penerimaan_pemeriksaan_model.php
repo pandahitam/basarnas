@@ -13,7 +13,8 @@ class Inventory_Penerimaan_Pemeriksaan_Model extends MY_Model{
                                         }
 	
 	function get_AllData($start=null, $limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
-                
+               
+            $isGridFilter = false;
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn
@@ -37,12 +38,11 @@ class Inventory_Penerimaan_Pemeriksaan_Model extends MY_Model{
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
                             where
-                            nama_org like '%$searchByField%' OR
-                            kd_lokasi like '%$searchByField%' OR
-                            pic like '%$searchByField%' OR
-                            nama_operasi like '%$searchByField%' OR
-                            nama like '%$searchByField%' OR
-                            deskripsi like '%$searchByField%'
+                            t.nama_org like '%$searchByField%' OR
+                            t.kd_lokasi like '%$searchByField%' OR
+                            t.pic like '%$searchByField%' OR
+                            t.keterangan like '%$searchByField%' OR
+                            t.asal_barang like '%$searchByField%'
                             LIMIT $start, $limit";
                 }
                  else if($gridFilter != null)
@@ -81,13 +81,12 @@ class Inventory_Penerimaan_Pemeriksaan_Model extends MY_Model{
                             FROM $this->table AS t
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
-                                    where
-                                    kd_brg like '%$searchByField%' OR
-                                    kd_lokasi like '%$searchByField%' OR
-                                    pic like '%$searchByField%' OR
-                                    nama_operasi like '%$searchByField%' OR
-                                    nama like '%$searchByField%' OR
-                                    deskripsi like '%$searchByField%'
+                            where
+                            t.nama_org like '%$searchByField%' OR
+                            t.kd_lokasi like '%$searchByField%' OR
+                            t.pic like '%$searchByField%' OR
+                            t.keterangan like '%$searchByField%' OR
+                            t.asal_barang like '%$searchByField%'
                                     ";
                     }
                     else if($gridFilter != null)

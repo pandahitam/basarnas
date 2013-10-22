@@ -4,6 +4,7 @@ class User extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+  	$this->load->model('Pengguna_Login_Model','',TRUE);
     }
 
     function index() {
@@ -21,7 +22,10 @@ class User extends CI_Controller {
         $this->my_usession->unset_userdata("user_zs_simpeg");
         $this->my_usession->unset_userdata("fullname_zs_simpeg");
         $this->my_usession->unset_userdata("type_zs_simpeg");
-        $this->my_usession->unset_userdata("nip_zs_simpeg");     
+        $this->my_usession->unset_userdata("nip_zs_simpeg");   
+  	$this->my_usession->unset_userdata("gorupid_zs_simpeg"); 
+  	$this->my_usession->unset_userdata("temp_kode_unker_zs_simpeg");  
+  	$this->my_usession->unset_userdata("temp_kode_unor_zs_simpeg");  
         //$this->my_usession->unset_userdata("nama_unker_zs_simpeg");
         //$this->my_usession->unset_userdata("kode_unker_zs_simpeg");
         //$this->my_usession->unset_userdata("a_kode_unker_zs_simpeg");
@@ -42,6 +46,9 @@ class User extends CI_Controller {
             $this->my_usession->set_userdata('fullname_zs_simpeg', $row->fullname);
             $this->my_usession->set_userdata('type_zs_simpeg', $row->type);
             $this->my_usession->set_userdata('nip_zs_simpeg', $row->NIP);
+            $this->my_usession->set_userdata('gorupid_zs_simpeg', $row->group);
+            $this->my_usession->set_userdata('temp_kode_unker_zs_simpeg', $row->temp_kode_unker);
+            $this->my_usession->set_userdata('temp_kode_unor_zs_simpeg', $row->temp_kode_unor);
             //$this->my_usession->set_userdata('nama_unker_zs_simpeg', $row->nama_unker);
             $iduserok = $row->ID_User;
             $this->db->query("UPDATE tuser SET lastvisitDate=NOW() WHERE ID_User='" . $iduserok . "'");
@@ -127,7 +134,7 @@ class User extends CI_Controller {
         return $data;
     }
 
-    function set_var_access() {
+    /*function set_var_access() {
         if ($this->input->post("id_open")) {
             $data['jsscript'] = TRUE;
             $data['var_menu'] = $this->get_var_access();
@@ -135,7 +142,20 @@ class User extends CI_Controller {
         } else {
             $this->load->view('akses_menu_variabel');
         }
-    }
+    }*/
+    
+    
+
+	function set_var_access(){
+		if($this->input->post("id_open")){
+			$data['jsscript'] = TRUE;
+			$data['var_js_menu'] = $this->Pengguna_Login_Model->getAllVariableJSMenuUser();
+			$this->load->view('akses_menu_variabel',$data);
+		}else{
+			$data['var_js_menu'] = $this->Pengguna_Login_Model->getAllVariableJSMenuUser();
+			$this->load->view('akses_menu_variabel', $data);
+		}
+	}
 
     // AKSES MENU --------------------------------------------- END
 }

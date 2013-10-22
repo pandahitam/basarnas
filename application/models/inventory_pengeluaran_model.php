@@ -11,8 +11,9 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                                         d.nama_unor, t.kode_unor";
                                         }
 	
-	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
+	function get_AllData($start=null, $limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
                 
+            $isGridFilter = false;
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn
@@ -20,15 +21,39 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
                             LIMIT $start,$limit";
-                
-                if($searchTextFilter !=null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                             FROM $this->table AS t
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
-                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchByBarcode'
                             LIMIT $start,$limit";
+                }
+                else if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
+                            where
+                            t.nama_org like '%$searchByField%' OR
+                            t.kd_lokasi like '%$searchByField%' OR
+                            t.pic like '%$searchByField%' OR
+                            t.keterangan like '%$searchByField%' OR
+                            t.asal_barang like '%$searchByField%'
+                            LIMIT $start, $limit";
+                }
+                 else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
+                               where $gridFilter
+                               LIMIT $start, $limit
+                                ";
+                    $isGridFilter = true;
                 }
 		
             }
@@ -37,23 +62,58 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                 $query = "$this->selectColumn
                             FROM $this->table AS t
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
-                            LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
+                            LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
                             ";
                 
-                if($searchTextFilter !=null)
+                if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                             FROM $this->table AS t
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
-                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchTextFilter'
+                            where CONCAT(t.kd_brg,t.kd_lokasi,t.no_aset) = '$searchByBarcode'
                             ";
                 }
-            }
+                 else if($searchByField != null)
+                    {
+                        $query = "$this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
+                            where
+                            t.nama_org like '%$searchByField%' OR
+                            t.kd_lokasi like '%$searchByField%' OR
+                            t.pic like '%$searchByField%' OR
+                            t.keterangan like '%$searchByField%' OR
+                            t.asal_barang like '%$searchByField%'
+                                    ";
+                    }
+                    else if($gridFilter != null)
+                    {
+                        $query = "$this->selectColumn FROM $this->selectColumn
+                            FROM $this->table AS t
+                            LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                            LEFT JOIN ref_unor AS d ON t.kode_unor = d.kode_unor
+                                   where $gridFilter
+                                    ";
+                        $isGridFilter = true;
+                    }
             
-            return $this->Get_By_Query($query);
+             if($isGridFilter == true)
+                {
+                    return $this->Get_By_Query($query,true);	
+                }
+                else if($searchByField != null)
+                {
+                    return $this->Get_By_Query($query,false,'inventory_pengeluaran');	
+                }
+                else
+                {
+                    return $this->Get_By_Query($query);	
+                }	
 			
 	}
+        }
 	
 	function get_byIDs($ids)
 	{		

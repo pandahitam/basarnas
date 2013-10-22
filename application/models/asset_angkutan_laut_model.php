@@ -212,6 +212,37 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
 		}	
 		return $kode;
 	}
+   
+   function getPerlengkapan_for_print($id_ext_asset) {
+                $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan 
+                        FROM ext_asset_angkutan_laut_perlengkapan WHERE id_ext_asset = $id_ext_asset";
+                $r = $this->db->query($query);
+                $data = array();
+                if ($r->num_rows() > 0)
+                  {
+                      foreach ($r->result() as $obj)
+                      {
+                     $data[] = $obj;
+                      }  
+                  }
+                return $data;
+//                return $this->Get_By_Query($query);
+        }
+	
+   function getPenggunaan_for_print($id_ext_asset) {
+                $query = "SELECT * FROM ext_asset_angkutan_detail_penggunaan WHERE id_ext_asset = $id_ext_asset";
+                $r = $this->db->query($query);
+                $data = array();
+                if ($r->num_rows() > 0)
+                  {
+                      foreach ($r->result() as $obj)
+                      {
+                     $data[] = $obj;
+                      }  
+                  }
+                return $data;
+//                return $this->Get_By_Query($query);
+        }
 	
 	function get_SelectedDataPrint($ids){
 		$dataasset = array();

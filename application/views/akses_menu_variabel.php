@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
+<?php /* if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 <?php header("Content-Type: application/x-javascript"); ?>
 	
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
@@ -864,4 +864,17 @@ var rpt_hist_rekap_print = <?php echo $rpt_hist_rekap_print;?>;
 
 var var_akses_menu = 'SUKSES';
 
+<?php }else{ echo "var var_akses_menu = 'GAGAL';"; } */ ?>
+
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
+<?php header("Content-Type: application/x-javascript"); ?>
+	
+<?php if(isset($jsscript) && $jsscript == TRUE){ ?>
+
+<?php echo $var_js_menu; ?>
+
+var var_akses_menu = 'SUKSES';
+
 <?php }else{ echo "var var_akses_menu = 'GAGAL';"; } ?>
+
+<?php echo $var_js_menu; ?>

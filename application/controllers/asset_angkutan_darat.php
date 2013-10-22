@@ -163,6 +163,10 @@ class Asset_Angkutan_Darat extends MY_Controller {
 				$xkd_kelompok = $data_cetak['0']['kd_kelompok'];
 				$xkd_skel = $data_cetak['0']['kd_skel'];
 				$xkd_sskel = $data_cetak['0']['kd_sskel'];
+            
+				$lvl1 = $data_cetak['0']['kd_lvl1'];
+				$lvl2 = $data_cetak['0']['kd_lvl2'];
+				$lvl3 = $data_cetak['0']['kd_lvl3'];
 				
 				
 				$data['dataprn'] = $data_cetak;
@@ -181,6 +185,18 @@ class Asset_Angkutan_Darat extends MY_Controller {
 				foreach ($query->result_array() as $rw) {$addata[] = $rw;}
 		  
 				$data['bidang'] = $addata;
+            
+            $query = $this->db->query(" SELECT nama FROM ref_klasifikasiaset_lvl1 WHERE kd_lvl1 =  $lvl1");
+            foreach ($query->result() as $rw) {$data['klasifikasi_lvl1'] = $rw;}
+            
+             $query = $this->db->query(" SELECT nama FROM ref_klasifikasiaset_lvl2 WHERE kd_lvl2 =  $lvl2");
+            foreach ($query->result() as $rw) {$data['klasifikasi_lvl2'] = $rw;}
+            
+             $query = $this->db->query(" SELECT nama FROM ref_klasifikasiaset_lvl3 WHERE kd_lvl3 =  $lvl3");
+            foreach ($query->result() as $rw) {$data['klasifikasi_lvl3'] = $rw;}
+            
+            $data['perlengkapan'] = json_decode(json_encode($this->model->getPerlengkapan_for_print($xid),TRUE),TRUE);
+            $data['penggunaan'] = json_decode(json_encode($this->model->getPenggunaan_for_print($xid),TRUE),TRUE);
 				
 				$this->load->model("Pengadaan_Model");
 				$data['pengadaan'] = json_decode(json_encode($this->Pengadaan_Model->get_ByKodeForPrint($xkd_lokasi,$xkd_brg,$xno_aset),TRUE),TRUE);

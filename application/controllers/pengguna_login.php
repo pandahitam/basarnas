@@ -379,6 +379,106 @@ class Pengguna_Login extends CI_Controller{
   }
 	
 	// AKSES MENU --------------------------------------------- END
+	
+	//menu
+	function ext_get_all_menu(){
+	    if($this->input->post("id_open")){
+		$data = $this->Pengguna_Login_Model->get_AllData_Menu();
+		if($this->input->post('combox')==1){
+		    $data[] = array('idmenu'=>0, 'general_text'=>'--None--');
+		}
+   		echo '({total:0 , results:'.json_encode($data).'})';
+	    }
+	}
+	function ext_insert_menu(){  	
+	    $sesi_type = $this->session->userdata("type_zs_simpeg");
+	    if(($this->input->post('type') == 'SUPER ADMIN' || $this->input->post('type') == 'ADMIN') && $sesi_type == 'ADMIN'){
+		echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";		
+	    }else if($sesi_type == 'SUPER ADMIN' || $sesi_type == 'ADMIN'){
+		$Status = $this->Pengguna_Login_Model->Insert_Data_Menu();
+		if($Status == TRUE){
+		   echo "{success:true}";
+		}elseif($Status == FALSE){
+		    echo "{success:false, errors: { reason: 'Menu sudah terdaftar !' }}";
+		}else{
+		    echo "{success:false, errors: { reason: 'Gagal Memanipulasi Menu !' }}";
+		}
+	    }else{
+		echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";
+	    }
+	}  
+	//end menu
+	
+	//group
+	function ext_sync_group(){
+	    if($this->input->post("id_open")){
+		$timpah  = $this->input->post("timpah");
+		$sesi_type = $this->session->userdata("type_zs_simpeg");
+		if(($this->input->post('type') == 'SUPER ADMIN' || $this->input->post('type') == 'ADMIN') && $sesi_type == 'ADMIN'){
+		    echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";		
+		}else if($sesi_type == 'SUPER ADMIN' || $sesi_type == 'ADMIN'){
+		    $Status = $this->Pengguna_Login_Model->Sync_Data_Group($timpah);
+		    if($Status==true){
+			echo "{success:true}";
+		    }else{
+		      echo "{success:false, errors: { reason: 'Gagal Melakukan Auto Sync Data Maping Group !' }}";
+		    }
+		}
+	    }
+	}
+	function ext_get_all_group(){
+	    if($this->input->post("id_open")){
+		$data = $this->Pengguna_Login_Model->get_AllData_Group();
+   		echo '({total:0 , results:'.json_encode($data).'})';
+	    }
+	}
+	function ext_insert_group(){  	
+	    $sesi_type = $this->session->userdata("type_zs_simpeg");
+	    if(($this->input->post('type') == 'SUPER ADMIN' || $this->input->post('type') == 'ADMIN') && $sesi_type == 'ADMIN'){
+		echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";		
+	    }else if($sesi_type == 'SUPER ADMIN' || $sesi_type == 'ADMIN'){
+		$Status = $this->Pengguna_Login_Model->Insert_Data_Group();
+		if($Status == TRUE){
+		   echo "{success:true}";
+		}else if($Status == FALSE){
+		    echo "{success:false, errors: { reason: 'Group Maping Menu sudah terdaftar !' }}";
+		}else{
+		    echo "{success:false, errors: { reason: 'Gagal Memanipulasi Group Maping Menu !' }}";
+		}
+	    }else{
+		echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";
+	    }
+	}  
+	//end group
+	
+	//group collections
+	function ext_get_all_groupcollections(){
+	    if($this->input->post("id_open")){
+		$data = $this->Pengguna_Login_Model->get_AllData_GroupCollections();
+		if($this->input->post('combox')==1){
+		    $data[] = array('ID_GroupCollections'=>0, 'general_group_name'=>'--Semua Group--');
+		}
+   		echo '({total:0 , results:'.json_encode($data).'})';
+	    }
+	}
+	function ext_insert_groupcollections(){  	
+	    $sesi_type = $this->session->userdata("type_zs_simpeg");
+	    if(($this->input->post('type') == 'SUPER ADMIN' || $this->input->post('type') == 'ADMIN') && $sesi_type == 'ADMIN'){
+		echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";		
+	    }else if($sesi_type == 'SUPER ADMIN' || $sesi_type == 'ADMIN'){
+		$Status = $this->Pengguna_Login_Model->Insert_Data_GroupCollections();
+		if($Status == TRUE){
+		   echo "{success:true}";
+		}elseif($Status == FALSE){
+		    echo "{success:false, errors: { reason: 'Group sudah terdaftar !' }}";
+		}else{
+		    echo "{success:false, errors: { reason: 'Gagal Memanipulasi Koleksi Group !' }}";
+		}
+	    }else{
+		echo "{success:false, errors: { reason: 'Akses Ditolak  !' }}";
+	    }
+	}  
+	//end group collections
 
 }
 ?>

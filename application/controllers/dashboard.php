@@ -6,9 +6,18 @@ class Dashboard extends CI_Controller{
       $data['title'] = 'LOGIN PENGGUNA';
       redirect('user/index','refresh');
     }
+	$this->load->model('Pengguna_Login_Model','',TRUE);
   }
 	
   public function index(){
+	
+	$MenuDashboard = $this->Pengguna_Login_Model->get_AllData_Menu_ExtJS();
+//	if(strlen($MenuDashboard) > 7){
+//	    $MenuDashboard.=",";
+//	}
+	
+	$data['MenuDashboard'] = $MenuDashboard;
+	
   	$data['main'] = "home";
     $this->load->view('dashboard_view',$data);
   }
@@ -76,6 +85,14 @@ class Dashboard extends CI_Controller{
 	    $dataSend['results'] = $data;
 	    echo json_encode($dataSend);
   }
+  
+  function inventaris_assetumum() {
+      $query = "SELECT * FROM t_tempall";
+	   $data = $this->Get_By_Query($query);
+	   $dataSend['results'] = $data;
+	   echo json_encode($dataSend);
+  }
+  
   
   function grafik_unker_totalaset()
   {
