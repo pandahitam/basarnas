@@ -868,7 +868,21 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         };
         //end form pendayagunaan
 
-
+        
+        Form.pemeliharaanWithParts = function(setting,setting_grid_pemeliharaan_part)
+        {
+            var form = Form.panelPemeliharaanParts(setting.url, setting.data, setting.isEditing, setting_grid_pemeliharaan_part.dataStore,setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(4, Form.Component.fileUpload());
+            
+            var tipe_angkutan = setting.tipe_angkutan;
+            form.insert(2, Form.Component.pemeliharaan(tipe_angkutan));
+            form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+                
+            return form;
+        };
+        
         Form.pemeliharaan = function(setting,setting_grid_pemeliharaan_part)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
@@ -1786,6 +1800,133 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             
                         }
                     },]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelPemeliharaanParts = function(url, data, edit, dataStoreParts, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            if (form.isValid())
+                            {
+                                var list_data = dataStoreParts.getRange();
+                                var data_to_check = [];
+                                Ext.Array.each(list_data,function(key,index,self){
+                                    if(list_data[index].phantom == true || list_data[index].dirty == true)
+                                    {
+                                        data_to_check.push(list_data[index].data);
+                                    }
+                                });
+                                //checks the real quantity from the server to minimize dirty read
+                                //NOT YET FINISHED
+                                var flag_quantity = true;
+//                                $.ajax({
+//                                    url:BASE_URL + 'inventory_penyimpanan/checkServerQuantity',
+//                                    type: "POST",
+//                                    dataType:'json',
+//                                    async:false,
+//                                    data:{data:data_to_check},
+//                                    success:function(response, status){
+//                                        flag_quantity = true;
+//
+//                                    }
+//                                 });
+                                if(flag_quantity == true)
+                                {
+                                    form.submit({
+                                        success: function(form,action) {
+                                            
+                                            var id = action.result.id;
+                                            var gridStore = dataStoreParts;
+                                            var new_records = gridStore.getNewRecords();
+    //                                        var updated_records = grid.getUpdatedRecords();
+    //                                        var removed_records = grid.getRemovedRecords();
+                                            Ext.each(new_records, function(obj){
+                                                var index = gridStore.indexOf(obj);
+                                                var record = gridStore.getAt(index);
+                                                record.set('id_pemeliharaan',id);
+                                            });
+                                            debugger;
+                                                gridStore.sync();
+
+
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            Modal.closeProcessWindow();
+    //                                        if (edit)
+    //                                        {
+    //                                            Modal.closeProcessWindow();
+    //                                        }
+    //                                        else
+    //                                        {
+    //                                            form.reset();
+    //                                        }
+
+
+
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Fail', 'Terdapat kesalahan pada qty. Harap melakukan perbaikan');
+                                }
+                                
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
             });
 
 
@@ -5543,117 +5684,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         };
         
-        Form.Component.dataPemeliharaanPart = function(id_pemeliharaan,edit)
-        {
-            var component = {
-                xtype: 'fieldset',
-                layout: 'anchor',
-                anchor: '100%',
-                title: 'PEMELIHARAAN PART',
-                border: false,
-                frame: true,
-                defaultType: 'container',
-                defaults: {
-                    layout: 'anchor'
-                },
-                items: [{
-                        columnWidth: .99,
-                        layout: 'anchor',
-                        defaults: {
-                            anchor: '95%'
-                        },
-                        defaultType: 'numberfield',
-                        items: [
-                            {
-                                    readOnly:(edit==true)?true:false,
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'No Penyimpanan *',
-                                    name: 'id_penyimpanan',
-                                    allowBlank: false,
-                                    store: Reference.Data.penyimpanan,
-                                    valueField: 'id',
-                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'beforeRender': {
-                                            fn: function() {
-                                                if(setting.isEditing == true)
-                                                {
-                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1, excludedValue: id_perlengkapan}});
-                                                }
-                                                else
-                                                {
-                                                    Reference.Data.penyimpanan.changeParams({params: {id_open: 1}});
-                                                }
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null || value !== '')
-                                                {
-                                                    /*
-                                                     * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
-                                                     * if not is edit, the combo box will only present all id_penerimaan that isn't used yet
-                                                     */
-                                                    
-                                                    Ext.Ajax.request({
-                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpanan',
-                                                        params: {
-                                                            id: value
-                                                        },
-                                                        success: function(response){
-                                                            var data = eval ("(" + response.responseText + ")");
-                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
-                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
-                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
-                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
-                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
-                                                                Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
-                                                                Ext.getCmp('pemeliharaan_part_qty').setDisabled(false);
-                                                                Ext.getCmp('pemeliharaan_part_qty').setMaxValue(data.qty);
-                                                                if(edit == true)
-                                                                {
-                                                                    Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('pemeliharaan_part_qty').value));
-                                                                    Ext.getCmp('pemeliharaan_part_qty').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
-                                                                }
-//                                                                Ext.getCmp('pemeliharaan_part_qty').reset();
-                                                           
-                                                        }
-                                                        });
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                },
-                            {
-                                xtype:'hidden',
-                                name:'id',
-                            },
-                            {
-                                xtype:'hidden',
-                                name:'id_pemeliharaan',
-                                value:id_pemeliharaan,
-                            },
-                            {
-                                disabled:true,
-                                xtype:'numberfield',
-                                fieldLabel: 'Qty Pemeliharaan',
-                                name: 'qty_pemeliharaan',
-                                id:'pemeliharaan_part_qty',
-                                minValue:1,
-                            },
-                            ]
-                    }]
-            };
-
-            return component;
-        
-        }
+       
         
         Form.Component.gridParts = function(setting,isInventoryPengeluaran) {
     
@@ -5700,16 +5731,30 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         };
         
         Form.Component.gridPemeliharaanPart = function(setting,edit) {
-            var component = {
+//            var component = {
+//                xtype: 'fieldset',
+//                layout:'anchor',
+//                height: (edit == true)?325:150,
+//                anchor: '100%',
+//                title: 'PEMELIHARAAN PART',
+//                border: false,
+//                frame: true,
+//                defaultType: 'container',
+//                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+//            };
+//
+//            return component;
+            
+             var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: (edit == true)?325:150,
+                height: 325,
                 anchor: '100%',
                 title: 'PEMELIHARAAN PART',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
+                items: [{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}]
             };
 
             return component;
@@ -8863,6 +8908,183 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     fieldLabel:'Qty Keluar',
                                     name:'qty_keluar',
                                     id:'inventory_pengeluaran_data_perlengkapan_parts_qty_keluar',
+                                    minValue:1,
+                                    disabled:true,
+                                    allowBlank:false,
+                                }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        
+        
+        Form.Component.dataPemeliharaanParts = function (readOnly){
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PEMELIHARAAN PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 220
+                            },
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id',
+                                        id:'pemeliharaan_parts_id',
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'id_pemeliharaan',
+                                        id:'pemeliharaan_parts_id_pemeliharaan',
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'nama',
+                                        id:'pemeliharaan_parts_nama',
+                                    },
+                                    {
+                                    allowBlank:false,
+                                    readOnly:readOnly,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'No Berita Acara Penyimpanan *',
+                                    name: 'id_penyimpanan',
+                                    id:'pemeliharaan_parts_id_penyimpanan',
+                                    store: Reference.Data.penyimpanan,
+                                    valueField: 'id',
+                                    editable:false,
+                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                               
+                                                if (value !== null && value !== '')
+                                                {
+                                                    var excluded_id_penyimpanan_data_perlengkapan = '';
+                                                    
+                                                    if(readOnly != true)
+                                                    {
+                                                    Ext.getCmp('pemeliharaan_parts_combo').setValue('');
+                                                    Ext.getCmp('pemeliharaan_parts_combo').setDisabled(true);
+                                                    Ext.getCmp('pemeliharaan_parts_qty').setDisabled(true);
+                                                    Ext.getCmp('pemeliharaan_parts_qty').setValue('');
+                                                    var gridData = Ext.getCmp('grid_pemeliharaan_parts').getStore().getRange();
+                                                        Ext.Array.each(gridData,function(key,index,self){
+                                                        if(gridData[index].data.id_penyimpanan == value)
+                                                        {
+                                                            excluded_id_penyimpanan_data_perlengkapan += gridData[index].data.id_penyimpanan_data_perlengkapan +',';
+                                                        }
+                                                     });
+                                                    }
+                                                    Reference.Data.partsInventoryPengeluaran.changeParams({params: {id_open: 1, id_penyimpanan: value, excluded_id_penyimpanan_data_perlengkapan:excluded_id_penyimpanan_data_perlengkapan.slice(0,-1)}});
+                                                    Ext.getCmp('pemeliharaan_parts_combo').setDisabled(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    allowBlank:false,
+                                    readOnly:readOnly,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Part *',
+                                    name: 'id_penyimpanan_data_perlengkapan',
+                                    id:'pemeliharaan_parts_combo',
+                                    store: Reference.Data.partsInventoryPengeluaran,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Part',
+                                    editable:false,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                
+                                                
+                                              
+                                                if (value !== null && value !== '')
+                                                {
+                                                    Ext.getCmp('pemeliharaan_parts_nama').setValue(obj.rawValue);
+                                                    if(readOnly != true)
+                                                    {
+                                                        Ext.getCmp('pemeliharaan_parts_qty').setValue('');
+                                                        Ext.getCmp('pemeliharaan_parts_qty').setDisabled(true);
+                                                        
+                                                    }
+                                                   Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpanan',
+                                                        dataType: 'JSON',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+                                                                Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
+                                                                Ext.getCmp('pemeliharaan_parts_qty').setMaxValue(data.qty);
+                                                                Ext.getCmp('pemeliharaan_parts_qty').setDisabled(false);
+//                                                                var gridData = Ext.getCmp('grid_inventory_pengeluaran_parts').getStore().getRange();
+//                                                                debugger;
+//                                                                Ext.Array.each(gridData,function(key,index,self){
+//                                                                    var grid_id_penyimpanan = gridData[index].data.id_penyimpanan;
+//                                                                    var grid_id_penyimpanan_data_perlengkapan = gridData[index].data.id_penyimpanan_data_perlengkapan;
+//                                                                    var grid_qty_keluar = gridData[index].data.id_penyimpanan_data_perlengkapan.qty_keluar;
+//                                                                    var form_current_id_penyimpanan = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_id_penyimpanan').value;
+//                                                                    var form_current_id_penyimpanan_data_perlengkapan = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').value;
+//                                                                    
+//                                                                    if(grid_id_penyimpanan == form_current_id_penyimpanan && grid_id_penyimpanan_data_perlengkapan == form_current_id_penyimpanan_data_perlengkapan)
+//                                                                    {
+//                                                                        
+//                                                                    }
+//                                                                    
+//                                                                });
+//                                                                debugger;
+                                                                if(readOnly == true)
+                                                                {
+                                                                    var id_pemeliharaan_parts = Ext.getCmp('pemeliharaan_parts_id').value;
+                                                                    if(id_pemeliharaan_parts != '') //if the record has been committed to the database
+                                                                    {
+                                                                        Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('pemeliharaan_parts_qty').value));
+                                                                        Ext.getCmp('pemeliharaan_parts_qty').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
+                                                                    }
+                                                                    
+                                                                }
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                        
+                                                        
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },{
+                                    xtype:'numberfield',
+                                    fieldLabel:'Qty Pemeliharaan',
+                                    name:'qty_pemeliharaan',
+                                    id:'pemeliharaan_parts_qty',
                                     minValue:1,
                                     disabled:true,
                                     allowBlank:false,

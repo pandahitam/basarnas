@@ -8,13 +8,26 @@
 
         Ext.namespace('PemeliharaanDarat', 'PemeliharaanDarat.reader', 'PemeliharaanDarat.proxy', 'PemeliharaanDarat.Data', 'PemeliharaanDarat.Grid', 'PemeliharaanDarat.Window', 'PemeliharaanDarat.Form', 'PemeliharaanDarat.Action', 'PemeliharaanDarat.URL');
         
-        PemeliharaanDarat.dataStorePemeliharaanPart = new Ext.create('Ext.data.Store', {
-            model: MPemeliharaanPart, autoLoad: false, noCache: false,
+        PemeliharaanDarat.dataStorePemeliharaanParts = new Ext.create('Ext.data.Store', {
+            model: MPemeliharaanPart, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPart', actionMethods: {read: 'POST'},
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanParts',
+                create: BASE_URL + 'pemeliharaan_part/createPemeliharaanParts',
+                update: BASE_URL + 'pemeliharaan_part/updatePemeliharaanParts',
+                destroy: BASE_URL + 'pemeliharaan_part/destroyPemeliharaanParts'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
                 reader: new Ext.data.JsonReader({
-                    root: 'results', totalProperty: 'total', idProperty: 'id'})
-            })
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
         });
         
         PemeliharaanDarat.URL = {
@@ -77,16 +90,16 @@
             };
             
              var setting_grid_pemeliharaan_part = {
-                id:'grid_pemeliharaan_darat_pemeliharaan_part',
+                id:'grid_pemeliharaan_parts',
                 toolbar:{
                     add: PemeliharaanDarat.addPemeliharaanPart,
                     edit: PemeliharaanDarat.editPemeliharaanPart,
                     remove: PemeliharaanDarat.removePemeliharaanPart
                 },
-                dataStore:PemeliharaanDarat.dataStorePemeliharaanPart
+                dataStore:PemeliharaanDarat.dataStorePemeliharaanParts
             };
 
-            var form = Form.pemeliharaan(setting,setting_grid_pemeliharaan_part);
+            var form = Form.pemeliharaanWithParts(setting,setting_grid_pemeliharaan_part);
             if (data !== null)
             {
                 if(data.unit_waktu != 0)
@@ -126,43 +139,35 @@
         };
         
         PemeliharaanDarat.addPemeliharaanPart = function(){
-            var selected = PemeliharaanDarat.Grid.grid.getSelectionModel().getSelection();
-            if (selected.length === 1)
-            {
-               
-                var data = selected[0].data;
-                delete data.nama_unker;
-                delete data.nama_unor;
-                
-                
-                if (Modal.assetSecondaryWindow.items.length === 0)
+         if (Modal.assetSecondaryWindow.items.length === 0)
                 {
                     Modal.assetSecondaryWindow.setTitle('Tambah Part');
                 }
-                    var form = Form.pemeliharaanPart(PemeliharaanDarat.URL.createUpdatePemeliharaanPart, PemeliharaanDarat.dataStorePemeliharaanPart, false);
-                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id));
+                    var form = Form.secondaryWindowAsset(PemeliharaanDarat.dataStorePemeliharaanParts,'add');
+                    form.insert(0, Form.Component.dataPemeliharaanParts());
                     form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
-                
-            }
         };
         
         PemeliharaanDarat.editPemeliharaanPart = function(){
-            var selected = Ext.getCmp('grid_pemeliharaan_darat_pemeliharaan_part').getSelectionModel().getSelection();
+            var grid = Ext.getCmp('grid_pemeliharaan_parts');
+            var selected = grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
-               
+
                 var data = selected[0].data;
+                var storeIndex = grid.store.indexOf(selected[0]);
+                
                 
                 if (Modal.assetSecondaryWindow.items.length === 0)
                 {
                     Modal.assetSecondaryWindow.setTitle('Edit Part');
                 }
-                    var form = Form.pemeliharaanPart(PemeliharaanDarat.URL.createUpdatePemeliharaanPart, PemeliharaanDarat.dataStorePemeliharaanPart, false);
-                    form.insert(0, Form.Component.dataPemeliharaanPart(data.id_pemeliharaan,true));
+                    var form = Form.secondaryWindowAsset(PemeliharaanDarat.dataStorePemeliharaanParts, 'edit',storeIndex);
+                    form.insert(0, Form.Component.dataPemeliharaanParts(true));
                     form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
-                    
+
                     if (data !== null)
                     {
                         Ext.Object.each(data,function(key,value,myself){
@@ -175,29 +180,39 @@
                     }
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
-                
             }
         };
         
         PemeliharaanDarat.removePemeliharaanPart = function(){
-            var selected = Ext.getCmp('grid_pemeliharaan_darat_pemeliharaan_part').getSelectionModel().getSelection();
-            var arrayDeleted = [];
-            _.each(selected, function(obj) {
-                var data = {
-                    id: obj.data.id,
-                    id_penyimpanan: obj.data.id_penyimpanan,
-                    qty_pemeliharaan:obj.data.qty_pemeliharaan,
-                };
-                arrayDeleted.push(data);
-            });
-            console.log(arrayDeleted);
-            Modal.deleteAlert(arrayDeleted, PemeliharaanDarat.URL.removePemeliharaanPart, PemeliharaanDarat.dataStorePemeliharaanPart);
+            var grid = Ext.getCmp('grid_pemeliharaan_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if(selected.length > 0)
+            {
+                Ext.Msg.show({
+                    title: 'Konfirmasi',
+                    msg: 'Apakah Anda yakin untuk menghapus ?',
+                    buttons: Ext.Msg.YESNO,
+                    icon: Ext.Msg.Question,
+                    fn: function(btn) {
+                        if (btn === 'yes')
+                        {
+                            Ext.each(selected, function(obj){
+                                var storeIndex = grid.store.indexOf(obj);
+                                var record = grid.store.getAt(storeIndex);
+                                grid.store.remove(record);
+                            });
+                        }
+                    }
+                });
+            }
         };
 
         PemeliharaanDarat.Action.add = function() {
             var _form = PemeliharaanDarat.Form.create(null, false);
-            Modal.processCreate.setTitle('Create PemeliharaanDarat');
+            Modal.processCreate.setTitle('Create Pemeliharaan Darat');
             Modal.processCreate.add(_form);
+              PemeliharaanDarat.dataStorePemeliharaanParts.changeParams({params:{open:'0'}});
+            PemeliharaanDarat.dataStorePemeliharaanParts.removed = [];
             Modal.processCreate.show();
         };
 
@@ -210,12 +225,13 @@
 
                 if (Modal.processEdit.items.length === 0)
                 {
-                    Modal.processEdit.setTitle('Edit PemeliharaanDarat');
+                    Modal.processEdit.setTitle('Edit Pemeliharaan Darat');
                 }
                 var _form = PemeliharaanDarat.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
-                PemeliharaanDarat.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:data.id}});
+                PemeliharaanDarat.dataStorePemeliharaanParts.changeParams({params:{id_pemeliharaan:data.id}});
+                PemeliharaanDarat.dataStorePemeliharaanParts.removed = [];
             }
         };
 

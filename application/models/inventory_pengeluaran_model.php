@@ -99,6 +99,9 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                         $isGridFilter = true;
                     }
             
+            
+			
+	}
              if($isGridFilter == true)
                 {
                     return $this->Get_By_Query($query,true);	
@@ -111,8 +114,6 @@ class Inventory_Pengeluaran_Model extends MY_Model{
                 {
                     return $this->Get_By_Query($query);	
                 }	
-			
-	}
         }
 	
 	function get_byIDs($ids)

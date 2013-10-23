@@ -13,7 +13,7 @@ class Inventory_Penyimpanan_Model extends MY_Model{
                                         }
 	
 	function get_AllData($start=null, $limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
-                
+            
             $isGridFilter = false;
             if($start != null && $limit != null)
             {
@@ -22,6 +22,7 @@ class Inventory_Penyimpanan_Model extends MY_Model{
                             LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
                             LEFT JOIN ref_unor d ON t.kode_unor = d.kode_unor
                             LIMIT $start,$limit";
+                
                 if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
@@ -56,6 +57,7 @@ class Inventory_Penyimpanan_Model extends MY_Model{
                                 ";
                     $isGridFilter = true;
                 }
+              
 		
             }
             else
@@ -100,20 +102,24 @@ class Inventory_Penyimpanan_Model extends MY_Model{
                         $isGridFilter = true;
                     }
             
+               
+			
+	}
+        
              if($isGridFilter == true)
                 {
                     return $this->Get_By_Query($query,true);	
                 }
                 else if($searchByField != null)
                 {
+                     
                     return $this->Get_By_Query($query,false,'inventory_penyimpanan');	
                 }
                 else
                 {
+                    
                     return $this->Get_By_Query($query);	
                 }	
-			
-	}
         }
 	
         function get_InventoryPenyimpanan($id)

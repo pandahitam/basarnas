@@ -21,8 +21,8 @@ Ext.define('MDetailPenggunaanAngkutan', {extend: 'Ext.data.Model',
 
 Ext.define('MPemeliharaanPart', {extend: 'Ext.data.Model',
     fields: ['id', 'id_pemeliharaan', 
-        'id_penyimpanan', 'part_number', 
-        'nama', 'qty_pemeliharaan'
+        'id_penyimpanan', 'part_number', 'id_penyimpanan_data_perlengkapan',
+        'nama', 'qty_pemeliharaan','qty'
     ]
 });
 
