@@ -70,7 +70,20 @@ class Pemeliharaan extends MY_Controller {
 //                    $dataExt['no_aset'] = $dataSimak['no_aset'];
 //                }
                 
-		$this->modifyData(null,$data);
+//		$this->modifyData(null,$data);
+                 if($data['id'] == '')
+                {
+                    $this->db->insert('pemeliharaan',$data);
+                    $id = $this->db->insert_id();
+                    
+                }
+                else
+                {
+                    $id = $data['id'];
+                    $this->db->set($data);
+                    $this->db->replace('pemeliharaan');
+                }
+                echo "{success:true, id:$id}";
 	}
 	
 	function deletePemeliharaan()
