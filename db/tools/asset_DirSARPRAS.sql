@@ -1,981 +1,5 @@
+-- please apply_this_first.sql
 USE db_asset_basarnas;
-
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_alatbesar SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_angkutan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_bangunan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_dil SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_perairan SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_ruang SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_senjata SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=657; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=658; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=13; -- Video Tape Recorder Portable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=14; -- Video Tape Recorder Portable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=23; -- LCD Monitor
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102135" AND no_aset=24; -- LCD Monitor
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=2; -- Ground Power Unit 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=3; -- Ground Power Unit 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310001" AND no_aset=4; -- Ground Power Unit 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=14; -- Tool Kit Box  
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=15; -- Tool Kit Box  
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=16; -- Tool Kit Box  
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030205002" AND no_aset=17; -- Tool Kit Box  
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=2; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=3; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=4; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=5; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=6; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=1; -- Portable Compressor
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=2; -- Portable Compressor
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303002" AND no_aset=3; -- Portable Compressor
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=1; -- Compressor Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=2; -- Compressor Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=3; -- Compressor Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010303999" AND no_aset=4; -- Compressor Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=10; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=11; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=12; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=13; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=14; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=15; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=16; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=17; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=18; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3010310999" AND no_aset=19; -- Alat Bantu Penerbangan Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=3; -- Tangga Aluminium
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=4; -- Tangga Aluminium
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=5; -- Tangga Aluminium
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3050206034" AND no_aset=6; -- Tangga Aluminium
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102127" AND no_aset=3; -- Camera Under Water
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102013" AND no_aset=9; -- Video Tape Recorder Portable 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060102012" AND no_aset=1; -- Video Monitor
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=19; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=20; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=21; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=22; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=23; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=24; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=25; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=26; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=27; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030101029" AND no_aset=28; -- Mesin Pemotong Plat
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=89; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=90; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=91; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=92; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=93; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=94; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=95; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=96; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=97; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3030103001" AND no_aset=98; -- Battery Charge
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=80; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=81; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=82; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=83; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=84; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=85; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=86; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=87; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=88; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060347004" AND no_aset=89; -- Charger 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=15; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=16; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=17; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=18; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=19; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=20; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=21; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=22; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=23; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3060101085" AND no_aset=24; -- Cable
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=1; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=2; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=3; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=4; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=5; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=6; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=7; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=8; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3080115047" AND no_aset=9; -- Carrying/Storage Case
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=634; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=635; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=636; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=637; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=638; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=639; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=640; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=641; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=642; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=643; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=644; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=645; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=646; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=647; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=648; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=649; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=650; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=651; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=652; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150302999" AND no_aset=653; -- Alat Pendukung Pencarian Lainnya
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=580; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=581; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=582; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=583; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=584; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=585; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=586; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=587; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=588; -- Back Pack/Ransel 
-UPDATE ext_asset_tanah SET kode_unor="44", kd_klasifikasi_aset="999999" WHERE kd_lokasi="107010199414370000KP" AND kd_brg="3150301020" AND no_aset=589; -- Back Pack/Ransel 
-
 
 UPDATE ext_asset_angkutan SET kode_unor="44" WHERE kd_brg = "3020501005"; -- Pesawat
 
@@ -991,4 +15,274 @@ SET `b`.`kd_klasifikasi_aset` = "010201" WHERE `a`.`merk` LIKE "%rescue%car%" OR
 UPDATE asset_angkutan AS `a` INNER JOIN ext_asset_angkutan AS `b` ON `a`.`kd_lokasi`=`b`.`kd_lokasi` AND `a`.`kd_brg`=`b`.`kd_brg` AND `a`.`no_aset`=`b`.`no_aset`
 SET `b`.`kode_unor` = "44" WHERE `b`.`kd_klasifikasi_aset` IN ("020200", "010100", "010201"); -- ketiga barang diatas selalu milik Sarpras
 
+UPDATE ext_asset_alatbesar SET kode_unor = 44
+WHERE (kd_lokasi, kd_brg, no_aset) IN (
+	("107010199414370000KP","3010303002",1),
+	("107010199414370000KP","3010303002",2),
+	("107010199414370000KP","3010303002",3),
+	("107010199414370000KP","3010303999",1),
+	("107010199414370000KP","3010303999",2),
+	("107010199414370000KP","3010303999",3),
+	("107010199414370000KP","3010303999",4),
+	("107010199414370000KP","3010310001",2),
+	("107010199414370000KP","3010310001",3),
+	("107010199414370000KP","3010310001",4),
+	("107010199414370000KP","3010310999",2),
+	("107010199414370000KP","3010310999",3),
+	("107010199414370000KP","3010310999",4),
+	("107010199414370000KP","3010310999",5),
+	("107010199414370000KP","3010310999",6),
+	("107010199414370000KP","3010310999",10),
+	("107010199414370000KP","3010310999",11),
+	("107010199414370000KP","3010310999",12),
+	("107010199414370000KP","3010310999",13),
+	("107010199414370000KP","3010310999",14),
+	("107010199414370000KP","3010310999",15),
+	("107010199414370000KP","3010310999",16),
+	("107010199414370000KP","3010310999",17),
+	("107010199414370000KP","3010310999",18),
+	("107010199414370000KP","3010310999",19)
+); 
+
+INSERT INTO asset_alatbesar (kd_lokasi, kd_brg, no_aset, kuantitas, jns_trn, `type`, merk, kondisi, rph_aset, tgl_buku, tgl_prl, dari, dasar_hrg, no_kib)
+(
+	SELECT kd_lokasi, kd_brg, no_aset, kuantitas, jns_trn, keterangan, merk_type, kondisi, rph_aset, tgl_buku, tgl_perlh, asal_perlh, dsr_hrg, no_aset FROM t_masteru 
+	WHERE (kd_lokasi, kd_brg, no_aset) IN (
+		("107010199414370000KP","3030101029",19),
+		("107010199414370000KP","3030101029",20),
+		("107010199414370000KP","3030101029",21),
+		("107010199414370000KP","3030101029",22),
+		("107010199414370000KP","3030101029",23),
+		("107010199414370000KP","3030101029",24),
+		("107010199414370000KP","3030101029",25),
+		("107010199414370000KP","3030101029",26),
+		("107010199414370000KP","3030101029",27),
+		("107010199414370000KP","3030101029",28),
+		("107010199414370000KP","3030103001",89),
+		("107010199414370000KP","3030103001",90),
+		("107010199414370000KP","3030103001",91),
+		("107010199414370000KP","3030103001",92),
+		("107010199414370000KP","3030103001",93),
+		("107010199414370000KP","3030103001",94),
+		("107010199414370000KP","3030103001",95),
+		("107010199414370000KP","3030103001",96),
+		("107010199414370000KP","3030103001",97),
+		("107010199414370000KP","3030103001",98),
+		("107010199414370000KP","3030205002",14),
+		("107010199414370000KP","3030205002",15),
+		("107010199414370000KP","3030205002",16),
+		("107010199414370000KP","3030205002",17),
+		("107010199414370000KP","3050206034",3),
+		("107010199414370000KP","3050206034",4),
+		("107010199414370000KP","3050206034",5),
+		("107010199414370000KP","3050206034",6),
+		("107010199414370000KP","3060101085",15),
+		("107010199414370000KP","3060101085",16),
+		("107010199414370000KP","3060101085",17),
+		("107010199414370000KP","3060101085",18),
+		("107010199414370000KP","3060101085",19),
+		("107010199414370000KP","3060101085",20),
+		("107010199414370000KP","3060101085",21),
+		("107010199414370000KP","3060101085",22),
+		("107010199414370000KP","3060101085",23),
+		("107010199414370000KP","3060101085",24),
+		("107010199414370000KP","3060102012",1),
+		("107010199414370000KP","3060102013",13),
+		("107010199414370000KP","3060102013",14),
+		("107010199414370000KP","3060102013",9),
+		("107010199414370000KP","3060102127",3),
+		("107010199414370000KP","3060102135",23),
+		("107010199414370000KP","3060102135",24),
+		("107010199414370000KP","3060347004",80),
+		("107010199414370000KP","3060347004",81),
+		("107010199414370000KP","3060347004",82),
+		("107010199414370000KP","3060347004",83),
+		("107010199414370000KP","3060347004",84),
+		("107010199414370000KP","3060347004",85),
+		("107010199414370000KP","3060347004",86),
+		("107010199414370000KP","3060347004",87),
+		("107010199414370000KP","3060347004",88),
+		("107010199414370000KP","3060347004",89),
+		("107010199414370000KP","3080115047",1),
+		("107010199414370000KP","3080115047",2),
+		("107010199414370000KP","3080115047",3),
+		("107010199414370000KP","3080115047",4),
+		("107010199414370000KP","3080115047",5),
+		("107010199414370000KP","3080115047",6),
+		("107010199414370000KP","3080115047",7),
+		("107010199414370000KP","3080115047",8),
+		("107010199414370000KP","3080115047",9),
+		("107010199414370000KP","3150301020",580),
+		("107010199414370000KP","3150301020",581),
+		("107010199414370000KP","3150301020",582),
+		("107010199414370000KP","3150301020",583),
+		("107010199414370000KP","3150301020",584),
+		("107010199414370000KP","3150301020",585),
+		("107010199414370000KP","3150301020",586),
+		("107010199414370000KP","3150301020",587),
+		("107010199414370000KP","3150301020",588),
+		("107010199414370000KP","3150301020",589),
+		("107010199414370000KP","3150302999",657),
+		("107010199414370000KP","3150302999",658),
+		("107010199414370000KP","3150302999",634),
+		("107010199414370000KP","3150302999",635),
+		("107010199414370000KP","3150302999",636),
+		("107010199414370000KP","3150302999",637),
+		("107010199414370000KP","3150302999",638),
+		("107010199414370000KP","3150302999",639),
+		("107010199414370000KP","3150302999",640),
+		("107010199414370000KP","3150302999",641),
+		("107010199414370000KP","3150302999",642),
+		("107010199414370000KP","3150302999",643),
+		("107010199414370000KP","3150302999",644),
+		("107010199414370000KP","3150302999",645),
+		("107010199414370000KP","3150302999",646),
+		("107010199414370000KP","3150302999",647),
+		("107010199414370000KP","3150302999",648),
+		("107010199414370000KP","3150302999",649),
+		("107010199414370000KP","3150302999",650),
+		("107010199414370000KP","3150302999",651),
+		("107010199414370000KP","3150302999",652),
+		("107010199414370000KP","3150302999",653)
+	) 
+	AND (kd_lokasi, kd_brg, no_aset) NOT IN (
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_alatbesar
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_angkutan
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_bangunan
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_dil
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_perairan
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_ruang
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_senjata
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM asset_tanah
+	)
+	AND LEFT(jns_trn,1)="1"
+);
+
+INSERT INTO ext_asset_alatbesar (kd_lokasi, kd_brg, no_aset, kode_unor)
+(
+	SELECT kd_lokasi, kd_brg, no_aset, 44 AS `kode_unor` FROM t_masteru 
+	WHERE (kd_lokasi, kd_brg, no_aset) IN (
+		("107010199414370000KP","3030101029",19),
+		("107010199414370000KP","3030101029",20),
+		("107010199414370000KP","3030101029",21),
+		("107010199414370000KP","3030101029",22),
+		("107010199414370000KP","3030101029",23),
+		("107010199414370000KP","3030101029",24),
+		("107010199414370000KP","3030101029",25),
+		("107010199414370000KP","3030101029",26),
+		("107010199414370000KP","3030101029",27),
+		("107010199414370000KP","3030101029",28),
+		("107010199414370000KP","3030103001",89),
+		("107010199414370000KP","3030103001",90),
+		("107010199414370000KP","3030103001",91),
+		("107010199414370000KP","3030103001",92),
+		("107010199414370000KP","3030103001",93),
+		("107010199414370000KP","3030103001",94),
+		("107010199414370000KP","3030103001",95),
+		("107010199414370000KP","3030103001",96),
+		("107010199414370000KP","3030103001",97),
+		("107010199414370000KP","3030103001",98),
+		("107010199414370000KP","3030205002",14),
+		("107010199414370000KP","3030205002",15),
+		("107010199414370000KP","3030205002",16),
+		("107010199414370000KP","3030205002",17),
+		("107010199414370000KP","3050206034",3),
+		("107010199414370000KP","3050206034",4),
+		("107010199414370000KP","3050206034",5),
+		("107010199414370000KP","3050206034",6),
+		("107010199414370000KP","3060101085",15),
+		("107010199414370000KP","3060101085",16),
+		("107010199414370000KP","3060101085",17),
+		("107010199414370000KP","3060101085",18),
+		("107010199414370000KP","3060101085",19),
+		("107010199414370000KP","3060101085",20),
+		("107010199414370000KP","3060101085",21),
+		("107010199414370000KP","3060101085",22),
+		("107010199414370000KP","3060101085",23),
+		("107010199414370000KP","3060101085",24),
+		("107010199414370000KP","3060102012",1),
+		("107010199414370000KP","3060102013",13),
+		("107010199414370000KP","3060102013",14),
+		("107010199414370000KP","3060102013",9),
+		("107010199414370000KP","3060102127",3),
+		("107010199414370000KP","3060102135",23),
+		("107010199414370000KP","3060102135",24),
+		("107010199414370000KP","3060347004",80),
+		("107010199414370000KP","3060347004",81),
+		("107010199414370000KP","3060347004",82),
+		("107010199414370000KP","3060347004",83),
+		("107010199414370000KP","3060347004",84),
+		("107010199414370000KP","3060347004",85),
+		("107010199414370000KP","3060347004",86),
+		("107010199414370000KP","3060347004",87),
+		("107010199414370000KP","3060347004",88),
+		("107010199414370000KP","3060347004",89),
+		("107010199414370000KP","3080115047",1),
+		("107010199414370000KP","3080115047",2),
+		("107010199414370000KP","3080115047",3),
+		("107010199414370000KP","3080115047",4),
+		("107010199414370000KP","3080115047",5),
+		("107010199414370000KP","3080115047",6),
+		("107010199414370000KP","3080115047",7),
+		("107010199414370000KP","3080115047",8),
+		("107010199414370000KP","3080115047",9),
+		("107010199414370000KP","3150301020",580),
+		("107010199414370000KP","3150301020",581),
+		("107010199414370000KP","3150301020",582),
+		("107010199414370000KP","3150301020",583),
+		("107010199414370000KP","3150301020",584),
+		("107010199414370000KP","3150301020",585),
+		("107010199414370000KP","3150301020",586),
+		("107010199414370000KP","3150301020",587),
+		("107010199414370000KP","3150301020",588),
+		("107010199414370000KP","3150301020",589),
+		("107010199414370000KP","3150302999",657),
+		("107010199414370000KP","3150302999",658),
+		("107010199414370000KP","3150302999",634),
+		("107010199414370000KP","3150302999",635),
+		("107010199414370000KP","3150302999",636),
+		("107010199414370000KP","3150302999",637),
+		("107010199414370000KP","3150302999",638),
+		("107010199414370000KP","3150302999",639),
+		("107010199414370000KP","3150302999",640),
+		("107010199414370000KP","3150302999",641),
+		("107010199414370000KP","3150302999",642),
+		("107010199414370000KP","3150302999",643),
+		("107010199414370000KP","3150302999",644),
+		("107010199414370000KP","3150302999",645),
+		("107010199414370000KP","3150302999",646),
+		("107010199414370000KP","3150302999",647),
+		("107010199414370000KP","3150302999",648),
+		("107010199414370000KP","3150302999",649),
+		("107010199414370000KP","3150302999",650),
+		("107010199414370000KP","3150302999",651),
+		("107010199414370000KP","3150302999",652),
+		("107010199414370000KP","3150302999",653)
+	) 
+	AND (kd_lokasi, kd_brg, no_aset) NOT IN (
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_alatbesar
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_angkutan
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_bangunan
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_dil
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_perairan
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_ruang
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_senjata
+		UNION
+		SELECT kd_lokasi, kd_brg, no_aset FROM ext_asset_tanah
+	)
+	AND LEFT(jns_trn,1)="1"
+);
 
