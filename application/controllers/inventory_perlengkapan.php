@@ -45,11 +45,14 @@ class inventory_perlengkapan extends MY_Controller {
                         'dari'=>$row->asal_barang,
                         'serial_number'=>$row->serial_number,
                         'kuantitas'=>$row->qty,
+                        'id_pengadaan'=>$row->id_source,
                         'no_aset'=>$no_aset
                     );
                     unset($row->kd_lokasi);
-                     $this->db->insert('pengadaan_data_perlengkapan',$row);
                     $this->db->insert('asset_perlengkapan',$asset_perlengkapan_data);
+                    $id_asset_perlengkapan = $this->db->insert_id();
+                    $row->id_asset_perlengkapan = $id_asset_perlengkapan;
+                    $this->db->insert('pengadaan_data_perlengkapan',$row);
                     
                 }
             }
@@ -69,11 +72,14 @@ class inventory_perlengkapan extends MY_Controller {
                         'dari'=>$data->asal_barang,
                         'serial_number'=>$data->serial_number,
                         'kuantitas'=>$data->qty,
-                        'no_aset'=>$no_aset
+                        'no_aset'=>$no_aset,
+                        'id_pengadaan'=>$data->id_source,
                     );
                 unset($data->kd_lokasi);
-                $this->db->insert('pengadaan_data_perlengkapan',$data);
                 $this->db->insert('asset_perlengkapan',$asset_perlengkapan_data);
+                $id_asset_perlengkapan = $this->db->insert_id();
+                $data->id_asset_perlengkapan = $id_asset_perlengkapan;
+                $this->db->insert('pengadaan_data_perlengkapan',$data);
             }
             
             echo "{success:true}";
@@ -215,19 +221,55 @@ class inventory_perlengkapan extends MY_Controller {
          */
 	function createInventoryPenyimpananPerlengkapan(){
             $data = json_decode($this->input->post('data'));
-           
+            
+            
             if(count($data) > 1)
             {
                 foreach($data as $row)
                 {
                     unset($row->nama_warehouse,$row->nama_ruang,$row->nama_rak,$row->invalid_grid_field_count);
                     $this->db->insert('inventory_penyimpanan_data_perlengkapan',$row);
+                    if($row->id_asset_perlengkapan != 0 && $row->id_asset_perlengkapan != null)
+                    {
+                        $query = "select b.id_pengadaan from inventory_penyimpanan as a
+                        INNER JOIN inventory_penerimaan_pemeriksaan as b ON a.id_penerimaan_pemeriksaan = b.id
+                        where a.id = $row->id_source";
+                        $result = $this->db->query($query);
+                        $id_pengadaan = $result->row()->id_pengadaan;
+                        $data_warehouse = array(
+                            "warehouse_id"=>$row->id_warehouse,
+                            "ruang_id"=>$row->id_warehouse_ruang,
+                            "rak_id"=>$row->id_warehouse_rak
+                        );
+                        $this->db->where('id_pengadaan',$id_pengadaan);
+                        $this->db->where('id',$row->id_asset_perlengkapan);
+                        $this->db->update('asset_perlengkapan',$data_warehouse);
+                        
+                    }
+                    
                 }
             }
             else
             {
                 unset($data->nama_warehouse,$data->nama_ruang,$data->nama_rak,$data->invalid_grid_field_count);
                 $this->db->insert('inventory_penyimpanan_data_perlengkapan',$data);
+                if($data->id_asset_perlengkapan != 0 && $data->id_asset_perlengkapan != null)
+                {
+                    $query = "select b.id_pengadaan from inventory_penyimpanan as a
+                    INNER JOIN inventory_penerimaan_pemeriksaan as b ON a.id_penerimaan_pemeriksaan = b.id
+                    where a.id = $data->id_source";
+                    $result = $this->db->query($query);
+                    $id_pengadaan = $result->row()->id_pengadaan;
+                    $data_warehouse = array(
+                        "warehouse_id"=>$data->id_warehouse,
+                        "ruang_id"=>$data->id_warehouse_ruang,
+                        "rak_id"=>$data->id_warehouse_rak
+                    );
+                    $this->db->where('id_pengadaan',$id_pengadaan);
+                    $this->db->where('id',$data->id_asset_perlengkapan);
+                    $this->db->update('asset_perlengkapan',$data_warehouse);
+
+                }
             }
             
             echo "{success:true}";
@@ -242,6 +284,23 @@ class inventory_perlengkapan extends MY_Controller {
                     unset($row->nama_warehouse,$row->nama_ruang,$row->nama_rak,$row->invalid_grid_field_count);
                     $this->db->set($row);
                     $this->db->replace('inventory_penyimpanan_data_perlengkapan');
+                    if($row->id_asset_perlengkapan != 0 && $row->id_asset_perlengkapan != null)
+                    {
+                        $query = "select b.id_pengadaan from inventory_penyimpanan as a
+                        INNER JOIN inventory_penerimaan_pemeriksaan as b ON a.id_penerimaan_pemeriksaan = b.id
+                        where a.id = $row->id_source";
+                        $result = $this->db->query($query);
+                        $id_pengadaan = $result->row()->id_pengadaan;
+                        $data_warehouse = array(
+                            "warehouse_id"=>$row->id_warehouse,
+                            "ruang_id"=>$row->id_warehouse_ruang,
+                            "rak_id"=>$row->id_warehouse_rak
+                        );
+                        $this->db->where('id_pengadaan',$id_pengadaan);
+                        $this->db->where('id',$row->id_asset_perlengkapan);
+                        $this->db->update('asset_perlengkapan',$data_warehouse);
+                        
+                    }
                 }
             }
             else
@@ -249,6 +308,23 @@ class inventory_perlengkapan extends MY_Controller {
                     unset($data->nama_warehouse,$data->nama_ruang,$data->nama_rak,$data->invalid_grid_field_count);
                     $this->db->set($data);
                     $this->db->replace('inventory_penyimpanan_data_perlengkapan');
+                    if($data->id_asset_perlengkapan != 0 && $data->id_asset_perlengkapan != null)
+                    {
+                        $query = "select b.id_pengadaan from inventory_penyimpanan as a
+                        INNER JOIN inventory_penerimaan_pemeriksaan as b ON a.id_penerimaan_pemeriksaan = b.id
+                        where a.id = $data->id_source";
+                        $result = $this->db->query($query);
+                        $id_pengadaan = $result->row()->id_pengadaan;
+                        $data_warehouse = array(
+                            "warehouse_id"=>$data->id_warehouse,
+                            "ruang_id"=>$data->id_warehouse_ruang,
+                            "rak_id"=>$data->id_warehouse_rak
+                        );
+                        $this->db->where('id_pengadaan',$id_pengadaan);
+                        $this->db->where('id',$data->id_asset_perlengkapan);
+                        $this->db->update('asset_perlengkapan',$data_warehouse);
+
+                    }
             }
             
            
@@ -264,11 +340,45 @@ class inventory_perlengkapan extends MY_Controller {
                 foreach($data as $row)
                 {
                     $this->db->delete('inventory_penyimpanan_data_perlengkapan', array('id' => $row->id));
+                    if($row->id_asset_perlengkapan != 0 && $row->id_asset_perlengkapan != null)
+                    {
+                        $query = "select b.id_pengadaan from inventory_penyimpanan as a
+                        INNER JOIN inventory_penerimaan_pemeriksaan as b ON a.id_penerimaan_pemeriksaan = b.id
+                        where a.id = $row->id_source";
+                        $result = $this->db->query($query);
+                        $id_pengadaan = $result->row()->id_pengadaan;
+                        $data_warehouse = array(
+                            "warehouse_id"=>0,
+                            "ruang_id"=>0,
+                            "rak_id"=>0
+                        );
+                        $this->db->where('id_pengadaan',$id_pengadaan);
+                        $this->db->where('id',$row->id_asset_perlengkapan);
+                        $this->db->update('asset_perlengkapan',$data_warehouse);
+                        
+                    }
                 }
             }
             else
             {
                     $this->db->delete('inventory_penyimpanan_data_perlengkapan', array('id' => $data->id));
+                    if($data->id_asset_perlengkapan != 0 && $data->id_asset_perlengkapan != null)
+                    {
+                        $query = "select b.id_pengadaan from inventory_penyimpanan as a
+                        INNER JOIN inventory_penerimaan_pemeriksaan as b ON a.id_penerimaan_pemeriksaan = b.id
+                        where a.id = $data->id_source";
+                        $result = $this->db->query($query);
+                        $id_pengadaan = $result->row()->id_pengadaan;
+                        $data_warehouse = array(
+                            "warehouse_id"=>0,
+                            "ruang_id"=>0,
+                            "rak_id"=>0
+                        );
+                        $this->db->where('id_pengadaan',$id_pengadaan);
+                        $this->db->where('id',$data->id_asset_perlengkapan);
+                        $this->db->update('asset_perlengkapan',$data_warehouse);
+
+                    }
             }
             
 		 echo "{success:true}"; 

@@ -24,6 +24,7 @@ class Perencanaan extends MY_Controller {
 	
 	function modifyPerencanaan(){
                 $data = array();
+                $dataKode = array();
                 
 	  	$fields = array(
 			'id', 'kode_unor', 'kd_lokasi',
@@ -32,9 +33,19 @@ class Perencanaan extends MY_Controller {
                         'harga_satuan', 'harga_total', 'is_realisasi','document_url','image_url'
                 );
                 
+                $kodeFields = array(
+                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
+                );
+                
+                foreach ($kodeFields as $field) {
+			$dataKode[$field] = $this->input->post($field);
+		}
+                $kd_brg = $this->codeGenerator($dataKode);
+                
                 foreach ($fields as $field) {
 			$data[$field] = $this->input->post($field);
 		} 
+                $data['kd_brg'] = $kd_brg;
                 
                    //GENERASI NO_ASET 
                 if($data['no_aset'] == null || $data['no_aset'] == "")

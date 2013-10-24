@@ -449,6 +449,11 @@ class Combo_Ref extends CI_Controller {
             if ($this->input->post('kd_gol') > 0) {
                 $this->db->where('kd_gol', $this->input->post('kd_gol'));
             }
+            
+            if($this->input->get_post('excludeBidang'))
+            {
+                $this->db->where_not_in('kd_bid',$this->input->post('excludeBidang'));
+            }
 
             $this->db->order_by('ur_bid', 'ASC');
             $this->db->group_by('kd_bid');
