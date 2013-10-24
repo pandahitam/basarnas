@@ -93,6 +93,7 @@ class Inventory_Perlengkapan_Model extends MY_Model{
                       where t.id_source =$id";
             return $this->Get_By_Query($query); 
         }
+        
 	
 	
 //	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){
