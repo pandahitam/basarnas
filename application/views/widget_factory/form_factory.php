@@ -721,7 +721,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         Form.pengadaanInAsset = function(setting)
         {
-            var form = Form.panelPengadaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.processPengadaanInPerlengkapan(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.fileUpload());
@@ -2009,6 +2009,80 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             }
                                             form.reset();
                                         }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.processPengadaanInPerlengkapan = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_process', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+//                            console.log(form.getValues());
+                            
+                            if (form.isValid())
+                            {
+//                                console.log(form.getValues());
+                                form.submit({
+                                    success: function(form) {
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        
 
 
 
@@ -3459,7 +3533,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
 
-        Form.Component.unit = function(edit,form,isReadOnly) {
+        Form.Component.unit = function(edit,form,isReadOnly,isUnorReadOnly) {
             var component = {
                 xtype: 'fieldset',
                 itemId : 'unit_selection',
@@ -6998,10 +7072,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                        xtype:'hidden',
-                                        name:'id',
-                                    },
+                            items: [
+//                                    {
+//                                        xtype:'hidden',
+//                                        name:'id',
+//                                    },
                                 {
                                     fieldLabel: 'No SPPA *',
                                     name: 'no_sppa',
@@ -7672,6 +7747,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     fieldLabel: 'Kebutuhan',
                                     name: 'kebutuhan'
                                 }, {
+                                    xtype:'textarea',
                                     fieldLabel: 'Keterangan',
                                     name: 'keterangan'
                                 }]
@@ -7684,8 +7760,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items: [{
-                                    fieldLabel: 'Satuan',
-                                    name: 'satuan'
+                                    xtype:'textfield',
+                                    fieldLabel: 'Nama',
+                                    name:'nama'
+                                    
                                 }, {
                                     xtype: 'numberfield',
                                     fieldLabel: 'Quantity',
@@ -7698,7 +7776,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             o_form_p.findField('harga_total').setValue((v_qu * v_satuan));
                                         }
                                     }
-                                }, ]
+                                }, {
+                                    fieldLabel: 'Satuan',
+                                    name: 'satuan'
+                                },]
                         }, {
                             columnWidth: .33,
                             layout: 'anchor',

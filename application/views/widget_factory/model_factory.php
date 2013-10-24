@@ -122,7 +122,7 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
         'dihapus','image_url','document_url'
-        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor']
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan']
 });
 
 
@@ -552,11 +552,11 @@ Ext.define('MPartsPengadaan', {extend: 'Ext.data.Model',
 Ext.define('MParts', {extend: 'Ext.data.Model',
     fields: ['id','id_source',
         'serial_number', 'part_number','kd_brg',
-        'status_barang', 'qty', 'asal_barang']
+        'status_barang', 'qty', 'asal_barang','id_asset_perlengkapan']
 });
 
 Ext.define('MPartsPenyimpanan', {extend: 'Ext.data.Model',
-    fields: ['id','id_source',
+    fields: ['id','id_source','id_asset_perlengkapan',
         'serial_number', 'part_number','kd_brg',
         'status_barang', 'qty', 'asal_barang',
         'id_warehouse','id_warehouse_ruang','id_warehouse_rak',

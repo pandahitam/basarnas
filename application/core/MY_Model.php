@@ -71,8 +71,8 @@ class MY_Model extends CI_Model{
 	{	
             $extra_qr = $this->extractLimitQuery($query);
 	    
-//	    $q_ori = $query;
-//	    
+	    $q_ori = $query;
+	    
 //	    $temp_kode_unker_zs_simpeg = $this->session->userdata("temp_kode_unker_zs_simpeg");
 //	    $temp_kode_unor_zs_simpeg = $this->session->userdata("temp_kode_unor_zs_simpeg");
 //	    

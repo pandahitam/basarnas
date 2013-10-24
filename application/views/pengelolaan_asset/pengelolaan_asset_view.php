@@ -47,12 +47,12 @@ var Center_PA = {
 					text: 'Inventaris Asset - Bangunan'
 				}
 		},
-	  	{text: 'Alat Besar', iconCls: 'icon-kendaraan', 
+	  	{text: 'Peralatan', iconCls: 'icon-kendaraan', 
 				handler: function(){
 					Load_TabPage_Asset('alatbesar_panel', BASE_URL+'asset_alatbesar/alatbesar')
 				}, 
 				tooltip: {
-					text: 'Inventaris Asset - Alat Besar'
+					text: 'Inventaris Asset - Peralatan'
 				}
 		},
 	  	{text: 'Angkutan', iconCls: 'icon-book', 

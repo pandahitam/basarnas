@@ -825,7 +825,7 @@
 
         Alatbesar.Action.add = function() {
             var _form = Alatbesar.Form.create(null, false);
-            Modal.assetCreate.setTitle('Create Alatbesar');
+            Modal.assetCreate.setTitle('Create Peralatan');
             Modal.assetCreate.add(_form);
             Modal.assetCreate.show();
         };
@@ -839,7 +839,7 @@
                 delete data.nama_unor;
                 if (Modal.assetEdit.items.length === 0)
                 {
-                    Modal.assetEdit.setTitle('Edit Alatbesar');
+                    Modal.assetEdit.setTitle('Edit Peralatan');
                     Modal.assetEdit.add(Region.createSidePanel(Alatbesar.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
@@ -965,7 +965,7 @@
         var setting = {
             grid: {
                 id: 'grid_Alatbesar',
-                title: 'DAFTAR ASSET ALAT ALAT BESAR',
+                title: 'DAFTAR ASSET PERALATAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Klasifikasi Aset', dataIndex: 'nama_klasifikasi_aset', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
@@ -1049,8 +1049,8 @@
         Alatbesar.Grid.grid = Grid.inventarisGrid(setting, Alatbesar.Data);
 
         var new_tabpanel_Asset = {
-            id: 'alatbesar_panel', title: 'Alatbesar', iconCls: 'icon-alatbesar_Alatbesar', closable: true, border: false,layout:'border',
-            items: [Region.filterPanelAset(Alatbesar.Data,'alatbesar','3','01'),Alatbesar.Grid.grid]
+            id: 'alatbesar_panel', title: 'Peralatan', iconCls: 'icon-alatbesar_Alatbesar', closable: true, border: false,layout:'border',
+            items: [Region.filterPanelAsetPeralatan(Alatbesar.Data,'alatbesar','3'),Alatbesar.Grid.grid]
         };
 
 <?php

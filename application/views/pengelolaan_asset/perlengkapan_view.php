@@ -578,15 +578,19 @@
             if (selected.length === 1)
             {
                 var data = selected[0].data;
+//                var params = {
+//                                kd_lokasi : data.kd_lokasi,
+//                                kd_unor : data.kd_unor,
+//                                kd_brg : data.kd_brg,
+//                                no_aset : data.no_aset
+//                        };
                 var params = {
-                                kd_lokasi : data.kd_lokasi,
-                                kd_unor : data.kd_unor,
-                                kd_brg : data.kd_brg,
-                                no_aset : data.no_aset
-                        };
+                        id_pengadaan: data.id_pengadaan,
+                        isAssetPerlengkapan: true
+                };
                         
                 Ext.Ajax.request({
-                    url: BASE_URL + 'pengadaan/getByKode/',
+                    url: BASE_URL + 'pengadaan/getByID/',
                     params: params,
                     success: function(resp)
                     {

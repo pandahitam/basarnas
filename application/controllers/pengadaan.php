@@ -24,7 +24,7 @@ class Pengadaan extends MY_Controller {
 	
 	function modifyPengadaan(){
                 $data = array();
-                
+
 	  	$fields = array(
 			'id', 'kode_unker', 'kode_unor', 'id_vendor', 'kd_lokasi','kd_brg','no_aset','merek','model','nama',
                         'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal',
@@ -71,7 +71,15 @@ class Pengadaan extends MY_Controller {
 	{
 		$id = $this->input->post('id_pengadaan');
 		$data = $this->model->get_ByID($id);
-		echo json_encode($data);
+                if(isset($_POST['isAssetPerlengkapan']))
+                {
+                    echo json_encode($data['data']);
+                }
+                else
+                {
+                    echo json_encode($data);
+                }
+		
 	}
         
         function getByKode()
