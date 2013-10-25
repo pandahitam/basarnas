@@ -488,6 +488,13 @@
                 var GridAlertPemeliharaan = Ext.create('Ext.grid.Panel', {
                     title: 'Alert Pemeliharaan',
                     store: Dashboard.DataAlertPemeliharaan,
+                    tools:[{
+                        type:'refresh',
+                        tooltip: 'Load Ulang Data',
+                        handler: function(event, toolEl, panel){
+                            Dashboard.DataAlertPemeliharaan.load();
+                        }
+                    }],
                     columns: [
                         {
                             xtype:'actioncolumn', width:30, 
@@ -709,6 +716,13 @@
                  var GridAlertPengadaan = Ext.create('Ext.grid.Panel', {
                     title: 'Alert Pengadaan',
                     store: Dashboard.DataAlertPengadaan,
+                    tools:[{
+                        type:'refresh',
+                        tooltip: 'Load Ulang Data',
+                        handler: function(event, toolEl, panel){
+                            Dashboard.DataAlertPengadaan.load();
+                        }
+                    }],
                     columns: [
                         {xtype:'actioncolumn', width:30, 
                             items:[{
@@ -745,6 +759,13 @@
                 var GridAlertKendaraan = Ext.create('Ext.grid.Panel', {
                     title: 'Alert Kendaraan Darat',
                     store: Dashboard.DataAlertKendaraanDarat,
+                    tools:[{
+                        type:'refresh',
+                        tooltip: 'Load Ulang Data',
+                        handler: function(event, toolEl, panel){
+                           Dashboard.DataAlertKendaraanDarat.load();
+                        }
+                    }],
                     columns: [
                         {xtype:'actioncolumn', width:30, 
                             items:[{
