@@ -17,7 +17,7 @@ class Utility_SIMPEG extends CI_Controller {
 		// ON DEMOND SET PHP.INI
 	 	ini_set("max_execution_time","900");
 	 	ini_set("max_input_time","1800");
-	 	ini_set("memory_limit","384M");
+	 	ini_set("memory_limit","1024M");
 
 		// Load the DB utility class
 		$this->load->dbutil();

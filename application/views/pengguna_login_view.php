@@ -179,7 +179,6 @@ function show_formUsers(mode,value_form) {
                     },
                     'change': {
                         fn: function(obj, value) {
-                            Ext.getCmp('nama_unor_user').setValue()
                             /*if (value !== null)
                             {
                                 var kodeUnkerField = Ext.getCmp('kd_lokasi');
@@ -224,6 +223,7 @@ function show_formUsers(mode,value_form) {
                                 dataStore.clearFilter();
                                 dataStore.filter({property:"kd_lokasi", value:kd_lokasi});
                             }
+						
                             comboField.expand();
                             
                         },
@@ -475,21 +475,27 @@ function addUsers() {
 function updateUsers() {	
 	var sm = gridUsers.getSelectionModel(), sel = sm.getSelection();
   if(sel.length == 1){
-    
+	
   	var value_form = { 
     	ID_User: sel[0].get('ID_User'), 
     	NIP: sel[0].get('NIP'), 
     	user: sel[0].get('user'),
     	fullname: sel[0].get('fullname'),
-    	nama_unor: (sel[0].get('nama_unor')!==null ? sel[0].get('nama_unor') : sel[0].get('temp_kode_unor')),
-    	nama_unker: (sel[0].get('nama_unker')!==null ? sel[0].get('nama_unker') : sel[0].get('temp_kode_unor')),
+    	nama_unor: (sel[0].get('nama_unor')),
+    	nama_unker: (sel[0].get('nama_unker')),
     	email: sel[0].get('email'),
     	type: sel[0].get('type'),
     	group: sel[0].get('group'),
     	status: sel[0].get('status')
    };
-   show_formUsers('Ubah',value_form);    	
-	}		
+   show_formUsers('Ubah',value_form);
+   
+	Ext.getCmp('nama_unker_user').setValue(sel[0].get('temp_kode_unker'));
+   if(sel[0].get('temp_kode_unor')!=null && sel[0].get('temp_kode_unor')!=0){
+		Ext.getCmp('nama_unor_user').setValue(sel[0].get('temp_kode_unor'));
+   }
+
+   }		
 }
 // FUNCTION UBAH PENGGUNA LOGIN ------------------------------------------ END
 	
