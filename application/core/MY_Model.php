@@ -70,24 +70,33 @@ class MY_Model extends CI_Model{
 	function Get_By_Query($query,$isGridFilter = null, $searchByFieldTable =null)
 	{	
             $extra_qr = $this->extractLimitQuery($query);
-	    
-	    $q_ori = $query;
-	    
-//	    $temp_kode_unker_zs_simpeg = $this->session->userdata("temp_kode_unker_zs_simpeg");
-//	    $temp_kode_unor_zs_simpeg = $this->session->userdata("temp_kode_unor_zs_simpeg");
-//	    
-//	    if((str_replace(' ','', strtolower($temp_kode_unker_zs_simpeg))=="badansarnasional") || $temp_kode_unker_zs_simpeg=='107010199414370000KP'){
-//
-//	    }else{
-//		if(strpos($q_ori, 'kd_lokasi')!==false){
-//			$extra_qr['query'] = str_replace(' where ','', $extra_qr['query']);
-//			$extra_qr['byss'] = "where kd_lokasi = '".$temp_kode_unker_zs_simpeg."'";
-//			$q_ori = $extra_qr['query'].' '.$extra_qr['byss'].' '.$extra_qr['limit_num'];
-//		}
-//	    }
-//	    
-//            $r = $this->db->query($q_ori);
-            $r = $this->db->query($query);
+			
+			$r = $this->db->query($query);
+			
+			$gorupid_zs_simpeg = $this->session->userdata("gorupid_zs_simpeg");
+			if($gorupid_zs_simpeg == '4' ){
+				$q_ori = $query;
+				
+				$temp_kode_unker_zs_simpeg = $this->session->userdata("temp_kode_unker_zs_simpeg");
+				$temp_kode_unor_zs_simpeg = $this->session->userdata("temp_kode_unor_zs_simpeg");
+				
+				if(((str_replace(' ','', strtolower($temp_kode_unker_zs_simpeg))=="badansarnasional") || $temp_kode_unker_zs_simpeg=='107010199414370000KP') && $temp_kode_unor_zs_simpeg!=0){
+					if(strpos($q_ori, 'kode_unor')!==false){
+						$extra_qr['query'] = str_replace(' where ','', $extra_qr['query']);
+						$extra_qr['byss'] = "where kode_unor = '".$temp_kode_unor_zs_simpeg."'";
+						$q_ori = $extra_qr['query'].' '.$extra_qr['byss'].' '.$extra_qr['limit_num'];
+					}
+				}else{
+					if(strpos($q_ori, 'kd_lokasi')!==false){
+						$extra_qr['query'] = str_replace(' where ','', $extra_qr['query']);
+						$extra_qr['byss'] = "where kd_lokasi = '".$temp_kode_unker_zs_simpeg."'";
+						$q_ori = $extra_qr['query'].' '.$extra_qr['byss'].' '.$extra_qr['limit_num'];
+					}
+				}
+			
+				$r = $this->db->query($q_ori);
+			}
+			
             $count = $this->getQueryCountWithoutLimit($extra_qr['query'],$isGridFilter,$searchByFieldTable);
             $data = array();
             if ($r->num_rows() > 0)

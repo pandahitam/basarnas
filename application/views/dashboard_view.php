@@ -61,7 +61,8 @@
             readGrafikUnkerTotalAset: BASE_URL + 'dashboard/grafik_unker_totalaset',
             readGrafikKategoriBarangTotalAset : BASE_URL + 'dashboard/grafik_kategoribarang_totalaset',
             readAlertPemeliharaan: BASE_URL + 'dashboard/alert_pemeliharaan',
-            readInventarisAssetUmum: BASE_URL + 'dashboard/inventaris_assetumum',
+           // readInventarisAssetUmum: BASE_URL + 'dashboard/inventaris_assetumum'
+		    readInventarisAssetUmum: BASE_URL + 'dashboard/cari_global'
             readAlertPengadaan: BASE_URL + 'dashboard/alert_pengadaan',
             readAlertKendaraanDarat: BASE_URL + 'dashboard/alert_kendaraan_darat',
             };
@@ -428,21 +429,20 @@
                          store: Dashboard.DataInventarisAssetUmum, 
                         flex: 1,        
                         columns: [
+                            { header: 'Nama Barang', dataIndex: 'nama_barang', width:150 },
                             { header: 'Kode Barang',  dataIndex: 'kode_barang', width:100 },
                             { header: 'Kode Lokasi', dataIndex: 'kode_lokasi', width:150},
-                            { header: 'No Asset', dataIndex: 'no_aset', width:60 },
-                            { header: 'Unit Kerja', dataIndex: 'nama_unker', width:150 },
-                            { header: 'Nama Barang', dataIndex: 'nama_barang', width:150 },
-                            { header: 'Tanggal Perolehan', dataIndex: 'tanggal_perolehan', width:120 },
-                            { header: 'Kondisi', dataIndex: 'kondisi', width:60 }
+                            { header: 'No. Asset', dataIndex: 'no_aset', width:60 },   
+                            { header: 'Kategori', dataIndex: 'kategori', width:100 } ,
+                            { header: 'Unit Kerja', dataIndex: 'nama_unker', width:150 } 
                         ], 
                         dockedItems : [
                            { xtype: 'toolbar', 
                            dock: 'top',
                            items: [
                                  {
-                                 text: 'Clear Filter', iconCls: 'icon-filter_clear',
-                                 handler: function() {
+                                 text: 'Clean Filter  ', iconCls: 'icon-filter_clear',
+                                 handler: function() {  
                                  // _grid.filters.clearFilters();
                                  }
                               }, search
