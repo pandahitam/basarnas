@@ -61,8 +61,18 @@
             readGrafikUnkerTotalAset: BASE_URL + 'dashboard/grafik_unker_totalaset',
             readGrafikKategoriBarangTotalAset : BASE_URL + 'dashboard/grafik_kategoribarang_totalaset',
             readAlertPemeliharaan: BASE_URL + 'dashboard/alert_pemeliharaan',
-            readInventarisAssetUmum: BASE_URL + 'dashboard/inventaris_assetumum'
+            readInventarisAssetUmum: BASE_URL + 'dashboard/inventaris_assetumum',
+            readAlertPengadaan: BASE_URL + 'dashboard/alert_pengadaan',
+            readAlertKendaraanDarat: BASE_URL + 'dashboard/alert_kendaraan_darat',
             };
+    
+            Dashboard.readerAlertKendaraanDarat = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderAlertKendaraanDarat_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
+            
+            Dashboard.readerAlertPengadaan = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderAlertPengadaaan_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
 
             Dashboard.readerGrafikUnkerTotalAset = new Ext.create('Ext.data.JsonReader', {
                 id: 'ReaderGrafikUnkerTotalAset_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
@@ -78,6 +88,18 @@
             
             Dashboard.readerInventarisAssetUmum = new Ext.create('Ext.data.JsonReader', {
                 id: 'ReaderInventarisAssetUmum_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
+            
+            Dashboard.proxyAlertPengadaan = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyAlertPengadaan_Dashboard',
+                url: Dashboard.URL.readAlertPengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerAlertPengadaan,
+            });
+            
+            Dashboard.proxyAlertKendaraanDarat = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyAlertKendaraanDarat_Dashboard',
+                url: Dashboard.URL.readAlertKendaraanDarat, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerAlertKendaraanDarat,
             });
 
             Dashboard.proxyGrafikUnkerTotalAset = new Ext.create('Ext.data.AjaxProxy', {
@@ -104,6 +126,13 @@
                 reader: Dashboard.readerInventarisAssetUmum ,
             });
             
+            Dashboard.modelAlertPengadaan = Ext.define('MAlertPengadaan', {extend: 'Ext.data.Model',
+                fields: ['id,nama_unker,kd_brg,nama,tanggal_garansi_expired']
+            });
+            
+            Dashboard.modelAlertKendaraanDarat = Ext.define('MAlertKendaraanDarat', {extend: 'Ext.data.Model',
+                fields: ['id,nama_unker,kd_brg,merk,darat_masa_berlaku_stnk, darat_masa_berlaku_pajak']
+            });
             
             Dashboard.modelGrafikUnkerTotalAset = Ext.define('MGrafikUnkerTotalAset', {extend: 'Ext.data.Model',
                 fields: ['kd_lokasi','ur_upb','totalAset']
@@ -139,6 +168,16 @@
             Dashboard.DataInventarisAssetUmum = new Ext.create('Ext.data.Store', {
                 id: 'Data_InventarisAssetUmum', storeId: 'DataInventarisAssetUmum', model: Dashboard.modelInventarisAssetUmum, noCache: false, autoLoad: false,
                 proxy: Dashboard.proxyInventarisAssetUmum, groupField: 'tipe'
+            });
+            
+            Dashboard.DataAlertPengadaan = new Ext.create('Ext.data.Store', {
+                id: 'Data_AlertPengadaan', storeId: 'DataAlertPengadaan', model: Dashboard.modelAlertPengadaan, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyAlertPengadaan, groupField: 'tipe'
+            });
+            
+            Dashboard.DataAlertKendaraanDarat = new Ext.create('Ext.data.Store', {
+                id: 'Data_AlertKendaraanDarat', storeId: 'DataAlertKendaraanDarat', model: Dashboard.modelAlertKendaraanDarat, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyAlertKendaraanDarat, groupField: 'tipe'
             });
             
             Ext.onReady(function() {
@@ -383,21 +422,7 @@
                         align: 'stretch',   
                         padding: 5,
                     },
-                    items: [{              
-                        title: 'Alert Pemeliharaan',
-                        width: 500,
-                        xtype: 'grid',
-                        columns: [
-                            { header: 'Unit Kerja',  dataIndex: 'ur_upb', width:150 },
-                            { header: 'Nama Aset', dataIndex: 'nama', width:196},
-                            { header: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
-                        ],           
-                        store: Dashboard.DataAlertPemeliharaan 
-                        //flex: 1
-                    }, {
-                        xtype: 'splitter'   
-                    }, {
-						
+                    items: [{			
                         title: 'Pencarian Asset',
                         xtype: 'grid',
                          store: Dashboard.DataInventarisAssetUmum, 
@@ -438,9 +463,51 @@
                         { header: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
                     ],
                     height: 200,
-                    width: 500
+                    width: 420
+                });
+                
+                 var GridAlertPengadaan = Ext.create('Ext.grid.Panel', {
+                    title: 'Alert Pengadaan',
+                    store: Dashboard.DataAlertPengadaan,
+                    columns: [
+                        { header: 'Tanggal Expire Garansi', dataIndex: 'tanggal_garansi_expired', width:150 },
+                        { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
+                        { header: 'Kode Barang',  dataIndex: 'kd_brg', width:150 },
+                        { header: 'Nama Aset', dataIndex: 'nama', width:200},
+                        
+                    ],
+                    height: 200,
+                    width: 420
+                });
+                
+                var GridAlertKendaraan = Ext.create('Ext.grid.Panel', {
+                    title: 'Alert Kendaraan Darat',
+                    store: Dashboard.DataAlertKendaraanDarat,
+                    columns: [
+                        { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
+                        { header: 'Kode Barang', dataIndex: 'kd_brg', width:200},
+                        { header: 'Merk', dataIndex: 'merk', width:200},
+                        { header: 'Masa Berlaku STNK', dataIndex: 'darat_masa_berlaku_stnk', width:150 },
+                        { header: 'Masa Berlaku Pajak', dataIndex: 'darat_masa_berlaku_pajak', width:150 }
+                    ],
+                    height: 200,
+                    width: 420
                     //renderTo: Ext.getBody()
                 });
+                
+                var AlertContainer = Ext.create('Ext.panel.Panel', {
+                    height: 200,
+                    renderTo: Ext.getBody(),
+                    layout: {
+                        type: 'hbox',       
+                        align: 'stretch',   
+                        padding: 5,
+                    },
+                    items: [ GridAlertPemeliharaan,{xtype:'splitter'},
+                             GridAlertKendaraan,{xtype:'splitter'},
+                             GridAlertPengadaan
+                           ]
+                 });
                 
                 
                     
@@ -534,6 +601,7 @@
                     title: "Grafik Total Aset/Unit Kerja", 
                     autoScroll: true, 
                     height: 600,
+                    padding:5,
                     layout:{
                         type:'table',
                         tableAttrs:{
@@ -551,6 +619,7 @@
                     title: "Grafik Total Aset/Kategori Barang", 
                     autoScroll: true, 
                     height: 600,
+                    padding: 5,
                     layout:{
                         type:'table',
                         tableAttrs:{
@@ -567,8 +636,8 @@
                     id: 'Content_Body_Tabs', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
                     defaults: {autoScroll: true},
                     items: [{
-                            id: 'dashboard', title: 'Dashboard', bodyPadding: 10, iconCls: 'icon-gnome', closable: false,layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}},},
-                            items:[DashboardMyPanel,GrafikUnkerTotalAsetContainer, GrafikKategoriBarangTotalAsetContainer]
+                            id: 'dashboard', title: 'Dashboard', bodyPadding:0, iconCls: 'icon-gnome', closable: false,layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}},},
+                            items:[DashboardMyPanel,AlertContainer,GrafikUnkerTotalAsetContainer, GrafikKategoriBarangTotalAsetContainer]
                         }],
                     listeners: {
                         'tabchange': function(tabPanel, tab) {

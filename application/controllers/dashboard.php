@@ -86,6 +86,30 @@ class Dashboard extends CI_Controller{
 	    echo json_encode($dataSend);
   }
   
+  function alert_pengadaan()
+  {
+      $query = "SELECT id,nama_unker,kd_brg,nama,garansi_berlaku AS tanggal_garansi_expired FROM view_pengadaan
+                WHERE is_garansi = 1 AND expired_viewed_status = 0 
+                AND DATEDIFF( DATE( garansi_berlaku ) , CURDATE() ) <=0 
+                AND garansi_berlaku != '0000-00-00'";
+       $data = $this->Get_By_Query($query);
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
+  }
+  
+  function alert_kendaraan_darat()
+  {
+      $query = "SELECT id,nama_unker,kd_brg,merk,darat_masa_berlaku_stnk, darat_masa_berlaku_pajak FROM view_asset_angkutan_darat
+                WHERE DATEDIFF( DATE( darat_masa_berlaku_stnk ) , CURDATE() ) <=0
+                OR
+                DATEDIFF( DATE( darat_masa_berlaku_pajak ) , CURDATE() ) <=0
+                AND darat_masa_berlaku_stnk != '0000-00-00'
+                AND darat_masa_berlaku_pajak != '0000-00-00'";
+      $data = $this->Get_By_Query($query);
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
+  }
+  
   function inventaris_assetumum() {
       $query = "SELECT * FROM t_tempall";
 	   $data = $this->Get_By_Query($query);
