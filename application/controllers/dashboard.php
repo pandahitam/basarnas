@@ -54,7 +54,7 @@ class Dashboard extends CI_Controller{
       //                inner join ref_unker as b on a.kd_lokasi = b.kdlok
       //                where DATEDIFF(DATE(rencana_waktu),CURDATE()) <= 0
       //                group by kd_lokasi, kd_brg, no_aset";
-	    $query = "SELECT kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
+	    $query = "SELECT a.id,kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
 		      FROM pemeliharaan AS a
 		      INNER JOIN ref_unker AS b ON a.kd_lokasi = b.kdlok
 		      WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
@@ -73,15 +73,29 @@ class Dashboard extends CI_Controller{
 		      )
 		      GROUP BY kd_lokasi, kd_brg, no_aset";
 		      
-	    $newQuery = "SELECT kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
+	    $newQuery = "SELECT a.id, kd_lokasi,kd_brg,no_aset,ur_upb, nama, max( rencana_waktu ) as tanggal_kadaluarsa
 		      FROM pemeliharaan AS a
 		      INNER JOIN ref_unker AS b ON a.kd_lokasi = b.kdlok
 		      WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
 		      AND alert = 1
+                      AND rencana_waktu != '0000-00-00'
 		      GROUP BY kd_lokasi, kd_brg, no_aset";
-		      
+            $newQuery2 = "SELECT id, kd_brg, kd_lokasi, no_aset,
+                            kode_unker, kode_unor, nama_unker, nama_unor,jenis, nama, 
+                            tahun_angaran, pelaksana_tgl, pelaksana_nama, 
+                            kondisi, deskripsi, harga, kode_angaran,
+                            unit_waktu, unit_pengunaan,
+                            freq_waktu, freq_pengunaan, status, durasi, 
+                            rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert
+                            FROM view_pemeliharaan
+                            WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
+                            AND alert = 1
+                            AND rencana_waktu != '0000-00-00'
+                            
+                            ";
+            
 	    //$this->Get_By_Query($query);
-	    $data = $this->Get_By_Query($newQuery);
+	    $data = $this->Get_By_Query($newQuery2);
 	    $dataSend['results'] = $data;
 	    echo json_encode($dataSend);
   }
@@ -99,12 +113,22 @@ class Dashboard extends CI_Controller{
   
   function alert_kendaraan_darat()
   {
-      $query = "SELECT id,nama_unker,kd_brg,merk,darat_masa_berlaku_stnk, darat_masa_berlaku_pajak FROM view_asset_angkutan_darat
-                WHERE DATEDIFF( DATE( darat_masa_berlaku_stnk ) , CURDATE() ) <=0
-                OR
-                DATEDIFF( DATE( darat_masa_berlaku_pajak ) , CURDATE() ) <=0
-                AND darat_masa_berlaku_stnk != '0000-00-00'
-                AND darat_masa_berlaku_pajak != '0000-00-00'";
+      $query = "SELECT kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
+                            msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
+                            dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status,
+                            id, kode_unor, image_url, document_url, 
+                            nama_unker, nama_unor,
+                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel,ur_sskel
+                            ,nama_klasifikasi_aset, kd_klasifikasi_aset,
+                            kd_lvl1,kd_lvl2,kd_lvl3,
+                            darat_no_stnk,darat_masa_berlaku_stnk,darat_masa_berlaku_pajak,
+                            darat_jumlah_pajak, darat_keterangan_lainnya
+                            FROM view_asset_angkutan_darat
+                            WHERE DATEDIFF( DATE( darat_masa_berlaku_stnk ) , CURDATE() ) <=0
+                            OR
+                            DATEDIFF( DATE( darat_masa_berlaku_pajak ) , CURDATE() ) <=0
+                            AND darat_masa_berlaku_stnk != '0000-00-00'
+                            AND darat_masa_berlaku_pajak != '0000-00-00'";
       $data = $this->Get_By_Query($query);
        $dataSend['results'] = $data;
        echo json_encode($dataSend);

@@ -55,7 +55,7 @@
             Ext.form.Field.prototype.msgTarget = 'side';
             Ext.QuickTips.init();
 
-            Ext.namespace('SIMPEG','Dashboard');
+            Ext.namespace('SIMPEG','Dashboard','AlertKendaraanDarat','AlertKendaraanDarat.Form','AlertPemeliharan','AlertPemeliharaan.Form');
 
             Dashboard.URL = {
             readGrafikUnkerTotalAset: BASE_URL + 'dashboard/grafik_unker_totalaset',
@@ -127,11 +127,38 @@
             });
             
             Dashboard.modelAlertPengadaan = Ext.define('MAlertPengadaan', {extend: 'Ext.data.Model',
-                fields: ['id,nama_unker,kd_brg,nama,tanggal_garansi_expired']
+                fields: ['id','nama_unker','kd_brg','nama','tanggal_garansi_expired']
             });
             
             Dashboard.modelAlertKendaraanDarat = Ext.define('MAlertKendaraanDarat', {extend: 'Ext.data.Model',
-                fields: ['id,nama_unker,kd_brg,merk,darat_masa_berlaku_stnk, darat_masa_berlaku_pajak']
+                fields: ['id', 'kd_lokasi', 
+                        'kd_brg', 'no_aset', 
+                        'kuantitas', 'no_kib', 
+                        'merk', 'type', 
+                        'pabrik', 'thn_rakit', 
+                        'thn_buat', 'negara', 
+                        'muat', 'bobot', 
+                        'daya', 'msn_gerak', 
+                        'jml_msn', 'bhn_bakar', 
+                        'no_mesin', 'no_rangka', 
+                        'no_polisi', 'no_bpkb', 
+                        'lengkap1', 'lengkap2', 
+                        'lengkap3', 'jns_trn', 
+                        'dari', 'tgl_prl', 
+                        'rph_aset', 'dasar_hrg', 
+                        'sumber', 'no_dana', 
+                        'tgl_dana', 'unit_pmk', 
+                        'alm_pmk', 'catatan', 
+                        'kondisi', 'tgl_buku', 
+                        'rphwajar', 'status', 
+                        'id','nama_unker', 'nama_unor', // Field from ext bangunan
+                        'kode_unor','image_url','document_url',
+                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
+                        ,'ur_sskel'
+                        ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+                        'kd_lvl1','kd_lvl2','kd_lvl3',
+                         'darat_no_stnk','darat_masa_berlaku_stnk','darat_masa_berlaku_pajak',
+                         'darat_jumlah_pajak', 'darat_keterangan_lainnya']
             });
             
             Dashboard.modelGrafikUnkerTotalAset = Ext.define('MGrafikUnkerTotalAset', {extend: 'Ext.data.Model',
@@ -143,7 +170,12 @@
             });
             
             Dashboard.modelAlertPemeliharaan = Ext.define('MAlertPemeliharaan', {extend: 'Ext.data.Model',
-                fields: ['ur_upb','nama','tanggal_kadaluarsa']
+                fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset',
+                        'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
+                        'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
+                        'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
+                        'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
+                        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url','tanggal_kadaluarsa']
             });
 			
             Dashboard.modelInventarisAssetUmum = Ext.define('MInventarisAssetUmum', {extend: 'Ext.data.Model',
@@ -162,22 +194,22 @@
             
             Dashboard.DataAlertPemeliharaan = new Ext.create('Ext.data.Store', {
                 id: 'Data_AlertPemeliharaan', storeId: 'DataAlertPemeliharaan', model: Dashboard.modelAlertPemeliharaan, noCache: false, autoLoad: true,
-                proxy: Dashboard.proxyAlertPemeliharaan, groupField: 'tipe'
+                proxy: Dashboard.proxyAlertPemeliharaan,
             });
 			
             Dashboard.DataInventarisAssetUmum = new Ext.create('Ext.data.Store', {
-                id: 'Data_InventarisAssetUmum', storeId: 'DataInventarisAssetUmum', model: Dashboard.modelInventarisAssetUmum, noCache: false, autoLoad: false,
+                id: 'Data_InventarisAssetUmum', storeId: 'DataInventarisAssetUmum', model: Dashboard.modelInventarisAssetUmum, noCache: false, autoLoad: true,
                 proxy: Dashboard.proxyInventarisAssetUmum, groupField: 'tipe'
             });
             
             Dashboard.DataAlertPengadaan = new Ext.create('Ext.data.Store', {
                 id: 'Data_AlertPengadaan', storeId: 'DataAlertPengadaan', model: Dashboard.modelAlertPengadaan, noCache: false, autoLoad: true,
-                proxy: Dashboard.proxyAlertPengadaan, groupField: 'tipe'
+                proxy: Dashboard.proxyAlertPengadaan
             });
             
             Dashboard.DataAlertKendaraanDarat = new Ext.create('Ext.data.Store', {
                 id: 'Data_AlertKendaraanDarat', storeId: 'DataAlertKendaraanDarat', model: Dashboard.modelAlertKendaraanDarat, noCache: false, autoLoad: true,
-                proxy: Dashboard.proxyAlertKendaraanDarat, groupField: 'tipe'
+                proxy: Dashboard.proxyAlertKendaraanDarat,
             });
             
             Ext.onReady(function() {
@@ -457,9 +489,218 @@
                     title: 'Alert Pemeliharaan',
                     store: Dashboard.DataAlertPemeliharaan,
                     columns: [
-                        { header: 'Unit Kerja',  dataIndex: 'ur_upb', width:150 },
+                        {
+                            xtype:'actioncolumn', width:30, 
+                            items:[{
+                                    icon: '../basarnas/assets/images/icons/edit.png', 
+                                    tooltip: 'Ubah',
+                                    handler: function(grid,rowIndex,colIndex,obj)
+                                    {
+                                        var gridStore = grid.getStore();
+                                        var data = gridStore.getAt(rowIndex).data;
+                                        AlertPemeliharaan.data = data;
+                                        AlertPemeliharaan.store = gridStore;
+//                                        Ext.Msg.alert('Status','Not Yet Implemented');
+                                        AlertPemeliharaan.dataStorePemeliharaanParts = new Ext.create('Ext.data.Store', {
+                                            model: MPemeliharaanPart, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+                                            proxy: new Ext.data.AjaxProxy({
+                                                actionMethods: {read: 'POST'},
+                                                api: {
+                                                read: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanParts',
+                                                create: BASE_URL + 'pemeliharaan_part/createPemeliharaanParts',
+                                                update: BASE_URL + 'pemeliharaan_part/updatePemeliharaanParts',
+                                                destroy: BASE_URL + 'pemeliharaan_part/destroyPemeliharaanParts'
+                                                },
+                                                writer: {
+                                                type: 'json',
+                                                writeAllFields: true,
+                                                root: 'data',
+                                                encode:true,
+                                                },
+                                                reader: new Ext.data.JsonReader({
+                                                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                                                extraParams:{open:'0'}
+                                            }),
+                                        });
+                                        
+                                        AlertPemeliharaan.URL = {
+                                            createUpdate: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
+                                            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+                                            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart'
+                                        };
+                                        
+                                        AlertPemeliharaan.Form.create = function(data, edit) {
+//                                            var tipe_angkutan = 'darat';
+                                            
+                                            var setting = {
+//                                                tipe_angkutan:tipe_angkutan,
+                                                url: AlertPemeliharaan.URL.createUpdate,
+                                                data:  AlertPemeliharaan.store,
+                                                isEditing: edit,
+                                                addBtn: {
+                                                    isHidden: edit,
+                                                    text: 'Add Asset',
+                                                    fn: function() {
+
+                                                        if (Modal.assetSelection.items.length === 0)
+                                                        {
+                                                            Modal.assetSelection.add(Grid.selectionAsset(tipe_angkutan));
+                                                            Modal.assetSelection.show();
+                                                        }
+                                                        else
+                                                        {
+                                                            console.error('There is existing grid in the popup selection - pemeliharaan');
+                                                        }
+                                                    }
+                                                },
+                                                selectionAsset: {
+                                                    noAsetHidden: false
+                                                }
+                                            };
+
+                                             var setting_grid_pemeliharaan_part = {
+                                                id:'grid_pemeliharaan_parts',
+                                                toolbar:{
+                                                    add: AlertPemeliharaan.addPemeliharaanPart,
+                                                    edit: AlertPemeliharaan.editPemeliharaanPart,
+                                                    remove: AlertPemeliharaan.removePemeliharaanPart
+                                                },
+                                                dataStore:AlertPemeliharaan.dataStorePemeliharaanParts
+                                            };
+
+                                            var form = Form.pemeliharaanWithParts(setting,setting_grid_pemeliharaan_part);
+                                            if (data !== null)
+                                            {
+                                                if(data.unit_waktu != 0)
+                                                {
+                                                    data.comboUnitWaktuOrUnitPenggunaan = 1;
+                                                }
+                                                if(data.unit_pengunaan != 0)
+                                                {
+                                                    data.comboUnitWaktuOrUnitPenggunaan = 2;
+                                                }
+
+                                                Ext.Object.each(data,function(key,value,myself){
+                                                            if(data[key] == '0000-00-00')
+                                                            {
+                                                                data[key] = '';
+                                                            }
+                                                        });
+
+//                                                $.ajax({
+//                                                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+//                                                       type: "POST",
+//                                                       dataType:'json',
+//                                                       async:false,
+//                                                       data:{tipe_angkutan:'darat',id_ext_asset:data.id},
+//                                                       success:function(response, status){
+//                                                        if(response.status == 'success')
+//                                                        {
+//                                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+//                                                        }
+//
+//                                                       }
+//                                                    });
+
+                                                form.getForm().setValues(data);
+                                            }
+                                            return form;
+                                        };
+                                        
+                                        AlertPemeliharaan.addPemeliharaanPart = function(){
+                                            if (Modal.assetSecondaryWindow.items.length === 0)
+                                                   {
+                                                       Modal.assetSecondaryWindow.setTitle('Tambah Part');
+                                                   }
+                                                       var form = Form.secondaryWindowAsset(AlertPemeliharaan.dataStorePemeliharaanParts,'add');
+                                                       form.insert(0, Form.Component.dataPemeliharaanParts());
+                                                       form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+                                                       Modal.assetSecondaryWindow.add(form);
+                                                       Modal.assetSecondaryWindow.show();
+                                           };
+
+                                           AlertPemeliharaan.editPemeliharaanPart = function(){
+                                               var grid = Ext.getCmp('grid_pemeliharaan_parts');
+                                               var selected = grid.getSelectionModel().getSelection();
+                                               if (selected.length === 1)
+                                               {
+
+                                                   var data = selected[0].data;
+                                                   var storeIndex = grid.store.indexOf(selected[0]);
+
+
+                                                   if (Modal.assetSecondaryWindow.items.length === 0)
+                                                   {
+                                                       Modal.assetSecondaryWindow.setTitle('Edit Part');
+                                                   }
+                                                       var form = Form.secondaryWindowAsset(AlertPemeliharaan.dataStorePemeliharaanParts, 'edit',storeIndex);
+                                                       form.insert(0, Form.Component.dataPemeliharaanParts(true));
+                                                       form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+
+                                                       if (data !== null)
+                                                       {
+                                                           Ext.Object.each(data,function(key,value,myself){
+                                                               if(data[key] == '0000-00-00')
+                                                               {
+                                                                   data[key] = '';
+                                                               }
+                                                           });
+                                                            form.getForm().setValues(data);
+                                                       }
+                                                       Modal.assetSecondaryWindow.add(form);
+                                                       Modal.assetSecondaryWindow.show();
+                                               }
+                                           };
+
+                                           AlertPemeliharaan.removePemeliharaanPart = function(){
+                                               var grid = Ext.getCmp('grid_pemeliharaan_parts');
+                                               var selected = grid.getSelectionModel().getSelection();
+                                               if(selected.length > 0)
+                                               {
+                                                   Ext.Msg.show({
+                                                       title: 'Konfirmasi',
+                                                       msg: 'Apakah Anda yakin untuk menghapus ?',
+                                                       buttons: Ext.Msg.YESNO,
+                                                       icon: Ext.Msg.Question,
+                                                       fn: function(btn) {
+                                                           if (btn === 'yes')
+                                                           {
+                                                               Ext.each(selected, function(obj){
+                                                                   var storeIndex = grid.store.indexOf(obj);
+                                                                   var record = grid.store.getAt(storeIndex);
+                                                                   grid.store.remove(record);
+                                                               });
+                                                           }
+                                                       }
+                                                   });
+                                               }
+                                           };
+                                           
+                                            
+                                                var data = AlertPemeliharaan.data;
+                                                delete data.nama_unker;
+
+                                                if (Modal.processEdit.items.length === 0)
+                                                {
+                                                    Modal.processEdit.setTitle('Edit Pemeliharaan Darat');
+                                                }
+                                                var _form = AlertPemeliharaan.Form.create(data, true);
+                                                Modal.processEdit.add(_form);
+                                                Modal.processEdit.show();
+                                                AlertPemeliharaan.dataStorePemeliharaanParts.changeParams({params:{id_pemeliharaan:data.id}});
+                                                AlertPemeliharaan.dataStorePemeliharaanParts.removed = [];
+                                            
+                                        
+                                        
+                                        
+                                    }
+                                   }]
+                        },
+                        { header: 'Tanggal Expire', dataIndex: 'rencana_waktu', width:150 },
+                        { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
+                        { header: 'Kode Barang', dataIndex: 'kd_brg', width:200},
                         { header: 'Nama Aset', dataIndex: 'nama', width:200},
-                        { header: 'Tanggal Overdue', dataIndex: 'tanggal_kadaluarsa', width:150 }
+                        
                     ],
                     height: 200,
                     width: 420
@@ -469,6 +710,28 @@
                     title: 'Alert Pengadaan',
                     store: Dashboard.DataAlertPengadaan,
                     columns: [
+                        {xtype:'actioncolumn', width:30, 
+                            items:[{
+                                    icon: '../basarnas/assets/images/icons/check.gif', 
+                                    tooltip: 'Tandai sudah dilihat',
+                                    handler: function(grid,rowIndex,colIndex,obj)
+                                    {
+                                        var gridStore = grid.getStore();
+                                        var id = gridStore.getAt(rowIndex).data.id;
+                                        $.ajax({
+                                            type: "POST",
+                                            url: BASE_URL + 'pengadaan/alertPengadaanAction',
+                                            data:{id: id},
+                                            dataType:'json',
+                                            async:false,
+                                            success:function(response, status)
+                                            {
+                                                gridStore.load();
+                                            }
+                                        });
+                                    }
+                                   }]
+                        },
                         { header: 'Tanggal Expire Garansi', dataIndex: 'tanggal_garansi_expired', width:150 },
                         { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
                         { header: 'Kode Barang',  dataIndex: 'kd_brg', width:150 },
@@ -476,18 +739,342 @@
                         
                     ],
                     height: 200,
-                    width: 420
+                    width: 420,
                 });
                 
                 var GridAlertKendaraan = Ext.create('Ext.grid.Panel', {
                     title: 'Alert Kendaraan Darat',
                     store: Dashboard.DataAlertKendaraanDarat,
                     columns: [
+                        {xtype:'actioncolumn', width:30, 
+                            items:[{
+                                    icon: '../basarnas/assets/images/icons/edit.png', 
+                                    tooltip: 'Ubah',
+                                    handler: function(grid,rowIndex,colIndex,obj)
+                                    {
+                                        var gridStore = grid.getStore();
+                                        var data = gridStore.getAt(rowIndex).data;
+                                        AlertKendaraanDarat.data = data;
+                                        AlertKendaraanDarat.store = gridStore;
+                                        
+                                         AlertKendaraanDarat.URL = {
+                                            read: BASE_URL + 'asset_angkutan_darat/getAllData',
+                                            createUpdate: BASE_URL + 'asset_angkutan_darat/modifyAngkutanDarat',
+                                            remove: BASE_URL + 'asset_angkutan_darat/deleteAngkutanDarat',
+                                            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
+                                            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+                                            createUpdatePerlengkapanAngkutanDarat: BASE_URL + 'asset_angkutan_darat/modifyPerlengkapanAngkutanDarat',
+                                            removePerlengkapanAngkutanDarat: BASE_URL + 'asset_angkutan_darat/deletePerlengkapanAngkutanDarat',
+                                            createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
+                                            removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
+                                            createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
+                                            removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
+                                            createUpdateDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutan',
+                                            removeDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutan',
+                                            createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
+                                            removePengelolaan: BASE_URL + 'pengelolaan/deletePengelolaan'
+
+                                        };
+                                        
+                                        AlertKendaraanDarat.dataStorePerlengkapanAngkutanDarat = new Ext.create('Ext.data.Store', {
+                                            model: MAngkutanDaratPerlengkapan, autoLoad: false, noCache: false,
+                                            proxy: new Ext.data.AjaxProxy({
+                                                url: BASE_URL + 'asset_angkutan_darat/getSpecificPerlengkapanAngkutanDarat', actionMethods: {read: 'POST'},
+                                                reader: new Ext.data.JsonReader({
+                                                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+                                            })
+                                        });
+        
+                                        AlertKendaraanDarat.dataStoreDetailPenggunaanAngkutan = new Ext.create('Ext.data.Store', {
+                                            model: MDetailPenggunaanAngkutan, autoLoad: false, noCache: false,
+                                            proxy: new Ext.data.AjaxProxy({
+                                                url: BASE_URL + 'asset_angkutan_detail_penggunaan/getSpecificDetailPenggunaanAngkutan', actionMethods: {read: 'POST'},
+                                                reader: new Ext.data.JsonReader({
+                                                    root: 'results', totalProperty: 'total', idProperty: 'id'})
+                                            })
+                                        });
+                                        
+                                        AlertKendaraanDarat.addPerlengkapan = function()
+                                        {
+                                                var data = AlertKendaraanDarat.data;
+                                                delete data.nama_unker;
+                                                delete data.nama_unor;
+
+                                                if (Modal.assetSecondaryWindow.items.length === 0)
+                                                {
+                                                    Modal.assetSecondaryWindow.setTitle('Tambah Perlengkapan');
+                                                }
+                                                    var form = Form.perlengkapanAngkutan(AlertKendaraanDarat.URL.createUpdatePerlengkapanAngkutanDarat, AlertKendaraanDarat.dataStorePerlengkapanAngkutanDarat, false);
+                                                    form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat(data.id));
+                                                    Modal.assetSecondaryWindow.add(form);
+                                                    Modal.assetSecondaryWindow.show();
+
+                                        };
+
+                                        AlertKendaraanDarat.editPerlengkapan = function()
+                                        {
+                                            var selected = Ext.getCmp('grid_angkutanDarat_perlengkapan').getSelectionModel().getSelection();
+                                            if (selected.length === 1)
+                                            {
+
+                                                var data = selected[0].data;
+
+
+                                                if (Modal.assetSecondaryWindow.items.length === 0)
+                                                {
+                                                    Modal.assetSecondaryWindow.setTitle('Edit Perlengkapan');
+                                                }
+                                                    var form = Form.perlengkapanAngkutan(AlertKendaraanDarat.URL.createUpdatePerlengkapanAngkutanDarat, AlertKendaraanDarat.dataStorePerlengkapanAngkutanDarat, false);
+                                                    form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat(data.id));
+
+                                                    if (data !== null)
+                                                    {
+                                                        Ext.Object.each(data,function(key,value,myself){
+                                                            if(data[key] == '0000-00-00')
+                                                            {
+                                                                data[key] = '';
+                                                            }
+                                                        });
+                                                         form.getForm().setValues(data);
+                                                    }
+                                                    Modal.assetSecondaryWindow.add(form);
+                                                    Modal.assetSecondaryWindow.show();
+
+                                        }};
+
+                                        AlertKendaraanDarat.removePerlengkapan = function()
+                                        {
+                                            var selected = Ext.getCmp('grid_angkutanDarat_perlengkapan').getSelectionModel().getSelection();
+                                            var arrayDeleted = [];
+                                            _.each(selected, function(obj) {
+                                                var data = {
+                                                    id: obj.data.id,
+                                                };
+                                                arrayDeleted.push(data);
+                                            });
+                                            console.log(arrayDeleted);
+                                            Modal.deleteAlert(arrayDeleted, AlertKendaraanDarat.URL.removePerlengkapanAngkutanDarat,AlertKendaraanDarat.dataStorePerlengkapanAngkutanDarat);
+                                        };
+
+                                        AlertKendaraanDarat.addDetailPenggunaan = function()
+                                        {
+                                            
+
+                                                var data = AlertKendaraanDarat.data;
+                                                delete data.nama_unker;
+                                                delete data.nama_unor;
+
+                                                if (Modal.assetSecondaryWindow.items.length === 0)
+                                                {
+                                                    Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
+                                                }
+                                                    var form = Form.detailPenggunaanAngkutan(AlertKendaraanDarat.URL.createUpdateDetailPenggunaanAngkutan, AlertKendaraanDarat.dataStoreDetailPenggunaanAngkutan, false,'darat');
+                                                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'darat'));
+                                                    Modal.assetSecondaryWindow.add(form);
+                                                    Modal.assetSecondaryWindow.show();
+
+                                            
+                                        };
+
+                                        AlertKendaraanDarat.editDetailPenggunaan = function()
+                                        {
+                                            var selected = Ext.getCmp('grid_angkutanDarat_detail_penggunaan').getSelectionModel().getSelection();
+                                            if (selected.length === 1)
+                                            {
+
+                                                var data = selected[0].data;
+
+
+                                                if (Modal.assetSecondaryWindow.items.length === 0)
+                                                {
+                                                    Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
+                                                }
+                                                    var form = Form.detailPenggunaanAngkutan(AlertKendaraanDarat.URL.createUpdateDetailPenggunaanAngkutan, AlertKendaraanDarat.dataStoreDetailPenggunaanAngkutan, true,'darat');
+                                                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'darat'));
+
+                                                    if (data !== null)
+                                                    {
+                                                        Ext.Object.each(data,function(key,value,myself){
+                                                            if(data[key] == '0000-00-00')
+                                                            {
+                                                                data[key] = '';
+                                                            }
+                                                        });
+                                                         form.getForm().setValues(data);
+                                                    }
+                                                    Modal.assetSecondaryWindow.add(form);
+                                                    Modal.assetSecondaryWindow.show();
+
+                                        }};
+
+                                        AlertKendaraanDarat.removeDetailPenggunaan = function()
+                                        {
+                                            var selected = Ext.getCmp('grid_angkutanDarat_detail_penggunaan').getSelectionModel().getSelection();
+                                            var arrayDeleted = [];
+                                            _.each(selected, function(obj) {
+                                                var data = {
+                                                    id: obj.data.id,
+                                                    id_ext_asset:obj.data.id_ext_asset,
+                                                };
+                                                arrayDeleted.push(data);
+                                            });
+                                            console.log(arrayDeleted);
+                                           Modal.deleteAlertDetailPenggunaanAngkutan(arrayDeleted, AlertKendaraanDarat.URL.removeDetailPenggunaanAngkutan,AlertKendaraanDarat.dataStoreDetailPenggunaanAngkutan,'darat');
+
+
+                                        };
+                                        
+                                        
+                                        
+                                        AlertKendaraanDarat.Form.create = function(data, edit) {
+                                            var setting_grid_detail_penggunaan = {
+                                                 id:'grid_angkutanDarat_detail_penggunaan',
+                                                 toolbar:{
+                                                     add: AlertKendaraanDarat.addDetailPenggunaan,
+                                                     edit: AlertKendaraanDarat.editDetailPenggunaan,
+                                                     remove: AlertKendaraanDarat.removeDetailPenggunaan
+                                                 },
+                                                 dataStore:AlertKendaraanDarat.dataStoreDetailPenggunaanAngkutan,
+                                             };
+
+                                             var setting_grid_perlengkapan = {
+                                                 id:'grid_angkutanDarat_perlengkapan',
+                                                 toolbar:{
+                                                     add: AlertKendaraanDarat.addPerlengkapan,
+                                                     edit: AlertKendaraanDarat.editPerlengkapan,
+                                                     remove: AlertKendaraanDarat.removePerlengkapan
+                                                 },
+                                                 dataStore:AlertKendaraanDarat.dataStorePerlengkapanAngkutanDarat
+                                             };
+
+                                             var form = Form.asset(AlertKendaraanDarat.URL.createUpdate, AlertKendaraanDarat.store, edit, true);
+                                              var tab = Tab.formTabs();
+                                             tab.add({
+                                                 title: 'Utama',
+                                                 closable: false,
+                                                 border: false,
+                                                 deferredRender: false,
+                                                 bodyStyle:{background:'none'},
+                                                 items: [
+                                                         Form.Component.unit(edit,form),
+                                                         Form.Component.kode(edit),
+                                                         Form.Component.klasifikasiAset(edit),
+                                                         Form.Component.basicAsset(edit),
+                                                         Form.Component.mechanical(),
+                                                         Form.Component.angkutan(),
+                                                         Form.Component.detailPenggunaanAngkutan(setting_grid_detail_penggunaan,edit),
+                                                         Form.Component.fileUpload(),
+                                                        ],
+                                                 listeners: {
+                                                     'beforeclose': function() {
+                                                         Utils.clearDataRef();
+                                                     }
+                                                 }
+                                             });
+
+                                             tab.add({
+                                                 title: 'Tambahan',
+                                                 closable: false,
+                                                 border: false,
+                                                 layout:'fit',
+                                                 deferredRender: false,
+                                                 bodyStyle:{background:'none'},
+                                                 items: [
+                                                         Form.Component.tambahanAngkutanDarat(setting_grid_perlengkapan,edit),
+                                                        ],
+                                                 listeners: {
+                                                     'beforeclose': function() {
+                                                         Utils.clearDataRef();
+                                                     }
+                                                 }
+                                             });
+
+                                             tab.setActiveTab(1);
+
+                                             form.insert(0,tab);
+
+                                             if (data !== null)
+                                             {
+                                                 $.ajax({
+                                                        url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                                                        type: "POST",
+                                                        dataType:'json',
+                                                        async:false,
+                                                        data:{tipe_angkutan:'darat',id_ext_asset:data.id},
+                                                        success:function(response, status){
+                                                         if(response.status == 'success')
+                                                         {
+                                                             data.total_detail_penggunaan_angkutan = response.total + ' Km';
+                                                         }
+
+                                                        }
+                                                     });
+
+                                                 Ext.Object.each(data,function(key,value,myself){
+                                                             if(data[key] == '0000-00-00')
+                                                             {
+                                                                 data[key] = '';
+                                                             }
+                                                         });
+
+                                                 form.getForm().setValues(data);
+                                             }
+
+                                             return form;
+                                         };
+                                         
+                                           
+                                                var flagExtAsset = false;
+                                                var data = AlertKendaraanDarat.data;
+                                                delete data.nama_unker;
+                                                delete data.nama_unor;
+
+                                                if (Modal.assetCreate.items.length === 0)
+                                                {
+                                                    Modal.assetCreate.setTitle('Edit Angkutan Darat');
+                                                }
+
+                                                if(data.id == null || data.id == undefined)
+                                                {   
+                                                    $.ajax({
+                                                       url:BASE_URL + 'asset_angkutan_darat/requestIdExtAsset',
+                                                       type: "POST",
+                                                       dataType:'json',
+                                                       async:false,
+                                                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                                                       success:function(response, status){
+                                                        if(response.status == 'success')
+                                                        {
+                                                            flagExtAsset = true;
+                                                            data.id = response.idExt;
+                                                        }
+
+                                                       }
+                                                    });
+                                                }
+                                                else
+                                                {
+                                                    flagExtAsset = true;
+                                                }
+                                                if(flagExtAsset == true)
+                                                {
+                                                    var _form = AlertKendaraanDarat.Form.create(data, true);
+                                                    Modal.assetCreate.add(_form);
+                                                    Modal.assetCreate.show();
+                                                    AlertKendaraanDarat.dataStorePerlengkapanAngkutanDarat.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                                                    AlertKendaraanDarat.dataStoreDetailPenggunaanAngkutan.changeParams({params:{open:'1',id_ext_asset:data.id}});
+                                                }
+                                            
+                                         
+                                    }
+                                   }]
+                        },
+                        { header: 'Masa Berlaku STNK', dataIndex: 'darat_masa_berlaku_stnk', width:150 },
+                        { header: 'Masa Berlaku Pajak', dataIndex: 'darat_masa_berlaku_pajak', width:150 },
                         { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
                         { header: 'Kode Barang', dataIndex: 'kd_brg', width:200},
                         { header: 'Merk', dataIndex: 'merk', width:200},
-                        { header: 'Masa Berlaku STNK', dataIndex: 'darat_masa_berlaku_stnk', width:150 },
-                        { header: 'Masa Berlaku Pajak', dataIndex: 'darat_masa_berlaku_pajak', width:150 }
+                        
                     ],
                     height: 200,
                     width: 420

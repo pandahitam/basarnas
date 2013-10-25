@@ -92,5 +92,16 @@ class Pengadaan extends MY_Controller {
 		echo json_encode($data['data']);
 	}
         
+        function alertPengadaanAction()
+        {
+            $id = $_POST['id'];
+            $update_expire_viewed_status = array(
+                'expired_viewed_status'=>1
+            );
+            $this->db->where('id',$id);
+            $this->db->update('pengadaan',$update_expire_viewed_status);
+            echo 1;
+        }
+        
 }
 ?>
