@@ -61,8 +61,7 @@
             readGrafikUnkerTotalAset: BASE_URL + 'dashboard/grafik_unker_totalaset',
             readGrafikKategoriBarangTotalAset : BASE_URL + 'dashboard/grafik_kategoribarang_totalaset',
             readAlertPemeliharaan: BASE_URL + 'dashboard/alert_pemeliharaan',
-           // readInventarisAssetUmum: BASE_URL + 'dashboard/inventaris_assetumum'
-		    readInventarisAssetUmum: BASE_URL + 'dashboard/cari_global'
+            readInventarisAssetUmum: BASE_URL + 'dashboard/cari_global',
             readAlertPengadaan: BASE_URL + 'dashboard/alert_pengadaan',
             readAlertKendaraanDarat: BASE_URL + 'dashboard/alert_kendaraan_darat',
             };
