@@ -111,7 +111,7 @@ Ext.define('MLuar', {extend: 'Ext.data.Model',
         'id', 'kode_unor','image_url','document_url',
         'nama_unker','nama_unor', 'nama',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
-        ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+        ,'ur_sskel','kd_klasifikasi_aset','nama_klasifikasi_aset',
         'kd_lvl1','kd_lvl2','kd_lvl3',]
 });
 
@@ -122,7 +122,7 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
         'dihapus','image_url','document_url'
-        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan']
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan','no_induk_pesawat','nama_part']
 });
 
 

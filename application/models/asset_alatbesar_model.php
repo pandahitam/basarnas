@@ -74,7 +74,7 @@ class Asset_Alatbesar_Model extends MY_Model{
 //                    }
 //                }
 //            return $this->Get_By_Query($query);
-            
+           
             $isGridFilter = false;
             if($start != null && $limit != null)
             {
@@ -90,11 +90,20 @@ class Asset_Alatbesar_Model extends MY_Model{
                 }
                 else if($searchByField != null)
                 {
+//                    $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                                where
+//                                kd_brg like '%$searchByField%' OR
+//                                kd_lokasi like '%$searchByField%' OR
+//                                nama_unker like '%$searchByField%' OR
+//                                nama_unor like '%$searchByField%' OR
+//                                nama_klasifikasi_aset like '%$searchByField%' OR
+//                                merk like '%$searchByField%' OR
+//                                type like'%$searchByField%'
+//                                LIMIT $start, $limit";
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
                                 where
-                                kd_brg like '%$searchByField%' OR
-                                kd_lokasi like '%$searchByField%' OR
                                 nama_unker like '%$searchByField%' OR
                                 nama_unor like '%$searchByField%' OR
                                 nama_klasifikasi_aset like '%$searchByField%' OR
@@ -148,6 +157,9 @@ class Asset_Alatbesar_Model extends MY_Model{
                     $isGridFilter = true;
                 }
             }
+            
+//            print_r($query);
+//            die;
 
             if($isGridFilter == true)
             {

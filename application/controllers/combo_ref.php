@@ -42,8 +42,17 @@ class Combo_Ref extends CI_Controller {
         $data = array();
         if($this->input->get_post("id_open"))
         {
-            $query = $this->db->query('select id, part_number, serial_number from asset_perlengkapan');
-            foreach($query->result() as $obj)
+            $query = "select id, part_number, serial_number from asset_perlengkapan 
+                      where warehouse_id > 0 and ruang_id > 0";
+            if($_POST['id_open'] == 2)
+            {
+                $query = 'select id, part_number, serial_number from asset_perlengkapan';
+            }
+            
+            $query_data = $this->db->query($query);
+            
+            
+            foreach($query_data->result() as $obj)
             {
                 $data[] = $obj;
             }

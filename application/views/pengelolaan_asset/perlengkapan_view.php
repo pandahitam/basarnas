@@ -73,8 +73,11 @@
                 var paramsUnker = request.params.searchUnker;
                 if(paramsUnker != null && paramsUnker != undefined)
                 {
-                    Perlengkapan.Data.clearFilter();
-                    Perlengkapan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+//                    Perlengkapan.Data.clearFilter();
+//                    Perlengkapan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+                      var gridFilterObject = {type:'string',value:paramsUnker,field:'kd_lokasi'};
+                    var gridFilter = JSON.stringify(gridFilterObject);
+                    Perlengkapan.Data.changeParams({params:{"gridFilter":'['+gridFilter+']'}})
                 }
             }
         });
@@ -852,11 +855,13 @@
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Part', dataIndex: 'nama_part', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Part Number', dataIndex: 'part_number', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Serial Number', dataIndex: 'serial_number', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Aset', dataIndex: 'no_aset', width: 90, groupable: false, filter: {type: 'string'}},
+                    {header: 'No Induk Pesawat', dataIndex: 'no_induk_pesawat', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Warehouse', dataIndex: 'nama_warehouse', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Ruang', dataIndex: 'nama_ruang', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Rak', dataIndex: 'nama_rak', width: 150, groupable: false, filter: {type: 'string'}},
@@ -868,10 +873,10 @@
                     {header: 'Dari', dataIndex: 'dari', width: 90, groupable: false, hidden: true, filter: {type: 'string'}},
                     {header: 'Tanggal Perolehan', dataIndex: 'tanggal_perolehan', hidden: true, width: 60, groupable: false, filter: {type: 'numeric'}},
                     {header: 'No Dana', dataIndex: 'no_dana', width: 150,hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Penggunaan Waktu', dataIndex: 'penggunaan_waktu', width: 150, groupable: false, filter: {type: 'string'}},
-                    {header: 'Penggunaan Freq', dataIndex: 'penggunaan_freq', width: 70, groupable: false, filter: {type: 'numeric'}},
-                    {header: 'Unit Waktu', dataIndex: 'unit_waktu', width: 70, groupable: false, filter: {type: 'numeric'}},
-                    {header: 'Unit Freq', dataIndex: 'unit_freq', width: 90, groupable: false, filter: {type: 'string'}},
+                    {header: 'Penggunaan Waktu', dataIndex: 'penggunaan_waktu', width: 150, groupable: false, hidden: true, filter: {type: 'string'}},
+                    {header: 'Penggunaan Freq', dataIndex: 'penggunaan_freq', width: 70, groupable: false,hidden: true, filter: {type: 'numeric'}},
+                    {header: 'Unit Waktu', dataIndex: 'unit_waktu', width: 70, groupable: false,hidden: true, filter: {type: 'numeric'}},
+                    {header: 'Unit Freq', dataIndex: 'unit_freq', width: 90, groupable: false,hidden: true, filter: {type: 'string'}},
                     {header: 'Disimpan', dataIndex: 'disimpan', width: 90, groupable: false, hidden: true, filter: {type: 'string'}},
                     {header: 'Dihapus', dataIndex: 'dihapus', width: 90, groupable: false, hidden: true, filter: {type: 'string'}},
                     {header: 'Image Url', dataIndex: 'image_url', width: 50, hidden: true, groupable: false, filter: {type: 'string'}},

@@ -1488,6 +1488,7 @@ var search = [{
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
                 ftype: 'filters', autoReload: true, local: false, encode: true, paramPrefix:'gridFilter',
+                id:'inventaris_grid_filter',
                 updateBuffer: 2000,
             });
 
@@ -1532,7 +1533,10 @@ var search = [{
                             {
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
-                            Ext.getCmp(setting.grid.id).filters.clearFilters();
+//                            Ext.getCmp(setting.grid.id).filters.clearFilters();
+//                              var dataProxy = data.getProxy();
+                              delete data.getProxy().extraParams.gridFilter;
+                              data.load()
                         }
                     }, '->',searchField,searchCode
                 ]
@@ -1687,9 +1691,26 @@ var search = [{
                     extraParams: {id_open: 1, kd_lokasi: 0, kd_gol: 0, kd_bid: 0, kd_kel: 0, kd_skel: 0, kd_sskel: 0}
                 })
             });
+            
+           
+                
 
             var toolbar = ToolbarGrid.gridSelectionAsset(true, data);
-
+            
+            
+            if(tipe_angkutan == 'darat' || tipe_angkutan =='laut')
+            {
+                Ext.getCmp('select_gol').setValue('3');
+                Ext.getCmp('select_bidang').setValue('02');
+                data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: 3, kd_bid: 02, kd_kel: 0, kd_skel: 0, kd_sskel: 0}})
+            }
+            else if(tipe_angkutan == 'udara')
+            {
+                Ext.getCmp('select_gol').setValue('3');
+                Ext.getCmp('select_bidang').setValue('02');
+                Ext.getCmp('select_kel').setValue('05');
+                data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: 3, kd_bid: 02, kd_kel: 05, kd_skel: 0, kd_sskel: 0}})
+            }
             
             var _grid = Ext.create('Ext.grid.Panel', {
                 store: data,

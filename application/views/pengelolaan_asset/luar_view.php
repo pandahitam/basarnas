@@ -85,8 +85,11 @@
                 var paramsUnker = request.params.searchUnker;
                 if(paramsUnker != null && paramsUnker != undefined)
                 {
-                    Luar.Data.clearFilter();
-                    Luar.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+//                    Luar.Data.clearFilter();
+//                    Luar.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+                      var gridFilterObject = {type:'string',value:paramsUnker,field:'kd_lokasi'};
+                    var gridFilter = JSON.stringify(gridFilterObject);
+                    Luar.Data.changeParams({params:{"gridFilter":'['+gridFilter+']'}})
                 }
             }
         });
@@ -973,6 +976,7 @@
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Barang', dataIndex: 'ur_sskel', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 150, groupable: true, filter: {type: 'string'}},

@@ -120,8 +120,11 @@
                 var paramsUnker = request.params.searchUnker;
                 if(paramsUnker != null && paramsUnker != undefined)
                 {
-                    AngkutanUdara.Data.clearFilter();
-                    AngkutanUdara.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+//                    AngkutanUdara.Data.clearFilter();
+//                    AngkutanUdara.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+                      var gridFilterObject = {type:'string',value:paramsUnker,field:'kd_lokasi'};
+                    var gridFilter = JSON.stringify(gridFilterObject);
+                    AngkutanUdara.Data.changeParams({params:{"gridFilter":'['+gridFilter+']'}})
                 }
             }
         });
@@ -330,6 +333,7 @@
                     form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara(data.id));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
+                    Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1}});
                 
             }
         };
@@ -342,13 +346,12 @@
                
                 var data = selected[0].data;
                 
-                
                 if (Modal.assetSecondaryWindow.items.length === 0)
                 {
                     Modal.assetSecondaryWindow.setTitle('Edit Perlengkapan');
                 }
                     var form = Form.perlengkapanAngkutan(AngkutanUdara.URL.createUpdatePerlengkapanAngkutanUdara, AngkutanUdara.dataStorePerlengkapanAngkutanUdara, false);
-                    form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara(data.id));
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara(data.id,true));
                     
                     if (data !== null)
                     {
@@ -368,14 +371,18 @@
         AngkutanUdara.removePerlengkapan = function()
         {
             var selected = Ext.getCmp('grid_angkutanUdara_perlengkapan').getSelectionModel().getSelection();
-            var arrayDeleted = [];
-            _.each(selected, function(obj) {
-                var data = {
-                    id: obj.data.id,
-                };
-                arrayDeleted.push(data);
-            });
-            console.log(arrayDeleted);
+            if(selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id,
+                        id_asset_perlengkapan: obj.data.id_asset_perlengkapan
+                    };
+                    arrayDeleted.push(data);
+                });
+            }
+            
             Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePerlengkapanAngkutanUdara,AngkutanUdara.dataStorePerlengkapanAngkutanUdara);
         };
         
@@ -624,6 +631,14 @@
                         });
                 
                 form.getForm().setValues(data);
+            }
+            else
+            {
+                var presetData = {};
+                presetData.kd_gol = '3';
+                presetData.kd_bid = '02';
+                presetData.kd_kelompok = '05';
+                form.getForm().setValues(presetData);
             }
 
             return form;
@@ -1302,6 +1317,7 @@
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Barang', dataIndex: 'ur_sskel', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 150, groupable: true, filter: {type: 'string'}},

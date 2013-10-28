@@ -4712,14 +4712,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'kd_gol',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboGolongan = Ext.getCmp('nama_golongan');
                                             if (comboGolongan !== null)
                                             {
                                                 comboGolongan.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -4727,14 +4727,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'kd_bid',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboBidang = Ext.getCmp('nama_bidang');
                                             if (comboBidang !== null)
                                             {
                                                 comboBidang.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -4742,14 +4742,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'kd_kelompok',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
+//                                        if (edit)
+//                                        {
                                             var comboKelompok = Ext.getCmp('nama_kelompok');
                                             if (comboKelompok !== null)
                                             {
                                                 comboKelompok.setValue(value);
                                             }
-                                        }
+//                                        }
                                     }
                                 }
                             }, {
@@ -5530,7 +5530,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         };
         
-        Form.Component.dataPerlengkapanAngkutanUdara = function (id_ext_asset)
+        Form.Component.dataPerlengkapanAngkutanUdara = function (id_ext_asset,readOnly)
         {
             var component = {
                 xtype: 'fieldset',
@@ -5565,19 +5565,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'jenis_perlengkapan',
                                 anchor: '100%',
                                 allowBlank: false,
+                                readOnly:(readOnly == true)?true:false,
                                 store: Reference.Data.jenisPerlengkapanAngkutanUdara,
                                 valueField: 'value',
                                 displayField: 'value', emptyText: 'Pilih Jenis',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
                                 listeners: {
-//                                    'focus': {
-//                                        fn: function(comboField) {
-//                                            var store = comboField.getStore();
-//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
-//                                            comboField.expand();
-//                                        },
-//                                        scope: this
-//                                    },
                                     'change': {
                                         fn: function(obj, value) {
                                             if(value == "Part Pesawat")
@@ -5619,6 +5612,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'id_asset_perlengkapan',
                                 anchor: '100%',
                                 allowBlank: true,
+                                readOnly:(readOnly == true)?true:false,
                                 store: Reference.Data.assetPerlengkapanPart,
                                 valueField: 'id',
                                 editable:false,
@@ -5627,8 +5621,18 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 listeners: {
                                     'change': {
                                         fn: function(obj, value) {
-                                            var serial_number = obj.valueModels[0].data.serial_number;
-                                           Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setValue(serial_number);
+                                           
+                                            if(readOnly == true)
+                                            {
+                                                Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 2}});
+                                            }
+                                            else
+                                            {
+                                                
+                                                var serial_number = obj.valueModels[0].data.serial_number;
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setValue(serial_number);
+                                            }
+                                            
                                         },
                                         scope: this
                                     }
