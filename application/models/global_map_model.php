@@ -6,16 +6,16 @@ class Global_Map_Model extends CI_Model {
 	
 	function get_byLoc($loc)
 	{
-		$names = Array('Tanah', 'Bangunan', 'Alat Besar', 'Angkutan', 'Perairan', 'Senjata', 'Ruang', 'Luar');
-		$tables = Array('ext_asset_tanah', 'ext_asset_bangunan', 'ext_asset_alatbesar', 'ext_asset_angkutan', 'ext_asset_perairan', 'ext_asset_senjata', 'ext_asset_ruang', 'ext_asset_dil');
+		$names = Array('Tanah', 'Bangunan', 'Alat Besar', 'Angkutan Darat', 'Angkutan Laut', 'Angkutan Udara', 'Perairan', 'Senjata', 'Ruang', 'Luar');
+		$tables = Array('ext_asset_tanah', 'ext_asset_bangunan', 'ext_asset_alatbesar', 'view_asset_angkutan_darat', 'view_asset_angkutan_laut', 'view_asset_angkutan_udara', 'ext_asset_perairan', 'ext_asset_senjata', 'ext_asset_ruang', 'ext_asset_dil');
 		$sql = '';
-		for($i=0; $i<8; $i++)
+		for($i=0; $i<10; $i++)
 		{
 			$sql .= ' SELECT "'.$names[$i].'" AS `asset`, `b`.`nama` AS `criteria`, MID(`a`.`kd_lokasi`, 6, 10) AS `kode_lokasi`, COUNT(*) AS `count`';
 			$sql .= ' FROM '.$tables[$i].' AS `a` INNER JOIN ref_klasifikasiaset_lvl1 AS `b` ON  MID(`a`.`kd_klasifikasi_aset`, 1, 2) = `b`.kd_lvl1';
 			$sql .= ' GROUP BY `kode_lokasi`, `criteria`';
 			$sql .= ' HAVING `kode_lokasi` LIKE "%'. $loc .'%"';
-			if($i<7) $sql .= ' UNION'; else $sql .= ' ORDER BY `asset`, `criteria`';
+			if($i<9) $sql .= ' UNION'; else $sql .= ' ORDER BY `asset`, `criteria`';
 		}
 		$this->load->database();
 		$result = $this->db->query($sql)->result_array();
