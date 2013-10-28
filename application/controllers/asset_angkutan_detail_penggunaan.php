@@ -52,11 +52,11 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
 		$this->db->delete('ext_asset_angkutan_detail_penggunaan');
 	}
         
-        function getSpecificDetailPenggunaanAngkutanUdara($mesin)
+        function getSpecificDetailPenggunaanAngkutanUdara()
         {
             if($_POST['open'] == 1)
             {
-                $data = $this->model->getSpecificDetailPenggunaanAngkutanUDara($_POST['id_ext_asset'],$mesin);
+                $data = $this->model->getSpecificDetailPenggunaanAngkutanUdara($_POST['id_ext_asset']);
                 //                $total = $this->model->get_CountData();
                 $dataSend['total'] = $data['count'];
 		$dataSend['results'] = $data['data'];
@@ -65,7 +65,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
             }
         }
         
-        function modifyDetailPenggunaanAngkutanUdara($mesin)
+        function modifyDetailPenggunaanAngkutanUdara()
         {
             $dataPenggunaan = array();
             $dataPenggunaanFields = array(
@@ -76,11 +76,11 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
 			$dataPenggunaan[$field] = $this->input->post($field);
             }
                 $this->db->set($dataPenggunaan);
-                $this->db->replace("ext_asset_angkutan_udara_detail_penggunaan_mesin$mesin");
+                $this->db->replace("ext_asset_angkutan_udara_detail_penggunaan");
                
         }
         
-        function deleteDetailPenggunaanAngkutanUdara($mesin)
+        function deleteDetailPenggunaanAngkutanUdara()
 	{
 		$data = $this->input->post('data');
                 $deletedArray = array();
@@ -90,7 +90,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 }
                 $this->db->where_in('id',$deletedArray);
                 
-		$this->db->delete("ext_asset_angkutan_udara_detail_penggunaan_mesin$mesin");
+		$this->db->delete("ext_asset_angkutan_udara_detail_penggunaan");
 	}
         
         function getTotalPenggunaanAngkutanUdara()
@@ -100,24 +100,32 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
               'id_ext_asset'=>$_POST['id_ext_asset'],
             );
             
-            $queryMesin1 = $this->db->query("select SUM(jumlah_penggunaan) AS jumlah_penggunaan_mesin1
-                                FROM ext_asset_angkutan_udara_detail_penggunaan_mesin1
+            $queryMesin = $this->db->query("select SUM(jumlah_penggunaan) AS jumlah_penggunaan
+                                FROM ext_asset_angkutan_udara_detail_penggunaan
                                 where id_ext_asset =".$receivedData['id_ext_asset']);
-            $queryMesin2 = $this->db->query("SELECT SUM(jumlah_penggunaan) AS jumlah_penggunaan_mesin2
-                                FROM ext_asset_angkutan_udara_detail_penggunaan_mesin2
-                                where id_ext_asset =".$receivedData['id_ext_asset']);
-            $resultMesin1 = $queryMesin1->row();
-            $resultMesin2 = $queryMesin2->row();
-            $totalPenggunaanMesin1 = $resultMesin1->jumlah_penggunaan_mesin1;
-            $totalPenggunaanMesin2 = $resultMesin2->jumlah_penggunaan_mesin2;
-                
+            $queryInisialisaiMesin = $this->db->query("select udara_inisialisasi_mesin1, udara_inisialisasi_mesin2
+                                                       FROM ext_asset_angkutan where id =".$receivedData['id_ext_asset']);
+//            $queryMesin2 = $this->db->query("SELECT SUM(jumlah_penggunaan) AS jumlah_penggunaan_mesin2
+//                                FROM ext_asset_angkutan_udara_detail_penggunaan_mesin2
+//                                where id_ext_asset =".$receivedData['id_ext_asset']);
+            $resultMesin = $queryMesin->row();
+            $resultInisialisasi = $queryInisialisaiMesin->row();
+//            $resultMesin2 = $queryMesin2->row();
+//            $totalPenggunaanMesin1 = $resultMesin1->jumlah_penggunaan_mesin1;
+//            $totalPenggunaanMesin2 = $resultMesin2->jumlah_penggunaan_mesin2;
+              $totalPenggunaan = $resultMesin->jumlah_penggunaan;
             
             
             $sendData = array(
-                    'total_mesin1' => $totalPenggunaanMesin1,
-                    'total_mesin2' =>$totalPenggunaanMesin2,
+                    'total_mesin1' => (int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin1,
+                    'total_mesin2' =>(int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin2,
                     'status' => 'success'
                     );
+              
+//              $sendData = array(
+//                    'total_penggunaan' => $totalPenggunaan,
+//                    'status' => 'success'
+//                    );
             echo json_encode($sendData);
         }
         
@@ -145,14 +153,42 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
               'kd_lokasi'=>$_POST['kd_lokasi'],
               'no_aset'=>$_POST['no_aset'],
             );
-            
-            $query = $this->db->query("select jumlah_penggunaan, satuan_penggunaan 
+            if($_POST['tipe_angkutan'] == 'udara')
+            {
+                
+                $query = $this->db->query("select id 
+                                from ext_asset_angkutan as a
+                                LEFT JOIN asset_angkutan as c on a.kd_lokasi = c.kd_lokasi AND a.kd_brg=c.kd_brg AND a.no_aset = c.no_aset
+                                where c.kd_brg ='".$receivedData['kd_brg']."' AND c.kd_lokasi='".$receivedData['kd_lokasi']."' AND c.no_aset ='".$receivedData['no_aset']."'");
+                $result_query = $query->row();
+                
+                $queryMesin = $this->db->query("select SUM(jumlah_penggunaan) AS jumlah_penggunaan
+                                FROM ext_asset_angkutan_udara_detail_penggunaan
+                                where id_ext_asset =".$result_query->id);
+                $queryInisialisaiMesin = $this->db->query("select udara_inisialisasi_mesin1, udara_inisialisasi_mesin2
+                                                       FROM ext_asset_angkutan where id =".$result_query->id);
+                $resultMesin = $queryMesin->row();
+                $resultInisialisasi = $queryInisialisaiMesin->row();
+                $totalPenggunaan = $resultMesin->jumlah_penggunaan;
+
+                $sendData = array(
+                        'total_mesin1' => (int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin1,
+                        'total_mesin2' =>(int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin2,
+                        'status' => 'success'
+                        );
+                echo json_encode($sendData);
+            }
+            else
+            {
+                $query = $this->db->query("select jumlah_penggunaan, satuan_penggunaan 
                                 from ext_asset_angkutan_detail_penggunaan as t
                                 LEFT JOIN ext_asset_angkutan as a on t.id_ext_asset = a.id
                                 LEFT JOIN asset_angkutan as c on a.kd_lokasi = c.kd_lokasi AND a.kd_brg=c.kd_brg AND a.no_aset = c.no_aset
                                 where c.kd_brg ='".$receivedData['kd_brg']."' AND c.kd_lokasi='".$receivedData['kd_lokasi']."' AND c.no_aset ='".$receivedData['no_aset']."'");
             
-            $this->calculateTotalPenggunaan($receivedData, $query);
+                $this->calculateTotalPenggunaan($receivedData, $query);
+            }
+            
         }
         
         

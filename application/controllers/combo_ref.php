@@ -194,7 +194,8 @@ class Combo_Ref extends CI_Controller {
         
         if($this->input->get_post("id_open"))
         {
-            $query = $this->db->query('select id, no_sppa from pengadaan');
+            //$query = $this->db->query('select id, no_sppa from pengadaan');
+            $query = $this->db->query('select id, no_sppa from pengadaan where id not in (select id_pengadaan from inventory_penerimaan_pemeriksaan)');
             foreach($query->result() as $obj)
             {
                 $data[] = $obj;

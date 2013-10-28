@@ -3007,10 +3007,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
 
-                                        if (!edit)
-                                        {
+                                        
                                             Modal.closeAssetWindow();
-                                        }
+                                        
                                     },
                                     failure: function() {
                                         Ext.MessageBox.alert('Fail', 'Changes saved fail.');
@@ -3330,7 +3329,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         {
                                             var id_ext_asset = Ext.getCmp('id_ext_asset_detail_penggunaan_angkutan').value;
                                             $.ajax({
-                                                url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara/'+mesin,
+                                                url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara/',
                                                 type: "POST",
                                                 dataType:'json',
                                                 async:false,
@@ -3340,14 +3339,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                  {
                                                         var updateTotalPenggunaanMesin1 = response.total_mesin1 + ' Jam';
                                                         var updateTotalPenggunaanMesin2 = response.total_mesin2 + ' Jam';
-                                                        if(mesin == '1')
-                                                        {
-                                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin_'+mesin).setValue(updateTotalPenggunaanMesin1);
-                                                        }
-                                                        else if(mesin == '2')
-                                                        {
-                                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin_'+mesin).setValue(updateTotalPenggunaanMesin2);
-                                                        }
+                                                        
+                                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin1').setValue(updateTotalPenggunaanMesin1);
+                                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin2').setValue(updateTotalPenggunaanMesin2);
+                                                        
                                                         
                                                  }
 
@@ -5147,6 +5142,97 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                         },
                         defaultType: 'textfield',
                         items: [{
+                                fieldLabel: 'Lengkap 1',
+                                name: 'lengkap1'
+                            }, {
+                                fieldLabel: 'Lengkap 2',
+                                name: 'lengkap2'
+                            }, {
+                                fieldLabel: 'Lengkap 3',
+                                name: 'lengkap3'
+                            }]
+                    }]
+            };
+
+            return component;
+        };
+        
+        
+        Form.Component.mechanicalAngkutanUdara = function() {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'DETAIL ALAT / KENDARAAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .33,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                fieldLabel: 'Merek',
+                                name: 'merk'
+                            }, {
+                                fieldLabel: 'Tipe',
+                                name: 'type'
+                            }, {
+                                fieldLabel: 'Pabrik',
+                                name: 'pabrik'
+                            }, {
+                                fieldLabel: 'No Mesin 1',
+                                name: 'no_mesin'
+                            },{
+                                fieldLabel: 'No Mesin 2',
+                                name: 'udara_no_mesin2'
+                            }]
+                    }, {
+                        columnWidth: .33,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                fieldLabel: 'Tahun Buat',
+                                name: 'thn_buat'
+                            }, {
+                                fieldLabel: 'Tahun Rakit',
+                                name: 'thn_akit'
+                            }, {
+                                fieldLabel: 'Negara',
+                                name: 'negara'
+                            },{
+                                xtype:'numberfield',
+                                fieldLabel: 'Inisialisasi Mesin 1',
+                                name: 'udara_inisialisasi_mesin1',
+                                value:0,
+                                minValue:0,
+                            },{
+                                xtype:'numberfield',
+                                fieldLabel: 'Inisialisasi Mesin 2',
+                                name: 'udara_inisialisasi_mesin2',
+                                value:0,
+                                minValue:0
+                            }, ]
+                    }, {
+                        columnWidth: .34,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                fieldLabel: 'No Rangka',
+                                name: 'no_rangka'
+                            },{
                                 fieldLabel: 'Lengkap 1',
                                 name: 'lengkap1'
                             }, {
@@ -7479,11 +7565,13 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     items:[
                                         {
                                             xtype:'label',
+                                            
                                             text: 'Status Penggunaan Sampai Saat Ini:',
                                             
                                         },
                                         {
                                             xtype:'displayfield',
+                                            width:300,
                                             id:'pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini',
                                             name:'pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini',
                                             value:'',
@@ -9514,7 +9602,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'DETAIL PENGGUNAAN MESIN '+mesin,
+                title: 'DETAIL PENGGUNAAN',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -9527,13 +9615,23 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                         defaults: {
                             anchor: '95%'
                         },
-                        items: [
+                        items: [{
+                                        xtype:'label',
+                                        text:'Total Penggunaan',
+                                },{
+                                        xtype:'displayfield',
+                                        fieldLabel:'Mesin 1',
+                                        name:'total_penggunaan_mesin2',
+                                        labelWidth: 50,
+                                        id:'total_detail_penggunaan_angkutan_udara_mesin1',
+                                        value:'',
+                                    },
                                     {
                                         xtype:'displayfield',
-                                        fieldLabel:'Total Penggunaan',
+                                        fieldLabel:'Mesin 2',
                                         name:'total_penggunaan_mesin'+mesin,
-                                        labelWidth: 125,
-                                        id:'total_detail_penggunaan_angkutan_udara_mesin_'+mesin,
+                                        labelWidth: 50,
+                                        id:'total_detail_penggunaan_angkutan_udara_mesin2',
                                         value:'',
                                     },
 //                                    {

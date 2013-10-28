@@ -24,6 +24,7 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                             msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
                             dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status,
                             id, kode_unor, image_url, document_url, 
+                            udara_no_mesin2,udara_inisialisasi_mesin1,udara_inisialisasi_mesin2,
                             nama_unker, nama_unor,
                             kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel
                             ,nama_klasifikasi_aset, kd_klasifikasi_aset,

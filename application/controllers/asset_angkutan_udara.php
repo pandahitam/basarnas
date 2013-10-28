@@ -21,7 +21,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
 	}
 	
 	function modifyAngkutanUdara(){
-
+                
 		$dataSimak = array();
                 $dataExt = array();
                 
@@ -44,7 +44,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 );
                 
                 $extFields = array(
-                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
+                        'kd_lokasi', 'kd_brg', 'no_aset', 'id','udara_no_mesin2','udara_inisialisasi_mesin1','udara_inisialisasi_mesin2',
                         'kode_unor','image_url', 'document_url','kd_klasifikasi_aset',
                         'udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
                         'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',

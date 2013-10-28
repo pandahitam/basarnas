@@ -1726,9 +1726,25 @@ var search = [{
                                         {
                                             data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
                                         }
-                                        else if(tipe_angkutan == "udara" || tipe_angkutan == "laut")
+                                        else if(tipe_angkutan == "laut")
                                         {
                                             data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+                                        }
+                                        else if(tipe_angkutan == 'udara')
+                                        {
+                                            if(response.total_mesin1 == null)
+                                            {
+                                                response.total_mesin1 = 0;
+                                            }
+
+                                            if(response.total_mesin2 == null)
+                                            {
+                                                response.total_mesin2 = 0;
+                                            }
+                                            var total_penggunaan_mesin1 = response.total_mesin1 + ' Jam';
+                                            var total_penggunaan_mesin2 = response.total_mesin2 + ' Jam';
+
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = 'Mesin 1: ' + total_penggunaan_mesin1  +'<br />' + 'Mesin 2: ' + total_penggunaan_mesin2;
                                         }
                                             
                                          

@@ -91,9 +91,76 @@ Penghapusan.Action.remove = function(){
 //    Modal.deleteAlert(arrayDeleted,Penghapusan.URL.remove,Penghapusan.Data);
 };
 
-Penghapusan.Action.print = function (){
-    
-};
+Penghapusan.Action.print = function() {
+            var selected = Penghapusan.Grid.grid.getSelectionModel().getSelection();
+            var selectedData = "";
+            if (selected.length > 0)
+            {
+                for (var i = 0; i < selected.length; i++)
+                {
+                    selectedData += selected[i].data.id + ",";
+                }
+            }
+            var gridHeader = Penghapusan.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+            var gridHeaderList = "";
+            //index starts at 2 to exclude the No. column
+            for (var i = 2; i < gridHeader.length; i++)
+            {
+                if (gridHeader[i].dataIndex == undefined || gridHeader[i].dataIndex == "") //filter the action columns in grid
+                {
+                    //do nothing
+                }
+                else
+                {
+                    gridHeaderList += gridHeader[i].text + "&&" + gridHeader[i].dataIndex + "^^";
+                }
+            }
+
+            var serverSideModelName = "Penghapusan_Model";
+            var title = "Penghapusan";
+            var primaryKeys = "kd_lokasi,kd_brg,no_aset";
+
+            my_form = document.createElement('FORM');
+            my_form.name = 'myForm';
+            my_form.method = 'POST';
+            my_form.action = BASE_URL + 'excel_management/exportToExcel/';
+
+            my_tb = document.createElement('INPUT');
+            my_tb.type = 'HIDDEN';
+            my_tb.name = 'serverSideModelName';
+            my_tb.value = serverSideModelName;
+            my_form.appendChild(my_tb);
+
+            my_tb = document.createElement('INPUT');
+            my_tb.type = 'HIDDEN';
+            my_tb.name = 'title';
+            my_tb.value = title;
+            my_form.appendChild(my_tb);
+            document.body.appendChild(my_form);
+
+            my_tb = document.createElement('INPUT');
+            my_tb.type = 'HIDDEN';
+            my_tb.name = 'primaryKeys';
+            my_tb.value = primaryKeys;
+            my_form.appendChild(my_tb);
+            document.body.appendChild(my_form);
+
+            my_tb = document.createElement('INPUT');
+            my_tb.type = 'HIDDEN';
+            my_tb.name = 'gridHeaderList';
+            my_tb.value = gridHeaderList;
+            my_form.appendChild(my_tb);
+            document.body.appendChild(my_form);
+
+            my_tb = document.createElement('INPUT');
+            my_tb.type = 'HIDDEN';
+            my_tb.name = 'selectedData';
+            my_tb.value = selectedData;
+            my_form.appendChild(my_tb);
+            document.body.appendChild(my_form);
+
+            my_form.submit();
+        };
     
 var setting = {
         grid : {
@@ -160,7 +227,7 @@ var setting = {
             },
             print : {
                 id : 'button_pring_Penghapusan',
-                /*action : Penghapusan.Action.print*/
+                action : Penghapusan.Action.print
             }
         }
 };
