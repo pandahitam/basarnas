@@ -945,7 +945,7 @@
                         text: 'Golongan',
                         height: 30
                     }, {
-                        readOnly:true,
+                        readOnly:(defaultValGol !=  null && defaultValGol != undefined)?true:false,
                         xtype: 'combo',
                         fieldLabel: 'Filter by Golongan',
                         name: 'aset-golongan' + id,

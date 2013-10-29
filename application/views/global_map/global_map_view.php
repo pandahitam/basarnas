@@ -369,7 +369,9 @@ function applyZoomAll() {
 			if(record.get('asset')=='Tanah') Load_MapSearch('tanah_panel', BASE_URL + 'asset_tanah/tanah','DataTanah', sLocationCode);
 			else if(record.get('asset')=='Bangunan') Load_MapSearch('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan','DataBangunan', sLocationCode);
 			else if(record.get('asset')=='Alat Besar') Load_MapSearch('alatbesar_panel', BASE_URL + 'asset_alatbesar/alatbesar','DataAlatbesar', sLocationCode);
-			else if(record.get('asset')=='Angkutan') Load_MapSearch('angkutan_panel', BASE_URL + 'asset_angkutan/angkutan','DataAngkutan', sLocationCode);
+			else if(record.get('asset')=='Angkutan Darat') Load_MapSearch('angkutan_darat_panel', BASE_URL + 'asset_angkutan_darat/angkutan_darat','DataAngkutanDarat', sLocationCode);
+			else if(record.get('asset')=='Angkutan Laut') Load_MapSearch('angkutan_laut_panel', BASE_URL + 'asset_angkutan_laut/angkutan_laut','DataAngkutanLaut', sLocationCode);
+			else if(record.get('asset')=='Angkutan Udara') Load_MapSearch('angkutan_udara_panel', BASE_URL + 'asset_angkutan_udara/angkutan_udara','DataAngkutanUdara', sLocationCode);
 			else if(record.get('asset')=='Perairan') Load_MapSearch('perairan_panel', BASE_URL + 'asset_perairan/perairan','DataPerairan', sLocationCode);
 			else if(record.get('asset')=='Senjata') Load_MapSearch('senjata_panel', BASE_URL + 'asset_senjata/senjata','DataSenjata', sLocationCode);
 			else if(record.get('asset')=='Ruang') Load_MapSearch('ruang_panel', BASE_URL + 'asset_ruang/ruang','DataRuang', sLocationCode);

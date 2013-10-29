@@ -118,7 +118,7 @@ Penghapusan.Action.print = function() {
 
             var serverSideModelName = "Penghapusan_Model";
             var title = "Penghapusan";
-            var primaryKeys = "kd_lokasi,kd_brg,no_aset";
+            var primaryKeys = "kd_lokasi,kd_brg,no_sppa";
 
             my_form = document.createElement('FORM');
             my_form.name = 'myForm';

@@ -82,6 +82,7 @@ class MY_Controller extends CI_Controller{
 //            
 //            $queryString = $this->db->_compile_select();
             return $queryString;
+            
         }
 	
 	function getAllData(){

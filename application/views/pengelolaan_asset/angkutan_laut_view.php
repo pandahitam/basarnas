@@ -106,8 +106,11 @@
                 var paramsUnker = request.params.searchUnker;
                 if(paramsUnker != null && paramsUnker != undefined)
                 {
-                    AngkutanLaut.Data.clearFilter();
-                    AngkutanLaut.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+//                    AngkutanLaut.Data.clearFilter();
+//                    AngkutanLaut.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+                    var gridFilterObject = {type:'string',value:paramsUnker,field:'kd_lokasi'};
+                    var gridFilter = JSON.stringify(gridFilterObject);
+                    AngkutanLaut.Data.changeParams({params:{"gridFilter":'['+gridFilter+']'}})
                 }
             }
         });
@@ -316,6 +319,7 @@
                     form.insert(0, Form.Component.dataPerlengkapanAngkutanLaut(data.id));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
+                    Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1}});
                 
             }
         };
@@ -354,14 +358,17 @@
         AngkutanLaut.removePerlengkapan = function()
         {
             var selected = Ext.getCmp('grid_angkutanLaut_perlengkapan').getSelectionModel().getSelection();
-            var arrayDeleted = [];
-            _.each(selected, function(obj) {
-                var data = {
-                    id: obj.data.id,
-                };
-                arrayDeleted.push(data);
-            });
-            console.log(arrayDeleted);
+            if(selected.length > 0)
+            {
+                var arrayDeleted = [];
+                _.each(selected, function(obj) {
+                    var data = {
+                        id: obj.data.id,
+                        id_asset_perlengkapan: obj.data.id_asset_perlengkapan
+                    };
+                    arrayDeleted.push(data);
+                });
+            }
             Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePerlengkapanAngkutanLaut,AngkutanLaut.dataStorePerlengkapanAngkutanLaut);
         };
         
@@ -436,7 +443,6 @@
         };
         
         AngkutanLaut.Form.create = function(data, edit) {
-          debugger;
         var setting_grid_detail_penggunaan = {
                 id:'grid_angkutanLaut_detail_penggunaan',
                 toolbar:{
@@ -532,6 +538,13 @@
                         });
                 
                 form.getForm().setValues(data);
+            }
+            else
+            {
+                var presetData = {};
+                presetData.kd_gol = '3';
+                presetData.kd_bid = '02';
+                form.getForm().setValues(presetData);
             }
 
             return form;
@@ -1207,6 +1220,7 @@
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Barang', dataIndex: 'ur_sskel', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 150, groupable: true, filter: {type: 'string'}},

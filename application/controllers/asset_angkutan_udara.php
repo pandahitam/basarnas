@@ -126,8 +126,27 @@ class Asset_Angkutan_Udara extends MY_Controller {
             {
                 $dataPerlengkapanUdara['keterangan'] = '-';
             }
-                $this->db->set($dataPerlengkapanUdara);
-                $this->db->replace('ext_asset_angkutan_udara_perlengkapan');
+            
+            $this->db->set($dataPerlengkapanUdara);
+            $this->db->replace('ext_asset_angkutan_udara_perlengkapan');
+
+            //update asset perlengkapan, remove from warehouse, set kode induk pesawat
+            if($dataPerlengkapanUdara['id_asset_perlengkapan'] != ''  && $dataPerlengkapanUdara['id_asset_perlengkapan'] != 0)
+            {
+                $query_data_pesawat = $this->db->query("select kd_brg, no_aset, kd_lokasi from view_asset_angkutan_udara where id = ".$dataPerlengkapanUdara['id_ext_asset']);
+                $query_result = $query_data_pesawat->row();
+                $no_induk_pesawat = $query_result->kd_brg.$query_result->kd_lokasi.$query_result->no_aset;
+                
+                $update_data_no_induk = array(
+                    'warehouse_id' => 0,
+                    'ruang_id'=>0,
+                    'rak_id'=>0,
+                    'no_induk_pesawat'=>$no_induk_pesawat
+                );
+                $this->db->where('id',$dataPerlengkapanUdara['id_asset_perlengkapan']);
+                $this->db->update('asset_perlengkapan',$update_data_no_induk);
+            }
+            
                
         }
         
@@ -135,13 +154,23 @@ class Asset_Angkutan_Udara extends MY_Controller {
 	{
 		$data = $this->input->post('data');
                 $deletedArray = array();
+                $updatedAssetPerlengkapan = array();
                 foreach($data as $deleted)
                 {
                     $deletedArray[] =$deleted['id'];
+                    
+                    if($deleted['id_asset_perlengkapan'] != '' && $deleted['id_asset_perlengkapan'] != 0)
+                    {
+                        $updatedAssetPerlengkapan = $deleted['id_asset_perlengkapan'];
+                    }
                 }
                 $this->db->where_in('id',$deletedArray);
-                
 		$this->db->delete('ext_asset_angkutan_udara_perlengkapan');
+                if(!empty($updatedAssetPerlengkapan))
+                {
+                    $this->db->where_in('id',$updatedAssetPerlengkapan);
+                    $this->db->update('asset_perlengkapan',array('no_induk_pesawat'=>''));
+                }
 	}
         
         function requestIdExtAsset()

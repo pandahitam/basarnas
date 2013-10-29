@@ -185,7 +185,7 @@ PemeliharaanBangunan.Action.print = function (){
 var setting = {
         grid : {
             id : 'grid_PemeliharaanBangunan',
-            title : 'DAFTAR PEMELIHARAAN BANGUNAN',
+            title : 'DAFTAR PEMELIHARAAN BANGUNAN DAN TANAH',
             column : [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'ID',              dataIndex: 'id',                width: 50, groupable: false, filter:{type:'number'}},
@@ -297,7 +297,7 @@ PemeliharaanBangunan.Grid.grid = Grid.processGrid(setting,PemeliharaanBangunan.D
 
 var new_tabpanel = {
     xtype:'panel',
-    id: 'pemeliharaan_asset_bangunan', title: 'Pemeliharaan Bangunan', iconCls: 'icon-menu_impasing', border: false, closable: true, 
+    id: 'pemeliharaan_asset_bangunan', title: 'Pemeliharaan Bangunan Dan Tanah', iconCls: 'icon-menu_impasing', border: false, closable: true, 
     layout: 'border', items: [Region.filterPanelPemeliharaanBangunan(PemeliharaanBangunan.Data),PemeliharaanBangunan.Grid.grid]
 };
 
