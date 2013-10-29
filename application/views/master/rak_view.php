@@ -9,7 +9,8 @@
         Ext.namespace('Rak', 'Rak.reader', 'Rak.proxy', 'Rak.Data', 'Rak.Grid', 'Rak.Window', 'Rak.Form', 'Rak.Action', 'Rak.URL');
         Rak.URL = {
             read: BASE_URL + 'master_data/rak_getAllData',
-            createUpdate: BASE_URL + 'master_data/rak_modifyRak',
+            create: BASE_URL + 'master_data/rak_createRak',
+            update: BASE_URL + 'master_data/rak_modifyRak',
             remove: BASE_URL + 'master_data/rak_deleteRak'
         };
 
@@ -36,8 +37,10 @@
         });
 
         Rak.Form.create = function(data, edit) {
-            var setting = {
-                url: Rak.URL.createUpdate,
+            if(edit == true)
+            {
+                 var setting = {
+                url: Rak.URL.update,
                 data: Rak.Data,
                 isEditing: edit,
                 addBtn: {
@@ -59,7 +62,36 @@
                 selectionAsset: {
                     noAsetHidden: false
                 }
-            };
+                };
+            }
+            else
+            {
+                var setting = {
+                url: Rak.URL.create,
+                data: Rak.Data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: 'Add Asset',
+                    fn: function() {
+
+                        if (Modal.assetSelection.items.length === 0)
+                        {
+                            Modal.assetSelection.add(Grid.selectionAsset());
+                            Modal.assetSelection.show();
+                        }
+                        else
+                        {
+                            console.error('There is existing grid in the popup selection - pemeliharaan');
+                        }
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+                };
+            }
+           
 
             var form = Form.referensiRak(setting);
 

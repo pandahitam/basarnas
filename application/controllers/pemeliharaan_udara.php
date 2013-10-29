@@ -73,16 +73,17 @@ class Pemeliharaan_Udara extends MY_Controller {
 		if($data['id'] == '')
                 {
                     $this->db->insert('pemeliharaan',$data);
-                    $id = $this->db->insert_id();
-                    
                 }
                 else
                 {
-                    $id = $data['id'];
                     $this->db->set($data);
                     $this->db->replace('pemeliharaan');
                 }
-                echo "{success:true, id:$id}";
+//                echo "{success:true, id:$id}";
+                
+                $query_id_ext_asset = $this->db->query("select id from ext_asset_angkutan where kd_brg='".$data['kd_brg']."' and kd_lokasi='".$data['kd_lokasi']."' and no_aset= '".$data['no_aset']."'");
+                $query_id_ext_asset_result = $query_id_ext_asset->row();
+                echo "{success:true, id:$query_id_ext_asset_result->id}";
 	}
 	
 	function deletePemeliharaanUdara()

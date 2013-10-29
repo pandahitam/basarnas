@@ -21,35 +21,68 @@ class Asset_Ruang extends MY_Controller {
 	}
 	
 	function modifyRuang(){
+           
+		$dataSimak = array();
+                $dataExt = array();
                 
-            $dataKlasifikasiAset = array();
+                $dataKode = array();
+                $dataKlasifikasiAset = array();
                 
                 $klasifikasiAsetFields = array(
                     'kd_lvl1','kd_lvl2','kd_lvl3'
                 );
-            
-             foreach($klasifikasiAsetFields as $field)
+                
+                $kodeFields = array(
+                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
+                );
+                
+	  	$simakFields = array(
+			'kd_lokasi', 'kd_brg', 'no_aset', 'kd_pemilik', 'kd_ruang'
+                );
+                
+                $extFields = array(
+                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
+                        'kode_unor','image_url', 'document_url','kd_klasifikasi_aset','dihapus','lang','long'
+                );
+		
+		foreach ($kodeFields as $field) {
+			$dataKode[$field] = $this->input->post($field);
+		}
+                $kd_brg = $this->codeGenerator($dataKode);
+                
+		foreach ($simakFields as $field) {
+			$dataSimak[$field] = $this->input->post($field);
+		}
+                $dataSimak['kd_brg'] = $kd_brg;
+                $dataSimak['kd_pemilik'] = 1;
+                
+                foreach ($extFields as $field) {
+			$dataExt[$field] = $this->input->post($field);
+		} 
+                $dataExt['kd_brg'] = $kd_brg;	
+		
+                foreach($klasifikasiAsetFields as $field)
                 {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);
                 }
                 
                 $dataExt['kd_klasifikasi_aset'] = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasiAset);
-                /*
-                 * as of this time of writing this controller seems not yet updated
-                 * with the latest structure like the others in asset inventaris
-                 * therefore please uncomment the generasi of no_aset when changes had been made
-                 */
+                
                 //GENERASI NO_ASET 
-//                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
-//                {
-//                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
-//                    $dataExt['no_aset'] = $dataSimak['no_aset'];
-//                }
+                if($dataSimak['no_aset'] == null || $dataSimak['no_aset'] == "")
+                {
+                    $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
+                    $dataExt['no_aset'] = $dataSimak['no_aset'];
+                }
+                
+		$this->modifyData($dataSimak, $dataExt);
 	}
 	
 	function deleteRuang()
 	{
-		
+		$data = $this->input->post('data');
+                
+		return $this->deleteData($data);
 	}
 	
 	function cetak($input){

@@ -103,7 +103,35 @@
                 };
                 arrayDeleted.push(data);
             });
-            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl2.URL.remove, KlasifikasiAsetLvl2.Data);
+//            Modal.deleteAlert(arrayDeleted, KlasifikasiAsetLvl2.URL.remove, KlasifikasiAsetLvl2.Data);
+            Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ? Data lvl 3 yang berhubungan juga akan terhapus.',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url:  KlasifikasiAsetLvl2.URL.remove,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                 KlasifikasiAsetLvl2.Data.load();
+                            }
+                        });
+                    }
+                }
+            })
         };
 
         KlasifikasiAsetLvl2.Action.print = function() {

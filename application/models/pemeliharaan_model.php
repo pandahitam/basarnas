@@ -103,7 +103,7 @@ class Pemeliharaan_Model extends MY_Model{
 	
 	function get_Pemeliharaan($kd_lokasi, $kd_barang, $no_aset)
 	{
-		$query = "$this->selectColumn FROM $this->viewTable where kd_lokasi = '$kd_lokasi' and kd_brg = '$kd_barang' and no_aset = '$no_aset'";
+		$query = "$this->selectColumn FROM view_pemeliharaan where kd_lokasi = '$kd_lokasi' and kd_brg = '$kd_barang' and no_aset = '$no_aset'";
 		
                 return $this->Get_By_Query($query);
 	}

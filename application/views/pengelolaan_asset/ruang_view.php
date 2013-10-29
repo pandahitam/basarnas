@@ -944,7 +944,7 @@
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, groupable: true, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'ur_sskel', width: 150, hidden: false, filter: {type: 'string'}},
                     {header: 'Ruang', dataIndex: 'ruang', width: 120, hidden: false, filter: {type: 'string'}},
-                    {header: 'Pejabat Ruang', dataIndex: 'pejabat_ruang', width: 150, hidden: false, filter: {type: 'string'}},
+//                    {header: 'Pejabat Ruang', dataIndex: 'pejabat_ruang', width: 150, hidden: false, filter: {type: 'string'}},
                     {xtype: 'actioncolumn', width: 60, items: [{icon: '../basarnas/assets/images/icons/map1.png', tooltip: 'Map',
                                 handler: function(grid, rowindex, colindex, obj) {
                                     var kodeWilayah = Ruang.Data.getAt(rowindex).data.kd_lokasi.substring(9, 15);

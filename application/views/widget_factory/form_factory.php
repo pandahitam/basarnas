@@ -453,8 +453,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                         success: function(response){
                                                             var convertedResponseData = eval ("(" + response.responseText + ")");
                                                             var data = convertedResponseData.results;
+                                                            var kd_lokasi = data[0].kd_lokasi;
+                                                            var kode_unor = data[0].kode_unor;
                                                             var dataStoreInventoryPenerimaanPemeriksaan = Ext.getCmp('grid_inventory_penerimaan_pemeriksaan_parts').getStore();
                                                             dataStoreInventoryPenerimaanPemeriksaan.removeAll();
+                                                            Ext.getCmp('kd_lokasi').setValue(kd_lokasi);
+                                                            Ext.getCmp('kode_unor').setValue(kode_unor);
                                                             
                                                             Ext.Array.each(data,function(key,index,myself){
                                                                 data[index].id = '';
@@ -883,6 +887,170 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return form;
         };
         
+        
+        Form.panelPemeliharaanPartsAngkutanUdara = function(url, data, edit, dataStoreParts, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            if (form.isValid())
+                            {
+                                var list_data = dataStoreParts.getRange();
+                                var data_to_check = [];
+                                Ext.Array.each(list_data,function(key,index,self){
+                                    if(list_data[index].phantom == true || list_data[index].dirty == true)
+                                    {
+                                        data_to_check.push(list_data[index].data);
+                                    }
+                                });
+                                //checks the real quantity from the server to minimize dirty read
+                                //NOT YET FINISHED
+                                var flag_quantity = true;
+//                                $.ajax({
+//                                    url:BASE_URL + 'inventory_penyimpanan/checkServerQuantity',
+//                                    type: "POST",
+//                                    dataType:'json',
+//                                    async:false,
+//                                    data:{data:data_to_check},
+//                                    success:function(response, status){
+//                                        flag_quantity = true;
+//
+//                                    }
+//                                 });
+                                if(flag_quantity == true)
+                                {
+                                    form.submit({
+                                        success: function(form,action) {
+                                            
+                                            var id = action.result.id;
+                                            var gridStore = dataStoreParts;
+                                            var new_records = gridStore.getNewRecords();
+    //                                        var updated_records = grid.getUpdatedRecords();
+    //                                        var removed_records = grid.getRemovedRecords();
+                                            Ext.each(new_records, function(obj){
+                                                var index = gridStore.indexOf(obj);
+                                                var record = gridStore.getAt(index);
+                                                record.set('id_ext_asset',id);
+                                            });
+                                            
+                                                gridStore.sync();
+
+
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            Modal.closeProcessWindow();
+    //                                        if (edit)
+    //                                        {
+    //                                            Modal.closeProcessWindow();
+    //                                        }
+    //                                        else
+    //                                        {
+    //                                            form.reset();
+    //                                        }
+
+
+
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Fail', 'Terdapat kesalahan pada qty. Harap melakukan perbaikan');
+                                }
+                                
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.Component.gridPemeliharaanAngkutanUdaraPerlengkapan = function(setting,edit){
+            var component = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                id:'grid_pemeliharaan_perlengkapan_angkutan_udara',
+                height: 325,
+                title: 'PERLENGKAPAN ANGKUTAN UDARA',
+                border: false,
+                frame: true,
+                disabled:(edit == true)?false:true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{xtype:'container',height:300,items:[Grid.angkutanUdaraPerlengkapan(setting)]}]};
+                
+            return component;
+        };
+        
+        Form.pemeliharaanWithPartsAngkutanUdara = function(setting,setting_grid_pemeliharaan_part)
+        {
+            var form = Form.panelPemeliharaanPartsAngkutanUdara(setting.url, setting.data, setting.isEditing, setting_grid_pemeliharaan_part.dataStore,setting.addBtn);
+            form.insert(0, Form.Component.unit(setting.isEditing,form,true));
+            form.insert(1, Form.Component.selectionAsset(setting.selectionAsset));
+            form.insert(4, Form.Component.fileUpload());
+            
+            var tipe_angkutan = setting.tipe_angkutan;
+            form.insert(2, Form.Component.pemeliharaan(tipe_angkutan));
+            form.insert(3, Form.Component.gridPemeliharaanAngkutanUdaraPerlengkapan(setting_grid_pemeliharaan_part,setting.isEditing));
+                
+            return form;
+        };
+        
+        
+        
         Form.pemeliharaan = function(setting,setting_grid_pemeliharaan_part)
         {
             var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
@@ -956,7 +1124,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         Form.assetRuang = function(setting)
         {
-            var form = Form.asset(setting.url, setting.data, setting.isEditing);
+            var form = Form.asset(setting.url, setting.dataGrid, setting.isEditing);
             
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, Form.Component.kode(setting.isEditing));
@@ -1420,7 +1588,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items: [{
-//                                    readOnly:setting.isEditing,
+                                    readOnly:setting.isEditing,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Pilih Warehouse *',
@@ -1476,7 +1644,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items: [{
-//                                    readOnly:setting.isEditing,
+                                    readOnly:setting.isEditing,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Pilih Warehouse *',
@@ -1505,7 +1673,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     }
                                 },
                                 {
-//                                    readOnly:setting.isEditing,
+                                    readOnly:setting.isEditing,
                                     xtype: 'combo',
                                     disabled: true,
                                     fieldLabel: 'Pilih Ruang *',

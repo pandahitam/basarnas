@@ -9,7 +9,8 @@
         Ext.namespace('Warehouse', 'Warehouse.reader', 'Warehouse.proxy', 'Warehouse.Data', 'Warehouse.Grid', 'Warehouse.Window', 'Warehouse.Form', 'Warehouse.Action', 'Warehouse.URL');
         Warehouse.URL = {
             read: BASE_URL + 'master_data/warehouse_getAllData',
-            createUpdate: BASE_URL + 'master_data/warehouse_modifyWarehouse',
+            create: BASE_URL + 'master_data/warehouse_createWarehouse',
+            update: BASE_URL + 'master_data/warehouse_modifyWarehouse',
             remove: BASE_URL + 'master_data/warehouse_deleteWarehouse'
         };
 
@@ -36,30 +37,61 @@
         });
 
         Warehouse.Form.create = function(data, edit) {
-            var setting = {
-                url: Warehouse.URL.createUpdate,
+            if(edit == true)
+            {
+                var setting = {
+                url: Warehouse.URL.update,
                 data: Warehouse.Data,
                 isEditing: edit,
-                addBtn: {
-                    isHidden: true,
-                    text: 'Add Asset',
-                    fn: function() {
+                    addBtn: {
+                        isHidden: true,
+                        text: 'Add Asset',
+                        fn: function() {
 
-                        if (Modal.assetSelection.items.length === 0)
-                        {
-                            Modal.assetSelection.add(Grid.selectionAsset());
-                            Modal.assetSelection.show();
+                            if (Modal.assetSelection.items.length === 0)
+                            {
+                                Modal.assetSelection.add(Grid.selectionAsset());
+                                Modal.assetSelection.show();
+                            }
+                            else
+                            {
+                                console.error('There is existing grid in the popup selection - pemeliharaan');
+                            }
                         }
-                        else
-                        {
-                            console.error('There is existing grid in the popup selection - pemeliharaan');
-                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
                     }
-                },
-                selectionAsset: {
-                    noAsetHidden: false
-                }
-            };
+                };
+            }
+            else
+            {
+                var setting = {
+                url: Warehouse.URL.create,
+                data: Warehouse.Data,
+                isEditing: edit,
+                    addBtn: {
+                        isHidden: true,
+                        text: 'Add Asset',
+                        fn: function() {
+
+                            if (Modal.assetSelection.items.length === 0)
+                            {
+                                Modal.assetSelection.add(Grid.selectionAsset());
+                                Modal.assetSelection.show();
+                            }
+                            else
+                            {
+                                console.error('There is existing grid in the popup selection - pemeliharaan');
+                            }
+                        }
+                    },
+                    selectionAsset: {
+                        noAsetHidden: false
+                    }
+                };
+            }
+            
 
             var form = Form.referensiWarehouse(setting);
 
@@ -110,6 +142,35 @@
                 arrayDeleted.push(data);
             });
             Modal.deleteAlert(arrayDeleted, Warehouse.URL.remove, Warehouse.Data);
+            
+            Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ? Data ruang dan rak yang berhubungan juga akan terhapus.',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: Warehouse.URL.remove,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                 Warehouse.Data.load();
+                            }
+                        });
+                    }
+                }
+            })
         };
 
         Warehouse.Action.print = function() {

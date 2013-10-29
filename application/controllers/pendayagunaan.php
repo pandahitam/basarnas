@@ -25,8 +25,7 @@ class Pendayagunaan extends MY_Controller {
 	function modifyPendayagunaan(){
                 $data = array();
                 
-//                var_dump($_POST);
-//                die;
+                
 	  	$fields = array(
                     'id', 'kd_brg', 'kd_lokasi', 'no_aset','nama',
                     'kd_klasifikasi_aset', 'part_number', 'serial_number', 'mode_pendayagunaan', 'pihak_ketiga',
@@ -54,6 +53,7 @@ class Pendayagunaan extends MY_Controller {
                     }
                     
                 }
+                
                 
 		$this->modifyData(null,$data);
 	}

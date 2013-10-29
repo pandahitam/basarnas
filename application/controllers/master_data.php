@@ -1218,7 +1218,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-    function warehouse_modifyWarehouse() {
+    function warehouse_createWarehouse() {
         
         $data = array();
         
@@ -1235,6 +1235,26 @@ class Master_Data extends CI_Controller {
         
         echo "{success: true}";
     }
+    
+    function warehouse_modifyWarehouse() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','kd_lokasi','nama'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        
+        $this->db->where('id', $data['id']);
+        unset($data['id']);
+        $this->db->update('ref_warehouse',$data);
+        echo "{success: true}";
+    }
+    
     
     function warehouse_deleteWarehouse()
     {
@@ -1272,7 +1292,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-    function ruang_modifyRuang() {
+    function ruang_createRuang() {
         
         $data = array();
         
@@ -1287,6 +1307,24 @@ class Master_Data extends CI_Controller {
         $this->db->set($data);
         $this->db->replace('ref_warehouseruang');
         
+        echo "{success: true}";
+    }
+    
+    function ruang_modifyRuang() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','warehouse_id','nama'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('id', $data['id']);
+        unset($data['id'],$data['warehouse_id']);
+        $this->db->update('ref_warehouseruang',$data);
         echo "{success: true}";
     }
     
@@ -1327,7 +1365,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-        function rak_modifyRak() {
+        function rak_createRak() {
         
         $data = array();
         
@@ -1342,6 +1380,24 @@ class Master_Data extends CI_Controller {
         $this->db->set($data);
         $this->db->replace('ref_warehouserak');
         
+        echo "{success: true}";
+    }
+    
+     function rak_modifyRak() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','warehouseruang_id','nama','warehouse_id',
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+         $this->db->where('id', $data['id']);
+        unset($data['id'],$data['warehouse_id'],$data['warehouseruang_id']);
+        $this->db->update('ref_warehouserak',$data);
         echo "{success: true}";
     }
     

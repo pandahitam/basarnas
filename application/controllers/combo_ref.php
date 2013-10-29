@@ -322,13 +322,17 @@ class Combo_Ref extends CI_Controller {
         if($this->input->get_post("id_open"))
         {
             $id_warehouse = $this->input->get_post("warehouse_id");
-            $query = $this->db->query("select id, nama from ref_warehouseruang where warehouse_id = $id_warehouse");
-            foreach($query->result() as $obj)
+            if($id_warehouse != '')
             {
-                $data[] = $obj;
-            }
+                 $query = $this->db->query("select id, nama from ref_warehouseruang where warehouse_id = $id_warehouse");
+                foreach($query->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
 
-            echo json_encode($data);
+                echo json_encode($data);
+            }
+           
         }
     }
     

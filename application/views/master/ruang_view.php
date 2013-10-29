@@ -9,7 +9,8 @@
         Ext.namespace('MasterRuang', 'MasterRuang.reader', 'MasterRuang.proxy', 'MasterRuang.Data', 'MasterRuang.Grid', 'MasterRuang.Window', 'MasterRuang.Form', 'MasterRuang.Action', 'MasterRuang.URL');
         MasterRuang.URL = {
             read: BASE_URL + 'master_data/ruang_getAllData',
-            createUpdate: BASE_URL + 'master_data/ruang_modifyRuang',
+            create: BASE_URL + 'master_data/ruang_createRuang',
+            update: BASE_URL + 'master_data/ruang_modifyRuang',
             remove: BASE_URL + 'master_data/ruang_deleteRuang'
         };
 
@@ -36,8 +37,10 @@
         });
 
         MasterRuang.Form.create = function(data, edit) {
-            var setting = {
-                url: MasterRuang.URL.createUpdate,
+            if(edit == true)
+            {
+                var setting = {
+                url: MasterRuang.URL.update,
                 data: MasterRuang.Data,
                 isEditing: edit,
                 addBtn: {
@@ -59,7 +62,36 @@
                 selectionAsset: {
                     noAsetHidden: false
                 }
-            };
+                };
+            }
+            else
+            {
+                var setting = {
+                url: MasterRuang.URL.create,
+                data: MasterRuang.Data,
+                isEditing: edit,
+                addBtn: {
+                    isHidden: true,
+                    text: 'Add Asset',
+                    fn: function() {
+
+                        if (Modal.assetSelection.items.length === 0)
+                        {
+                            Modal.assetSelection.add(Grid.selectionAsset());
+                            Modal.assetSelection.show();
+                        }
+                        else
+                        {
+                            console.error('There is existing grid in the popup selection - pemeliharaan');
+                        }
+                    }
+                },
+                selectionAsset: {
+                    noAsetHidden: false
+                }
+                };
+            }
+            
 
             var form = Form.referensiRuang(setting);
 
@@ -109,7 +141,35 @@
                 };
                 arrayDeleted.push(data);
             });
-            Modal.deleteAlert(arrayDeleted, MasterRuang.URL.remove, MasterRuang.Data);
+            
+            Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ? Data rak yang berhubungan juga akan terhapus.',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: MasterRuang.URL.remove,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                 MasterRuang.Data.load();
+                            }
+                        });
+                    }
+                }
+            })
         };
 
         MasterRuang.Action.print = function() {

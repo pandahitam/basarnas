@@ -1826,6 +1826,179 @@ var search = [{
 
             return _grid;
         };
+        
+         Grid.selectionAssetAngkutanUdara = function(tipe_angkutan,store) {
+
+            var data = new Ext.create('Ext.data.Store', {
+                fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
+                proxy: new Ext.data.AjaxProxy({
+                    url: BASE_URL + 'asset_master/allAsset', actionMethods: {read: 'POST'},
+                    extraParams: {id_open: 1, kd_lokasi: 0, kd_gol: 0, kd_bid: 0, kd_kel: 0, kd_skel: 0, kd_sskel: 0}
+                })
+            });
+            
+           
+                
+
+            var toolbar = ToolbarGrid.gridSelectionAsset(true, data);
+            
+            
+            if(tipe_angkutan == 'darat' || tipe_angkutan =='laut')
+            {
+                Ext.getCmp('select_gol').setValue('3');
+                Ext.getCmp('select_bidang').setValue('02');
+                data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: 3, kd_bid: 02, kd_kel: 0, kd_skel: 0, kd_sskel: 0}})
+            }
+            else if(tipe_angkutan == 'udara')
+            {
+                Ext.getCmp('select_gol').setValue('3');
+                Ext.getCmp('select_bidang').setValue('02');
+                Ext.getCmp('select_kel').setValue('05');
+                data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: 3, kd_bid: 02, kd_kel: 05, kd_skel: 0, kd_sskel: 0}})
+            }
+            
+            var _grid = Ext.create('Ext.grid.Panel', {
+                store: data,
+                title: 'SELECT ASSET',
+                frame: true,
+                border: true,
+                loadMask: true,
+                style: 'margin:0 auto;',
+                height: '100%',
+                width: '100%',
+                columnLines: true,
+                tbar: toolbar,
+                dockedItems: [
+                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
+                ],
+                listeners: {
+                    itemdblclick: function(dataview, record, item, index, e) {
+                        var data = record.data;
+                        if (data !== null)
+                        {
+                            
+                            if(tipe_angkutan != null && tipe_angkutan != undefined)
+                            {
+                                 $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanWithoudIdExtAsset',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{tipe_angkutan:tipe_angkutan,kd_brg:data.kd_brg,kd_lokasi:data.kd_lokasi,no_aset:data.no_aset},
+                                    success:function(response, status){
+                                     if(response.status == 'success')
+                                     {
+                                        if(tipe_angkutan == 'udara')
+                                        {
+                                            if(response.total_mesin1 == null)
+                                            {
+                                                response.total_mesin1 = 0;
+                                            }
+
+                                            if(response.total_mesin2 == null)
+                                            {
+                                                response.total_mesin2 = 0;
+                                            }
+                                            var total_penggunaan_mesin1 = response.total_mesin1 + ' Jam';
+                                            var total_penggunaan_mesin2 = response.total_mesin2 + ' Jam';
+
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = 'Mesin 1: ' + total_penggunaan_mesin1  +'<br />' + 'Mesin 2: ' + total_penggunaan_mesin2;
+                                        }
+                                            
+                                         
+                                     }
+
+                                    }
+                                 });
+                                 
+                                 $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_udara/getSpecificPerlengkapanAngkutanUdaraWithoutIdExtAsset',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{kd_brg:data.kd_brg,kd_lokasi:data.kd_lokasi,no_aset:data.no_aset},
+                                    success:function(response, status){
+                                     
+                                        if(status == "success")
+                                        {
+                                            var data = response.results;
+                                            if(data.length > 0)
+                                            {
+                                                var id_ext_asset = data[0].id_ext_asset;
+                                                store.changeParams({params:{id_ext_asset:id_ext_asset}});
+//                                                Ext.each(data,function(value,index){
+//                                                    var partsData = {};
+//                                                    partsData.id = value.id;
+//                                                    partsData.id_asset_perlengkapan = value.id_asset_perlengkapan;
+//                                                    partsData.id_ext_asset = value.id_ext_asset;
+//                                                    partsData.jenis_perlengkapan = value.jenis_perlengkapan;
+//                                                    partsData.keterangan = value.keterangan;
+//                                                    partsData.nama = value.nama;
+//                                                    partsData.no = value.no;
+//                                                    store.add(partsData);
+//                                                })
+                                            }
+                                            
+                                            Ext.getCmp('grid_pemeliharaan_perlengkapan_angkutan_udara').setDisabled(false);
+                                        }
+
+                                    }
+                                 });
+                                 
+                                 
+                            }
+                            var temp = Ext.getCmp('form-process');
+                            if (temp !== null && temp != undefined)
+                            {
+                                
+                                var form = temp.getForm();
+                                form.setValues(data);
+                            }
+                            Modal.assetSelection.close();
+                        }
+                    },
+                },
+                columns: [
+                    {
+                        text: 'Nama',
+                        width: 200,
+                        sortable: true,
+                        dataIndex: 'nama',
+                        filter: {type: 'string'}
+                    },
+                    {
+                        text: 'Unit Kerja',
+                        width: 200,
+                        sortable: true,
+                        dataIndex: 'unker',
+                        filter: {type: 'string'}
+                    },
+                    {
+                        text: 'Kode Lokasi',
+                        width: 150,
+                        sortable: true,
+                        dataIndex: 'kd_lokasi',
+                        filter: {type: 'string'}
+                    },
+                    {
+                        text: 'Kode Barang',
+                        width: 110,
+                        sortable: true,
+                        dataIndex: 'kd_brg',
+                        filter: {type: 'string'}
+                    },
+                    {
+                        text: 'No Asset',
+                        width: 70,
+                        sortable: true,
+                        dataIndex: 'no_aset',
+                        filter: {type: 'string'}
+                    },
+                ]
+            });
+
+            return _grid;
+        };
 
         Grid.selectionReference = function() {
 
