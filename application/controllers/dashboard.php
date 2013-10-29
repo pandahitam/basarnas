@@ -141,89 +141,93 @@ class Dashboard extends CI_Controller{
 	   echo json_encode($dataSend);
   }
   function cari_global() {
-  $keyword="carab";
-      $query = " SELECT 'Alat Besar' AS `kategori`, `x`.kd_lokasi AS kode_lokasi, `x`.kd_brg AS kode_barang, `x`.no_aset,
-	  `x`.merk, `x`.`type` as tipe, `y`.ur_sskel as nama_barang, `z`.`ur_upb` as nama_unker
-	  FROM asset_alatbesar AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg  INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE   '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`x`.merk LIKE  '%".$keyword."%'OR
-	`x`.`type` LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Angkutan' AS `gol`, `x`.kd_lokasi, `x`.kd_brg,  `x`.no_aset, `x`.merk, `x`.`type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_angkutan AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`x`.merk LIKE  '%".$keyword."%'OR
-	`x`.`type` LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Bangunan' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_bangunan AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Dil' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_dil AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Perairan' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_perairan AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Ruang' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_ruang AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Senjata' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, `x`.merk, `x`.`type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_senjata AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`x`.merk LIKE  '%".$keyword."%'OR
-	`x`.`type` LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'
-	UNION
-	SELECT 'Tanah' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_tanah AS `x`
-	INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
-	WHERE 
-	`x`.kd_lokasi LIKE  '%".$keyword."%'OR
-	`x`.kd_brg LIKE  '%".$keyword."%'OR
-	`x`.no_aset LIKE  '%".$keyword."%'OR
-	`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
-	`z`.ur_upb LIKE   '%".$keyword."%'";
-	   $data = $this->Get_By_Query($query);
-	   $dataSend['results'] = $data;
-	   echo json_encode($dataSend);
+	$keyword="carab";
+	$keyword = $this->input->post('query');
+	$data = array();
+	if($keyword!=null){
+		$query = " SELECT 'Peralatan' AS `gol`, `x`.kd_lokasi AS kode_lokasi, `x`.kd_brg AS kode_barang, `x`.no_aset,
+		`x`.merk, `x`.`type` as tipe, `y`.ur_sskel as nama_barang, `z`.`ur_upb` as nama_unker
+		FROM asset_alatbesar AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg  INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE   '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`x`.merk LIKE  '%".$keyword."%'OR
+		`x`.`type` LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Angkutan' AS `gol`, `x`.kd_lokasi, `x`.kd_brg,  `x`.no_aset, `x`.merk, `x`.`type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_angkutan AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`x`.merk LIKE  '%".$keyword."%'OR
+		`x`.`type` LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Bangunan' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_bangunan AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Dil' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_dil AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Perairan' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_perairan AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Ruang' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_ruang AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Senjata' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, `x`.no_aset, `x`.merk, `x`.`type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_senjata AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`x`.merk LIKE  '%".$keyword."%'OR
+		`x`.`type` LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'
+		UNION
+		SELECT 'Tanah' AS `gol`, `x`.kd_lokasi, `x`.kd_brg, no_aset, '' AS merk, '' AS `type`, `y`.ur_sskel, `z`.`ur_upb` FROM asset_tanah AS `x`
+		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg    INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`
+		WHERE 
+		`x`.kd_lokasi LIKE  '%".$keyword."%'OR
+		`x`.kd_brg LIKE  '%".$keyword."%'OR
+		`x`.no_aset LIKE  '%".$keyword."%'OR
+		`y`.`ur_sskel` LIKE  '%".$keyword."%'OR
+		`z`.ur_upb LIKE   '%".$keyword."%'";
+		$data = $this->Get_By_Query($query);
+	}
+	$dataSend['results'] = $data;
+	echo json_encode($dataSend);
   }
   
   

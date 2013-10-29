@@ -82,15 +82,24 @@ class MY_Model extends CI_Model{
 				
 				if(((str_replace(' ','', strtolower($temp_kode_unker_zs_simpeg))=="badansarnasional") || $temp_kode_unker_zs_simpeg=='107010199414370000KP') && $temp_kode_unor_zs_simpeg!=0){
 					if(strpos($q_ori, 'kode_unor')!==false){
-						$extra_qr['query'] = str_replace(' where ','', $extra_qr['query']);
-						$extra_qr['byss'] = "where kode_unor = '".$temp_kode_unor_zs_simpeg."'";
-						$q_ori = $extra_qr['query'].' '.$extra_qr['byss'].' '.$extra_qr['limit_num'];
+						$split_where = explode(' where ', $extra_qr['query']);
+						$query_wo_where = $split_where[0];
+						$split_where[0] = '';
+						$split_where2 = implode('', $split_where);
+					
+						$extra_qr['byss'] = "where kode_unor = '".$temp_kode_unor_zs_simpeg."'".(strlen($split_where2) > 1 ? ' and ' : '');
+						$q_ori = $query_wo_where.' '.$extra_qr['byss'].' '.$split_where2.' '.$extra_qr['limit_num'];
+						
 					}
 				}else{
 					if(strpos($q_ori, 'kd_lokasi')!==false){
-						$extra_qr['query'] = str_replace(' where ','', $extra_qr['query']);
-						$extra_qr['byss'] = "where kd_lokasi = '".$temp_kode_unker_zs_simpeg."'";
-						$q_ori = $extra_qr['query'].' '.$extra_qr['byss'].' '.$extra_qr['limit_num'];
+						$split_where = explode(' where ', $extra_qr['query']);
+						$query_wo_where = $split_where[0];
+						$split_where[0] = '';
+						$split_where2 = implode('', $split_where);
+					
+						$extra_qr['byss'] = "where kd_lokasi = '".$temp_kode_unker_zs_simpeg."'".(strlen($split_where2) > 1 ? ' and ' : '');
+						$q_ori = $query_wo_where.' '.$extra_qr['byss'].' '.$split_where2.' '.$extra_qr['limit_num'];
 					}
 				}
 			

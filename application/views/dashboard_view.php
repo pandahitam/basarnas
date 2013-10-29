@@ -179,7 +179,7 @@
             });
 			
             Dashboard.modelInventarisAssetUmum = Ext.define('MInventarisAssetUmum', {extend: 'Ext.data.Model',
-                fields: ['kode_barang','kode_lokasi','no_aset','nama_unker','nama_barang','tanggal_perolehan','kondisi']
+                fields: ['kode_barang','kode_lokasi','no_aset','nama_unker','nama_barang','tanggal_perolehan','kondisi', 'merk', 'tipe', 'gol']
             });
 
             Dashboard.DataGrafikUnkerTotalAset = new Ext.create('Ext.data.Store', {
@@ -460,12 +460,53 @@
                          store: Dashboard.DataInventarisAssetUmum, 
                         flex: 1,        
                         columns: [
+							{
+								xtype:'actioncolumn', 
+								width:30, 
+								items:[
+									{
+                                        /*
+										icon: '../basarnas/assets/images/icons/edit.png', 
+										tooltip: 'Ubah',
+                                        */
+										handler: function(grid,rowIndex,colIndex,obj)
+										{
+											Ext.getBody().mask('Loading...');
+											var gridStore = grid.getStore();
+											var data = gridStore.getAt(rowIndex).data;
+											if(data){
+												switch(data.gol){
+													case 'Alat Besar' : //peralatan
+														break;
+													case 'Angkutan' : //angkurtan
+														break;
+													case 'Bangunan' : //Bangunan
+														break;
+													case 'Dil' : //luar
+														break;
+													case 'Perairan' : //Perairan
+														break;
+													case 'Ruang' : //Ruang
+														break;
+													case 'Senjata' : //Senjata
+														break;
+													case 'Tanah' : //Tanah
+														break;
+												}
+											};
+											Ext.getBody().unmask('Loading...');
+										}
+									}
+								]
+							},
                             { header: 'Nama Barang', dataIndex: 'nama_barang', width:150 },
                             { header: 'Kode Barang',  dataIndex: 'kode_barang', width:100 },
                             { header: 'Kode Lokasi', dataIndex: 'kode_lokasi', width:150},
                             { header: 'No. Asset', dataIndex: 'no_aset', width:60 },   
-                            { header: 'Kategori', dataIndex: 'kategori', width:100 } ,
-                            { header: 'Unit Kerja', dataIndex: 'nama_unker', width:150 } 
+                            { header: 'Kategori', dataIndex: 'gol', width:100 } ,
+                            { header: 'Unit Kerja', dataIndex: 'nama_unker', width:150 }  ,
+                            { header: 'Merek', dataIndex: 'merk', width:150 }   ,
+                            { header: 'Tipe', dataIndex: 'tipe', width:150 } 
                         ], 
                         dockedItems : [
                            { xtype: 'toolbar', 
@@ -507,7 +548,7 @@
                                         var data = gridStore.getAt(rowIndex).data;
                                         AlertPemeliharaan.data = data;
                                         AlertPemeliharaan.store = gridStore;
-//                                        Ext.Msg.alert('Status','Not Yet Implemented');
+//                                      Ext.Msg.alert('Status','Not Yet Implemented');
                                         AlertPemeliharaan.dataStorePemeliharaanParts = new Ext.create('Ext.data.Store', {
                                             model: MPemeliharaanPart, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
                                             proxy: new Ext.data.AjaxProxy({
