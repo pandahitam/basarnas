@@ -824,6 +824,9 @@
                     Modal.assetEdit.add(Region.createSidePanel(Senjata.Window.actionSidePanels()));
                     Modal.assetEdit.add(Tab.create());
                 }
+				
+				console.log('senjata');
+				console.log(data);
 
                 var _form = Senjata.Form.create(data, true);
                 Tab.addToForm(_form, 'senjata-details', 'Simak Details');
