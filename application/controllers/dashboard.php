@@ -145,7 +145,7 @@ class Dashboard extends CI_Controller{
 	$keyword = $this->input->post('query');
 	$data = array();
 	if($keyword!=null){
-		$query = " SELECT 'Peralatan' AS `gol`, `x`.kd_lokasi AS kode_lokasi, `x`.kd_brg AS kode_barang, `x`.no_aset,
+		$query = " SELECT 'Peralatan' AS `gol`, `x`.kd_lokasi AS kd_lokasi, `x`.kd_brg AS kd_brg, `x`.no_aset,
 		`x`.merk, `x`.`type` as tipe, `y`.ur_sskel as nama_barang, `z`.`ur_upb` as nama_unker
 		FROM asset_alatbesar AS `x`
 		INNER JOIN ref_subsubkel AS `y` ON `x`.kd_brg = `y`.kd_brg  INNER JOIN ref_unker AS `z` ON `x`.`kd_lokasi` =  `z`.`kdlok`

@@ -179,7 +179,29 @@
             });
 			
             Dashboard.modelInventarisAssetUmum = Ext.define('MInventarisAssetUmum', {extend: 'Ext.data.Model',
-                fields: ['kode_barang','kode_lokasi','no_aset','nama_unker','nama_barang','tanggal_perolehan','kondisi', 'merk', 'tipe', 'gol']
+                fields: ['kode_barang','kode_lokasi','no_aset','nama_unker','nama_barang','tanggal_perolehan','kondisi', 'merk', 
+				'kd_brg', 'kd_lokasi', 'tipe', 'gol',
+				
+				//tanah
+				'kd_lokasi', 'kd_brg', 'no_aset', // Field from asset tanah
+				'kuantitas', 'rph_aset', 'no_kib', 'luas_tnhs', 
+				'luas_tnhb', 'luas_tnhl', 'luas_tnhk', 'kd_prov', 
+				'kd_kab', 'kd_kec', 'kd_kel', 'kd_rtrw', 
+				'alamat', 'batas_u', 'batas_s', 'batas_t', 
+				'batas_b', 'jns_trn', 'sumber', 'dari', 
+				'dasar_hrg', 'no_dana', 'tgl_dana', 'surat1', 
+				'surat2', 'surat3', 'rph_m2', 'unit_pmk', 
+				'alm_pmk', 'catatan', 'tgl_prl', 'tgl_buku', 
+				'rphwajar', 'rphnjop', 'status', 'smilik',
+				'id','nama_unker', 'nama_unor', // Field from ext tanah
+				'kode_unor','image_url','document_url',
+				'nop','njkp','waktu_pembayaran','setoran_pajak','keterangan',
+				'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel', // kode barang
+				'ur_sskel',
+				,'kd_klasifikasi_aset','nama_klasifikasi_aset',
+				'kd_lvl1','kd_lvl2','kd_lvl3'
+				//end tanah
+				]
             });
 
             Dashboard.DataGrafikUnkerTotalAset = new Ext.create('Ext.data.Store', {
@@ -456,58 +478,134 @@
                     },
                     items: [{			
                         title: 'Pencarian Asset',
+						id:'dashboard_pencarian_aset',
                         xtype: 'grid',
                          store: Dashboard.DataInventarisAssetUmum, 
                         flex: 1,        
                         columns: [
-							{
-								xtype:'actioncolumn', 
-								width:30, 
-								items:[
-									{
-                                        /*
-										icon: '../basarnas/assets/images/icons/edit.png', 
-										tooltip: 'Ubah',
-                                        */
-										handler: function(grid,rowIndex,colIndex,obj)
-										{
-											Ext.getBody().mask('Loading...');
-											var gridStore = grid.getStore();
-											var data = gridStore.getAt(rowIndex).data;
-											if(data){
-												switch(data.gol){
-													case 'Alat Besar' : //peralatan
-														break;
-													case 'Angkutan' : //angkurtan
-														break;
-													case 'Bangunan' : //Bangunan
-														break;
-													case 'Dil' : //luar
-														break;
-													case 'Perairan' : //Perairan
-														break;
-													case 'Ruang' : //Ruang
-														break;
-													case 'Senjata' : //Senjata
-														break;
-													case 'Tanah' : //Tanah
-														break;
-												}
-											};
-											Ext.getBody().unmask('Loading...');
-										}
-									}
-								]
-							},
                             { header: 'Nama Barang', dataIndex: 'nama_barang', width:150 },
-                            { header: 'Kode Barang',  dataIndex: 'kode_barang', width:100 },
-                            { header: 'Kode Lokasi', dataIndex: 'kode_lokasi', width:150},
+                            { header: 'Kode Barang',  dataIndex: 'kd_barang', width:100 },
+                            { header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width:150},
                             { header: 'No. Asset', dataIndex: 'no_aset', width:60 },   
                             { header: 'Kategori', dataIndex: 'gol', width:100 } ,
                             { header: 'Unit Kerja', dataIndex: 'nama_unker', width:150 }  ,
                             { header: 'Merek', dataIndex: 'merk', width:150 }   ,
                             { header: 'Tipe', dataIndex: 'tipe', width:150 } 
                         ], 
+						listeners:{
+							itemdblclick:function(thisx, record, item, index, e, eOpts){
+								var data = record.data;
+								if(data){
+									if(data.id == null || data.id == undefined || new String(data.id).length <= 0){
+										data['id'] = undefined;
+										delete data['id'];
+									}
+									switch(data.gol){
+										case 'Peralatan' : //peralatan
+											Load_TabPage_Asset_Semar('alatbesar_panel', BASE_URL+'asset_alatbesar/alatbesar', function(cmpx){
+												SemarObjTemp['AlatbesarGrid'] = Alatbesar.Grid.grid;
+												
+												Alatbesar.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Alatbesar.Action.edit();
+												
+												//Alatbesar.Grid.grid = SemarObjTemp['AlatbesarGrid'];
+											});
+											break;
+										case 'Angkutan' : //angkurtan
+											if(data.kd_brg){
+												if(data.kd_brg.split('')[4]=='1'){
+													Load_TabPage_Asset_Semar('angkutan_darat_panel',BASE_URL+'asset_angkutan_darat/angkutan_darat', function(cmpx){
+														SemarObjTemp['AngkutanDaratGrid'] = AngkutanDarat.Grid.grid;
+														
+														AngkutanDarat.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+														AngkutanDarat.Action.edit();
+														
+														//AngkutanDarat.Grid.grid = SemarObjTemp['AngkutanDaratGrid'];
+													});
+												}else if(data.kd_brg.split('')[4]=='3'){
+													Load_TabPage_Asset_Semar('angkutan_laut_panel',BASE_URL+'asset_angkutan_laut/angkutan_laut', function(cmpx){
+														SemarObjTemp['AngkutanLautGrid'] = AngkutanLaut.Grid.grid;
+														
+														AngkutanLaut.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+														AngkutanLaut.Action.edit();
+														
+														//AngkutanLaut.Grid.grid = SemarObjTemp['AngkutanLautGrid'];
+													});
+												}else if(data.kd_brg.split('')[4]=='5'){
+													Load_TabPage_Asset_Semar('angkutan_udara_panel',BASE_URL+'asset_angkutan_udara/angkutan_udara', function(cmpx){
+														SemarObjTemp['AngkutanUdaraGrid'] = AngkutanUdara.Grid.grid;
+														
+														AngkutanUdara.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+														AngkutanUdara.Action.edit();
+														
+														//AngkutanUdara.Grid.grid = SemarObjTemp['AngkutanUdaraGrid'];
+													});
+												}
+											}
+											break;
+										case 'Bangunan' : //Bangunan
+											Load_TabPage_Asset_Semar('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan', function(cmpx){
+												
+												SemarObjTemp['BangunanGrid'] = Bangunan.Grid.grid;
+												
+												Bangunan.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Bangunan.Action.edit();
+												
+												//Bangunan.Grid.grid = SemarObjTemp['BangunanGrid'];
+											});
+											break;
+										case 'Dil' : //luar
+											Load_TabPage_Asset_Semar('luar_panel',BASE_URL+'asset_luar/luar', function(cmpx){
+												SemarObjTemp['LuarGrid'] = Luar.Grid.grid;
+												
+												Luar.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Luar.Action.edit();
+												
+												//Luar.Grid.grid = SemarObjTemp['LuarGrid'];
+											});
+											break;
+										case 'Perairan' : //Perairan
+											Load_TabPage_Asset_Semar('perairan_panel',BASE_URL+'asset_perairan/perairan', function(cmpx){
+												SemarObjTemp['PerairanGrid'] = Perairan.Grid.grid;
+												
+												Perairan.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Perairan.Action.edit();
+												
+												//Perairan.Grid.grid = SemarObjTemp['PerairanGrid'];
+											});
+											break;
+										case 'Ruang' : //Ruang
+											Load_TabPage_Asset_Semar('ruang_panel',BASE_URL+'asset_ruang/ruang', function(cmpx){
+												SemarObjTemp['RuangGrid'] = Ruang.Grid.grid;
+												
+												Ruang.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Ruang.Action.edit();
+												
+												//Ruang.Grid.grid = SemarObjTemp['RuangGrid'];
+											});
+											break;
+										case 'Senjata' : //Senjata
+											Load_TabPage_Asset_Semar('senjata_panel',BASE_URL+'asset_senjata/senjata', function(cmpx){
+												SemarObjTemp['SenjataGrid'] = Senjata.Grid.grid;
+												
+												Senjata.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Senjata.Action.edit();
+												
+												//Senjata.Grid.grid = SemarObjTemp['SenjataGrid'];
+											});
+											break;
+										case 'Tanah' : //Tanah
+											Load_TabPage_Asset_Semar('tanah_panel', BASE_URL + 'asset_tanah/tanah', function(cmpx){
+												SemarObjTemp['TanahGrid'] = Tanah.Grid.grid;
+												Tanah.Grid.grid = Ext.getCmp('dashboard_pencarian_aset');
+												Tanah.Action.edit();
+												//Tanah.Grid.grid = SemarObjTemp['TanahGrid'];
+											});
+											break;
+									}
+								};
+							}
+						},
                         dockedItems : [
                            { xtype: 'toolbar', 
                            dock: 'top',
@@ -1291,6 +1389,12 @@
                         'tabchange': function(tabPanel, tab) {
                             switch (tab.title) {
                                 // LAYANAN
+								case 'Dashboard' : 
+									var t_dsh =Ext.getCmp('Content_Body_Tabs');
+									for(var inx = 1; inx < 50; inx++){
+										t_dsh.remove(t_dsh.items.getAt(inx));
+									}
+									break;
                                 case 'Inpassing':
                                     Ext.getCmp('belum_proses_IMPG').setValue(true);
                                     break;
@@ -1759,6 +1863,35 @@
 					});
 				}	
 			}
+			
+			function Load_TabPage_Asset_Semar(tab_id, tab_url, fn_callback){
+				Ext.getBody().mask('Loading...');
+				
+				Ext.Ajax.timeout = Time_Out;
+				Ext.Ajax.request({
+					url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
+					success: function(response){
+						var jsonData = response.responseText.substring(13);   
+						var aHeadNode = document.getElementsByTagName('head')[0]; 
+						var aScript = document.createElement('script'); 
+						aScript.text = jsonData; 
+						aHeadNode.appendChild(aScript);
+						if(new_tabpanel_Asset != "GAGAL"){
+							fn_callback(new_tabpanel_Asset);
+						}else{
+							Ext.MessageBox.show({title:'Peringatan !', msg:'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});    			
+						}
+					},
+					failure: function(response){ 
+						Ext.MessageBox.show({title:'Peringatan !', msg:'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR}); 
+					}, 
+					callback: function(response){ 
+						Ext.getBody().unmask('Loading...');
+					},
+					scope : this
+				});
+			}
+			SemarObjTemp = {};
         </script>
     </head>
     <body>
