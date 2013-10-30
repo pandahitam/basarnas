@@ -9793,7 +9793,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 },{
                                         xtype:'displayfield',
                                         fieldLabel:'Mesin 1',
-                                        name:'total_penggunaan_mesin2',
+                                        name:'total_penggunaan_mesin1',
                                         labelWidth: 50,
                                         id:'total_detail_penggunaan_angkutan_udara_mesin1',
                                         value:'',
@@ -9801,7 +9801,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     {
                                         xtype:'displayfield',
                                         fieldLabel:'Mesin 2',
-                                        name:'total_penggunaan_mesin'+mesin,
+                                        name:'total_penggunaan_mesin2',
                                         labelWidth: 50,
                                         id:'total_detail_penggunaan_angkutan_udara_mesin2',
                                         value:'',
