@@ -134,6 +134,17 @@ class Dashboard extends CI_Controller{
        echo json_encode($dataSend);
   }
   
+  function alert_pengelolaan()
+  {
+//      $query = "SELECT id, nama_operasi, pic,tanggal_mulai,tanggal_selesai,deskripsi, image_url, document_url, kd_lokasi, kode_unor, kd_brg, no_aset, nama
+//                            FROM pengelolaan
+//                            WHERE DATEDIFF( DATE( darat_masa_berlaku_stnk ) , CURDATE() ) <=0
+//                            OR
+//                            DATEDIFF( DATE( darat_masa_berlaku_pajak ) , CURDATE() ) <=0
+//                            AND darat_masa_berlaku_stnk != '0000-00-00'
+//                            AND darat_masa_berlaku_pajak != '0000-00-00'";
+  }
+  
   function inventaris_assetumum() {
       $query = "SELECT * FROM t_tempall";
 	   $data = $this->Get_By_Query($query);

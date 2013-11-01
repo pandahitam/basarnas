@@ -208,7 +208,7 @@
             }
         };
 
-        PartNumber.Grid.grid = Grid.processGrid(setting, PartNumber.Data);
+        PartNumber.Grid.grid = Grid.referensiGrid(setting, PartNumber.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

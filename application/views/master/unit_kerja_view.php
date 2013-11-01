@@ -206,7 +206,7 @@
             }
         };
 
-        UnitKerja.Grid.grid = Grid.processGrid(setting, UnitKerja.Data);
+        UnitKerja.Grid.grid = Grid.referensiGrid(setting, UnitKerja.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

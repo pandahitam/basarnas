@@ -254,8 +254,11 @@
                             {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                            
+                           
                         ]
                     },
                     search: {
@@ -361,8 +364,10 @@
                             {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                            
                         ]
                     },
                     search: {
@@ -468,10 +473,11 @@
                             {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-//                            {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-//                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                            
+                                
                         ]
                     },
                     search: {
@@ -1611,6 +1617,71 @@ var search = [{
             };
 
             return Grid.baseGrid(setting, data, feature_list);
+        };
+        
+        Grid.referensiGrid = function(setting, data) {
+            if (setting === null)
+            {
+                console.log('setting is null');
+                return;
+            }
+
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+            var searchCode = [{
+                    xtype:'searchfield',
+                    id:setting.search.id + 'code',
+                    store:data,
+                    width:180,
+                    emptyText:'Scan Barcode/RFID',
+                    paramName:'query'
+            }];
+        
+            var searchField = [{
+                    xtype:'searchfield',
+                    id:setting.search.id + 'field',
+                    store:data,
+                    width:180,
+                    emptyText:'Cari',
+                    paramName:'search'
+            }];
+
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: setting.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: setting.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            setting.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: setting.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            setting.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: setting.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            setting.toolbar.remove.action();
+                        }
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, '->',searchField,searchCode
+                ]
+            });
+
+            var feature_list = {
+                filter: filter,
+
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(setting, data, feature_list);
+
         };
 
         Grid.processGrid = function(setting, data) {

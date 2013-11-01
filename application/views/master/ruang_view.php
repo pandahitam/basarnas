@@ -280,7 +280,7 @@
             }
         };
 
-        MasterRuang.Grid.grid = Grid.processGrid(setting, MasterRuang.Data);
+        MasterRuang.Grid.grid = Grid.referensiGrid(setting, MasterRuang.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

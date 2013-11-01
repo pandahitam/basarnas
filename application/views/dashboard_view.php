@@ -849,7 +849,7 @@
                         
                     ],
                     height: 200,
-                    width: 420
+                    
                 });
                 
                  var GridAlertPengadaan = Ext.create('Ext.grid.Panel', {
@@ -892,7 +892,7 @@
                         
                     ],
                     height: 200,
-                    width: 420,
+                    
                 });
                 
                 var GridAlertKendaraan = Ext.create('Ext.grid.Panel', {
@@ -1237,24 +1237,54 @@
                         
                     ],
                     height: 200,
-                    width: 420
+                    
                     //renderTo: Ext.getBody()
                 });
                 
-                var AlertContainer = Ext.create('Ext.panel.Panel', {
-                    height: 200,
+                var AlertRow1 = Ext.create('Ext.panel.Panel', {
                     renderTo: Ext.getBody(),
                     layout: {
-                        type: 'hbox',       
-                        align: 'stretch',   
-                        padding: 5,
+                        type: 'column',
                     },
-                    items: [ GridAlertPemeliharaan,{xtype:'splitter'},
-                             GridAlertKendaraan,{xtype:'splitter'},
-                             GridAlertPengadaan
+                    border:false,
+                    items: [ {
+                                columnWidth:.333,
+                                padding:5,
+                                items:[ 
+                                        GridAlertPemeliharaan,
+                                      ]
+                             },
+                             {
+                                columnWidth:.333,
+                                padding:5,
+                                items:[ 
+                                        GridAlertKendaraan
+                                      ]
+                             },
+                             {
+                                columnWidth:.334,
+                                padding:5,
+                                items:[ 
+                                        GridAlertPengadaan,
+                                      ]
+                             },
                            ]
                  });
-                
+                 
+                var AlertContainer = Ext.create('Ext.panel.Panel', {
+                    height: 215,
+                    renderTo: Ext.getBody(),
+                    layout: {
+                        type: 'table',
+                        tableAttrs: {
+                            style: {
+                               width: '100%',
+                            }
+                        }
+                    },
+                    items: [ AlertRow1,
+                           ]
+                 });
                 
                     
                 var GrafikUnkerTotalAset = Ext.create('Ext.chart.Chart', {

@@ -14,7 +14,8 @@ class Penghapusan_Model extends MY_Model{
 //                $this->viewTable = 'view_pemeliharaan';
 	}
 	
-	function get_AllData($start=null, $limit=null, $searchTextFilter = null){
+	function get_AllData($start=null, $limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
+            $countQuery = "";
             if($start != null && $limit != null)
             {
 //		$query = "
@@ -36,7 +37,7 @@ class Penghapusan_Model extends MY_Model{
 //                        from view_penghapusan
 //                        LIMIT $start, $limit";
                 $query = "
-						SELECT `y`.`ur_baru` AS `ur_baru`, `x`.*
+                                                SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
 						FROM
 						(
 							SELECT
@@ -58,8 +59,8 @@ class Penghapusan_Model extends MY_Model{
 							`u`.`kd_data`     AS `kd_data`,
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
-							abs(`u`.`rph_sat`)     AS `rph_sat`,
-							abs(`u`.`rph_aset`)    AS `rph_aset`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -87,11 +88,15 @@ class Penghapusan_Model extends MY_Model{
 							GROUP BY `z`.kd_brgbaru
 							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
 						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
                         LIMIT $start, $limit";
-                if($searchTextFilter != null)
+                if($searchByBarcode != null)
                 {
                     $query = "
-						SELECT `y`.`ur_baru` AS `ur_baru`, `x`.*
+                                                SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
 						FROM
 						(
 							SELECT
@@ -113,8 +118,8 @@ class Penghapusan_Model extends MY_Model{
 							`u`.`kd_data`     AS `kd_data`,
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
-							abs(`u`.`rph_sat`)     AS `rph_sat`,
-							abs(`u`.`rph_aset`)    AS `rph_aset`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -135,8 +140,8 @@ class Penghapusan_Model extends MY_Model{
 							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
 							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
 							HAVING `u`.`jns_trn` IN('301','391')
-                                                        AND
-                                                        CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
+                                                        AND 
+                                                        CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
 						) AS `x` LEFT JOIN
 						(
 							SELECT `z`.kd_brgbaru, `z`.ur_baru
@@ -144,7 +149,319 @@ class Penghapusan_Model extends MY_Model{
 							GROUP BY `z`.kd_brgbaru
 							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
 						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
                         LIMIT $start, $limit";
+                    
+                    $countQuery = "SELECT count(*) as total
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+                                                        AND 
+                                                        CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok";
+                }
+                else if($searchByField != null)
+                {
+                    $query = "
+						SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                (jenis_transaksi like '%$searchByField%' OR
+                                                kd_brg like '%$searchByField%' OR
+                                                no_sppa like '%$searchByField%' OR
+                                                ur_upb like '%$searchByField%' OR
+                                                ur_baru like '%$searchByField%' OR
+                                                merk_type like'%$searchByField%')
+                        LIMIT $start, $limit";
+                    
+                    $countQuery = "SELECT count(*) as total
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                (jenis_transaksi like '%$searchByField%' OR
+                                                kd_brg like '%$searchByField%' OR
+                                                no_sppa like '%$searchByField%' OR
+                                                ur_upb like '%$searchByField%' OR
+                                                ur_baru like '%$searchByField%' OR
+                                                merk_type like'%$searchByField%')";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "
+						SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                $gridFilter
+                        LIMIT $start, $limit";
+                    
+                    $countQuery = "SELECT count(*) as total
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                $gridFilter";
                 }
             }
             else
@@ -166,7 +483,7 @@ class Penghapusan_Model extends MY_Model{
 //                $query = "$this->selectColumn
 //                        from view_penghapusan";
                 $query = "
-						SELECT `y`.`ur_baru` AS `ur_baru`, `x`.*
+						 SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
 						FROM
 						(
 							SELECT
@@ -188,8 +505,8 @@ class Penghapusan_Model extends MY_Model{
 							`u`.`kd_data`     AS `kd_data`,
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
-							abs(`u`.`rph_sat`)     AS `rph_sat`,
-							abs(`u`.`rph_aset`)    AS `rph_aset`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -210,63 +527,6 @@ class Penghapusan_Model extends MY_Model{
 							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
 							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
 							HAVING `u`.`jns_trn` IN('301','391')
-						) AS `x` LEFT JOIN
-						(
-							SELECT `z`.kd_brgbaru, `z`.ur_baru
-							FROM t_mapbrg AS `z`
-							GROUP BY `z`.kd_brgbaru
-							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
-						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`";
-                
-                if($searchTextFilter != null)
-                {
-                    $query = "
-						SELECT `y`.`ur_baru` AS `ur_baru`, `x`.*
-						FROM
-						(
-							SELECT
-							MIN(`u`.`no_aset`) AS `no_awal`,
-							MAX(`u`.`no_aset`) AS `no_akhir`,
-							`c`.`ur_trn`      AS `jenis_transaksi`,
-							`u`.`thn_ang`     AS `thn_ang`,
-							`u`.`periode`     AS `periode`,
-							`u`.`kd_lokasi`   AS `kd_lokasi`,
-							`u`.`no_sppa`     AS `no_sppa`,
-							`u`.`kd_brg`      AS `kd_brg`,
-							`u`.`no_aset`     AS `no_aset`,
-							`u`.`tgl_perlh`   AS `tgl_perlh`,
-							`u`.`tercatat`    AS `tercatat`,
-							`u`.`kondisi`     AS `kondisi`,
-							`u`.`tgl_buku`    AS `tgl_buku`,
-							`u`.`jns_trn`     AS `jns_trn`,
-							`u`.`dsr_hrg`     AS `dsr_hrg`,
-							`u`.`kd_data`     AS `kd_data`,
-							`u`.`flag_sap`    AS `flag_sap`,
-							`u`.`kuantitas`   AS `kuantitas`,
-							abs(`u`.`rph_sat`)     AS `rph_sat`,
-							abs(`u`.`rph_aset`)    AS `rph_aset`,
-							`u`.`flag_kor`    AS `flag_kor`,
-							`u`.`keterangan`  AS `keterangan`,
-							`u`.`merk_type`   AS `merk_type`,
-							`u`.`asal_perlh`  AS `asal_perlh`,
-							`u`.`no_bukti`    AS `no_bukti`,
-							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
-							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
-							`u`.`flag_ttp`    AS `flag_ttp`,
-							`u`.`flag_krm`    AS `flag_krm`,
-							`u`.`kdblu`       AS `kdblu`,
-							`u`.`setatus`     AS `setatus`,
-							`u`.`noreg`       AS `noreg`,
-							`u`.`kdbapel`     AS `kdbapel`,
-							`u`.`kdkpknl`     AS `kdkpknl`,
-							`u`.`umeko`       AS `umeko`,
-							`u`.`rph_res`     AS `rph_res`,
-							`u`.`kdkppn`      AS `kdkppn`
-							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
-							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
-							HAVING `u`.`jns_trn` IN('301','391')
-                                                        AND
-                                                        CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchTextFilter'
 						) AS `x` LEFT JOIN
 						(
 							SELECT `z`.kd_brgbaru, `z`.ur_baru
@@ -274,10 +534,391 @@ class Penghapusan_Model extends MY_Model{
 							GROUP BY `z`.kd_brgbaru
 							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
 						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok";
+                
+                if($searchByBarcode != null)
+                {
+                     $query = "
+                                                SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+                                                        AND 
+                                                        CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
                         ";
+                    
+                    $countQuery = "SELECT count(*) as total
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+                                                        AND 
+                                                        CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok";
+                }
+                 else if($searchByField != null)
+                {
+                     $query = "
+						SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                (jenis_transaksi like '%$searchByField%' OR
+                                                kd_brg like '%$searchByField%' OR
+                                                no_sppa like '%$searchByField%' OR
+                                                ur_upb like '%$searchByField%' OR
+                                                ur_baru like '%$searchByField%' OR
+                                                merk_type like'%$searchByField%')
+                     ";
+                    
+                    $countQuery = "SELECT count(*) as total
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                (jenis_transaksi like '%$searchByField%' OR
+                                                kd_brg like '%$searchByField%' OR
+                                                no_sppa like '%$searchByField%' OR
+                                                ur_upb like '%$searchByField%' OR
+                                                ur_baru like '%$searchByField%' OR
+                                                merk_type like'%$searchByField%')";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "
+						SELECT `y`.`ur_baru` AS `ur_baru`, z.ur_upb AS ur_upb, `x`.*
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                $gridFilter
+                        ";
+                    
+                    $countQuery = "SELECT count(*) as total
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('301','391')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                $gridFilter";
                 }
             }
-		return $this->Get_By_Query($query);	
+                if($countQuery == '')
+                {
+                    return $this->Get_By_Query($query);
+                }
+                else
+                {
+                    return $this->Get_By_Query_New($query,$countQuery);
+                }
+			
 	}
 	
 	function get_Penghapusan($kd_lokasi, $kd_barang, $no_aset)

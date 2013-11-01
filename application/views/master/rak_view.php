@@ -254,7 +254,7 @@
             }
         };
 
-        Rak.Grid.grid = Grid.processGrid(setting, Rak.Data);
+        Rak.Grid.grid = Grid.referensiGrid(setting, Rak.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

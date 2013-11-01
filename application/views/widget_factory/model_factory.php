@@ -506,7 +506,7 @@ Ext.define('MMutasi', {extend: 'Ext.data.Model',
             'tgl_perlh','tercatat','kondisi','tgl_buku','jns_trn','dsr_hrg','kd_data','flag_sap','kuantitas',
             'rph_sat','rph_aset','flag_kor','keterangan','merk_type','asal_perlh','no_bukti','no_dsr_mts',
             'tgl_dsr_mts','flag_ttp','flag_krm','kdblu','setatus','noreg','kdbapel','kdkpknl','umeko','rph_res','kdkppn',
-            'jenis_transaksi',
+            'jenis_transaksi','ur_upb'
             ]
 });
 
@@ -515,7 +515,7 @@ Ext.define('MPenghapusan', {extend: 'Ext.data.Model',
             'tgl_perlh','tercatat','kondisi','tgl_buku','jns_trn','dsr_hrg','kd_data','flag_sap','kuantitas',
             'rph_sat','rph_aset','flag_kor','keterangan','merk_type','asal_perlh','no_bukti','no_dsr_mts',
             'tgl_dsr_mts','flag_ttp','flag_krm','kdblu','setatus','noreg','kdbapel','kdkpknl','umeko','rph_res','kdkppn',
-            'jenis_transaksi',
+            'jenis_transaksi','ur_upb'
             ]
 });
 

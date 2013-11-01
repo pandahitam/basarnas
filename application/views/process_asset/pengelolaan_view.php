@@ -191,7 +191,7 @@
                     {header: 'Nama Operasi SAR', dataIndex: 'nama_operasi', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'PIC', dataIndex: 'pic', flex: 1, groupable: false, filter: {type: 'string'}},
                     {header: 'Tanggal Mulai', dataIndex: 'tanggal_mulai', flex: 1, groupable: false, filter: {type: 'string'}},
-                    {header: 'Tanggal Mulai', dataIndex: 'tanggal_selesai', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Tanggal Selesai', dataIndex: 'tanggal_selesai', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Deskripsi', dataIndex: 'deskripsi', flex: 1, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', flex: 1, hidden: true, groupable: false, filter: {type: 'string'}},

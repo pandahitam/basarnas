@@ -9,14 +9,14 @@
         Ext.namespace('PemeliharaanUdara', 'PemeliharaanUdara.reader', 'PemeliharaanUdara.proxy', 'PemeliharaanUdara.Data', 'PemeliharaanUdara.Grid', 'PemeliharaanUdara.Window', 'PemeliharaanUdara.Form', 'PemeliharaanUdara.Action', 'PemeliharaanUdara.URL');
         
         PemeliharaanUdara.dataStorePemeliharaanParts = new Ext.create('Ext.data.Store', {
-            model: MPemeliharaanPart, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            model: MAngkutanUdaraPerlengkapan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
             proxy: new Ext.data.AjaxProxy({
                 actionMethods: {read: 'POST'},
                 api: {
-                read: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanParts',
-                create: BASE_URL + 'pemeliharaan_part/createPemeliharaanParts',
-                update: BASE_URL + 'pemeliharaan_part/updatePemeliharaanParts',
-                destroy: BASE_URL + 'pemeliharaan_part/destroyPemeliharaanParts'
+                read: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPartsAngkutanUdara',
+                create: BASE_URL + 'pemeliharaan_part/createPemeliharaanPartsAngkutanUdara',
+                update: BASE_URL + 'pemeliharaan_part/updatePemeliharaanPartsAngkutanUdara',
+                destroy: BASE_URL + 'pemeliharaan_part/destroyPemeliharaanPartsAngkutanUdara'
                 },
                 writer: {
                 type: 'json',
@@ -74,7 +74,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAsset(tipe_angkutan));
+                            Modal.assetSelection.add(Grid.selectionAssetAngkutanUdara(tipe_angkutan, PemeliharaanUdara.dataStorePemeliharaanParts));
                             Modal.assetSelection.show();
                         }
                         else
@@ -98,7 +98,7 @@
                 dataStore:PemeliharaanUdara.dataStorePemeliharaanParts
             };
 
-            var form = Form.pemeliharaanWithParts(setting,setting_grid_pemeliharaan_part);
+            var form = Form.pemeliharaanWithPartsAngkutanUdara(setting,setting_grid_pemeliharaan_part);
 
             if (data !== null)
             {
@@ -117,32 +117,7 @@
                                 data[key] = '';
                             }
                         });
-                $.ajax({
-                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara',
-                       type: "POST",
-                       dataType:'json',
-                       async:false,
-                       data:{tipe_angkutan:'udara',id_ext_asset:data.id},
-                       success:function(response, status){
-                        if(response.status == 'success')
-                        {
-                            if(response.total_mesin1 == null)
-                            {
-                                response.total_mesin1 = 0;
-                            }
-                            
-                            if(response.total_mesin2 == null)
-                            {
-                                response.total_mesin2 = 0;
-                            }
-                            var total_penggunaan_mesin1 = response.total_mesin1 + ' Jam';
-                            var total_penggunaan_mesin2 = response.total_mesin2 + ' Jam';
-                            
-                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = 'Mesin 1:' + total_penggunaan_mesin1  +'<br />' + 'Mesin 2:' + total_penggunaan_mesin2;
-                        }
-                           
-                       }
-                    });
+                
 //                $.ajax({
 //                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
 //                       type: "POST",
@@ -169,10 +144,12 @@
                 Modal.assetSecondaryWindow.setTitle('Tambah Part');
             }
             var form = Form.secondaryWindowAsset(PemeliharaanUdara.dataStorePemeliharaanParts,'add');
-            form.insert(0, Form.Component.dataPemeliharaanParts());
-            form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+//            form.insert(0, Form.Component.dataPemeliharaanParts());
+//            form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+            form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara());
             Modal.assetSecondaryWindow.add(form);
             Modal.assetSecondaryWindow.show();
+            
         };
         
         PemeliharaanUdara.editPemeliharaanPart = function(){
@@ -190,9 +167,10 @@
                     Modal.assetSecondaryWindow.setTitle('Edit Part');
                 }
                     var form = Form.secondaryWindowAsset(PemeliharaanUdara.dataStorePemeliharaanParts, 'edit',storeIndex);
-                    form.insert(0, Form.Component.dataPemeliharaanParts(true));
-                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
-
+//                    form.insert(0, Form.Component.dataPemeliharaanParts(true));
+//                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara('',true));
+                    
                     if (data !== null)
                     {
                         Ext.Object.each(data,function(key,value,myself){
@@ -247,16 +225,59 @@
             {
                 var data = selected[0].data;
                 delete data.nama_unker;
-
+                
                 if (Modal.processEdit.items.length === 0)
                 {
-                    Modal.processEdit.setTitle('Edit PemeliharaanUdara');
+                    Modal.processEdit.setTitle('Edit Pemeliharaan Udara');
                 }
+                var id_ext_asset = 0;
+                $.ajax({
+                       url:BASE_URL + 'asset_angkutan_udara/getIdExtAsset',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                       success:function(response, status){
+                        if(status == 'success')
+                        {
+                            id_ext_asset = response.idExt;
+                            PemeliharaanUdara.dataStorePemeliharaanParts.changeParams({params:{id_ext_asset:id_ext_asset}});
+                            PemeliharaanUdara.dataStorePemeliharaanParts.removed = [];
+                        }     
+                       }
+                    });
+                    
+                $.ajax({
+                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara',
+                    type: "POST",
+                    dataType:'json',
+                    async:false,
+                    data:{tipe_angkutan:'udara',id_ext_asset:id_ext_asset},
+                    success:function(response, status){
+                     if(response.status == 'success')
+                     {
+                         if(response.total_mesin1 == null)
+                         {
+                             response.total_mesin1 = 0;
+                         }
+
+                         if(response.total_mesin2 == null)
+                         {
+                             response.total_mesin2 = 0;
+                         }
+                         var total_penggunaan_mesin1 = response.total_mesin1 + ' Jam';
+                         var total_penggunaan_mesin2 = response.total_mesin2 + ' Jam';
+
+                         data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = 'Mesin 1:' + total_penggunaan_mesin1  +'<br />' + 'Mesin 2:' + total_penggunaan_mesin2;
+                     }
+
+                    }
+                 });
+                    
                 var _form = PemeliharaanUdara.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
-                PemeliharaanUdara.dataStorePemeliharaanParts.changeParams({params:{id_pemeliharaan:data.id}});
-                PemeliharaanUdara.dataStorePemeliharaanParts.removed = [];
+                
                 
             }
         };

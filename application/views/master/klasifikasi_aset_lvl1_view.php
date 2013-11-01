@@ -240,7 +240,7 @@
             }
         };
 
-        KlasifikasiAsetLvl1.Grid.grid = Grid.processGrid(setting, KlasifikasiAsetLvl1.Data);
+        KlasifikasiAsetLvl1.Grid.grid = Grid.referensiGrid(setting, KlasifikasiAsetLvl1.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

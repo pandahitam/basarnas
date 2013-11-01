@@ -216,7 +216,7 @@
             }
         };
 
-        KlasifikasiAsetLvl3.Grid.grid = Grid.processGrid(setting, KlasifikasiAsetLvl3.Data);
+        KlasifikasiAsetLvl3.Grid.grid = Grid.referensiGrid(setting, KlasifikasiAsetLvl3.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

@@ -103,6 +103,20 @@ class Asset_Angkutan_Udara extends MY_Controller {
             }
         }
         
+        function getSpecificPerlengkapanAngkutanUdaraWithoutIdExtAsset()
+        {
+                $kd_brg = $_POST['kd_brg'];
+                $kd_lokasi = $_POST['kd_lokasi'];
+                $no_aset = $_POST['no_aset'];
+                $queryIdExtAsset = $this->db->query("select id from ext_asset_angkutan where kd_brg = '$kd_brg' and kd_lokasi = '$kd_lokasi' and no_aset = '$no_aset'");
+                $queryIdExtAsset_result = $queryIdExtAsset->row();
+                $data = $this->model->getSpecificPerlengkapanAngkutanUdara($queryIdExtAsset_result->id);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+        }
+        
         function modifyPerlengkapanAngkutanUdara()
         {
             $dataPerlengkapanUdara = array();
@@ -182,6 +196,24 @@ class Asset_Angkutan_Udara extends MY_Controller {
             );
             $this->db->insert('ext_asset_angkutan',$receivedData);
             $idExt = $this->db->insert_id();
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
+        
+        function getIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $query = $this->db->query("select id from ext_asset_angkutan where kd_brg='".$receivedData['kd_brg']."' and kd_lokasi ='".$receivedData['kd_lokasi']."' and no_aset = '".$receivedData['no_aset']."'");
+            $query_result = $query->row();
+            $idExt = $query_result->id;
             $sendData = array(
               'status'=>'success',
               'idExt'=>$idExt

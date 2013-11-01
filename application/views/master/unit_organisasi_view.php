@@ -220,7 +220,7 @@
             }
         };
 
-        UnitOrganisasi.Grid.grid = Grid.processGrid(setting, UnitOrganisasi.Data);
+        UnitOrganisasi.Grid.grid = Grid.referensiGrid(setting, UnitOrganisasi.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

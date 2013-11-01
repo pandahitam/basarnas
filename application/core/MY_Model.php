@@ -66,6 +66,30 @@ class MY_Model extends CI_Model{
 			return false;
 		}
 	}
+        
+        function Get_By_Query_New($query,$countQuery)
+        {
+            $query_count = $this->db->query($countQuery);
+            $count = $query_count->row()->total;
+            $r = $this->db->query($query);
+            $data = array();
+            if ($r->num_rows() > 0)
+            {
+                foreach ($r->result() as $obj)
+                {
+                    $data[] = $obj;
+                }  
+            }
+
+
+            $r->free_result();
+
+            $returnedData = array(
+                'data'=>$data,
+                'count'=>$count,
+            );
+            return $returnedData;
+        }
 	
 	function Get_By_Query($query,$isGridFilter = null, $searchByFieldTable =null)
 	{	
