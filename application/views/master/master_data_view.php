@@ -46,9 +46,13 @@ var Center_MD = {
                             {text: 'Klasifikasi Aset Lvl 3', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset_lvl3', BASE_URL + 'master_data/klasifikasi_aset_lvl3');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl3'}},
                         ]
                     }},
-                {text: 'Warehouse', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_warehouse', BASE_URL + 'master_data/warehouse');}, tooltip: {text: 'Referensi Warehouse'}},
-                {text: 'Ruang', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_ruang', BASE_URL + 'master_data/ruang');}, tooltip: {text: 'Referensi Ruang'}},
-                {text: 'Rak', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_rak', BASE_URL + 'master_data/rak');}, tooltip: {text: 'Referensi Rak'}},
+                {text: 'Penyimpanan', iconCls: 'icon-templates', disabled: false, menu:{
+                        items:[
+                            {text: 'Warehouse', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_warehouse', BASE_URL + 'master_data/warehouse');}, tooltip: {text: 'Referensi Warehouse'}},
+                            {text: 'Ruang', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_ruang', BASE_URL + 'master_data/ruang');}, tooltip: {text: 'Referensi Ruang'}},
+                            {text: 'Rak', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_rak', BASE_URL + 'master_data/rak');}, tooltip: {text: 'Referensi Rak'}},
+                        ]
+                    }},
                 {text: 'Part Number', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_partnumber', BASE_URL + 'master_data/part_number');}, tooltip: {text: 'Referensi Part Number'}},
 	  ]
   })

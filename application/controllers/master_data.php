@@ -1223,13 +1223,12 @@ class Master_Data extends CI_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','kd_lokasi','nama'
+            'id','kd_lokasi','nama','kode_unor'
         );
         
         foreach ($dataFields as $field) {
             $data[$field] = $this->input->post($field);
         }
-        
         $this->db->set($data);
         $this->db->replace('ref_warehouse');
         
@@ -1241,7 +1240,7 @@ class Master_Data extends CI_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','kd_lokasi','nama'
+            'id','kd_lokasi','nama','kode_unor'
         );
         
         foreach ($dataFields as $field) {

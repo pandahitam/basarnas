@@ -64,7 +64,17 @@
             readInventarisAssetUmum: BASE_URL + 'dashboard/cari_global',
             readAlertPengadaan: BASE_URL + 'dashboard/alert_pengadaan',
             readAlertKendaraanDarat: BASE_URL + 'dashboard/alert_kendaraan_darat',
+            readAlertPengelolaan: BASE_URL + 'dashboard/alert_pengelolaan',
+            readAlertPendayagunaan: BASE_URL + 'dashboard/alert_pendayagunaan'
             };
+            
+            Dashboard.readerAlertPendayagunaan = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderAlertPendayagunaan_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
+    
+            Dashboard.readerAlertPengelolaan = new Ext.create('Ext.data.JsonReader', {
+                id: 'ReaderAlertPengelolaan_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
     
             Dashboard.readerAlertKendaraanDarat = new Ext.create('Ext.data.JsonReader', {
                 id: 'ReaderAlertKendaraanDarat_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
@@ -88,6 +98,18 @@
             
             Dashboard.readerInventarisAssetUmum = new Ext.create('Ext.data.JsonReader', {
                 id: 'ReaderInventarisAssetUmum_Dashboard', root: 'results', totalProperty: 'total', idProperty: 'id'
+            });
+            
+            Dashboard.proxyAlertPendayagunaan = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyAlertPendayagunaan_Dashboard',
+                url: Dashboard.URL.readAlertPendayagunaan, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerAlertPendayagunaan,
+            });
+            
+            Dashboard.proxyAlertPengelolaan = new Ext.create('Ext.data.AjaxProxy', {
+                id: 'ProxyAlertPengelolaan_Dashboard',
+                url: Dashboard.URL.readAlertPengelolaan, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+                reader: Dashboard.readerAlertPengelolaan,
             });
             
             Dashboard.proxyAlertPengadaan = new Ext.create('Ext.data.AjaxProxy', {
@@ -124,6 +146,20 @@
                 id: 'ProxyInventarisAssetUmum_Dashboard',
                 url: Dashboard.URL.readInventarisAssetUmum , actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
                 reader: Dashboard.readerInventarisAssetUmum ,
+            });
+            
+            Dashboard.modelAlertPendayagunaan = Ext.define('MAlertPengelolaan', {extend: 'Ext.data.Model',
+                fields: ['id', 'kd_lokasi', 'kd_brg', 'no_aset', 'nama','pihak_ketiga', 'nama_unor',
+                        'part_number','serial_number','mode_pendayagunaan','tanggal_start','description',
+                        'tanggal_end','document',
+                        'nama_unker',
+                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
+                        ,'nama_klasifikasi_aset', 'kd_klasifikasi_aset',
+                        'kd_lvl1','kd_lvl2','kd_lvl3']
+            });
+            
+            Dashboard.modelAlertPengelolaan = Ext.define('MAlertPengelolaan', {extend: 'Ext.data.Model',
+                fields: ['id', 'nama_operasi', 'pic','tanggal_mulai','tanggal_selesai','deskripsi', 'image_url', 'document_url', 'kd_lokasi', 'kode_unor', 'kd_brg', 'no_aset', 'nama','nama_unker']
             });
             
             Dashboard.modelAlertPengadaan = Ext.define('MAlertPengadaan', {extend: 'Ext.data.Model',
@@ -170,7 +206,7 @@
             });
             
             Dashboard.modelAlertPemeliharaan = Ext.define('MAlertPemeliharaan', {extend: 'Ext.data.Model',
-                fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset',
+                fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset','total_penggunaan',
                         'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
                         'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
                         'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
@@ -232,6 +268,16 @@
             Dashboard.DataAlertKendaraanDarat = new Ext.create('Ext.data.Store', {
                 id: 'Data_AlertKendaraanDarat', storeId: 'DataAlertKendaraanDarat', model: Dashboard.modelAlertKendaraanDarat, noCache: false, autoLoad: true,
                 proxy: Dashboard.proxyAlertKendaraanDarat,
+            });
+            
+            Dashboard.DataAlertPengelolaan = new Ext.create('Ext.data.Store', {
+                id: 'Data_AlertPengelolaan', storeId: 'DataAlertPengelolaan', model: Dashboard.modelAlertPengelolaan, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyAlertPengelolaan,
+            });
+            
+            Dashboard.DataAlertPendayagunaan = new Ext.create('Ext.data.Store', {
+                id: 'Data_AlertPendayagunaan', storeId: 'DataAlertPendayagunaan', model: Dashboard.modelAlertPendayagunaan, noCache: false, autoLoad: true,
+                proxy: Dashboard.proxyAlertPendayagunaan,
             });
             
             Ext.onReady(function() {
@@ -842,7 +888,33 @@
                                     }
                                    }]
                         },
-                        { header: 'Tanggal Expire', dataIndex: 'rencana_waktu', width:150 },
+                        { header: 'Unit Pemeliharaan', dataIndex: 'unit_waktu', width:100, 
+                        renderer: function(value) {
+                            if (value == '1')
+                            {
+                                return "Waktu";
+                            }
+                            else if (value == '0')
+                            {
+                                return "Penggunaan";
+                            }
+                            else
+                            {
+                                return "ERROR";
+                            }
+                        }},
+                        { header: 'Tanggal Expire', dataIndex: 'rencana_waktu', width:150,
+                        renderer: function(value) {
+                            if (value === '0000-00-00')
+                            {
+                                return "";
+                            }
+                            else
+                            {
+                                return value;
+                            }
+                        }},
+                        { header: 'Total Penggunaan',  dataIndex: 'total_penggunaan', width:150 },
                         { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
                         { header: 'Kode Barang', dataIndex: 'kd_brg', width:200},
                         { header: 'Nama Aset', dataIndex: 'nama', width:200},
@@ -1241,7 +1313,121 @@
                     //renderTo: Ext.getBody()
                 });
                 
+                
+                var GridAlertPengelolaan = Ext.create('Ext.grid.Panel', {
+                    title: 'Alert Pengelolaan',
+                    store: Dashboard.DataAlertPengelolaan,
+                    tools:[{
+                        type:'refresh',
+                        tooltip: 'Load Ulang Data',
+                        handler: function(event, toolEl, panel){
+                            Dashboard.DataAlertPengelolaan.load();
+                        }
+                    }],
+                    columns: [
+                        {xtype:'actioncolumn', width:30, 
+                            items:[{
+                                    icon: '../basarnas/assets/images/icons/check.gif', 
+                                    tooltip: 'Tandai sudah dilihat',
+                                    handler: function(grid,rowIndex,colIndex,obj)
+                                    {
+                                        var gridStore = grid.getStore();
+                                        var id = gridStore.getAt(rowIndex).data.id;
+                                        $.ajax({
+                                            type: "POST",
+                                            url: BASE_URL + 'pengelolaan/alertPengelolaanAction',
+                                            data:{id: id},
+                                            dataType:'json',
+                                            async:false,
+                                            success:function(response, status)
+                                            {
+                                                gridStore.load();
+                                            }
+                                        });
+                                    }
+                                   }]
+                        },
+                        { header: 'Tanggal Selesai', dataIndex: 'tanggal_selesai', width:150 },
+                        { header: 'Tanggal Mulai',  dataIndex: 'tanggal_mulai', width:150 },
+                        { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
+                        { header: 'Nama Operasi',  dataIndex: 'nama_operasi', width:150 },
+                        { header: 'Kode Barang',  dataIndex: 'kd_brg', width:150 },
+                        { header: 'Nama Aset', dataIndex: 'nama', width:200},
+                        
+                    ],
+                    height: 200,
+                    
+                });
+                
+                var GridAlertPendayagunaan = Ext.create('Ext.grid.Panel', {
+                    title: 'Alert Pendayagunaan',
+                    store: Dashboard.DataAlertPendayagunaan,
+                    tools:[{
+                        type:'refresh',
+                        tooltip: 'Load Ulang Data',
+                        handler: function(event, toolEl, panel){
+                            Dashboard.DataAlertPendayagunaan.load();
+                        }
+                    }],
+                    columns: [
+                        {xtype:'actioncolumn', width:30, 
+                            items:[{
+                                    icon: '../basarnas/assets/images/icons/check.gif', 
+                                    tooltip: 'Tandai sudah dilihat',
+                                    handler: function(grid,rowIndex,colIndex,obj)
+                                    {
+                                        var gridStore = grid.getStore();
+                                        var id = gridStore.getAt(rowIndex).data.id;
+                                        $.ajax({
+                                            type: "POST",
+                                            url: BASE_URL + 'pendayagunaan/alertPendayagunaanAction',
+                                            data:{id: id},
+                                            dataType:'json',
+                                            async:false,
+                                            success:function(response, status)
+                                            {
+                                                gridStore.load();
+                                            }
+                                        });
+                                    }
+                                   }]
+                        },
+                        { header: 'Tanggal Selesai', dataIndex: 'tanggal_end', width:150 },
+                        { header: 'Tanggal Mulai',  dataIndex: 'tanggal_start', width:150 },
+                        { header: 'Unit Kerja',  dataIndex: 'nama_unker', width:150 },
+                        { header: 'Mode Pendayagunaan',  dataIndex: 'mode_pendayagunaan', width:150 },
+                        { header: 'Kode Barang',  dataIndex: 'kd_brg', width:150 },
+                        { header: 'Nama Aset', dataIndex: 'nama', width:200},
+                        
+                    ],
+                    height: 200,
+                    
+                });
+                
                 var AlertRow1 = Ext.create('Ext.panel.Panel', {
+                    renderTo: Ext.getBody(),
+                    layout: {
+                        type: 'column',
+                    },
+                    border:false,
+                    items: [ {
+                                columnWidth:.5,
+                                padding:5,
+                                items:[ 
+                                        GridAlertPemeliharaan,
+                                      ]
+                             },
+                             {
+                                columnWidth:.5,
+                                padding:5,
+                                items:[ 
+                                        GridAlertKendaraan
+                                      ]
+                             },
+                           ]
+                 });
+                 
+                 var AlertRow2 = Ext.create('Ext.panel.Panel', {
                     renderTo: Ext.getBody(),
                     layout: {
                         type: 'column',
@@ -1251,14 +1437,14 @@
                                 columnWidth:.333,
                                 padding:5,
                                 items:[ 
-                                        GridAlertPemeliharaan,
+                                        GridAlertPengelolaan,
                                       ]
                              },
                              {
                                 columnWidth:.333,
                                 padding:5,
                                 items:[ 
-                                        GridAlertKendaraan
+                                        GridAlertPendayagunaan
                                       ]
                              },
                              {
@@ -1272,17 +1458,20 @@
                  });
                  
                 var AlertContainer = Ext.create('Ext.panel.Panel', {
-                    height: 215,
+                    height: 425,
                     renderTo: Ext.getBody(),
                     layout: {
                         type: 'table',
+                        columns: '1',
                         tableAttrs: {
                             style: {
                                width: '100%',
+                               
                             }
                         }
                     },
                     items: [ AlertRow1,
+                             AlertRow2,
                            ]
                  });
                 

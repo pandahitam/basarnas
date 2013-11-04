@@ -252,7 +252,8 @@
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'Id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
-                    {header: 'Lokasi', dataIndex: 'nama_unker', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
              
                 ]

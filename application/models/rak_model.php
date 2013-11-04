@@ -5,7 +5,7 @@ class Rak_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_warehouserak';
             
-            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.warehouse_id, t.nama, c.nama as nama_ruang, d.nama as nama_warehouse";
+            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.warehouse_id, t.nama, a.nama as nama_ruang, b.nama as nama_warehouse, c.ur_upb as nama_unker, d.nama_unor";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -14,16 +14,20 @@ class Rak_Model extends MY_Model{
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
-                        LEFT JOIN ref_warehouseruang as c on t.warehouseruang_id = c.id
-                        LEFT JOIN ref_warehouse as d on t.warehouse_id = d.id
+                        LEFT JOIN ref_warehouseruang as a on t.warehouseruang_id = a.id
+                        LEFT JOIN ref_warehouse as b on t.warehouse_id = b.id
+                        LEFT JOIN ref_unker as c on b.kd_lokasi = c.kdlok
+                        LEFT JOIN ref_unor as d on b.kode_unor = d.kode_unor
                         LIMIT $start, $limit";
             }
             else
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t
-                        LEFT JOIN ref_warehouseruang as c on t.warehouseruang_id = c.id
-                        LEFT JOIN ref_warehouse as d on t.warehouse_id = d.id
+                        LEFT JOIN ref_warehouseruang as a on t.warehouseruang_id = a.id
+                        LEFT JOIN ref_warehouse as b on t.warehouse_id = b.id
+                        LEFT JOIN ref_unker as c on b.kd_lokasi = c.kdlok
+                        LEFT JOIN ref_unor as d on b.kode_unor = d.kode_unor
                         ";
             }
             

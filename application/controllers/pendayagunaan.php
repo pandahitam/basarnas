@@ -76,5 +76,16 @@ class Pendayagunaan extends MY_Controller {
                 $datasend["total"] = $data['count'];
 		echo json_encode($datasend);
 	}
+        
+        function alertPendayagunaanAction()
+        {
+            $id = $_POST['id'];
+            $update_alert_viewed_status = array(
+                'alert_viewed_status'=>1
+            );
+            $this->db->where('id',$id);
+            $this->db->update('pendayagunaan',$update_alert_viewed_status);
+            echo 1;
+        }
 }
 ?>

@@ -176,8 +176,10 @@ class Asset_Angkutan_Laut_Model extends MY_Model{
         {
             if($_POST['open'] == 1)
             {
-                $query = "select id,id_ext_asset,jenis_perlengkapan,no,nama,keterangan,id_asset_perlengkapan
-                        FROM ext_asset_angkutan_laut_perlengkapan WHERE id_ext_asset = $id_ext_asset";
+                $query = "select t.id,t.id_ext_asset,a.kd_brg,a.part_number,a.serial_number,t.jenis_perlengkapan,t.no,t.nama,t.keterangan , t.id_asset_perlengkapan
+                        FROM ext_asset_angkutan_laut_perlengkapan as t
+                        LEFT JOIN asset_perlengkapan as a on t.id_asset_perlengkapan = a.id
+                        WHERE t.id_ext_asset = $id_ext_asset";
 //                return $this->Get_By_Query($query);
                 $r = $this->db->query($query);
                  $data = array();

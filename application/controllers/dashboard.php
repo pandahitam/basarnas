@@ -91,11 +91,77 @@ class Dashboard extends CI_Controller{
                             WHERE DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
                             AND alert = 1
                             AND rencana_waktu != '0000-00-00'
-                            
                             ";
             
+            $newQuery3 = "SELECT
+                        `a`.`ur_upb`             AS `nama_unker`,
+                        `b`.`nama_unor`          AS `nama_unor`,
+                        `t`.`kode_unor`          AS `kode_unor`,
+                        `t`.`kode_unker`         AS `kode_unker`,
+                        `t`.`id`                 AS `id`,
+                        `t`.`kd_lokasi`          AS `kd_lokasi`,
+                        `t`.`kd_brg`             AS `kd_brg`,
+                        `t`.`no_aset`            AS `no_aset`,
+                        `t`.`tahun_angaran`      AS `tahun_angaran`,
+                        `t`.`jenis`              AS `jenis`,
+                        `t`.`nama`               AS `nama`,
+                        `t`.`pelaksana_tgl`      AS `pelaksana_tgl`,
+                        `t`.`pelaksana_nama`     AS `pelaksana_nama`,
+                        `t`.`kondisi`            AS `kondisi`,
+                        `t`.`deskripsi`          AS `deskripsi`,
+                        `t`.`harga`              AS `harga`,
+                        `t`.`kode_angaran`       AS `kode_angaran`,
+                        `t`.`unit_waktu`         AS `unit_waktu`,
+                        `t`.`unit_pengunaan`     AS `unit_pengunaan`,
+                        `t`.`freq_waktu`         AS `freq_waktu`,
+                        `t`.`freq_pengunaan`     AS `freq_pengunaan`,
+                        `t`.`status`             AS `status`,
+                        `t`.`durasi`             AS `durasi`,
+                        `t`.`rencana_waktu`      AS `rencana_waktu`,
+                        `t`.`rencana_pengunaan`  AS `rencana_pengunaan`,
+                        `t`.`rencana_keterangan` AS `rencana_keterangan`,
+                        `t`.`alert`              AS `alert`,
+                        `t`.`image_url`          AS `image_url`,
+                        `t`.`document_url`       AS `document_url`,
+                        `c`.`total_penggunaan`       AS `total_penggunaan`
+                        FROM `pemeliharaan` `t`
+                            LEFT JOIN `ref_unker` `a`
+                              ON `t`.`kd_lokasi` = `a`.`kdlok`
+                           LEFT JOIN `ref_unor` `b`
+                             ON `t`.`kode_unor` = `b`.`kode_unor`
+                            LEFT JOIN(
+                                SELECT a.kd_brg,a.kd_lokasi,a.no_aset,SUM(CASE
+                                                WHEN satuan_penggunaan = 1 THEN jumlah_penggunaan/1000
+                                                WHEN satuan_penggunaan = 3 THEN jumlah_penggunaan * 1.60934
+                                                ELSE
+                                                jumlah_penggunaan
+                                                END) AS total_penggunaan
+                                        FROM ext_asset_angkutan_detail_penggunaan AS t
+                                        LEFT JOIN ext_asset_angkutan AS a ON t.`id_ext_asset` = a.id
+                                        GROUP BY a.kd_brg,a.kd_lokasi,a.no_aset
+                                UNION ALL
+                                SELECT t.kd_brg,t.kd_lokasi,t.no_aset, 
+                                (GREATEST(t.udara_inisialisasi_mesin1,t.udara_inisialisasi_mesin2)+SUM(a.jumlah_penggunaan)) AS total_penggunaan
+                                FROM view_asset_angkutan_udara AS t
+                                LEFT JOIN ext_asset_angkutan_udara_detail_penggunaan AS a
+                                ON t.id = a.`id_ext_asset`
+                                GROUP BY t.kd_brg,t.kd_lokasi,t.no_aset ) AS c ON c.no_aset = t.`no_aset` AND c.kd_lokasi = t.`kd_lokasi` AND c.kd_brg = t.`kd_brg`
+                                WHERE alert=1
+                                AND
+                                ((DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
+                                AND rencana_waktu != '0000-00-00')
+                                OR
+                                CASE
+                                                WHEN unit_pengunaan = 1 THEN total_penggunaan >= (freq_pengunaan/1000)
+                                                WHEN unit_pengunaan = 3 THEN total_penggunaan >= (freq_pengunaan * 1.60934)
+                                                ELSE
+                                                    total_penggunaan >= (freq_pengunaan/1000)
+                                                END
+                                )
+                                ";
+            
 	    //$this->Get_By_Query($query);
-	    $data = $this->Get_By_Query($newQuery2);
+	    $data = $this->Get_By_Query($newQuery3);
 	    $dataSend['results'] = $data;
 	    echo json_encode($dataSend);
   }
@@ -103,7 +169,7 @@ class Dashboard extends CI_Controller{
   function alert_pengadaan()
   {
       $query = "SELECT id,nama_unker,kd_brg,nama,garansi_berlaku AS tanggal_garansi_expired FROM view_pengadaan
-                WHERE is_garansi = 1 AND expired_viewed_status = 0 
+                WHERE is_garansi = 1 AND alert_viewed_status = 0 
                 AND DATEDIFF( DATE( garansi_berlaku ) , CURDATE() ) <=0 
                 AND garansi_berlaku != '0000-00-00'";
        $data = $this->Get_By_Query($query);
@@ -136,13 +202,33 @@ class Dashboard extends CI_Controller{
   
   function alert_pengelolaan()
   {
-//      $query = "SELECT id, nama_operasi, pic,tanggal_mulai,tanggal_selesai,deskripsi, image_url, document_url, kd_lokasi, kode_unor, kd_brg, no_aset, nama
-//                            FROM pengelolaan
-//                            WHERE DATEDIFF( DATE( darat_masa_berlaku_stnk ) , CURDATE() ) <=0
-//                            OR
-//                            DATEDIFF( DATE( darat_masa_berlaku_pajak ) , CURDATE() ) <=0
-//                            AND darat_masa_berlaku_stnk != '0000-00-00'
-//                            AND darat_masa_berlaku_pajak != '0000-00-00'";
+      $query = "SELECT t.id, t.nama_operasi, t.pic,t.tanggal_mulai,t.tanggal_selesai,t.deskripsi, t.image_url, t.document_url, t.kd_lokasi, t.kode_unor, t.kd_brg, t.no_aset, t.nama,c.ur_upb as nama_unker
+                FROM pengelolaan AS t
+                LEFT JOIN ref_unker AS c ON t.kd_lokasi = c.kdlok
+                WHERE DATEDIFF( DATE( tanggal_selesai ) , CURDATE() ) <=0
+                AND t.alert_viewed_status = 0
+                AND tanggal_selesai != '0000-00-00'";
+      
+       $data = $this->Get_By_Query($query);
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
+  }
+  
+  function alert_pendayagunaan()
+  {
+      $query = "SELECT id, kd_lokasi, kd_brg, no_aset, nama,pihak_ketiga, nama_unor,
+                part_number,serial_number,mode_pendayagunaan,tanggal_start,description,
+                tanggal_end,document,nama_unker,
+                kd_gol,kd_bid,kd_kelompok,kd_skel,kd_sskel
+                ,nama_klasifikasi_aset, kd_klasifikasi_aset,
+                kd_lvl1,kd_lvl2,kd_lvl3
+                FROM view_pendayagunaan
+                WHERE DATEDIFF( DATE( tanggal_end) , CURDATE() ) <=0
+                AND alert_viewed_status = 0
+                AND tanggal_end != '0000-00-00'";
+      $data = $this->Get_By_Query($query);
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
   }
   
   function inventaris_assetumum() {

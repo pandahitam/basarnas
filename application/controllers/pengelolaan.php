@@ -58,6 +58,17 @@ class Pengelolaan extends MY_Controller {
                 $datasend["total"] = $data['count'];
 		echo json_encode($datasend);
 	}
+        
+        function alertPengelolaanAction()
+        {
+            $id = $_POST['id'];
+            $update_alert_viewed_status = array(
+                'alert_viewed_status'=>1
+            );
+            $this->db->where('id',$id);
+            $this->db->update('pengelolaan',$update_alert_viewed_status);
+            echo 1;
+        }
 	
 
 }

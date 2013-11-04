@@ -65,9 +65,10 @@ class Asset_Perlengkapan extends MY_Controller {
                 
                 $partNumberDetails = $this->model->get_partNumberDetails($dataSimak['part_number']);
                 $dataSimak['kd_brg'] = $partNumberDetails->kd_brg;
+
                 if($dataSimak['kd_brg'] == '' || $dataSimak['kd_brg'] == null)
                 {
-                    $dataSimak['kd_brg'] == '-';
+                    $dataSimak['kd_brg'] = '-';
                 }
                 foreach($klasifikasiAsetFields as $field)
                 {

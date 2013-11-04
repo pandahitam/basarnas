@@ -6,7 +6,7 @@ class Ruang_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_warehouseruang';
             
-            $this->selectColumn = "SELECT t.id, t.warehouse_id, t.nama, c.nama as nama_warehouse";
+            $this->selectColumn = "SELECT t.id, t.warehouse_id, t.nama, a.nama as nama_warehouse, b.ur_upb as nama_unker, c.nama_unor";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -15,14 +15,18 @@ class Ruang_Model extends MY_Model{
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
-                        LEFT JOIN ref_warehouse as c on t.warehouse_id = c.id
+                        LEFT JOIN ref_warehouse as a on t.warehouse_id = a.id
+                        LEFT JOIN ref_unker as b on a.kd_lokasi = b.kdlok
+                        LEFT JOIN ref_unor as c on a.kode_unor = c.kode_unor
                         LIMIT $start, $limit";
             }
             else
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t
-                        LEFT JOIN ref_warehouse as c on t.warehouse_id = c.id
+                        LEFT JOIN ref_warehouse as a on t.warehouse_id = a.id
+                        LEFT JOIN ref_unker as b on a.kd_lokasi = b.kdlok
+                        LEFT JOIN ref_unor as c on a.kode_unor = c.kode_unor
                         ";
             }
             

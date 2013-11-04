@@ -95,11 +95,11 @@ class Pengadaan extends MY_Controller {
         function alertPengadaanAction()
         {
             $id = $_POST['id'];
-            $update_expire_viewed_status = array(
-                'expired_viewed_status'=>1
+            $update_alert_viewed_status = array(
+                'alert_viewed_status'=>1
             );
             $this->db->where('id',$id);
-            $this->db->update('pengadaan',$update_expire_viewed_status);
+            $this->db->update('pengadaan',$update_alert_viewed_status);
             echo 1;
         }
         

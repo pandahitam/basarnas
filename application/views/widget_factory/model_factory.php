@@ -29,19 +29,19 @@ Ext.define('MPemeliharaanPart', {extend: 'Ext.data.Model',
 
 Ext.define('MWarehouse', {extend: 'Ext.data.Model',
     fields: ['kd_lokasi','nama','id', 
-             'nama_unker'
+             'nama_unker','nama_unor'
     ]
 });
 
 Ext.define('MMasterRuang', {extend: 'Ext.data.Model',
     fields: ['id','warehouse_id' ,
-             'nama', 'nama_warehouse'
+             'nama', 'nama_warehouse','nama_unker','nama_unor'
     ]
 });
 
 Ext.define('MRak', {extend: 'Ext.data.Model',
     fields: ['id','warehouseruang_id','nama_warehouse','warehouse_id', 
-             'nama_ruang','nama'
+             'nama_ruang','nama','nama_unker','nama_unor'
     ]
 });
 
@@ -189,7 +189,7 @@ Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanDaratPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','id_asset_perlengkapan'
+        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg'
     ]
 });
 
@@ -231,7 +231,7 @@ Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanLautPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','id_asset_perlengkapan'
+        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg'
     ]
 });
 
@@ -272,7 +272,7 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanUdaraPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','id_asset_perlengkapan'
+        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg'
     ]
 });
   
