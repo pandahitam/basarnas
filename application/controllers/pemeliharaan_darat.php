@@ -75,13 +75,14 @@ class Pemeliharaan_Darat extends MY_Controller {
                 {
                     $this->db->insert('pemeliharaan',$data);
                     $id = $this->db->insert_id();
-                    
+                    $this->createLog('INSERT PEMELIHARAAN KENDARAAN DARAT','pemeliharaan');
                 }
                 else
                 {
                     $id = $data['id'];
                     $this->db->set($data);
                     $this->db->replace('pemeliharaan');
+                    $this->createLog('UPDATE PEMELIHARAAN KENDARAAN DARAT','pemeliharaan');
                 }
                 echo "{success:true, id:$id}";
 	}
@@ -89,7 +90,10 @@ class Pemeliharaan_Darat extends MY_Controller {
 	function deletePemeliharaanDarat()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PEMELIHARAAN KENDARAAN DARAT','pemeliharaan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

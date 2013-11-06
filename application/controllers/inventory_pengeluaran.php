@@ -52,13 +52,14 @@ class inventory_pengeluaran extends MY_Controller {
                 {
                     $this->db->insert('inventory_pengeluaran',$dataSimak);
                     $id = $this->db->insert_id();
-                    
+                    $this->createLog('INSERT INVENTORY PENGELUARAN','inventory_pengeluaran');
                 }
                 else
                 {
                     $id = $dataSimak['id'];
                     $this->db->set($dataSimak);
                     $this->db->replace('inventory_pengeluaran');
+                    $this->createLog('UPDATE INVENTORY PENGELUARAN','inventory_pengeluaran');
                 }
                 echo "{success:true, id:$id}";
                 
@@ -69,7 +70,7 @@ class inventory_pengeluaran extends MY_Controller {
             $input_data = $this->input->post('data');
             foreach($input_data as $data)
             {
-
+                $this->createLog('DELETE INVENTORY PENGELUARAN','inventory_pengeluaran');
                 //Return the quantity back to inventory_penyimpanan on deletion of inventory pengeluaran
                 $this->db->where('id_source', $data['id']);
                 $pengeluaran = $this->db->get('inventory_pengeluaran_data_perlengkapan');

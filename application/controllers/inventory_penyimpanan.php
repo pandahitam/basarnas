@@ -39,13 +39,14 @@ class inventory_penyimpanan extends MY_Controller {
                 {
                     $this->db->insert('inventory_penyimpanan',$dataSimak);
                     $id = $this->db->insert_id();
-                    
+                    $this->createLog('INSERT INVENTORY PENYIMPANAN','inventory_penyimpanan');
                 }
                 else
                 {
                     $id = $dataSimak['id'];
                     $this->db->set($dataSimak);
                     $this->db->replace('inventory_penyimpanan');
+                    $this->createLog('UPDATE INVENTORY PENYIMPANAN','inventory_penyimpanan');
                 }
                 echo "{success:true, id:$id}";
 	}
@@ -53,7 +54,10 @@ class inventory_penyimpanan extends MY_Controller {
 	function deleteInventoryPenyimpanan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE INVENTORY PENYIMPANAN','inventory_penyimpanan');
+                }
 		return $this->deleteProcess($data);
 	}
         

@@ -1,6 +1,6 @@
 <?php
 
-class Master_Data extends CI_Controller {
+class Master_Data extends MY_Controller {
 
     function __construct() {
         parent::__construct();
@@ -245,7 +245,7 @@ class Master_Data extends CI_Controller {
         }
     }
     
-        function unitkerja_modifyUnitKerja() {
+    function unitkerja_modifyUnitKerja() {
         
         $data = array();
         
@@ -262,6 +262,14 @@ class Master_Data extends CI_Controller {
         $this->db->set($data);
         $this->db->replace('ref_unker');
         
+        if($data['id'] != '')
+        {
+            $this->createLog('UPDATE REFERENSI UNIT KERJA','ref_unker');
+        }
+        else
+        {
+            $this->createLog('INSERT REFERENSI UNIT KERJA','ref_unker');
+        }
         echo "{success: true}";
     }
     
@@ -273,6 +281,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('kdlok', $data['id']);
            $this->db->delete('ref_unker');
+           $this->createLog('DELETE REFERENSI UNIT KERJA','ref_unker');
        }
        
        $result = array('fail' => false,
@@ -437,10 +446,17 @@ class Master_Data extends CI_Controller {
             $data[$field] = $this->input->post($field);
         }
         
-        
         $this->db->set($data);
         $this->db->replace('ref_unor');
         
+        if($data['ID_Unor'] != '')
+        {
+            $this->createLog('UPDATE REFERENSI UNIT ORGANISASI','ref_unor');
+        }
+        else
+        {
+            $this->createLog('INSERT REFERENSI UNIT ORGANISASI','ref_unor');
+        }
         echo "{success: true}";
     }
     
@@ -452,6 +468,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('ID_Unor', $data['id']);
            $this->db->delete('ref_unor');
+           $this->createLog('DELETE REFERENSI UNIT ORGANISASI','ref_unor');
        }
        
        $result = array('fail' => false,
@@ -969,7 +986,7 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_klasifikasiaset_lvl3');
-        
+        $this->createLog('INSERT REFERENSI KLASIFIKASI ASET LVL 3','ref_klasifikasiaset_lvl3');
         echo "{success: true}";
     }
     
@@ -991,7 +1008,7 @@ class Master_Data extends CI_Controller {
         $this->db->where('kd_lvl3',$data['kd_lvl3']);
         unset($data['kd_lvl1'],$data['kd_lvl2'],$data['kd_lvl3']);
         $this->db->update('ref_klasifikasiaset_lvl3',$data);
-        
+        $this->createLog('UPDATE REFERENSI KLASIFIKASI ASET LVL 3','ref_klasifikasiaset_lvl3');
         echo "{success: true}";
     }
     
@@ -1003,6 +1020,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('kd_klasifikasi_aset', $data['id']);
            $this->db->delete('ref_klasifikasiaset_lvl3');
+           $this->createLog('DELETE REFERENSI KLASIFIKASI ASET LVL 3','ref_klasifikasiaset_lvl3');
        }
        
        $result = array('fail' => false,
@@ -1046,7 +1064,7 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_klasifikasiaset_lvl2');
-        
+        $this->createLog('INSERT REFERENSI KLASIFIKASI ASET LVL 2','ref_klasifikasiaset_lvl2');
         echo "{success: true}";
     }
     
@@ -1068,6 +1086,7 @@ class Master_Data extends CI_Controller {
         $this->db->where('kd_lvl2',$data['kd_lvl2']);
         unset($data['kd_lvl1'],$data['kd_lvl2']);
         $this->db->update('ref_klasifikasiaset_lvl2',$data);
+        $this->createLog('UPDATE REFERENSI KLASIFIKASI ASET LVL 2','ref_klasifikasiaset_lvl2');
         
         echo "{success: true}";
     }
@@ -1080,6 +1099,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('kd_lvl2_brg', $data['id']);
            $this->db->delete('ref_klasifikasiaset_lvl2');
+           $this->createLog('DELETE REFERENSI KLASIFIKASI ASET LVL 2','ref_klasifikasiaset_lvl2');
        }
        
        $result = array('fail' => false,
@@ -1121,7 +1141,7 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_klasifikasiaset_lvl1');
-        
+        $this->createLog('INSERT REFERENSI KLASIFIKASI ASET LVL 1','ref_klasifikasiaset_lvl1');
         echo "{success: true}";
     }
     
@@ -1141,7 +1161,7 @@ class Master_Data extends CI_Controller {
         $this->db->where('kd_lvl1', $data['kd_lvl1']);
         unset($data['kd_lvl1']);
         $this->db->update('ref_klasifikasiaset_lvl1',$data);
-        
+         $this->createLog('UPDATE REFERENSI KLASIFIKASI ASET LVL 1','ref_klasifikasiaset_lvl1');
         echo "{success: true}";
     }
     
@@ -1153,6 +1173,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('kd_lvl1', $data['id']);
            $this->db->delete('ref_klasifikasiaset_lvl1');
+           $this->createLog('DELETE REFERENSI KLASIFIKASI ASET LVL 1','ref_klasifikasiaset_lvl1');
        }
        
        $result = array('fail' => false,
@@ -1231,7 +1252,7 @@ class Master_Data extends CI_Controller {
         }
         $this->db->set($data);
         $this->db->replace('ref_warehouse');
-        
+        $this->createLog('INSERT REFERENSI PENYIMPANAN WAREHOUSE','ref_warehouse');
         echo "{success: true}";
     }
     
@@ -1251,6 +1272,7 @@ class Master_Data extends CI_Controller {
         $this->db->where('id', $data['id']);
         unset($data['id']);
         $this->db->update('ref_warehouse',$data);
+        $this->createLog('UPDATE REFERENSI PENYIMPANAN WAREHOUSE','ref_warehouse');
         echo "{success: true}";
     }
     
@@ -1263,6 +1285,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('id', $data['id']);
            $this->db->delete('ref_warehouse');
+           $this->createLog('DELETE REFERENSI PENYIMPANAN WAREHOUSE','ref_warehouse');
        }
        
        $result = array('fail' => false,
@@ -1305,7 +1328,7 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_warehouseruang');
-        
+        $this->createLog('INSERT REFERENSI PENYIMPANAN RUANG','ref_warehouseruang');
         echo "{success: true}";
     }
     
@@ -1324,6 +1347,7 @@ class Master_Data extends CI_Controller {
         $this->db->where('id', $data['id']);
         unset($data['id'],$data['warehouse_id']);
         $this->db->update('ref_warehouseruang',$data);
+        $this->createLog('UPDATE REFERENSI PENYIMPANAN RUANG','ref_warehouseruang');
         echo "{success: true}";
     }
     
@@ -1335,6 +1359,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('id', $data['id']);
            $this->db->delete('ref_warehouseruang');
+           $this->createLog('DELETE REFERENSI PENYIMPANAN RUANG','ref_warehouseruang');
        }
        
        $result = array('fail' => false,
@@ -1378,7 +1403,7 @@ class Master_Data extends CI_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_warehouserak');
-        
+        $this->createLog('INSERT REFERENSI PENYIMPANAN RAK','ref_warehouserak');
         echo "{success: true}";
     }
     
@@ -1397,6 +1422,7 @@ class Master_Data extends CI_Controller {
          $this->db->where('id', $data['id']);
         unset($data['id'],$data['warehouse_id'],$data['warehouseruang_id']);
         $this->db->update('ref_warehouserak',$data);
+        $this->createLog('UPDATE REFERENSI PENYIMPANAN RAK','ref_warehouserak');
         echo "{success: true}";
     }
     
@@ -1408,6 +1434,7 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('id', $data['id']);
            $this->db->delete('ref_warehouserak');
+           $this->createLog('DELETE REFERENSI PENYIMPANAN RAK','ref_warehouserak');
        }
        
        $result = array('fail' => false,
@@ -1452,6 +1479,16 @@ class Master_Data extends CI_Controller {
         $this->db->set($data);
         $this->db->replace('ref_perlengkapan');
         
+        if($data['id'] != '')
+        {
+            $this->createLog('UPDATE REFERENSI PART','ref_perlengkapan');
+        }
+        else
+        {
+            $this->createLog('INSERT REFERENSI PART','ref_perlengkapan');
+        }
+        
+        
         echo "{success: true}";
     }
     
@@ -1463,11 +1500,12 @@ class Master_Data extends CI_Controller {
        {
            $this->db->where('id', $data['id']);
            $this->db->delete('ref_perlengkapan');
+           $this->createLog('DELETE REFERENSI PART','ref_perlengkapan');
        }
        
        $result = array('fail' => false,
                        'success'=>true);
-						
+       
         echo json_encode($result);
     }
     

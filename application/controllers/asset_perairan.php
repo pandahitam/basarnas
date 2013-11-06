@@ -77,13 +77,26 @@ class Asset_Perairan extends MY_Controller {
                     $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
+                
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET PERAIRAN','asset_perairan,ext_asset_perairan');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET PERAIRAN','asset_perairan,ext_asset_perairan');
+                }
+                
 		$this->modifyData($dataSimak,$dataExt);
 	}
 	
 	function deletePerairan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET PERAIRAN','asset_perairan,ext_asset_perairan');
+                }
 		return $this->deleteData($data);
 	}
 	

@@ -36,6 +36,15 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
             }
                 $this->db->set($dataPenggunaan);
                 $this->db->replace('ext_asset_angkutan_detail_penggunaan');
+            
+           if($dataPenggunaan['id'] != '')
+           {
+               $this->createLog('UPDATE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_detail_penggunaan');
+           }
+           else
+           {
+               $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_detail_penggunaan');
+           }
                
         }
         
@@ -45,6 +54,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 $deletedArray = array();
                 foreach($data as $deleted)
                 {
+                    $this->createLog('DELETE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$deleted['id_ext_asset'].']','ext_asset_angkutan_detail_penggunaan');
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);
@@ -77,6 +87,14 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
             }
                 $this->db->set($dataPenggunaan);
                 $this->db->replace("ext_asset_angkutan_udara_detail_penggunaan");
+           if($dataPenggunaan['id'] != '')
+           {
+               $this->createLog('UPDATE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_udara_detail_penggunaan');
+           }
+           else
+           {
+               $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_udara_detail_penggunaan');
+           }
                
         }
         
@@ -86,6 +104,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 $deletedArray = array();
                 foreach($data as $deleted)
                 {
+                    $this->createLog('DELETE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$deleted['id_ext_asset'].']','ext_asset_angkutan_detail_penggunaan');
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);

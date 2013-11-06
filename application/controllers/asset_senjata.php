@@ -85,6 +85,15 @@ class Asset_Senjata extends MY_Controller {
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
                 
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET SENJATA','asset_senjata,ext_asset_senjata');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET SENJATA','asset_senjata,ext_asset_senjata');
+                }
+                
 		$this->modifyData($dataSimak,$dataExt);
                 
 	}
@@ -92,7 +101,10 @@ class Asset_Senjata extends MY_Controller {
 	function deleteSenjata()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET SENJATA','asset_senjata,ext_asset_senjata');
+                }
 		return $this->deleteData($data);
 	}
 	

@@ -54,6 +54,15 @@ class Pendayagunaan extends MY_Controller {
                     
                 }
                 
+                if($data['id'] != '')
+                {
+                    $this->createLog('UPDATE PENDAYAGUNAAN','pendayagunaan');
+                }
+                else
+                {
+                    $this->createLog('INSERT PENDAYAGUNAAN','pendayagunaan');
+                }
+                
                 
 		$this->modifyData(null,$data);
 	}
@@ -61,7 +70,10 @@ class Pendayagunaan extends MY_Controller {
 	function deletePendayagunaan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PENDAYAGUNAAN','pendayagunaan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

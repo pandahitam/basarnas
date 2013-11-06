@@ -75,13 +75,14 @@ class Pemeliharaan extends MY_Controller {
                 {
                     $this->db->insert('pemeliharaan',$data);
                     $id = $this->db->insert_id();
-                    
+                    $this->createLog('INSERT PEMELIHARAAN PERALATAN LAINNYA','pemeliharaan');
                 }
                 else
                 {
                     $id = $data['id'];
                     $this->db->set($data);
                     $this->db->replace('pemeliharaan');
+                    $this->createLog('UPDATE PEMELIHARAAN PERALATAN LAINNYA','pemeliharaan');
                 }
                 echo "{success:true, id:$id}";
 	}
@@ -89,7 +90,10 @@ class Pemeliharaan extends MY_Controller {
 	function deletePemeliharaan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PEMELIHARAAN PERALATAN LAINNYA','pemeliharaan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

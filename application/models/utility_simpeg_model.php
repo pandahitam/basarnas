@@ -5,8 +5,9 @@ class Utility_Simpeg_Model extends CI_Model {
 	}
 	
 	function get_QUERY_Logs(){
-    $this->db->select('*');
-    $this->db->from('tLog');
+            $this->db->select('*');
+            $this->db->from('tLog');
+            $this->db->order_by("logDateTime","desc");
 	}
 
 	function get_AllData_Logs(){

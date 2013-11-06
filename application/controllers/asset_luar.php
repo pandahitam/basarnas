@@ -75,13 +75,25 @@ class Asset_Luar extends MY_Controller {
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
                 
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET LUAR','asset_dil,ext_asset_dil');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET LUAR','asset_dil,ext_asset_dil');
+                }
+                
 		$this->modifyData($dataSimak,$dataExt);
 	}
 	
 	function deleteLuar()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET LUAR','asset_dil,ext_asset_dil');
+                }
 		return $this->deleteData($data);
 	}
 	

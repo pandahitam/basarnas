@@ -54,6 +54,8 @@ class inventory_perlengkapan extends MY_Controller {
                     $row->id_asset_perlengkapan = $id_asset_perlengkapan;
                     $this->db->insert('pengadaan_data_perlengkapan',$row);
                     
+                    $this->createLog('INSERT PENGADAAN PERLENGKAPAN [id_pengadaan='.$row->id_source.']','pengadaan_data_perlengkapan');
+                    
                 }
             }
             else
@@ -80,6 +82,7 @@ class inventory_perlengkapan extends MY_Controller {
                 $id_asset_perlengkapan = $this->db->insert_id();
                 $data->id_asset_perlengkapan = $id_asset_perlengkapan;
                 $this->db->insert('pengadaan_data_perlengkapan',$data);
+                $this->createLog('INSERT PENGADAAN PERLENGKAPAN [id_pengadaan='.$data->id_source.']','pengadaan_data_perlengkapan');
             }
             
             echo "{success:true}";
@@ -93,12 +96,14 @@ class inventory_perlengkapan extends MY_Controller {
                 {
                     $this->db->set($row);
                     $this->db->replace('pengadaan_data_perlengkapan');
+                    $this->createLog('UPDATE PENGADAAN PERLENGKAPAN [id_pengadaan='.$row->id_source.']','pengadaan_data_perlengkapan');
                 }
             }
             else
             {
                     $this->db->set($data);
                     $this->db->replace('pengadaan_data_perlengkapan');
+                    $this->createLog('UPDATE PENGADAAN PERLENGKAPAN [id_pengadaan='.$data->id_source.']','pengadaan_data_perlengkapan');
             }
             
            
@@ -114,11 +119,13 @@ class inventory_perlengkapan extends MY_Controller {
                 foreach($data as $row)
                 {
                     $this->db->delete('pengadaan_data_perlengkapan', array('id' => $row->id));
+                    $this->createLog('DELETE PENGADAAN PERLENGKAPAN [id_pengadaan='.$row->id_source.']','pengadaan_data_perlengkapan');
                 }
             }
             else
             {
                     $this->db->delete('pengadaan_data_perlengkapan', array('id' => $data->id));
+                    $this->createLog('DELETE PENGADAAN PERLENGKAPAN [id_pengadaan='.$data->id_source.']','pengadaan_data_perlengkapan');
             }
             
 		 echo "{success:true}"; 
@@ -150,11 +157,13 @@ class inventory_perlengkapan extends MY_Controller {
                 foreach($data as $row)
                 {
                     $this->db->insert('inventory_penerimaan_pemeriksaan_data_perlengkapan',$row);
+                    $this->createLog('INSERT INVENTORY PENERIMAAN PEMERIKSAAN PERLENGKAPAN [id_inventory_penerimaan_pemeriksaan='.$row->id_source.']','inventory_penerimaan_pemeriksaan_data_perlengkapan');
                 }
             }
             else
             {
                 $this->db->insert('inventory_penerimaan_pemeriksaan_data_perlengkapan',$data);
+                $this->createLog('INSERT INVENTORY PENERIMAAN PEMERIKSAAN PERLENGKAPAN [id_inventory_penerimaan_pemeriksaan='.$data->id_source.']','inventory_penerimaan_pemeriksaan_data_perlengkapan');
             }
             
             echo "{success:true}";
@@ -168,12 +177,14 @@ class inventory_perlengkapan extends MY_Controller {
                 {
                     $this->db->set($row);
                     $this->db->replace('inventory_penerimaan_pemeriksaan_data_perlengkapan');
+                    $this->createLog('UPDATE INVENTORY PENERIMAAN PEMERIKSAAN PERLENGKAPAN [id_inventory_penerimaan_pemeriksaan='.$row->id_source.']','inventory_penerimaan_pemeriksaan_data_perlengkapan');
                 }
             }
             else
             {
                     $this->db->set($data);
                     $this->db->replace('inventory_penerimaan_pemeriksaan_data_perlengkapan');
+                    $this->createLog('UPDATE INVENTORY PENERIMAAN PEMERIKSAAN PERLENGKAPAN [id_inventory_penerimaan_pemeriksaan='.$data->id_source.']','inventory_penerimaan_pemeriksaan_data_perlengkapan');
             }
             
            
@@ -189,11 +200,13 @@ class inventory_perlengkapan extends MY_Controller {
                 foreach($data as $row)
                 {
                     $this->db->delete('inventory_penerimaan_pemeriksaan_data_perlengkapan', array('id' => $row->id));
+                    $this->createLog('DELETE INVENTORY PENERIMAAN PEMERIKSAAN PERLENGKAPAN [id_inventory_penerimaan_pemeriksaan='.$row->id_source.']','inventory_penerimaan_pemeriksaan_data_perlengkapan');
                 }
             }
             else
             {
                     $this->db->delete('inventory_penerimaan_pemeriksaan_data_perlengkapan', array('id' => $data->id));
+                    $this->createLog('DELETE INVENTORY PENERIMAAN PEMERIKSAAN PERLENGKAPAN [id_inventory_penerimaan_pemeriksaan='.$data->id_source.']','inventory_penerimaan_pemeriksaan_data_perlengkapan');
             }
             
 		 echo "{success:true}"; 
@@ -246,6 +259,7 @@ class inventory_perlengkapan extends MY_Controller {
                         $this->db->update('asset_perlengkapan',$data_warehouse);
                         
                     }
+                    $this->createLog('INSERT INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$row->id_source.']','inventory_penyimpanan_data_perlengkapan');
                     
                 }
             }
@@ -268,8 +282,9 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->where('id_pengadaan',$id_pengadaan);
                     $this->db->where('id',$data->id_asset_perlengkapan);
                     $this->db->update('asset_perlengkapan',$data_warehouse);
-
+                    
                 }
+                $this->createLog('INSERT INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$data->id_source.']','inventory_penyimpanan_data_perlengkapan');
             }
             
             echo "{success:true}";
@@ -301,6 +316,7 @@ class inventory_perlengkapan extends MY_Controller {
                         $this->db->update('asset_perlengkapan',$data_warehouse);
                         
                     }
+                    $this->createLog('UPDATE INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$row->id_source.']','inventory_penyimpanan_data_perlengkapan');
                 }
             }
             else
@@ -325,6 +341,7 @@ class inventory_perlengkapan extends MY_Controller {
                         $this->db->update('asset_perlengkapan',$data_warehouse);
 
                     }
+                    $this->createLog('UPDATE INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$data->id_source.']','inventory_penyimpanan_data_perlengkapan');
             }
             
            
@@ -357,6 +374,7 @@ class inventory_perlengkapan extends MY_Controller {
                         $this->db->update('asset_perlengkapan',$data_warehouse);
                         
                     }
+                    $this->createLog('DELETE INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$row->id_source.']','inventory_penyimpanan_data_perlengkapan');
                 }
             }
             else
@@ -379,6 +397,7 @@ class inventory_perlengkapan extends MY_Controller {
                         $this->db->update('asset_perlengkapan',$data_warehouse);
 
                     }
+                    $this->createLog('DELETE INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$data->id_source.']','inventory_penyimpanan_data_perlengkapan');
             }
             
 		 echo "{success:true}"; 
@@ -414,6 +433,7 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->insert('inventory_pengeluaran_data_perlengkapan',$row);
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$row->id_penyimpanan_data_perlengkapan";
                     $this->db->query($query);
+                    $this->createLog('INSERT INVENTORY PENGELUARAN PERLENGKAPAN [id_inventory_pengeluaran='.$row->id_source.']','inventory_pengeluaran_data_perlengkapan');
                 }
             }
             else
@@ -423,6 +443,7 @@ class inventory_perlengkapan extends MY_Controller {
                 $this->db->insert('inventory_pengeluaran_data_perlengkapan',$data);
                 $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$data->id_penyimpanan_data_perlengkapan";
                 $this->db->query($query);
+                $this->createLog('INSERT INVENTORY PENGELUARAN PERLENGKAPAN [id_inventory_pengeluaran='.$data->id_source.']','inventory_pengeluaran_data_perlengkapan');
             }
             
             echo "{success:true}";
@@ -440,6 +461,7 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->replace('inventory_pengeluaran_data_perlengkapan');
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$row->id_penyimpanan_data_perlengkapan";
                     $this->db->query($query);
+                    $this->createLog('UPDATE INVENTORY PENGELUARAN PERLENGKAPAN [id_inventory_pengeluaran='.$row->id_source.']','inventory_pengeluaran_data_perlengkapan');
                 }
             }
             else
@@ -450,6 +472,7 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->replace('inventory_pengeluaran_data_perlengkapan');
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$data->id_penyimpanan_data_perlengkapan";
                     $this->db->query($query);
+                    $this->createLog('UPDATE INVENTORY PENGELUARAN PERLENGKAPAN [id_inventory_pengeluaran='.$data->id_source.']','inventory_pengeluaran_data_perlengkapan');
             }
             
            
@@ -467,6 +490,7 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->delete('inventory_pengeluaran_data_perlengkapan', array('id' => $row->id));
                      $query = "update inventory_penyimpanan_data_perlengkapan set qty= (qty + $row->qty_keluar) where id=$row->id_penyimpanan_data_perlengkapan";
                     $this->db->query($query);
+                    $this->createLog('DELETE INVENTORY PENGELUARAN PERLENGKAPAN [id_inventory_pengeluaran='.$row->id_source.']','inventory_pengeluaran_data_perlengkapan');
                 }
             }
             else
@@ -474,6 +498,7 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->delete('inventory_pengeluaran_data_perlengkapan', array('id' => $data->id));
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= (qty + $data->qty_keluar) where id=$data->id_penyimpanan_data_perlengkapan";
                     $this->db->query($query);
+                    $this->createLog('DELETE INVENTORY PENGELUARAN PERLENGKAPAN [id_inventory_pengeluaran='.$data->id_source.']','inventory_pengeluaran_data_perlengkapan');
             }
             
 		 echo "{success:true}"; 

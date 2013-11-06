@@ -83,6 +83,15 @@ class asset_bangunan extends MY_Controller {
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
                 
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET BANGUNAN','asset_bangunan,ext_asset_bangunan');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET BANGUNAN','asset_bangunan,ext_asset_bangunan');
+                }
+                
 		$id = $this->modifyData($dataSimak,$dataExt);
                 
                 return 1;
@@ -91,7 +100,10 @@ class asset_bangunan extends MY_Controller {
 	function deleteBangunan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET BANGUNAN','asset_bangunan,ext_asset_bangunan');
+                }
 		return $this->deleteData($data);
 	}
         
@@ -111,8 +123,6 @@ class asset_bangunan extends MY_Controller {
         
         function modifyRiwayatPajak()
         {
-            var_dump($_POST);
-            die;
             $dataRiwayatPajak = array();
             $dataRiwayatPajakFields = array(
                 'id','id_ext_asset','tahun_pajak','tanggal_pembayaran','jumlah_setoran','file_setoran','keterangan'
@@ -123,6 +133,15 @@ class asset_bangunan extends MY_Controller {
             }
                 $this->db->set($dataRiwayatPajak);
                 $this->db->replace('ext_asset_bangunan_riwayat_pajak');
+                
+           if($dataRiwayatPajak['id'] != '')
+           {
+               $this->createLog('UPDATE ASSET BANGUNAN PAJAK[id_ext_asset_bangunan='.$dataRiwayatPajak['id_ext_asset'].']','ext_asset_bangunan_riwayat_pajak');
+           }
+           else
+           {
+               $this->createLog('INSERT ASSET BANGUNAN PAJAK[id_ext_asset_bangunan='.$dataRiwayatPajak['id_ext_asset'].']','ext_asset_bangunan_riwayat_pajak');
+           }
                 echo "{success:true, info: { reason: 'Sukses!' }}";
         }
         
@@ -132,6 +151,7 @@ class asset_bangunan extends MY_Controller {
                 $deletedArray = array();
                 foreach($data as $deleted)
                 {
+                    $this->createLog('UPDATE ASSET BANGUNAN PAJAK[id_ext_asset_bangunan='.$deleted['id_ext_asset'].']','ext_asset_bangunan_riwayat_pajak');
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);

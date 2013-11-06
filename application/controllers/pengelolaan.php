@@ -37,14 +37,24 @@ class Pengelolaan extends MY_Controller {
 		} 
 //                $today = new DateTime();
 //                $data['date_upload'] = $today->format('Y-m-d');
-                
+                if($data['id'] != '')
+                {
+                    $this->createLog('UPDATE PENGELOLAAN','pengelolaan');
+                }
+                else
+                {
+                    $this->createLog('INSERT PENGELOLAAN','pengelolaan');
+                }
 		$this->modifyData(null,$data);
 	}
 	
 	function deletePengelolaan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PENGELOLAAN','pengelolaan');
+                }
 		return $this->deleteProcess($data);
 	}
         

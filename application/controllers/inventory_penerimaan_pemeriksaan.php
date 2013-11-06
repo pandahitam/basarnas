@@ -42,13 +42,14 @@ class inventory_penerimaan_pemeriksaan extends MY_Controller {
                 {
                     $this->db->insert('inventory_penerimaan_pemeriksaan',$dataSimak);
                     $id = $this->db->insert_id();
-                    
+                    $this->createLog('INSERT INVENTORY PENERIMAAN/PEMERIKSAAN','inventory_penerimaan_pemeriksaan');
                 }
                 else
                 {
                     $id = $dataSimak['id'];
                     $this->db->set($dataSimak);
                     $this->db->replace('inventory_penerimaan_pemeriksaan');
+                    $this->createLog('UPDATE INVENTORY PENERIMAAN/PEMERIKSAAN','inventory_penerimaan_pemeriksaan');
                 }
                 
                 echo "{success:true, id:$id}";
@@ -57,7 +58,10 @@ class inventory_penerimaan_pemeriksaan extends MY_Controller {
 	function deleteInventoryPenerimaanPemeriksaan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE INVENTORY PENERIMAAN/PEMERIKSAAN','inventory_penerimaan_pemeriksaan');
+                }
 		return $this->deleteProcess($data);
 	}
         

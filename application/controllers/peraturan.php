@@ -38,6 +38,14 @@ class Peraturan extends MY_Controller {
                 {
                     $data['date_upload'] = date('Y-m-d');
                 }
+                if($data['id'] != '')
+                {
+                    $this->createLog('UPDATE PERATURAN','peraturan');
+                }
+                else
+                {
+                    $this->createLog('INSERT PERATURAN','peraturan');
+                }
 //                $today = new DateTime();
 //                $data['date_upload'] = $today->format('Y-m-d');
                 
@@ -47,7 +55,10 @@ class Peraturan extends MY_Controller {
 	function deletePeraturan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PERATURAN','peraturan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

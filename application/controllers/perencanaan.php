@@ -53,13 +53,25 @@ class Perencanaan extends MY_Controller {
                     $data['no_aset'] = $this->noAssetGenerator($data['kd_brg'], $data['kd_lokasi']);
                 }
                 
+                if($data['id'] != '')
+                {
+                    $this->createLog('UPDATE PERENCANAAN','perencanaan');
+                }
+                else
+                {
+                    $this->createLog('INSERT PERENCANAAN','perencanaan');
+                }
+                
 		$this->modifyData(null,$data);
 	}
 	
 	function deletePerencanaan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PERENCANAAN','perencanaan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

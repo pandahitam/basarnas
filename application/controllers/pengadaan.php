@@ -46,6 +46,7 @@ class Pengadaan extends MY_Controller {
                     $this->db->insert('pengadaan',$data);
                     $id = $this->db->insert_id();
                     $kd_lokasi = $data['kd_lokasi'];
+                    $this->createLog('INSERT PENGADAAN','pengadaan');
                     
                 }
                 else
@@ -54,6 +55,7 @@ class Pengadaan extends MY_Controller {
                     $kd_lokasi = $data['kd_lokasi'];
                     $this->db->set($data);
                     $this->db->replace('pengadaan');
+                    $this->createLog('UPDATE PENGADAAN','pengadaan');
                 }
                 
                 
@@ -63,7 +65,10 @@ class Pengadaan extends MY_Controller {
 	function deletePengadaan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PENGADAAN','pengadaan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

@@ -239,6 +239,18 @@ class MY_Controller extends CI_Controller{
             }
             return '0';
         }
+        
+        function createLog($description,$table_name)
+        {
+            $data = array(
+                'logIP'=>$this->session->userdata("ip_address"),
+                'logDateTime'=>date('Y-m-d H:i:s'),
+                'logUser'=>$this->session->userdata("user_zs_simpeg"),
+                'description'=>$description.' ('.$table_name.') ID_USER='.$this->session->userdata("iduser_zs_simpeg").' NIP='.$this->session->userdata("nip_zs_simpeg"),
+            );
+            
+            $this->db->insert('tlog',$data);
+        }
 		
 }
 ?>

@@ -75,6 +75,15 @@ class asset_alatbesar extends MY_Controller {
                     $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'], $dataSimak['kd_lokasi']);
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
+                
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET PERALATAN','asset_alatbesar,ext_asset_alatbesar');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET PERALATAN','asset_alatbesar,ext_asset_alatbesar');
+                }
 			
 		$this->modifyData($dataSimak, $dataExt);
 	}
@@ -82,7 +91,10 @@ class asset_alatbesar extends MY_Controller {
 	function deleteAlatbesar()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET PERALATAN','asset_alatbesar,ext_asset_alatbesar');
+                }
 		return $this->deleteData($data);
 	}
 	

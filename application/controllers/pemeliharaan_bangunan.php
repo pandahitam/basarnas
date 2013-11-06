@@ -56,6 +56,15 @@ class Pemeliharaan_Bangunan extends MY_Controller {
                     
                 }
                 
+                if($data['id'] != '')
+                {
+                    $this->createLog('UPDATE PEMELIHARAAN BANGUNAN DAN TANAH','pemeliharaan_bangunan');
+                }
+                else
+                {
+                    $this->createLog('INSERT PEMELIHARAAN BANGUNAN DAN TANAH','pemeliharaan_bangunan');
+                }
+                
                 /*
                  * as of this time of writing this controller seems not yet updated
                  * with the latest structure like the one in asset inventaris
@@ -73,7 +82,10 @@ class Pemeliharaan_Bangunan extends MY_Controller {
 	function deletePemeliharaanBangunan()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE PEMELIHARAAN BANGUNAN DAN TANAH','pendayagunaan');
+                }
 		return $this->deleteProcess($data);
 	}
 	

@@ -75,13 +75,25 @@ class Asset_Ruang extends MY_Controller {
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
                 
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET RUANG','asset_ruang,ext_asset_ruang');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET RUANG','asset_ruang,ext_asset_ruang');
+                }
+                
 		$this->modifyData($dataSimak, $dataExt);
 	}
 	
 	function deleteRuang()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET RUANG','asset_ruang,ext_asset_ruang');
+                }
 		return $this->deleteData($data);
 	}
 	

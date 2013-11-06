@@ -908,6 +908,7 @@
             _.each(selected, function(obj) {
                 var data = {
                     id: obj.data.id,
+                    id_ext_asset:obj.data.id_ext_asset,
                 };
                 arrayDeleted.push(data);
             });

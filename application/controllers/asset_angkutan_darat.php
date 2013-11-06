@@ -79,13 +79,25 @@ class Asset_Angkutan_Darat extends MY_Controller {
                     $dataExt['no_aset'] = $dataSimak['no_aset'];
                 }
                 
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET ANGKUTAN DARAT','asset_angkutan,ext_asset_angkutan_darat');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET ANGKUTAN DARAT','asset_angkutan,ext_asset_angkutan_darat');
+                }
+                
 		$this->modifyData($dataSimak, $dataExt);
 	}
 	
 	function deleteAngkutanDarat()
 	{
 		$data = $this->input->post('data');
-                
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET ANGKUTAN DARAT','asset_angkutan,ext_asset_angkutan_darat');
+                }
 		return $this->deleteData($data);
 	}
         

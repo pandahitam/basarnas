@@ -96,6 +96,15 @@ class Asset_Perlengkapan extends MY_Controller {
                     }
                 }
                 
+                if($dataSimak['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET PERLENGKAPAN','asset_perlengkapan');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET PERLENGKAPAN','asset_perlengkapan');
+                }
+                
 //                $dataSimak['part_number'] = $partNumberDetails->part_number;
 //                $dataSimak['no_aset'] = $this->noAssetGenerator($dataSimak['kd_brg'],$dataSimak['kd_lokasi']);
                 
@@ -120,7 +129,8 @@ class Asset_Perlengkapan extends MY_Controller {
 		$success = true;
 		
 		foreach($data as $keys)
-		{                        
+		{              
+                     $this->createLog('DELETE ASSET PERLENGKAPAN','asset_perlengkapan');
 			if($this->model->deleteData($keys['id']) == FALSE)
 			{
 				$success = false;

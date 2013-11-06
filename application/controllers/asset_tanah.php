@@ -102,12 +102,25 @@ class Asset_Tanah extends MY_Controller {
 //                    $dataExt['no_aset'] = $dataSimak['no_aset'];
 //                }
                 
+                if($dataExt['id'] != '')
+                {
+                    $this->createLog('UPDATE ASSET TANAH','asset_tanah,ext_asset_tanah');
+                }
+                else
+                {
+                    $this->createLog('INSERT ASSET TANAH','asset_tanah,ext_asset_tanah');
+                }
+                
 		$this->modifyData($dataSimak,$dataExt);
 	}
 	
 	function deleteTanah()
 	{
 		$data = $this->input->post('data');
+                foreach($data as $dataContent)
+                {
+                    $this->createLog('DELETE ASSET TANAH','asset_tanah,ext_asset_tanah');
+                }
 		return $this->deleteData($data);
 	}
         
@@ -137,6 +150,15 @@ class Asset_Tanah extends MY_Controller {
             }
                 $this->db->set($dataRiwayatPajak);
                 $this->db->replace('ext_asset_tanah_riwayat_pajak');
+            
+           if($dataRiwayatPajak['id'] != '')
+           {
+               $this->createLog('UPDATE ASSET TANAH PAJAK[id_ext_asset_tanah='.$dataRiwayatPajak['id_ext_asset'].']','ext_asset_tanah_riwayat_pajak');
+           }
+           else
+           {
+               $this->createLog('INSERT ASSET TANAH PAJAK[id_ext_asset_tanah='.$dataRiwayatPajak['id_ext_asset'].']','ext_asset_tanah_riwayat_pajak');
+           }
                 echo "{success:true, info: { reason: 'Sukses!' }}";
             
             
@@ -149,6 +171,7 @@ class Asset_Tanah extends MY_Controller {
                 $deletedArray = array();
                 foreach($data as $deleted)
                 {
+                    $this->createLog('UPDATE ASSET TANAH PAJAK[id_ext_asset_tanah='.$deleted['id_ext_asset'].']','ext_asset_tanah_riwayat_pajak');
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);
