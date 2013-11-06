@@ -38,7 +38,25 @@
             assetPerlengkapanPart: BASE_URL + 'combo_ref/combo_asset_perlengkapan_part',
             provinsi:BASE_URL + 'combo_ref/combo_prov',
             kabupaten:BASE_URL + 'combo_ref/combo_kabkota',
+            unkerForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unit_kerja_referensi_warehouse_ruang_rak',
+            unorForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unor_referensi_warehouse_ruang_rak',
         };
+        
+        Reference.Data.unorForReferensiWarehouseRuangRak = new Ext.create('Ext.data.Store', {
+             fields: ['kode_unor', 'nama_unor', 'kd_lokasi'], storeId: 'DataUnor',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.unorForReferensiWarehouseRuangRak, actionMethods: {read: 'POST'}, extraParams: {id_open: 1, kd_lokasi: 0}
+            }),
+            autoLoad: true
+        });
+
+        Reference.Data.unkerForReferensiWarehouseRuangRak = new Ext.create('Ext.data.Store', {
+             fields: ['kdlok', 'ur_upb'], idProperty: 'ID_UK', storeId: 'DataunkerForReferensiWarehouseRuangRak',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.unkerForReferensiWarehouseRuangRak, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         Reference.Data.kabupaten = new Ext.create('Ext.data.Store', {
             fields: ['kode_kabkota','nama_kabkota'], storeId: 'referensiKabupaten',
@@ -1570,6 +1588,162 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         Form.referensiRuang = function(setting)
         {
+            var pilihUnkerUnor = {
+                xtype: 'fieldset',
+                itemId : 'unit_selection',
+                title: 'UNIT',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lokasi',
+                                id: 'kd_lokasi',
+                                listeners: {
+                                    change: function(ob, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnker = Ext.getCmp('nama_unker');
+                                            var unorField = Ext.getCmp('nama_unor');
+                                                unorField.setValue('');
+                                            if (comboUnker !== null)
+                                            {
+                                                comboUnker.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kode_unor',
+                                id: 'kode_unor',
+                                listeners: {
+                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnor = Ext.getCmp('nama_unor');
+                                            if (comboUnor !== null)
+                                            {
+                                                comboUnor.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId:'column_unker',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Kerja *',
+                                name: 'nama_unker',
+                                id: 'nama_unker',
+                                itemId: 'unker',
+                                allowBlank: false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.unkerForReferensiWarehouseRuangRak,
+                                valueField: 'kdlok',
+                                displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(setting.isEditing != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+
+                                            if (value !== null)
+                                            {
+                                                var unorField = Ext.getCmp('nama_unor');
+                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                if (unorField !== null && kodeUnkerField !== null) {
+                                                    if (value.length > 0) {
+                                                        unorField.enable();
+                                                        kodeUnkerField.setValue(value);
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                             Ext.getCmp('referensi_warehouse_combo').setValue('');
+                                                        }
+                                                        Reference.Data.unor.changeParams({params: {id_open: 1, kode_unker: value}});
+                                                        Reference.Data.warehouse.changeParams({params:{'kd_lokasi':value}})
+                                                        Ext.getCmp('referensi_warehouse_combo').setDisabled(false);
+                                                    }
+                                                    else {
+                                                        unorField.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: ' Unit Organisasi',
+                                name: 'nama_unor',
+                                id: 'nama_unor',
+                                disabled: false,
+                                allowBlank: true,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.unorForReferensiWarehouseRuangRak,
+                                valueField: 'kode_unor',
+                                displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(setting.isEditing != true)
+                                            {
+                                                var dataStore = comboField.getStore();
+                                                var kd_lokasi = Utils.getUnkerCombo(form).getValue();
+                                                if (kd_lokasi !== null)
+                                                {
+                                                    console.log(Utils.getUnkerCombo(form).getValue());
+                                                    dataStore.clearFilter();
+                                                    dataStore.filter({property:"kd_lokasi", value:kd_lokasi});
+                                                }
+                                                comboField.expand();
+                                            }
+                                            
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var kodeUnorField = form.getForm().findField('kode_unor');
+                                            if (kodeUnorField !== null && !isNaN(value)) {
+                                                if(setting.isEditing != true)
+                                                {
+                                                     Ext.getCmp('referensi_warehouse_combo').setValue('');
+                                                }
+                                               
+                                                Reference.Data.warehouse.changeParams({params:{'kd_lokasi':Ext.getCmp('kd_lokasi').value,'kode_unor':value}})
+                                                kodeUnorField.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    },]
+            };
+            
             var pilihWarehouse = [{
                     xtype: 'fieldset',
                     layout: 'column',
@@ -1588,9 +1762,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             defaultType: 'textfield',
                             items: [{
+                                    disabled:true,
+                                    id:'referensi_warehouse_combo',
                                     readOnly:setting.isEditing,
                                     xtype: 'combo',
-                                    disabled: false,
                                     fieldLabel: 'Pilih Warehouse *',
                                     name: 'warehouse_id',
                                     allowBlank: false,
@@ -1618,15 +1793,229 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 }];
                 
             var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
-            form.insert(0, pilihWarehouse);
-            form.insert(1, Form.Component.referensiWarehouseRuangRak('RUANG'));
+            form.insert(0, pilihUnkerUnor);
+            form.insert(1, pilihWarehouse);
+            form.insert(2, Form.Component.referensiWarehouseRuangRak('RUANG'));
             
             return form;
         }
         
         Form.referensiRak = function(setting)
         {
+            
+            var pilihUnkerUnor = {
+                xtype: 'fieldset',
+                itemId : 'unit_selection',
+                title: 'UNIT',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lokasi',
+                                id: 'kd_lokasi',
+                                listeners: {
+                                    change: function(ob, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnker = Ext.getCmp('nama_unker');
+                                            var unorField = Ext.getCmp('nama_unor');
+                                                unorField.setValue('');
+                                            if (comboUnker !== null)
+                                            {
+                                                comboUnker.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kode_unor',
+                                id: 'kode_unor',
+                                listeners: {
+                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnor = Ext.getCmp('nama_unor');
+                                            if (comboUnor !== null)
+                                            {
+                                                comboUnor.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId:'column_unker',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Kerja *',
+                                name: 'nama_unker',
+                                id: 'nama_unker',
+                                itemId: 'unker',
+                                allowBlank: false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.unkerForReferensiWarehouseRuangRak,
+                                valueField: 'kdlok',
+                                displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(setting.isEditing != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+
+                                            if (value !== null)
+                                            {
+                                                var unorField = Ext.getCmp('nama_unor');
+                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                if (unorField !== null && kodeUnkerField !== null) {
+                                                    if (value.length > 0) {
+                                                        unorField.enable();
+                                                        kodeUnkerField.setValue(value);
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                             Ext.getCmp('referensi_warehouse_combo').setValue('');
+                                                        }
+                                                        Reference.Data.unor.changeParams({params: {id_open: 1, kode_unker: value}});
+                                                        Reference.Data.warehouse.changeParams({params:{'kd_lokasi':value}})
+                                                        Ext.getCmp('referensi_warehouse_combo').setDisabled(false);
+                                                    }
+                                                    else {
+                                                        unorField.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: ' Unit Organisasi',
+                                name: 'nama_unor',
+                                id: 'nama_unor',
+                                disabled: false,
+                                allowBlank: true,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.unorForReferensiWarehouseRuangRak,
+                                valueField: 'kode_unor',
+                                displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(setting.isEditing != true)
+                                            {
+                                                var dataStore = comboField.getStore();
+                                                var kd_lokasi = Utils.getUnkerCombo(form).getValue();
+                                                if (kd_lokasi !== null)
+                                                {
+                                                    console.log(Utils.getUnkerCombo(form).getValue());
+                                                    dataStore.clearFilter();
+                                                    dataStore.filter({property:"kd_lokasi", value:kd_lokasi});
+                                                }
+                                                comboField.expand();
+                                            }
+                                            
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var kodeUnorField = form.getForm().findField('kode_unor');
+                                            if (kodeUnorField !== null && !isNaN(value)) {
+                                                if(setting.isEditing != true)
+                                                {
+                                                     Ext.getCmp('referensi_warehouse_combo').setValue('');
+                                                }
+                                                Reference.Data.warehouse.changeParams({params:{'kd_lokasi':Ext.getCmp('kd_lokasi').value,'kode_unor':value}})
+                                                kodeUnorField.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    },]
+            };
+            
+            
             var pilihWarehouse = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'WAREHOUSE',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    disabled:true,
+                                    readOnly:setting.isEditing,
+                                    xtype: 'combo',
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'warehouse_id',
+                                    id:'referensi_warehouse_combo',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                var comboRuang = Ext.getCmp('referensi_warehouse_ruang_combo');
+                                                
+                                                if(setting.isEditing != true)
+                                                {
+                                                    comboRuang.setValue('');
+                                                }
+                                                if (value !== null && value !== '')
+                                                {
+                                                   Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                   
+                                                   comboRuang.setDisabled(false);
+                                                   
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                
+                            ]
+                        }]
+                }];
+                
+            var pilihRuang = [{
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
@@ -1643,35 +2032,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                    readOnly:setting.isEditing,
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'Pilih Warehouse *',
-                                    name: 'warehouse_id',
-                                    id:'referensi_warehouse_combo',
-                                    allowBlank: false,
-                                    store: Reference.Data.warehouse,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null || value !== '')
-                                                {
-                                                   Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
-                                                   var comboRuang = Ext.getCmp('referensi_warehouse_ruang_combo');
-                                                   comboRuang.setDisabled(false);
-                                                   
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                },
+                            items: [
                                 {
                                     readOnly:setting.isEditing,
                                     xtype: 'combo',
@@ -1688,7 +2049,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         'change': {
                                             fn: function(obj, value) {
 
-                                                if (value !== null || value !== '')
+                                                if (value !== null && value !== '')
                                                 {
                                                    
                                                 }
@@ -1704,8 +2065,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 }];
                 
             var form = Form.process(setting.url,setting.data,setting.isEditing,setting.addBtn);
-            form.insert(0, pilihWarehouse);
-            form.insert(1, Form.Component.referensiWarehouseRuangRak('RAK'));
+            form.insert(0, pilihUnkerUnor);
+            form.insert(1, pilihWarehouse);
+            form.insert(2, pilihRuang);
+            form.insert(3, Form.Component.referensiWarehouseRuangRak('RAK'));
             
             return form;
         }

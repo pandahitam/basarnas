@@ -35,13 +35,13 @@ Ext.define('MWarehouse', {extend: 'Ext.data.Model',
 
 Ext.define('MMasterRuang', {extend: 'Ext.data.Model',
     fields: ['id','warehouse_id' ,
-             'nama', 'nama_warehouse','nama_unker','nama_unor'
+             'nama', 'nama_warehouse','nama_unker','nama_unor','kd_lokasi','kode_unor'
     ]
 });
 
 Ext.define('MRak', {extend: 'Ext.data.Model',
     fields: ['id','warehouseruang_id','nama_warehouse','warehouse_id', 
-             'nama_ruang','nama','nama_unker','nama_unor'
+             'nama_ruang','nama','nama_unker','nama_unor','kd_lokasi','kode_unor'
     ]
 });
 

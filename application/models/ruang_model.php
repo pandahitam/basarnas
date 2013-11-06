@@ -6,7 +6,7 @@ class Ruang_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_warehouseruang';
             
-            $this->selectColumn = "SELECT t.id, t.warehouse_id, t.nama, a.nama as nama_warehouse, b.ur_upb as nama_unker, c.nama_unor";
+            $this->selectColumn = "SELECT t.id, t.warehouse_id, t.nama, a.nama as nama_warehouse, b.ur_upb as nama_unker, c.nama_unor, a.kd_lokasi, a.kode_unor";
 	}
 	
 	function get_AllData($start=null, $limit=null){

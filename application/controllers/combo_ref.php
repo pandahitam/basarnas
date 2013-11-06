@@ -302,11 +302,18 @@ class Combo_Ref extends CI_Controller {
     }
     
     function combo_warehouse(){
-    
+        
         $data = array();
-        if($this->input->get_post("id_open"))
+        if(isset($_POST['kd_lokasi']))
         {
-            $query = $this->db->query('select id, nama from ref_warehouse');
+            $query_text = "select id, nama from ref_warehouse where kd_lokasi='".$_POST['kd_lokasi']."'";
+            if(isset($_POST['kode_unor']))
+            {
+                
+                $query_text = "select id, nama from ref_warehouse where kd_lokasi='".$_POST['kd_lokasi']."' and kode_unor ='".$_POST['kode_unor']."'";
+            }
+            
+            $query = $this->db->query($query_text);
             foreach($query->result() as $obj)
             {
                 $data[] = $obj;
@@ -586,7 +593,57 @@ class Combo_Ref extends CI_Controller {
             echo json_encode($data);
         }
     }
+    
+    
+    
+    
+    function combo_unit_kerja_referensi_warehouse_ruang_rak() {
+        if ($this->input->get_post("id_open")) {
+            $data = array();
+            $this->db->select('ur_upb,kdlok');
+            $this->db->from('ref_unker');
+            $this->db->join('ref_warehouse','ref_warehouse.kd_lokasi = ref_unker.kdlok');
+            $this->db->group_by('kdlok');
+            if ($this->input->get_post('query')) {
+                $this->db->like('ur_upb', $this->input->get_post('query'));
+            }
 
+            $this->db->order_by('ur_upb', 'ASC');
+            $Q = $this->db->get('');
+            foreach ($Q->result() as $obj) {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_unor_referensi_warehouse_ruang_rak() {
+        if ($this->input->get_post("id_open")) {
+            $data = array();
+            $this->db->select('nama_unor,ref_unor.kode_unor,ref_unor.kd_lokasi');
+            $this->db->from('ref_unor');
+            $this->db->join('ref_warehouse','ref_warehouse.kode_unor = ref_unor.kode_unor');
+            $this->db->group_by('ref_unor.kode_unor');
+            
+            if ($this->input->get_post('query')) {
+                $this->db->like('jabatan_unor', $this->input->get_post('query'));
+            }
+
+            if ($this->input->post('kd_lokasi') > 0) {
+                $this->db->where('kd_lokasi', $this->input->post('kd_lokasi'));
+            }
+
+            $this->db->order_by('nama_unor', 'ASC');
+            $Q = $this->db->get('');
+            foreach ($Q->result() as $obj) {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
     function combo_simak_unker() {
         if ($this->input->get_post("id_open")) {
             $data = array();

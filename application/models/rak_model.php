@@ -5,7 +5,7 @@ class Rak_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_warehouserak';
             
-            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.warehouse_id, t.nama, a.nama as nama_ruang, b.nama as nama_warehouse, c.ur_upb as nama_unker, d.nama_unor";
+            $this->selectColumn = "SELECT t.id, t.warehouseruang_id, t.warehouse_id, t.nama, a.nama as nama_ruang, b.nama as nama_warehouse, c.ur_upb as nama_unker, d.nama_unor,b.kd_lokasi, b.kode_unor";
 	}
 	
 	function get_AllData($start=null, $limit=null){
