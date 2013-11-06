@@ -377,19 +377,23 @@
                 id: 'toolbar_PemeliharaanLaut',
                 add: {
                     id: 'button_add_PemeliharaanLaut',
-                    action: PemeliharaanLaut.Action.add
+                    action: PemeliharaanLaut.Action.add,
+                    disabled:pemeliharaan_umum_kendaraan_laut_insert,
                 },
                 edit: {
                     id: 'button_edit_PemeliharaanLaut',
-                    action: PemeliharaanLaut.Action.edit
+                    action: PemeliharaanLaut.Action.edit,
+                    disabled:pemeliharaan_umum_kendaraan_laut_update,
                 },
                 remove: {
                     id: 'button_remove_PemeliharaanLaut',
-                    action: PemeliharaanLaut.Action.remove
+                    action: PemeliharaanLaut.Action.remove,
+                    disabled:pemeliharaan_umum_kendaraan_laut_delete,
                 },
                 print: {
                     id: 'button_print_PemeliharaanLaut',
-                    action: PemeliharaanLaut.Action.print
+                    action: PemeliharaanLaut.Action.print,
+                    disabled:pemeliharaan_umum_kendaraan_laut_print,
                 }
             }
         };

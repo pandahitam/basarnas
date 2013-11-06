@@ -206,19 +206,23 @@
                 id: 'toolbar_Peraturan',
                 add: {
                     id: 'button_add_Peraturan',
-                    action: Peraturan.Action.add
+                    action: Peraturan.Action.add,
+                    disabled:peraturan_insert,
                 },
                 edit: {
                     id: 'button_edit_Peraturan',
-                    action: Peraturan.Action.edit
+                    action: Peraturan.Action.edit,
+                    disabled:peraturan_update,
                 },
                 remove: {
                     id: 'button_remove_Peraturan',
-                    action: Peraturan.Action.remove
+                    action: Peraturan.Action.remove,
+                    disabled:peraturan_delete,
                 },
                 print: {
                     id: 'button_pring_Peraturan',
-                    action: Peraturan.Action.print
+                    action: Peraturan.Action.print,
+                    disabled:peraturan_print,
                 }
             }
         };

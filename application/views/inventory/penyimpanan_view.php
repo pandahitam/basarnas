@@ -317,19 +317,23 @@
                 id: 'toolbar_InventoryPenyimpanan',
                 add: {
                     id: 'button_add_InventoryPenyimpanan',
-                    action: InventoryPenyimpanan.Action.add
+                    action: InventoryPenyimpanan.Action.add,
+                    disabled:inventory_penyimpanan_insert
                 },
                 edit: {
                     id: 'button_edit_InventoryPenyimpanan',
-                    action: InventoryPenyimpanan.Action.edit
+                    action: InventoryPenyimpanan.Action.edit,
+                    disabled:inventory_penyimpanan_update
                 },
                 remove: {
                     id: 'button_remove_InventoryPenyimpanan',
-                    action: InventoryPenyimpanan.Action.remove
+                    action: InventoryPenyimpanan.Action.remove,
+                    disabled:inventory_penyimpanan_delete
                 },
                 print: {
                     id: 'button_print_InventoryPenyimpanan',
-                    action: InventoryPenyimpanan.Action.print
+                    action: InventoryPenyimpanan.Action.print,
+                    disabled:inventory_penyimpanan_print
                 }
             }
         };

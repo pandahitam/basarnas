@@ -422,19 +422,23 @@
                 id: 'toolbar_PemeliharaanUdara',
                 add: {
                     id: 'button_add_PemeliharaanUdara',
-                    action: PemeliharaanUdara.Action.add
+                    action: PemeliharaanUdara.Action.add,
+                    disabled:pemeliharaan_umum_kendaraan_udara_insert,
                 },
                 edit: {
                     id: 'button_edit_PemeliharaanUdara',
-                    action: PemeliharaanUdara.Action.edit
+                    action: PemeliharaanUdara.Action.edit,
+                    disabled:pemeliharaan_umum_kendaraan_udara_update,
                 },
                 remove: {
                     id: 'button_remove_PemeliharaanUdara',
-                    action: PemeliharaanUdara.Action.remove
+                    action: PemeliharaanUdara.Action.remove,
+                    disabled:pemeliharaan_umum_kendaraan_udara_delete,
                 },
                 print: {
                     id: 'button_print_PemeliharaanUdara',
-                    action: PemeliharaanUdara.Action.print
+                    action: PemeliharaanUdara.Action.print,
+                    disabled:pemeliharaan_umum_kendaraan_udara_print,
                 }
             }
         };

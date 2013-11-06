@@ -356,19 +356,23 @@
                 id: 'toolbar_Pemeliharaan',
                 add: {
                     id: 'button_add_Pemeliharaan',
-                    action: Pemeliharaan.Action.add
+                    action: Pemeliharaan.Action.add,
+                    disabled:pemeliharaan_umum_kendaraan_peralatan_lainnya_insert,
                 },
                 edit: {
                     id: 'button_edit_Pemeliharaan',
-                    action: Pemeliharaan.Action.edit
+                    action: Pemeliharaan.Action.edit,
+                    disabled:pemeliharaan_umum_kendaraan_peralatan_lainnya_update,
                 },
                 remove: {
                     id: 'button_remove_Pemeliharaan',
-                    action: Pemeliharaan.Action.remove
+                    action: Pemeliharaan.Action.remove,
+                    disabled:pemeliharaan_umum_kendaraan_peralatan_lainnya_delete,
                 },
                 print: {
                     id: 'button_print_Pemeliharaan',
-                    action: Pemeliharaan.Action.print
+                    action: Pemeliharaan.Action.print,
+                    disabled:pemeliharaan_umum_kendaraan_peralatan_lainnya_print,
                 }
             }
         };

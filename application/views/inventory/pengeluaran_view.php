@@ -317,19 +317,23 @@
                 id: 'toolbar_InventoryPengeluaran',
                 add: {
                     id: 'button_add_InventoryPengeluaran',
-                    action: InventoryPengeluaran.Action.add
+                    action: InventoryPengeluaran.Action.add,
+                    disabled:inventory_pengeluaran_insert,
                 },
                 edit: {
                     id: 'button_edit_InventoryPengeluaran',
-                    action: InventoryPengeluaran.Action.edit
+                    action: InventoryPengeluaran.Action.edit,
+                    disabled:inventory_pengeluaran_update,
                 },
                 remove: {
                     id: 'button_remove_InventoryPengeluaran',
-                    action: InventoryPengeluaran.Action.remove
+                    action: InventoryPengeluaran.Action.remove,
+                    disabled:inventory_pengeluaran_delete,
                 },
                 print: {
                     id: 'button_print_InventoryPengeluaran',
-                    action: InventoryPengeluaran.Action.print
+                    action: InventoryPengeluaran.Action.print,
+                    disabled:inventory_pengeluaran_print,
                 }
             }
         };

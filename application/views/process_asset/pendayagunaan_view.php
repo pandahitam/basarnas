@@ -226,19 +226,23 @@
                 id: 'toolbar_Pendayagunaan',
                 add: {
                     id: 'button_add_Pendayagunaan',
-                    action: Pendayagunaan.Action.add
+                    action: Pendayagunaan.Action.add,
+                    disabled:pendayagunaan_asset_insert,
                 },
                 edit: {
                     id: 'button_edit_Pendayagunaan',
-                    action: Pendayagunaan.Action.edit
+                    action: Pendayagunaan.Action.edit,
+                    disabled:pendayagunaan_asset_update,
                 },
                 remove: {
                     id: 'button_remove_Pendayagunaan',
-                    action: Pendayagunaan.Action.remove
+                    action: Pendayagunaan.Action.remove,
+                    disabled:pendayagunaan_asset_delete,
                 },
                 print: {
                     id: 'button_print_Pendayagunaan',
-                    action: Pendayagunaan.Action.print
+                    action: Pendayagunaan.Action.print,
+                    disabled:pendayagunaan_asset_print,
                 }
             }
         };

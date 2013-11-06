@@ -375,19 +375,23 @@
                 id: 'toolbar_PemeliharaanDarat',
                 add: {
                     id: 'button_add_PemeliharaanDarat',
-                    action: PemeliharaanDarat.Action.add
+                    action: PemeliharaanDarat.Action.add,
+                    disabled:pemeliharaan_umum_kendaraan_darat_insert,
                 },
                 edit: {
                     id: 'button_edit_PemeliharaanDarat',
-                    action: PemeliharaanDarat.Action.edit
+                    action: PemeliharaanDarat.Action.edit,
+                    disabled:pemeliharaan_umum_kendaraan_darat_update,
                 },
                 remove: {
                     id: 'button_remove_PemeliharaanDarat',
-                    action: PemeliharaanDarat.Action.remove
+                    action: PemeliharaanDarat.Action.remove,
+                    disabled:pemeliharaan_umum_kendaraan_darat_delete,
                 },
                 print: {
                     id: 'button_print_PemeliharaanDarat',
-                    action: PemeliharaanDarat.Action.print
+                    action: PemeliharaanDarat.Action.print,
+                    disabled:pemeliharaan_umum_kendaraan_darat_print,
                 }
             }
         };

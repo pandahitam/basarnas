@@ -276,19 +276,23 @@ var setting = {
             id : 'toolbar_PemeliharaanBangunan',
             add : {
                 id : 'button_add_PemeliharaanBangunan',
-                action : PemeliharaanBangunan.Action.add
+                action : PemeliharaanBangunan.Action.add,
+                disabled:pemeliharaan_bangunan_insert
             },
             edit : {
                 id : 'button_edit_PemeliharaanBangunan',
-                action : PemeliharaanBangunan.Action.edit
+                action : PemeliharaanBangunan.Action.edit,
+                disabled:pemeliharaan_bangunan_update
             },
             remove : {
                 id : 'button_remove_PemeliharaanBangunan',
-                action : PemeliharaanBangunan.Action.remove
+                action : PemeliharaanBangunan.Action.remove,
+                disabled:pemeliharaan_bangunan_delete
             },
             print : {
                 id : 'button_pring_PemeliharaanBangunan',
-                action : PemeliharaanBangunan.Action.print
+                action : PemeliharaanBangunan.Action.print,
+                disabled:pemeliharaan_bangunan_print
             }
         }
 };

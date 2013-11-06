@@ -217,11 +217,13 @@ var setting = {
             id : 'toolbar_Mutasi',
             edit : {
                 id : 'button_edit_Mutasi',
-                action : Mutasi.Action.edit
+                action : Mutasi.Action.edit,
+                disabled:mutasi_asset_update,
             },
             print : {
                 id : 'button_pring_Mutasi',
-                action : Mutasi.Action.print
+                action : Mutasi.Action.print,
+                disabled:mutasi_asset_print,
             }
         }
 };

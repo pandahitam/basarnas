@@ -321,19 +321,23 @@
                 id: 'toolbar_InventoryPenerimaanPemeriksaan',
                 add: {
                     id: 'button_add_InventoryPenerimaanPemeriksaan',
-                    action: InventoryPenerimaanPemeriksaan.Action.add
+                    action: InventoryPenerimaanPemeriksaan.Action.add,
+                    disabled:inventory_penerimaan_pemeriksaan_insert,
                 },
                 edit: {
                     id: 'button_edit_InventoryPenerimaanPemeriksaan',
-                    action: InventoryPenerimaanPemeriksaan.Action.edit
+                    action: InventoryPenerimaanPemeriksaan.Action.edit,
+                    disabled:inventory_penerimaan_pemeriksaan_update,
                 },
                 remove: {
                     id: 'button_remove_InventoryPenerimaanPemeriksaan',
-                    action: InventoryPenerimaanPemeriksaan.Action.remove
+                    action: InventoryPenerimaanPemeriksaan.Action.remove,
+                    disabled:inventory_penerimaan_pemeriksaan_delete,
                 },
                 print: {
                     id: 'button_print_InventoryPenerimaanPemeriksaan',
-                    action: InventoryPenerimaanPemeriksaan.Action.print
+                    action: InventoryPenerimaanPemeriksaan.Action.print,
+                    disabled:inventory_penerimaan_pemeriksaan_print,
                 }
             }
         };

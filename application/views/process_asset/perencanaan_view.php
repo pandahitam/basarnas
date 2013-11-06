@@ -219,19 +219,23 @@ var setting = {
             id : 'toolbar_Perencanaan',
             add : {
                 id : 'button_add_Perencanaan',
-                action : Perencanaan.Action.add
+                action : Perencanaan.Action.add,
+                disabled:perencanaan_insert,
             },
             edit : {
                 id : 'button_edit_Perencanaan',
-                action : Perencanaan.Action.edit
+                action : Perencanaan.Action.edit,
+                disabled:perencanaan_update,
             },
             remove : {
                 id : 'button_remove_Perencanaan',
-                action : Perencanaan.Action.remove
+                action : Perencanaan.Action.remove,
+                disabled:perencanaan_delete,
             },
             print : {
                 id : 'button_pring_Perencanaan',
-                action : Perencanaan.Action.print
+                action : Perencanaan.Action.print,
+                disabled:perencanaan_print,
             }
         }
 };

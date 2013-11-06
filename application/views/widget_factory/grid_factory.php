@@ -1520,19 +1520,19 @@ var search = [{
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: setting.toolbar.id,
                 items: [{
-                        text: 'Tambah', id: setting.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                        text: 'Tambah', id: setting.toolbar.add.id, disabled:(setting.toolbar.add.disabled == true)?true:false, iconCls: 'icon-add', handler: function() {
                             setting.toolbar.add.action();
                         }
                     }, '-', {
-                        text: 'Ubah', id: setting.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                        text: 'Ubah', id: setting.toolbar.edit.id, disabled:(setting.toolbar.edit.disabled == true)?true:false, iconCls: 'icon-edit', handler: function() {
                             setting.toolbar.edit.action();
                         }
                     }, '-', {
-                        text: 'Hapus', id: setting.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                        text: 'Hapus', id: setting.toolbar.remove.id, hidden:(setting.toolbar.remove.disabled == true)?true:false, iconCls: 'icon-delete', handler: function() {
                             setting.toolbar.remove.action();
                         }
                     }, '-', {
-                        text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
+                        text: 'Cetak', id: setting.toolbar.print.id, hidden:(setting.toolbar.print.disabled == true)?true:false, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
                     }, '-', 
@@ -1653,15 +1653,15 @@ var search = [{
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: setting.toolbar.id,
                 items: [{
-                        text: 'Tambah', id: setting.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                        text: 'Tambah', id: setting.toolbar.add.id, disabled:(setting.toolbar.add.disabled == true)?true:false, iconCls: 'icon-add', handler: function() {
                             setting.toolbar.add.action();
                         }
                     }, '-', {
-                        text: 'Ubah', id: setting.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                        text: 'Ubah', id: setting.toolbar.edit.id, disabled:(setting.toolbar.edit.disabled == true)?true:false, iconCls: 'icon-edit', handler: function() {
                             setting.toolbar.edit.action();
                         }
                     }, '-', {
-                        text: 'Hapus', id: setting.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                        text: 'Hapus', id: setting.toolbar.remove.id, disabled:(setting.toolbar.remove.disabled == true)?true:false, iconCls: 'icon-delete', handler: function() {
                             setting.toolbar.remove.action();
                         }
                     }, '-', {
@@ -1718,19 +1718,19 @@ var search = [{
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: setting.toolbar.id,
                 items: [{
-                        text: 'Tambah', id: setting.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                        text: 'Tambah', id: setting.toolbar.add.id, disabled:(setting.toolbar.add.disabled == true)?true:false, iconCls: 'icon-add', handler: function() {
                             setting.toolbar.add.action();
                         }
                     }, '-', {
-                        text: 'Ubah', id: setting.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                        text: 'Ubah', id: setting.toolbar.edit.id, disabled:(setting.toolbar.edit.disabled == true)?true:false, iconCls: 'icon-edit', handler: function() {
                             setting.toolbar.edit.action();
                         }
                     }, '-', {
-                        text: 'Hapus', id: setting.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                        text: 'Hapus', id: setting.toolbar.remove.id, disabled:(setting.toolbar.remove.disabled == true)?true:false, iconCls: 'icon-delete', handler: function() {
                             setting.toolbar.remove.action();
                         }
                     }, '-', {
-                        text: 'Cetak', id: setting.toolbar.print.id, iconCls: 'icon-printer', handler: function() {
+                        text: 'Cetak', id: setting.toolbar.print.id, disabled:(setting.toolbar.print.disabled == true)?true:false, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         }
                     }, '-', {

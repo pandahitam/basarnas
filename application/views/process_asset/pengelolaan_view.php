@@ -211,19 +211,23 @@
                 id: 'toolbar_Pengelolaan',
                 add: {
                     id: 'button_add_Pengelolaan',
-                    action: Pengelolaan.Action.add
+                    action: Pengelolaan.Action.add,
+                    disabled:pengelolaan_insert,
                 },
                 edit: {
                     id: 'button_edit_Pengelolaan',
-                    action: Pengelolaan.Action.edit
+                    action: Pengelolaan.Action.edit,
+                    disabled:pengelolaan_update,
                 },
                 remove: {
                     id: 'button_remove_Pengelolaan',
-                    action: Pengelolaan.Action.remove
+                    action: Pengelolaan.Action.remove,
+                    disabled:pengelolaan_delete,
                 },
                 print: {
                     id: 'button_pring_Pengelolaan',
-                    action: Pengelolaan.Action.print
+                    action: Pengelolaan.Action.print,
+                    disabled:pengelolaan_print,
                 }
             }
         };

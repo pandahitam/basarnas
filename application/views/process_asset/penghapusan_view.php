@@ -217,19 +217,23 @@ var setting = {
             id : 'toolbar_Penghapusan',
             add : {
                 id : 'button_add_Penghapusan',
-               /* action : Penghapusan.Action.add*/
+               /* action : Penghapusan.Action.add,*/
+               disabled:penghapusan_asset_insert,
             },
             edit : {
                 id : 'button_edit_Penghapusan',
-                action : Penghapusan.Action.edit
+                action : Penghapusan.Action.edit,
+                disabled:penghapusan_asset_update,
             },
             remove : {
                 id : 'button_remove_Penghapusan',
-                /*action : Penghapusan.Action.remove*/
+                /*action : Penghapusan.Action.remove,*/
+                disabled:penghapusan_asset_delete,
             },
             print : {
                 id : 'button_pring_Penghapusan',
-                action : Penghapusan.Action.print
+                action : Penghapusan.Action.print,
+                disabled:penghapusan_asset_print,
             }
         }
 };

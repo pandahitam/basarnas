@@ -38,9 +38,11 @@
         });
         
         Perlengkapan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
-            model: 'MPemeliharaanPerlengkapan', autoLoad: false, noCache: false,
+            model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Pemeliharaan_Perlengkapan/getSpecificPemeliharaanPerlengkapan', actionMethods: {read: 'POST'}
+                url: BASE_URL + 'Pemeliharaan_Perlengkapan/getSpecificPemeliharaanPerlengkapan', actionMethods: {read: 'POST'},
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
         });
 

@@ -378,7 +378,7 @@ class Pengguna_Login_Model extends CI_Model {
 		$this->db->from('tuser_semar_menu_group_menu');
 		$this->db->join('tuser_semar_menu_group_collections', 'tuser_semar_menu_group_menu.ID_Group_Menu_ID_Group = tuser_semar_menu_group_collections.id_groupcollections', 'left');
 		$this->db->join('tuser_semar_menu', 'tuser_semar_menu_group_menu.ID_Group_Menu_ID_Menu = tuser_semar_menu.idmenu', 'left');
-		
+		$this->db->where('id_groupcollections',$gorupid_zs_simpeg);
 		$this->db->order_by('ID_Group_Menu');
 		$Q = $this->db->get();
 		if($Q->num_rows() > 0){

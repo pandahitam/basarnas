@@ -333,19 +333,23 @@ var setting = {
             id : 'toolbar_Pengadaan',
             add : {
                 id : 'button_add_Pengadaan',
-                action : Pengadaan.Action.add
+                action : Pengadaan.Action.add,
+                disabled:pengadaan_insert,
             },
             edit : {
                 id : 'button_edit_Pengadaan',
-                action : Pengadaan.Action.edit
+                action : Pengadaan.Action.edit,
+                disabled:pengadaan_update,
             },
             remove : {
                 id : 'button_remove_Pengadaan',
-                action : Pengadaan.Action.remove
+                action : Pengadaan.Action.remove,
+                disabled:pengadaan_delete,
             },
             print : {
                 id : 'button_pring_Pengadaan',
-                action : Pengadaan.Action.print
+                action : Pengadaan.Action.print,
+                disabled:pengadaan_print,
             }
         }
 };
