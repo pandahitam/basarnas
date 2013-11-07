@@ -374,6 +374,8 @@ class Pengguna_Login_Model extends CI_Model {
 	function getAllVariableJSMenuUser(){
 		$result = array();
 		$gorupid_zs_simpeg = $this->session->userdata("gorupid_zs_simpeg");
+                $user_unit_kerja = $this->session->userdata("temp_kode_unker_zs_simpeg");
+                $user_unit_organisasi = $this->session->userdata("temp_kode_unor_zs_simpeg");
 		$this->db->select('*');
 		$this->db->from('tuser_semar_menu_group_menu');
 		$this->db->join('tuser_semar_menu_group_collections', 'tuser_semar_menu_group_menu.ID_Group_Menu_ID_Group = tuser_semar_menu_group_collections.id_groupcollections', 'left');
@@ -400,6 +402,34 @@ class Pengguna_Login_Model extends CI_Model {
 				}
 			}
 		}
+                //variable tambahan untuk deteksi unit kerja dan unit organisasi user
+                if($gorupid_zs_simpeg == '4') //User adalah OPD
+                {
+                    if($user_unit_kerja != '' && $user_unit_kerja != '0')
+                    {
+                        $result[] = "var user_kd_lokasi ='$user_unit_kerja'";
+                    }
+                    else
+                    {
+                        $result[] = "var user_kd_lokasi=null";
+                    }
+                    
+                    if($user_unit_organisasi != '' && $user_unit_organisasi != '0')
+                    {
+                        $result[] = "var user_kode_unor='$user_unit_organisasi'";
+                    }
+                    else
+                    {
+                        $result[] = "var user_kode_unor=null";
+                    }
+                    
+                }
+                else
+                {
+                    $result[] = "var user_kd_lokasi=null";
+                    $result[] = "var user_kode_unor=null";
+                }
+                
 		return implode("\n", $result);
 	}
 	function checkMenuForUser($idmenu){

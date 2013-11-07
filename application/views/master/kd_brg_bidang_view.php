@@ -4,59 +4,59 @@
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
 <script>
     /////////
-        var Params_M_Provinsi = null;
+        var Params_M_KdBrgBidang = null;
 
-        Ext.namespace('Provinsi', 'Provinsi.reader', 'Provinsi.proxy', 'Provinsi.Data', 'Provinsi.Grid', 'Provinsi.Window', 'Provinsi.Form', 'Provinsi.Action', 'Provinsi.URL');
-        Provinsi.URL = {
-            read: BASE_URL + 'master_data/provinsi_getAllData',
-            update: BASE_URL + 'master_data/provinsi_modifyProvinsi',
-            create: BASE_URL + 'master_data/provinsi_createProvinsi',
-            remove: BASE_URL + 'master_data/provinsi_deleteProvinsi'
+        Ext.namespace('KdBrgBidang', 'KdBrgBidang.reader', 'KdBrgBidang.proxy', 'KdBrgBidang.Data', 'KdBrgBidang.Grid', 'KdBrgBidang.Window', 'KdBrgBidang.Form', 'KdBrgBidang.Action', 'KdBrgBidang.URL');
+        KdBrgBidang.URL = {
+            read: BASE_URL + 'master_data/kd_brg_bidang_getAllData',
+            update: BASE_URL + 'master_data/kd_brg_bidang_modifyKdBrgBidang',
+            create: BASE_URL + 'master_data/kd_brg_bidang_createKdBrgBidang',
+            remove: BASE_URL + 'master_data/kd_brg_bidang_deleteKdBrgBidang'
         };
 
-        Provinsi.reader = new Ext.create('Ext.data.JsonReader', {
-            id: 'Reader.Provinsi', root: 'results', totalProperty: 'total', idProperty: 'id'
+        KdBrgBidang.reader = new Ext.create('Ext.data.JsonReader', {
+            id: 'Reader.KdBrgBidang', root: 'results', totalProperty: 'total', idProperty: 'id'
         });
 
-        Provinsi.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
+        KdBrgBidang.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
             allowSingle: false});
 
-        Provinsi.proxy = new Ext.create('Ext.data.AjaxProxy', {
-            id: 'Proxy_Provinsi',
-            url: Provinsi.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
-            reader: Provinsi.reader,
-            writer: Provinsi.writer,
+        KdBrgBidang.proxy = new Ext.create('Ext.data.AjaxProxy', {
+            id: 'Proxy_KdBrgBidang',
+            url: KdBrgBidang.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+            reader: KdBrgBidang.reader,
+            writer: KdBrgBidang.writer,
             afterRequest: function(request, success) {
-                Params_M_Provinsi = request.operation.params;
+                Params_M_KdBrgBidang = request.operation.params;
             }
         });
 
-        Provinsi.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Provinsi', storeId: 'DataProvinsi', model: 'MProvinsi', pageSize: 50, noCache: false, autoLoad: true,
-            proxy: Provinsi.proxy, groupField: 'tipe'
+        KdBrgBidang.Data = new Ext.create('Ext.data.Store', {
+            id: 'Data_KdBrgBidang', storeId: 'DataKdBrgBidang', model: 'MKdBrgBidang', pageSize: 50, noCache: false, autoLoad: true,
+            proxy: KdBrgBidang.proxy, groupField: 'tipe'
         });
 
-        Provinsi.Form.create = function(data, edit) {
+        KdBrgBidang.Form.create = function(data, edit) {
             
             if(edit == true)
             {
                 var setting = {
-                    url: Provinsi.URL.update,
-                    data: Provinsi.Data,
+                    url: KdBrgBidang.URL.update,
+                    data: KdBrgBidang.Data,
                     isEditing: edit,
                 };
             }
             else
             {
                 var setting = {
-                    url: Provinsi.URL.create,
-                    data: Provinsi.Data,
+                    url: KdBrgBidang.URL.create,
+                    data: KdBrgBidang.Data,
                     isEditing: edit,
                 };
             }
             
 
-            var form = Form.referensiProvinsi(setting);
+            var form = Form.referensiKdBrgBidang(setting);
             if (data !== null)
             {
                 Ext.Object.each(data,function(key,value,myself){
@@ -70,34 +70,34 @@
             
             if(edit == false)
             {
-                var kode_prov = '';
-                $.ajax({
-                       url:BASE_URL + 'master_data/provinsi_getLastKodeProv',
-                       type: "POST",
-                       dataType:'json',
-                       async:false,
-                       success:function(response, status){
-                          kode_prov = response;
-                       }
-                    });
-                var data_kode = {
-                    kode_prov: kode_prov
-                };
-                form.getForm().setValues(data_kode)
+//                var kode = '';
+//                $.ajax({
+//                       url:BASE_URL + 'master_data/kd_brg_bidang_getLastKdBrgBidang',
+//                       type: "POST",
+//                       dataType:'json',
+//                       async:false,
+//                       success:function(response, status){
+//                          kode = response;
+//                       }
+//                    });
+//                var data_kode = {
+//                    kd_gol: kode
+//                };
+//                form.getForm().setValues(data_kode)
             }
             
             return form;
         };
 
-        Provinsi.Action.add = function() {
-            var _form = Provinsi.Form.create(null, false);
-            Modal.smallWindow.setTitle('Create Provinsi');
+        KdBrgBidang.Action.add = function() {
+            var _form = KdBrgBidang.Form.create(null, false);
+            Modal.smallWindow.setTitle('Create Kode Barang Bidang');
             Modal.smallWindow.add(_form);
             Modal.smallWindow.show();
         };
 
-        Provinsi.Action.edit = function() {
-            var selected = Provinsi.Grid.grid.getSelectionModel().getSelection();
+        KdBrgBidang.Action.edit = function() {
+            var selected = KdBrgBidang.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
@@ -105,28 +105,28 @@
 
                 if (Modal.smallWindow.items.length === 0)
                 {
-                    Modal.smallWindow.setTitle('Edit Provinsi');
+                    Modal.smallWindow.setTitle('Edit Kode Barang Bidang');
                 }
-                var _form = Provinsi.Form.create(data, true);
+                var _form = KdBrgBidang.Form.create(data, true);
                 Modal.smallWindow.add(_form);
                 Modal.smallWindow.show();
             }
         };
 
-        Provinsi.Action.remove = function() {
-            var selected = Provinsi.Grid.grid.getSelectionModel().getSelection();
+        KdBrgBidang.Action.remove = function() {
+            var selected = KdBrgBidang.Grid.grid.getSelectionModel().getSelection();
             var arrayDeleted = [];
             _.each(selected, function(obj) {
                 var data = {
-                    id: obj.data.ID_Prov,
-                    kode_prov: obj.data.kode_prov
+                    kd_gol: obj.data.kd_gol,
+                    kd_bid: obj.data.kd_bid
                 };
                 arrayDeleted.push(data);
             });
-            //Modal.deleteAlert(arrayDeleted, Provinsi.URL.remove, Provinsi.Data);
+            //Modal.deleteAlert(arrayDeleted, KdBrgBidang.URL.remove, KdBrgBidang.Data);
             Ext.Msg.show({
                 title: 'Konfirmasi',
-                msg: 'Apakah Anda yakin untuk menghapus ? Kota/Kabupaten yang berhubungan akan juga terhapus.',
+                msg: 'Apakah Anda yakin untuk menghapus ?',
                 buttons: Ext.Msg.YESNO, 
                 icon: Ext.Msg.Question,
                 fn: function(btn) {
@@ -141,9 +141,9 @@
                             type: 'POST',
                             data: dataSend,
                             dataType: 'json',
-                            url:  Provinsi.URL.remove,
+                            url:  KdBrgBidang.URL.remove,
                             success: function(data) {
-                                 Provinsi.Data.load();
+                                 KdBrgBidang.Data.load();
                             }
                         });
                     }
@@ -151,8 +151,8 @@
             })
         };
 
-        Provinsi.Action.print = function() {
-//            var selected = Provinsi.Grid.grid.getSelectionModel().getSelection();
+        KdBrgBidang.Action.print = function() {
+//            var selected = KdBrgBidang.Grid.grid.getSelectionModel().getSelection();
 //            var selectedData = "";
 //            if (selected.length > 0)
 //            {
@@ -161,7 +161,7 @@
 //                    selectedData += selected[i].data.id + ",";
 //                }
 //            }
-//            var gridHeader = Provinsi.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+//            var gridHeader = KdBrgBidang.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
 //            var gridHeaderList = "";
 //            //index starts at 2 to exclude the No. column
 //            for (var i = 2; i < gridHeader.length; i++)
@@ -176,8 +176,8 @@
 //                }
 //            }
 //
-//            var serverSideModelName = "Provinsi_Model";
-//            var title = "Provinsi Umum";
+//            var serverSideModelName = "KdBrgBidang_Model";
+//            var title = "KdBrgBidang Umum";
 //            var primaryKeys = "id";
 //
 //            my_form = document.createElement('FORM');
@@ -224,44 +224,45 @@
 
         var setting = {
             grid: {
-                id: 'grid_Provinsi',
-                title: 'PROVINSI',
+                id: 'grid_KdBrgBidang',
+                title: 'BIDANG',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Kode Provinsi', dataIndex: 'kode_prov', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Nama Provinsi', dataIndex: 'nama_prov', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Golongan', dataIndex: 'ur_gol', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Bidang', dataIndex: 'kd_bid', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Bidang', dataIndex: 'ur_bid', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                 ]
             },
             search: {
-                id: 'search_Provinsi'
+                id: 'search_KdBrgBidang'
             },
             toolbar: {
-                id: 'toolbar_Provinsi',
+                id: 'toolbar_KdBrgBidang',
                 add: {
-                    id: 'button_add_Provinsi',
-                    action: Provinsi.Action.add
+                    id: 'button_add_KdBrgBidang',
+                    action: KdBrgBidang.Action.add
                 },
                 edit: {
-                    id: 'button_edit_Provinsi',
-                    action: Provinsi.Action.edit
+                    id: 'button_edit_KdBrgBidang',
+                    action: KdBrgBidang.Action.edit
                 },
                 remove: {
-                    id: 'button_remove_Provinsi',
-                    action: Provinsi.Action.remove
+                    id: 'button_remove_KdBrgBidang',
+                    action: KdBrgBidang.Action.remove
                 },
                 print: {
-                    id: 'button_print_Provinsi',
-                    action: Provinsi.Action.print
+                    id: 'button_print_KdBrgBidang',
+                    action: KdBrgBidang.Action.print
                 }
             }
         };
 
-        Provinsi.Grid.grid = Grid.referensiGrid(setting, Provinsi.Data);
+        KdBrgBidang.Grid.grid = Grid.referensiGrid(setting, KdBrgBidang.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',
-            id: 'master_provinsi', title: 'Provinsi', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Provinsi.Grid.grid]
+            id: 'master_kd_brg_bidang', title: 'Bidang', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            layout: 'border', items: [KdBrgBidang.Grid.grid]
         };
 
 

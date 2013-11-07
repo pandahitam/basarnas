@@ -40,7 +40,7 @@
         Perlengkapan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
             model: MPemeliharaan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Pemeliharaan_Perlengkapan/getSpecificPemeliharaanPerlengkapan', actionMethods: {read: 'POST'},
+                url: BASE_URL + 'Pemeliharaan/getSpecificPemeliharaan', actionMethods: {read: 'POST'},
                 reader: new Ext.data.JsonReader({
                     root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
@@ -50,8 +50,8 @@
             read: BASE_URL + 'asset_perlengkapan/getAllData',
             createUpdate: BASE_URL + 'asset_perlengkapan/modifyPerlengkapan',
             remove: BASE_URL + 'asset_perlengkapan/deletePerlengkapan',
-            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/modifyPemeliharaanPerlengkapan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/deletePemeliharaanPerlengkapan',
+            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
+            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
@@ -108,6 +108,20 @@
                         });
                 form.getForm().setValues(data);
             }
+            else
+            {
+                var presetData = {};
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
+                form.getForm().setValues(presetData);
+
+            }
 
             return form;
         };
@@ -129,7 +143,7 @@
             };
 
             var form = Form.pemeliharaanInAsset(setting);
-
+            
             if (dataForm !== null)
             {
                 Ext.Object.each(dataForm,function(key,value,myself){
@@ -640,17 +654,23 @@
         };
 
         Perlengkapan.Action.pemeliharaanEdit = function() {
-            var selected = Ext.getCmp('perlengkapan_grid_pemeliharaan').getSelectionModel().getSelection();
+            var selected = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var dataForm = selected[0].data;
                 var form = Perlengkapan.Form.createPemeliharaan(Perlengkapan.dataStorePemeliharaan, dataForm, true)
-                Tab.addToForm(form, 'perlengkapan-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Tab.addToForm(form, 'asset_perlengkapan-edit-pemeliharaan', 'Edit Pemeliharaan');
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
             }
         };
 
         Perlengkapan.Action.pemeliharaanRemove = function() {
-            var selected = Ext.getCmp('perlengkapan_grid_pemeliharaan').getSelectionModel().getSelection();
+            var selected = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan').getSelectionModel().getSelection();
             if (selected.length > 0)
             {
                 var arrayDeleted = [];
@@ -674,8 +694,16 @@
                 kd_brg: data.kd_brg,
                 no_aset: data.no_aset
             };
-            var form = Perlengkapan.Form.createPemeliharaan(Perlengkapan.dataStorePemeliharaan, dataForm, false)
-            Tab.addToForm(form, 'perlengkapan-add-pemeliharaan', 'Add Pemeliharaan');
+            
+            var form = Perlengkapan.Form.createPemeliharaan(Perlengkapan.dataStorePemeliharaan, dataForm, false);
+            
+//            Tab.addToForm(form, 'asset_perlengkapan-add-pemeliharaan', 'Add Pemeliharaan');
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
         };
 
 
@@ -689,7 +717,7 @@
                 Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
                 Perlengkapan.dataStorePemeliharaan.load();
                 var toolbarIDs = {};
-                toolbarIDs.idGrid = "perlengkapan_grid_pemeliharaan";
+                toolbarIDs.idGrid = "asset_perlengkapan_grid_pemeliharaan";
                 toolbarIDs.add = Perlengkapan.Action.pemeliharaanAdd;
                 toolbarIDs.remove = Perlengkapan.Action.pemeliharaanRemove;
                 toolbarIDs.edit = Perlengkapan.Action.pemeliharaanEdit;
@@ -701,7 +729,6 @@
                 };
                 var _perlengkapanPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
                 Tab.addToForm(_perlengkapanPemeliharaanGrid, 'perlengkapan-pemeliharaan', 'Pemeliharaan');
-                Modal.assetEdit.show();
             }
         };
 

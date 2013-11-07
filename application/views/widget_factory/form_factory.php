@@ -788,7 +788,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         Form.pengelolaanInAsset = function(setting)
         {
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelPengelolaanInAsset(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
 //            form.insert(2, Form.Component.klasifikasiAset(setting.isEditing));
             form.insert(2, Form.Component.pengelolaan(setting.isEditing));
@@ -1091,7 +1091,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 }
                 
                 form.insert(2, Form.Component.pemeliharaan(tipe_angkutan));
-                if(setting_grid_pemeliharaan_part != null || setting_grid_pemeliharaan_part != undefined)
+                if(setting_grid_pemeliharaan_part != null && setting_grid_pemeliharaan_part != undefined)
                 {
                     form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
                 }
@@ -1101,19 +1101,25 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return form;
         };
         
+        
         Form.pemeliharaanInAsset = function(setting,setting_grid_pemeliharaan_part){
-            var form = Form.process(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            var form = Form.panelPemeliharaanInAsset(setting.url, setting.data, setting.isEditing, setting.addBtn);
             form.insert(1, Form.Component.hiddenIdentifier());
             form.insert(4, Form.Component.fileUpload());
             
             if (setting.isBangunan)
             {
-                form.insert(2, Form.Component.pemeliharaanBangunan(form.getForm()));
+//                form.insert(2, Form.Component.pemeliharaanBangunan(form.getForm()));
+                  form.insert(2, Form.Component.pemeliharaanBangunan(form));
             }
             else
             {
-                form.insert(2, Form.Component.pemeliharaan(form.getForm()));
-                form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+                form.insert(2, Form.Component.pemeliharaan());
+                if(setting_grid_pemeliharaan_part != null && setting_grid_pemeliharaan_part != undefined)
+                {
+//                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+                }
+                
             }
             
             return form;
@@ -1308,6 +1314,309 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             var form = Form.referensiKlasifikasiAset(setting.url,setting.data,setting.isEditing,'ref_klasifikasiaset_lvl3','kd_klasifikasi_aset');
             form.insert(0, pilihKlasifikasiAset);
             form.insert(1, Form.Component.referensiKlasifikasiAset('KLASIFIKASI ASET LVL 3','kd_lvl3',setting.isEditing));
+            
+            return form;
+        }
+        
+        Form.referensiKdBrgGolongan = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'GOLONGAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+                                        fieldLabel:'Kode Golongan',
+                                        name: 'kd_gol',
+                                        readOnly:setting.isEditing,
+                                        maxLength:3,
+                                        allowBlank:false,
+                                    },
+                                    {
+                                        fieldLabel:'Nama Golongan',
+                                        name: 'ur_gol',
+                                        allowBlank:false,
+                                       
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKdBrgGolongan(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
+        Form.referensiKdBrgBidang = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'BIDANG',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'combo',
+                                fieldLabel: 'Golongan',
+                                name: 'kd_gol',
+                                hideLabel: false,
+                                allowBlank: false,
+                                readOnly:setting.isEditing,
+                                editable:false,
+                                store: Reference.Data.golongan,
+                                valueField: 'kd_gol',
+                                displayField: 'ur_gol', emptyText: 'Golongan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan'
+                            },
+                                    {
+                                        fieldLabel:'Kode Bidang',
+                                        name: 'kd_bid',
+                                        readOnly:setting.isEditing,
+                                        maxLength:3,
+                                        allowBlank:false,
+                                    },
+                                    {
+                                        fieldLabel:'Nama Bidang',
+                                        name: 'ur_bid',
+                                        allowBlank:false,
+                                       
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKdBrgBidang(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
+        Form.referensiKdBrgKelompok = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'KELOMPOK',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'combo',
+                                fieldLabel: 'Golongan',
+                                name: 'kd_gol',
+                                id: 'referensi_kd_gol',
+                                hideLabel: false,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.golongan,
+                                valueField: 'kd_gol',
+                                displayField: 'ur_gol', emptyText: 'Golongan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var bidangField = Ext.getCmp('referensi_kd_bid');
+                                                    if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                        bidangField.enable();
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                            bidangField.setValue('');
+                                                        }
+                                                        Reference.Data.bidang.changeParams({params: {id_open: 1, kd_gol: value}});
+                                                    }
+                                                    else {
+                                                        bidangField.disable();
+                                                    }
+                                               
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'combo',
+                                fieldLabel: 'Bidang',
+                                name: 'kd_bid',
+                                id: 'referensi_kd_bid',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.bidang,
+                                valueField: 'kd_bid',
+                                displayField: 'ur_bid', emptyText: 'Bidang',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
+                            },
+                                    {
+                                        fieldLabel:'Kode Kelompok',
+                                        name: 'kd_kel',
+                                        readOnly:setting.isEditing,
+                                        maxLength:3,
+                                        allowBlank:false,
+                                    },
+                                    {
+                                        fieldLabel:'Nama Kelompok',
+                                        name: 'ur_kel',
+                                        allowBlank:false,
+                                       
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKdBrgKelompok(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
+        Form.referensiProvinsi = function(setting)
+        {
+            var formComponentReferensiProvinsi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PROVINSI',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'ID_Prov'
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Kode Provinsi',
+                                        name: 'kode_prov',
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Nama Provinsi',
+                                        name: 'nama_prov',
+                                       
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiProvinsi(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensiProvinsi);
+            
+            return form;
+        }
+        
+        Form.referensiKabkota = function(setting)
+        {
+            var formComponentReferensiKabkota = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'KOTA/KABUPATEN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'ID_KK'
+                                    },
+                                    {
+                                        fieldLabel:'Provinsi',
+                                        name: 'kode_prov', 
+                                        xtype:'combo',
+                                        allowBlank: false,
+                                        store: Reference.Data.provinsi,
+                                        valueField: 'kode_prov',
+                                        displayField: 'nama_prov', emptyText: 'Pilih Provinsi',
+                                        editable:false,
+                                        readOnly:setting.isEditing,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Provinsi',
+                                        listeners:{
+                                            'change':
+                                            {
+                                                fn:function(obj,value)
+                                                {
+                                                  
+                                                   
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Kode Kota/Kabupaten',
+                                        name: 'kode_kabkota',
+                                        id:'referensi_kabkota_kode_kabkota',
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Nama Kota/Kabupaten',
+                                        name: 'nama_kabkota',
+                                       
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKabkota(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensiKabkota);
             
             return form;
         }
@@ -2609,6 +2918,156 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return _form;
         };
+        
+        Form.panelPengelolaanInAsset = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_process', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+//                            console.log(form.getValues());
+                            
+                            if (form.isValid())
+                            {
+//                                console.log(form.getValues());
+                                form.submit({
+                                    success: function(form) {
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.assetSecondaryWindow.close();
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelPemeliharaanInAsset = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_process', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+//                            console.log(form.getValues());
+                            
+                            if (form.isValid())
+                            {
+//                                console.log(form.getValues());
+                                form.submit({
+                                    success: function(form) {
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.assetSecondaryWindow.close();
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
 
         Form.process = function(url, data, edit, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
@@ -2669,22 +3128,22 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         Modal.closeProcessWindow();
                                         if (edit)
                                         {
-                                            Modal.closeProcessWindow();
+//                                            Modal.closeProcessWindow();
                                         }
                                         else
                                         {
-                                            var ref_combo_warehouse = Ext.getCmp('referensi_warehouse_combo');
-                                            var ref_combo_warehouse_ruang = Ext.getCmp('referensi_warehouse_ruang_combo');
+//                                            var ref_combo_warehouse = Ext.getCmp('referensi_warehouse_combo');
+//                                            var ref_combo_warehouse_ruang = Ext.getCmp('referensi_warehouse_ruang_combo');
 //                                            if(ref_combo_warehouse !=null)
 //                                            {
 //                                                ref_combo_warehouse.setValue('');
 //                                            }
-                                            if(ref_combo_warehouse_ruang != null)
-                                            {
-                                                ref_combo_warehouse_ruang.setValue('');
-                                                ref_combo_warehouse_ruang.setDisabled(true);
-                                            }
-                                            form.reset();
+//                                            if(ref_combo_warehouse_ruang != null)
+//                                            {
+//                                                ref_combo_warehouse_ruang.setValue('');
+//                                                ref_combo_warehouse_ruang.setDisabled(true);
+//                                            }
+//                                            form.reset();
                                         }
 
 
@@ -2933,14 +3392,15 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             data.load();
                                         }
                                         Modal.closeProcessWindow();
-                                        if (edit)
-                                        {
-                                            Modal.closeProcessWindow();
-                                        }
-                                        else
-                                        {
-                                            form.reset();
-                                        }
+                                        Modal.assetSecondaryWindow.close();
+//                                        if (edit)
+//                                        {
+//                                            Modal.closeProcessWindow();
+//                                        }
+//                                        else
+//                                        {
+//                                            form.reset();
+//                                        }
 
 
 
@@ -3265,6 +3725,405 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             else
                             {
                                 Ext.MessageBox.alert('Fail', 'Kode Part Number Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiKdBrgGolongan = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-kodeBarang',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_kodebarang', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kode = formValues.kd_gol;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdBrgGolongan',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kode:kode, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiKdBrgBidang = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-kodeBarang',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_kodebarang', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kd_gol = formValues.kd_gol;
+                            var kd_bid = formValues.kd_bid;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdBrgBidang',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kd_gol:kd_gol, kd_bid:kd_bid, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiKdBrgKelompok = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-kodeBarang',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_kodebarang', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kd_gol = formValues.kd_gol;
+                            var kd_bid = formValues.kd_bid;
+                            var kd_kel = formValues.kd_kel;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdBrgKelompok',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kd_gol:kd_gol, kd_bid:kd_bid, kd_kel:kd_kel, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+         Form.panelReferensiProvinsi = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiWilayah',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiWilayah', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kode = formValues.kode_prov;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdProvinsi',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kode:kode, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiKabkota = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiWilayah',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiWilayah', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kabkota = formValues.kode_kabkota;
+                            var prov = formValues.kode_prov;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdKabkota',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kabkota:kabkota, prov:prov, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                form.setValues({kode_kabkota:parseInt(formValues.kode_kabkota) + 1});
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
                             }
 
                             
@@ -4206,6 +5065,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         };
 
         Form.Component.unit = function(edit,form,isReadOnly,isUnorReadOnly) {
+            
+            if(user_kd_lokasi != null) //user session kd_lokasi
+            {
+                isReadOnly = true;
+            }
+            
             var component = {
                 xtype: 'fieldset',
                 itemId : 'unit_selection',
@@ -6725,31 +7590,31 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         };
         
         Form.Component.gridPemeliharaanPart = function(setting,edit) {
-//            var component = {
-//                xtype: 'fieldset',
-//                layout:'anchor',
-//                height: (edit == true)?325:150,
-//                anchor: '100%',
-//                title: 'PEMELIHARAAN PART',
-//                border: false,
-//                frame: true,
-//                defaultType: 'container',
-//                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
-//            };
-//
-//            return component;
-            
-             var component = {
+            var component = {
                 xtype: 'fieldset',
                 layout:'anchor',
-                height: 325,
+                height: (edit == true)?325:150,
                 anchor: '100%',
                 title: 'PEMELIHARAAN PART',
                 border: false,
                 frame: true,
                 defaultType: 'container',
-                items: [{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}]
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]
             };
+
+            return component;
+            
+//             var component = {
+//                xtype: 'fieldset',
+//                layout:'anchor',
+//                height: 325,
+//                anchor: '100%',
+//                title: 'PEMELIHARAAN PART',
+//                border: false,
+//                frame: true,
+//                defaultType: 'container',
+//                items: [{xtype:'container',height:300,items:[Grid.pemeliharaanPart(setting)]}]
+//            };
 
             return component;
         };
@@ -8394,7 +9259,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     displayField: 'year', emptyText: '',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
                                 },
-                                (tipe_angkutan != null)?{
+                                (tipe_angkutan != null && tipe_angkutan != undefined)?{
                                     xtype:'fieldset',
                                     items:[
                                         {
@@ -8432,7 +9297,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     disabled: false,
                                     fieldLabel: 'Kondisi',
                                     name: 'kondisi',
-                                    id : 'kondisi',
+                                    id : 'kondisi_perlengkapan',
                                     allowBlank: true,
                                     store: Reference.Data.kondisiPerlengkapan,
                                     valueField: 'value',

@@ -305,6 +305,19 @@
                         });
                 form.getForm().setValues(data);
             }
+            else
+            {
+                var presetData = {};
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
+                form.getForm().setValues(presetData);
+            }
 
             return form;
         };
@@ -757,8 +770,14 @@
             {
                 var dataForm = selected[0].data;
                 var form = Luar.Form.createPemeliharaan(Luar.dataStorePemeliharaan, dataForm, true);
-                Tab.addToForm(form, 'luar-edit-pemeliharaan', 'Edit Pemeliharaan');
-                Modal.assetEdit.show();
+//                Tab.addToForm(form, 'luar-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
                 Luar.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
@@ -791,7 +810,13 @@
             };
 
             var form = Luar.Form.createPemeliharaan(Luar.dataStorePemeliharaan, dataForm, false);
-            Tab.addToForm(form, 'luar-add-pemeliharaan', 'Add Pemeliharaan');
+//            Tab.addToForm(form, 'luar-add-pemeliharaan', 'Add Pemeliharaan');
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
         };
 
         Luar.Action.pemeliharaanList = function() {

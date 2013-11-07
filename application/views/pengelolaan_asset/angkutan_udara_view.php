@@ -638,6 +638,14 @@
                 presetData.kd_gol = '3';
                 presetData.kd_bid = '02';
                 presetData.kd_kelompok = '05';
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
                 form.getForm().setValues(presetData);
             }
 
@@ -1067,8 +1075,14 @@
             {
                 var dataForm = selected[0].data;
                 var form = AngkutanUdara.Form.createPemeliharaan(AngkutanUdara.dataStorePemeliharaan, dataForm, true);
-                Tab.addToForm(form, 'angkutanUdara-edit-pemeliharaan', 'Edit Pemeliharaan');
-                Modal.assetEdit.show();
+//                Tab.addToForm(form, 'angkutanUdara-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
                  AngkutanUdara.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
@@ -1101,7 +1115,13 @@
             };
 
             var form = AngkutanUdara.Form.createPemeliharaan(AngkutanUdara.dataStorePemeliharaan, dataForm, false);
-            Tab.addToForm(form, 'angkutanUdara-add-pemeliharaan', 'Add Pemeliharaan');
+//            Tab.addToForm(form, 'angkutanUdara-add-pemeliharaan', 'Add Pemeliharaan');
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
         };
 
         AngkutanUdara.Action.pemeliharaanList = function() {

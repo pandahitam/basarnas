@@ -299,6 +299,20 @@
                         });
                 form.getForm().setValues(dataForm);
             }
+            else
+            {
+                var presetData = {};
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
+                form.getForm().setValues(presetData);
+
+            }
             
             return form;
         };
@@ -725,7 +739,13 @@
             {
                 var dataForm = selected[0].data;
                 var form = Ruang.Form.createPemeliharaan(Ruang.dataStorePemeliharaan, dataForm, true)
-                Tab.addToForm(form, 'bangunan-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Tab.addToForm(form, 'bangunan-edit-pemeliharaan', 'Edit Pemeliharaan');
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
                 Ruang.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
@@ -756,7 +776,13 @@
                 no_aset: data.no_aset
             };
             var form = Ruang.Form.createPemeliharaan(Ruang.dataStorePemeliharaan, dataForm, false)
-            Tab.addToForm(form, 'bangunan-add-pemeliharaan', 'Add Pemeliharaan');
+//            Tab.addToForm(form, 'bangunan-add-pemeliharaan', 'Add Pemeliharaan');
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
         };
 
 

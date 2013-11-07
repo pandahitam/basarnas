@@ -4,59 +4,59 @@
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
 <script>
     /////////
-        var Params_M_Provinsi = null;
+        var Params_M_KdBrgGolongan = null;
 
-        Ext.namespace('Provinsi', 'Provinsi.reader', 'Provinsi.proxy', 'Provinsi.Data', 'Provinsi.Grid', 'Provinsi.Window', 'Provinsi.Form', 'Provinsi.Action', 'Provinsi.URL');
-        Provinsi.URL = {
-            read: BASE_URL + 'master_data/provinsi_getAllData',
-            update: BASE_URL + 'master_data/provinsi_modifyProvinsi',
-            create: BASE_URL + 'master_data/provinsi_createProvinsi',
-            remove: BASE_URL + 'master_data/provinsi_deleteProvinsi'
+        Ext.namespace('KdBrgGolongan', 'KdBrgGolongan.reader', 'KdBrgGolongan.proxy', 'KdBrgGolongan.Data', 'KdBrgGolongan.Grid', 'KdBrgGolongan.Window', 'KdBrgGolongan.Form', 'KdBrgGolongan.Action', 'KdBrgGolongan.URL');
+        KdBrgGolongan.URL = {
+            read: BASE_URL + 'master_data/kd_brg_golongan_getAllData',
+            update: BASE_URL + 'master_data/kd_brg_golongan_modifyKdBrgGolongan',
+            create: BASE_URL + 'master_data/kd_brg_golongan_createKdBrgGolongan',
+            remove: BASE_URL + 'master_data/kd_brg_golongan_deleteKdBrgGolongan'
         };
 
-        Provinsi.reader = new Ext.create('Ext.data.JsonReader', {
-            id: 'Reader.Provinsi', root: 'results', totalProperty: 'total', idProperty: 'id'
+        KdBrgGolongan.reader = new Ext.create('Ext.data.JsonReader', {
+            id: 'Reader.KdBrgGolongan', root: 'results', totalProperty: 'total', idProperty: 'id'
         });
 
-        Provinsi.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
+        KdBrgGolongan.writer = new Ext.create('Ext.data.JsonWriter', {type: 'json',
             allowSingle: false});
 
-        Provinsi.proxy = new Ext.create('Ext.data.AjaxProxy', {
-            id: 'Proxy_Provinsi',
-            url: Provinsi.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
-            reader: Provinsi.reader,
-            writer: Provinsi.writer,
+        KdBrgGolongan.proxy = new Ext.create('Ext.data.AjaxProxy', {
+            id: 'Proxy_KdBrgGolongan',
+            url: KdBrgGolongan.URL.read, actionMethods: {read: 'POST'}, extraParams: {id_open: '1'},
+            reader: KdBrgGolongan.reader,
+            writer: KdBrgGolongan.writer,
             afterRequest: function(request, success) {
-                Params_M_Provinsi = request.operation.params;
+                Params_M_KdBrgGolongan = request.operation.params;
             }
         });
 
-        Provinsi.Data = new Ext.create('Ext.data.Store', {
-            id: 'Data_Provinsi', storeId: 'DataProvinsi', model: 'MProvinsi', pageSize: 50, noCache: false, autoLoad: true,
-            proxy: Provinsi.proxy, groupField: 'tipe'
+        KdBrgGolongan.Data = new Ext.create('Ext.data.Store', {
+            id: 'Data_KdBrgGolongan', storeId: 'DataKdBrgGolongan', model: 'MKdBrgGolongan', pageSize: 50, noCache: false, autoLoad: true,
+            proxy: KdBrgGolongan.proxy, groupField: 'tipe'
         });
 
-        Provinsi.Form.create = function(data, edit) {
+        KdBrgGolongan.Form.create = function(data, edit) {
             
             if(edit == true)
             {
                 var setting = {
-                    url: Provinsi.URL.update,
-                    data: Provinsi.Data,
+                    url: KdBrgGolongan.URL.update,
+                    data: KdBrgGolongan.Data,
                     isEditing: edit,
                 };
             }
             else
             {
                 var setting = {
-                    url: Provinsi.URL.create,
-                    data: Provinsi.Data,
+                    url: KdBrgGolongan.URL.create,
+                    data: KdBrgGolongan.Data,
                     isEditing: edit,
                 };
             }
             
 
-            var form = Form.referensiProvinsi(setting);
+            var form = Form.referensiKdBrgGolongan(setting);
             if (data !== null)
             {
                 Ext.Object.each(data,function(key,value,myself){
@@ -70,34 +70,34 @@
             
             if(edit == false)
             {
-                var kode_prov = '';
-                $.ajax({
-                       url:BASE_URL + 'master_data/provinsi_getLastKodeProv',
-                       type: "POST",
-                       dataType:'json',
-                       async:false,
-                       success:function(response, status){
-                          kode_prov = response;
-                       }
-                    });
-                var data_kode = {
-                    kode_prov: kode_prov
-                };
-                form.getForm().setValues(data_kode)
+//                var kode = '';
+//                $.ajax({
+//                       url:BASE_URL + 'master_data/kd_brg_golongan_getLastKdBrgGolongan',
+//                       type: "POST",
+//                       dataType:'json',
+//                       async:false,
+//                       success:function(response, status){
+//                          kode = response;
+//                       }
+//                    });
+//                var data_kode = {
+//                    kd_gol: kode
+//                };
+//                form.getForm().setValues(data_kode)
             }
             
             return form;
         };
 
-        Provinsi.Action.add = function() {
-            var _form = Provinsi.Form.create(null, false);
-            Modal.smallWindow.setTitle('Create Provinsi');
+        KdBrgGolongan.Action.add = function() {
+            var _form = KdBrgGolongan.Form.create(null, false);
+            Modal.smallWindow.setTitle('Create Kode Barang Golongan');
             Modal.smallWindow.add(_form);
             Modal.smallWindow.show();
         };
 
-        Provinsi.Action.edit = function() {
-            var selected = Provinsi.Grid.grid.getSelectionModel().getSelection();
+        KdBrgGolongan.Action.edit = function() {
+            var selected = KdBrgGolongan.Grid.grid.getSelectionModel().getSelection();
             if (selected.length === 1)
             {
                 var data = selected[0].data;
@@ -105,28 +105,27 @@
 
                 if (Modal.smallWindow.items.length === 0)
                 {
-                    Modal.smallWindow.setTitle('Edit Provinsi');
+                    Modal.smallWindow.setTitle('Edit Kode Barang Golongan');
                 }
-                var _form = Provinsi.Form.create(data, true);
+                var _form = KdBrgGolongan.Form.create(data, true);
                 Modal.smallWindow.add(_form);
                 Modal.smallWindow.show();
             }
         };
 
-        Provinsi.Action.remove = function() {
-            var selected = Provinsi.Grid.grid.getSelectionModel().getSelection();
+        KdBrgGolongan.Action.remove = function() {
+            var selected = KdBrgGolongan.Grid.grid.getSelectionModel().getSelection();
             var arrayDeleted = [];
             _.each(selected, function(obj) {
                 var data = {
-                    id: obj.data.ID_Prov,
-                    kode_prov: obj.data.kode_prov
+                    id: obj.data.kd_gol,
                 };
                 arrayDeleted.push(data);
             });
-            //Modal.deleteAlert(arrayDeleted, Provinsi.URL.remove, Provinsi.Data);
+            //Modal.deleteAlert(arrayDeleted, KdBrgGolongan.URL.remove, KdBrgGolongan.Data);
             Ext.Msg.show({
                 title: 'Konfirmasi',
-                msg: 'Apakah Anda yakin untuk menghapus ? Kota/Kabupaten yang berhubungan akan juga terhapus.',
+                msg: 'Apakah Anda yakin untuk menghapus ?',
                 buttons: Ext.Msg.YESNO, 
                 icon: Ext.Msg.Question,
                 fn: function(btn) {
@@ -141,9 +140,9 @@
                             type: 'POST',
                             data: dataSend,
                             dataType: 'json',
-                            url:  Provinsi.URL.remove,
+                            url:  KdBrgGolongan.URL.remove,
                             success: function(data) {
-                                 Provinsi.Data.load();
+                                 KdBrgGolongan.Data.load();
                             }
                         });
                     }
@@ -151,8 +150,8 @@
             })
         };
 
-        Provinsi.Action.print = function() {
-//            var selected = Provinsi.Grid.grid.getSelectionModel().getSelection();
+        KdBrgGolongan.Action.print = function() {
+//            var selected = KdBrgGolongan.Grid.grid.getSelectionModel().getSelection();
 //            var selectedData = "";
 //            if (selected.length > 0)
 //            {
@@ -161,7 +160,7 @@
 //                    selectedData += selected[i].data.id + ",";
 //                }
 //            }
-//            var gridHeader = Provinsi.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
+//            var gridHeader = KdBrgGolongan.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
 //            var gridHeaderList = "";
 //            //index starts at 2 to exclude the No. column
 //            for (var i = 2; i < gridHeader.length; i++)
@@ -176,8 +175,8 @@
 //                }
 //            }
 //
-//            var serverSideModelName = "Provinsi_Model";
-//            var title = "Provinsi Umum";
+//            var serverSideModelName = "KdBrgGolongan_Model";
+//            var title = "KdBrgGolongan Umum";
 //            var primaryKeys = "id";
 //
 //            my_form = document.createElement('FORM');
@@ -224,44 +223,44 @@
 
         var setting = {
             grid: {
-                id: 'grid_Provinsi',
-                title: 'PROVINSI',
+                id: 'grid_KdBrgGolongan',
+                title: 'GOLONGAN',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Kode Provinsi', dataIndex: 'kode_prov', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Nama Provinsi', dataIndex: 'nama_prov', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kode Golongan', dataIndex: 'kd_gol', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Nama Golongan', dataIndex: 'ur_gol', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                 ]
             },
             search: {
-                id: 'search_Provinsi'
+                id: 'search_KdBrgGolongan'
             },
             toolbar: {
-                id: 'toolbar_Provinsi',
+                id: 'toolbar_KdBrgGolongan',
                 add: {
-                    id: 'button_add_Provinsi',
-                    action: Provinsi.Action.add
+                    id: 'button_add_KdBrgGolongan',
+                    action: KdBrgGolongan.Action.add
                 },
                 edit: {
-                    id: 'button_edit_Provinsi',
-                    action: Provinsi.Action.edit
+                    id: 'button_edit_KdBrgGolongan',
+                    action: KdBrgGolongan.Action.edit
                 },
                 remove: {
-                    id: 'button_remove_Provinsi',
-                    action: Provinsi.Action.remove
+                    id: 'button_remove_KdBrgGolongan',
+                    action: KdBrgGolongan.Action.remove
                 },
                 print: {
-                    id: 'button_print_Provinsi',
-                    action: Provinsi.Action.print
+                    id: 'button_print_KdBrgGolongan',
+                    action: KdBrgGolongan.Action.print
                 }
             }
         };
 
-        Provinsi.Grid.grid = Grid.referensiGrid(setting, Provinsi.Data);
+        KdBrgGolongan.Grid.grid = Grid.referensiGrid(setting, KdBrgGolongan.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',
-            id: 'master_provinsi', title: 'Provinsi', iconCls: 'icon-menu_impasing', border: false, closable: true,
-            layout: 'border', items: [Provinsi.Grid.grid]
+            id: 'master_kd_brg_golongan', title: 'Golongan', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            layout: 'border', items: [KdBrgGolongan.Grid.grid]
         };
 
 

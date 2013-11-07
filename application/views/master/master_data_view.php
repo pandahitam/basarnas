@@ -34,11 +34,16 @@ var Center_MD = {
 		items: [
 	  	{text: 'Unit Kerja', iconCls: 'icon-course', disabled: false, handler: function(){Load_TabPage_MD('master_unit_kerja', BASE_URL + 'master_data/unit_kerja');}, tooltip: {text: 'Referensi Unit Kerja'}},
 	  	{text: 'Unit Organisasi', iconCls: 'icon-spell', disabled: false, handler: function(){Load_TabPage_MD('master_unit_organisasi', BASE_URL + 'master_data/unit_organisasi');}, tooltip: {text: 'Referensi Unit Organisasi'}},
-//                {text: 'Kode Barang', iconCls: 'icon-templates', disabled: false, menu:{
-//                        items:[
-//                            {text: 'Golongan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kode_barang_golongan', BASE_URL + 'master_data/kode_barang_golongan');}, tooltip: {text: 'Referensi Kode Barang Golongan'}},
-//                        ]
-//                    }},
+                {text: 'Part Number', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_partnumber', BASE_URL + 'master_data/part_number');}, tooltip: {text: 'Referensi Part Number'}},
+                {text: 'Kode Barang', iconCls: 'icon-templates', disabled: false, menu:{
+                        items:[
+                            {text: 'Golongan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_golongan', BASE_URL + 'master_data/kd_brg_golongan');}, tooltip: {text: 'Referensi Kode Barang Golongan'}},
+                            {text: 'Bidang', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_bidang', BASE_URL + 'master_data/kd_brg_bidang');}, tooltip: {text: 'Referensi Kode Barang Bidang'}},
+                            {text: 'Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_kelompok', BASE_URL + 'master_data/kd_brg_kelompok');}, tooltip: {text: 'Referensi Kode Barang Kelompok'}},
+                            {text: 'Sub Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){}, tooltip: {text: 'Referensi Kode Barang Sub Kelompok'}},
+                            {text: 'Sub Sub Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){}, tooltip: {text: 'Referensi Kode Barang Sub Sub Kelompok'}},
+                        ]
+                }},
                 {text: 'Klasifikasi Aset', iconCls: 'icon-templates', disabled: false, menu:{
                         items:[
                             {text: 'Klasifikasi Aset Lvl 1', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset_lvl1', BASE_URL + 'master_data/klasifikasi_aset_lvl1');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl1'}},
@@ -53,7 +58,13 @@ var Center_MD = {
                             {text: 'Rak', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_rak', BASE_URL + 'master_data/rak');}, tooltip: {text: 'Referensi Rak'}},
                         ]
                     }},
-                {text: 'Part Number', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_partnumber', BASE_URL + 'master_data/part_number');}, tooltip: {text: 'Referensi Part Number'}},
+                {text: 'Wilayah', iconCls: 'icon-templates', disabled: false, menu:{
+                        items:[
+                            {text: 'Provinsi', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_provinsi', BASE_URL + 'master_data/provinsi');}, tooltip: {text: 'Referensi Provinsi'}},
+                            {text: 'Kota/Kabupaten', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kabkota', BASE_URL + 'master_data/kabkota');}, tooltip: {text: 'Referensi Kota/Kabupaten'}},
+                        ]
+                    }},
+               
 	  ]
   })
 };

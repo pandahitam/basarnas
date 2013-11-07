@@ -117,6 +117,26 @@
         });
         
         //used when adding/editing data with a grid inside a form
+        Modal.assetTertiaryWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: {
+                type: 'hbox',
+                pack: 'start',
+                align: 'stretch'
+            },
+            width: Measurement.windowWidth, height: Measurement.windowHeight, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.assetTertiaryWindow.removeAll(true);
+
+                }
+            }
+        });
+        
         Modal.assetSecondaryWindow = Ext.create('Ext.window.Window', {
             iconCls: 'icon-course',
             modal: true,

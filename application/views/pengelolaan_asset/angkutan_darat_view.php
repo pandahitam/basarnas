@@ -542,6 +542,14 @@
                 var presetData = {};
                 presetData.kd_gol = '3';
                 presetData.kd_bid = '02';
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
                 form.getForm().setValues(presetData);
             }
 
@@ -972,8 +980,14 @@
             {
                 var dataForm = selected[0].data;
                 var form = AngkutanDarat.Form.createPemeliharaan(AngkutanDarat.dataStorePemeliharaan, dataForm, true);
-                Tab.addToForm(form, 'angkutanDarat-edit-pemeliharaan', 'Edit Pemeliharaan');
-                Modal.assetEdit.show();
+//                Tab.addToForm(form, 'angkutanDarat-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
                 AngkutanDarat.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
@@ -989,7 +1003,6 @@
                     };
                     arrayDeleted.push(data);
                 });
-                console.log(arrayDeleted);
                 Modal.deleteAlert(arrayDeleted, AngkutanDarat.URL.removePemeliharaan, AngkutanDarat.dataStorePemeliharaan);
             }
         };
@@ -1006,7 +1019,13 @@
             };
 
             var form = AngkutanDarat.Form.createPemeliharaan(AngkutanDarat.dataStorePemeliharaan, dataForm, false);
-            Tab.addToForm(form, 'angkutanDarat-add-pemeliharaan', 'Add Pemeliharaan');
+//            Tab.addToForm(form, 'angkutanDarat-add-pemeliharaan', 'Add Pemeliharaan');
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
         };
 
         AngkutanDarat.Action.pemeliharaanList = function() {

@@ -312,7 +312,11 @@ class Combo_Ref extends CI_Controller {
                 
                 $query_text = "select id, nama from ref_warehouse where kd_lokasi='".$_POST['kd_lokasi']."' and kode_unor ='".$_POST['kode_unor']."'";
             }
-            
+        }
+        else
+        {
+             $query_text = "select id, nama from ref_warehouse";
+        }
             $query = $this->db->query($query_text);
             foreach($query->result() as $obj)
             {
@@ -320,7 +324,7 @@ class Combo_Ref extends CI_Controller {
             }
 
             echo json_encode($data);
-        }
+        
     }
     
     function combo_warehouseRuang(){

@@ -17,10 +17,13 @@ class Master_Data extends MY_Controller {
         $this->load->model('Ruang_Model', '', TRUE);
         $this->load->model('Rak_Model', '', TRUE);
         $this->load->model('Part_Number_Model', '', TRUE);
+        $this->load->model('Kd_Brg_Golongan_Model', '', TRUE);
+        $this->load->model('Kd_Brg_Bidang_Model', '', TRUE);
+        $this->load->model('Kd_Brg_Kelompok_Model', '', TRUE);
 //		$this->load->model('Jabatan_Model','',TRUE);
 //		$this->load->model('TTD_Model','',TRUE);
-//		$this->load->model('Prov_Model','',TRUE);
-//		$this->load->model('KabKota_Model','',TRUE);
+	$this->load->model('Prov_Model','',TRUE);
+        $this->load->model('KabKota_Model','',TRUE);
 //		$this->load->model('Kec_Model','',TRUE);
 //		$this->load->model('Tasset_tanah_Model','',TRUE);		
 //		$this->load->model('Tasset_bangunan_Model','',TRUE);
@@ -746,7 +749,7 @@ class Master_Data extends MY_Controller {
 
     // MASTER PEJABAT PENANDATANGAN ------------------------------------------- END
     // MASTER PROVINSI ------------------------------------------- START
-    function prov() {
+    function provinsi() {
         if ($this->input->post("id_open")) {
             $data['jsscript'] = TRUE;
             $this->load->view('master/prov_view', $data);
@@ -755,65 +758,115 @@ class Master_Data extends MY_Controller {
         }
     }
 
-    function ext_get_all_prov() {
-        if ($this->input->post("id_open")) {
-            $data = $this->Prov_Model->get_AllData();
-            $total = $this->Prov_Model->get_CountData();
-            echo '({total:' . $total . ',results:' . json_encode($data) . '})';
+    function provinsi_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Prov_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
         }
     }
-
-    function ext_insert_prov() {
-        $Status = $this->Prov_Model->Insert_Data();
-        if ($Status == "Kode Exist") {
-            echo "{success:false, info: { reason: 'Kode Provinsi sudah ada !' }}";
-        } elseif ($Status == "Exist") {
-            echo "{success:false, info: { reason: 'Nama Provinsi sudah ada !' }}";
-        } elseif ($Status == "Updated") {
-            echo "{success:true, info: { reason: 'Sukses merubah data !' }}";
-        } elseif (is_array($Status) && is_numeric($Status[0])) {
-            echo "{success:true, info: { reason: '" . $Status[0] . "', kode: '" . $Status[1] . "' }}";
-        } else {
-            echo "{success:false, info: { reason: 'Gagal menambah Data !' }}";
+    
+    function provinsi_createProvinsi() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'ID_Prov','kode_prov','nama_prov'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
         }
+        
+        $this->db->set($data);
+        $this->db->replace('tref_provinsi');
+        $this->createLog('INSERT REFERENSI PROVINSI','tref_provinsi');
+        echo "{success: true}";
     }
-
-    function ext_delete_prov() {
-        $this->Prov_Model->Delete_Data();
-    }
-
-    // CETAK PROVINSI ---------------------------------------------
-    function print_dialog_prov() {
-        if ($this->input->post("id_open")) {
-            $data['jsscript'] = TRUE;
-            $data['Data_ID'] = 'ID_Prov';
-            $data['Grid_ID'] = 'Grid_MProv';
-            $data['Params_Print'] = 'Params_MProv';
-            $data['uri_all'] = 'master_data/cetak_prov/all';
-            $data['uri_selected'] = 'master_data/cetak_prov/selected';
-            $data['uri_by_rows'] = 'master_data/cetak_prov/by_rows/';
-            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
-        } else {
-            $this->load->view('print_dialog/print_dialog_no_ttd_view');
+    
+    function provinsi_modifyProvinsi() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'ID_Prov','kode_prov','nama_prov'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
         }
+        
+        $this->db->where('ID_Prov', $data['ID_Prov']);
+        unset($data['ID_Prov']);
+        $this->db->update('tref_provinsi',$data);
+         $this->createLog('UPDATE REFERENSI PROVINSI','tref_provinsi');
+        echo "{success: true}";
     }
+    
+    function provinsi_deleteProvinsi()
+    {
+       $deletedData = $this->input->post('data');
 
-    function cetak_prov($p_mode = 'all', $dari = null, $sampai = null) {
-        if ($this->input->post("id_open")) {
-            if ($p_mode == "all") {
-                $data['data_cetak'] = $this->Prov_Model->get_AllPrint();
-            } elseif ($p_mode == "selected") {
-                $data['data_cetak'] = $this->Prov_Model->get_SelectedPrint();
-            } elseif ($p_mode == "by_rows") {
-                $data['data_cetak'] = $this->Prov_Model->get_ByRowsPrint($dari, $sampai);
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('ID_Prov', $data['id']);
+           $this->db->delete('tref_provinsi');
+           $this->db->where('kode_prov',$data['kode_prov']);
+           $this->db->delete('tref_kabkota');
+           $this->createLog('DELETE REFERENSI PROVINSI','tref_provinsi');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdProvinsi()
+    {
+
+        $this->db->from('tref_provinsi');
+        $this->db->where('kode_prov',$_POST['kode']);
+        $result = $this->db->get();
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
             }
-            $this->load->view('master/prov_pdf', $data);
+            else
+            {
+                echo "false";
+            }
+            
         }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    function provinsi_getLastKodeProv()
+    {
+        $this->db->from('tref_provinsi');
+        $this->db->select('kode_prov');
+        $this->db->order_by('kode_prov','desc');
+        $query = $this->db->get();
+        $result = $query->row();
+        echo $result->kode_prov + 1;
     }
 
     // MASTER PROVINSI ------------------------------------------- END
     // MASTER KABUPATEN / KOTA ------------------------------------------- START
-    function kabkota() {
+   function kabkota() {
         if ($this->input->post("id_open")) {
             $data['jsscript'] = TRUE;
             $this->load->view('master/kabkota_view', $data);
@@ -822,60 +875,108 @@ class Master_Data extends MY_Controller {
         }
     }
 
-    function ext_get_all_kabkota() {
-        if ($this->input->post("id_open")) {
-            $data = $this->KabKota_Model->get_AllData();
-            $total = $this->KabKota_Model->get_CountData();
-            echo '({total:' . $total . ',results:' . json_encode($data) . '})';
+    function kabkota_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->KabKota_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
         }
     }
-
-    function ext_insert_kabkota() {
-        $Status = $this->KabKota_Model->Insert_Data();
-        if ($Status == "Kode Exist") {
-            echo "{success:false, info: { reason: 'Kode Kabupaten/Kota sudah ada !' }}";
-        } elseif ($Status == "Exist") {
-            echo "{success:false, info: { reason: 'Nama Kabupaten/Kota sudah ada !' }}";
-        } elseif ($Status == "Updated") {
-            echo "{success:true, info: { reason: 'Sukses merubah data !' }}";
-        } elseif (is_array($Status) && is_numeric($Status[0])) {
-            echo "{success:true, info: { reason: '" . $Status[0] . "', kode: '" . $Status[1] . "' }}";
-        } else {
-            echo "{success:false, info: { reason: 'Gagal menambah Data !' }}";
+    
+    function kabkota_createKabkota() {
+        
+        $data = array();
+        $dataFields = array(
+            'ID_KK','kode_prov','kode_kabkota','nama_kabkota'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
         }
+        
+        $this->db->set($data);
+        $this->db->replace('tref_kabkota');
+        $this->createLog('INSERT REFERENSI KOTA/KABUPATEN','tref_kabkota');
+        echo "{success: true}";
     }
-
-    function ext_delete_kabkota() {
-        $this->KabKota_Model->Delete_Data();
-    }
-
-    // CETAK KABUPATEN / KOTA ---------------------------------------------
-    function print_dialog_kabkota() {
-        if ($this->input->post("id_open")) {
-            $data['jsscript'] = TRUE;
-            $data['Data_ID'] = 'ID_KK';
-            $data['Grid_ID'] = 'Grid_MKabKota';
-            $data['Params_Print'] = 'Params_MKabKota';
-            $data['uri_all'] = 'master_data/cetak_kabkota/all';
-            $data['uri_selected'] = 'master_data/cetak_kabkota/selected';
-            $data['uri_by_rows'] = 'master_data/cetak_kabkota/by_rows/';
-            $this->load->view('print_dialog/print_dialog_no_ttd_view', $data);
-        } else {
-            $this->load->view('print_dialog/print_dialog_no_ttd_view');
+    
+    function kabkota_modifyKabkota() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'ID_KK','kode_prov','kode_kabkota','nama_kabkota'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
         }
+        
+        $this->db->where('ID_KK', $data['ID_KK']);
+        unset($data['ID_KK']);
+        $this->db->update('tref_kabkota',$data);
+         $this->createLog('UPDATE REFERENSI KOTA/KABUPATEN','tref_kabkota');
+        echo "{success: true}";
     }
+    
+    function kabkota_deleteKabkota()
+    {
+       $deletedData = $this->input->post('data');
 
-    function cetak_kabkota($p_mode = 'all', $dari = null, $sampai = null) {
-        if ($this->input->post("id_open")) {
-            if ($p_mode == "all") {
-                $data['data_cetak'] = $this->KabKota_Model->get_AllPrint();
-            } elseif ($p_mode == "selected") {
-                $data['data_cetak'] = $this->KabKota_Model->get_SelectedPrint();
-            } elseif ($p_mode == "by_rows") {
-                $data['data_cetak'] = $this->KabKota_Model->get_ByRowsPrint($dari, $sampai);
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('ID_KK', $data['id']);
+           $this->db->delete('tref_kabkota');
+           $this->createLog('DELETE REFERENSI KOTA/KABUPATEN','tref_kabkota');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdKabkota()
+    {
+
+        $this->db->from('tref_kabkota');
+        $this->db->where('kode_kabkota',$_POST['kabkota']);
+        $this->db->where('kode_prov',$_POST['prov']);
+        $result = $this->db->get();
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
             }
-            $this->load->view('master/kabkota_pdf', $data);
+            else
+            {
+                echo "false";
+            }
+            
         }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    function kabkota_getLastKodeKabkota()
+    {
+        $this->db->from('tref_kabkota');
+        $this->db->select('kode_kabkota');
+        $this->db->order_by('kode_kabkota','desc');
+        $query = $this->db->get();
+        $result = $query->row();
+        echo $result->kode_kabkota + 1;
     }
 
     // MASTER KABUPATEN / KOTA ------------------------------------------- END
@@ -1545,28 +1646,26 @@ class Master_Data extends MY_Controller {
     }
     
     
-     //MASTER KODE BARANG GOLONGAN
-    function kode_barang_golongan() {
+    // KODE BARANG GOLONGAN
+    function kd_brg_golongan() {
         if ($this->input->post("id_open")) {
             $data['jsscript'] = TRUE;
-            $this->load->view('master/kode_barang_golongan_view', $data);
+            $this->load->view('master/kd_brg_golongan_view', $data);
         } else {
-            $this->load->view('master/kode_barang_golongan_view');
+            $this->load->view('master/kd_brg_golongan_view');
         }
     }
 
-    function kode_barang_golongan_getAllData() {
+    function kd_brg_golongan_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Part_Number_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->Kd_Brg_Golongan_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
             $data = $resultData['data'];
             $total = $resultData['count'];	  
-//			$total = $this->Unit_Kerja_Model->get_CountData();	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
-//            echo '({results:' . json_encode($data) . '})';
         }
     }
     
-    function kode_barang_golongan_modifyGolongan() {
+    function kd_brg_golongan_createKdBrgGolongan() {
         
         $data = array();
         
@@ -1580,18 +1679,38 @@ class Master_Data extends MY_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_golongan');
-        
+        $this->createLog('INSERT REFERENSI KODE BARANG GOLONGAN','ref_golongan');
         echo "{success: true}";
     }
     
-    function kode_barang_golongan_deleteGolongan()
+    function kd_brg_golongan_modifyKdBrgGolongan() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','ur_gol'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('kd_gol', $data['kd_gol']);
+        unset($data['kd_gol']);
+        $this->db->update('ref_golongan',$data);
+         $this->createLog('UPDATE REFERENSI KODE BARANG GOLONGAN','ref_golongan');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_golongan_deleteKdBrgGolongan()
     {
        $deletedData = $this->input->post('data');
 
        foreach ($deletedData as $data)
        {
-           $this->db->where('id', $data['id']);
+           $this->db->where('kd_gol', $data['id']);
            $this->db->delete('ref_golongan');
+           $this->createLog('DELETE REFERENSI KODE BARANG GOLONGAN','ref_golongan');
        }
        
        $result = array('fail' => false,
@@ -1600,16 +1719,231 @@ class Master_Data extends MY_Controller {
         echo json_encode($result);
     }
     
-    function checkKodeBarangGolongan()
+    function checkKdBrgGolongan()
     {
 
         $this->db->from('ref_golongan');
-        $this->db->where('kd_gol',$_POST['kd_gol']);
+        $this->db->where('kd_gol',$_POST['kode']);
         $result = $this->db->get();
-//        var_dump($this->db->last_query());
-//        var_dump($result->num_rows());
-//        var_dump($_POST);
-//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    // KODE BARANG BIDANG
+    function kd_brg_bidang() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/kd_brg_bidang_view', $data);
+        } else {
+            $this->load->view('master/kd_brg_bidang_view');
+        }
+    }
+
+    function kd_brg_bidang_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Kd_Brg_Bidang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function kd_brg_bidang_createKdBrgBidang() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','ur_bid'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        $data['kd_bidbrg'] = $data['kd_gol'].$data['kd_bid'];
+        $this->db->set($data);
+        $this->db->replace('ref_bidang');
+        $this->createLog('INSERT REFERENSI KODE BARANG BIDANG','ref_bidang');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_bidang_modifyKdBrgBidang() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','ur_bid'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('kd_gol', $data['kd_gol']);
+        $this->db->where('kd_bid', $data['kd_bid']);
+        unset($data['kd_gol'],$data['kd_bid']);
+        $this->db->update('ref_bidang',$data);
+         $this->createLog('UPDATE REFERENSI KODE BARANG BIDANG','ref_bidang');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_bidang_deleteKdBrgBidang()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_gol', $data['kd_gol']);
+            $this->db->where('kd_bid', $data['kd_bid']);
+           $this->db->delete('ref_bidang');
+           $this->createLog('DELETE REFERENSI KODE BARANG BIDANG','ref_bidang');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdBrgBidang()
+    {
+
+        $this->db->from('ref_bidang');
+        $this->db->where('kd_gol',$_POST['kd_gol']);
+        $this->db->where('kd_bid',$_POST['kd_bid']);
+        $result = $this->db->get();
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    // KODE BARANG KELOMPOK
+    function kd_brg_kelompok() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/kd_brg_kelompok_view', $data);
+        } else {
+            $this->load->view('master/kd_brg_kelompok_view');
+        }
+    }
+
+    function kd_brg_kelompok_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Kd_Brg_Kelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function kd_brg_kelompok_createKdBrgKelompok() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','kd_kel','ur_kel'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_kelbrg'] = $data['kd_gol'].$data['kd_bid'].$data['kd_kel'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_kel');
+        $this->createLog('INSERT REFERENSI KODE BARANG KELOMPOK','ref_kel');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_kelompok_modifyKdBrgKelompok() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','kd_kel','ur_kel'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('kd_gol', $data['kd_gol']);
+        $this->db->where('kd_bid', $data['kd_bid']);
+        $this->db->where('kd_kel', $data['kd_kel']);
+        unset($data['kd_gol'],$data['kd_bid'],$data['kd_kel']);
+        $this->db->update('ref_kel',$data);
+         $this->createLog('UPDATE REFERENSI KODE BARANG KELOMPOK','ref_kel');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_kelompok_deleteKdBrgKelompok()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_gol', $data['kd_gol']);
+           $this->db->where('kd_bid', $data['kd_bid']);
+           $this->db->where('kd_kel', $data['kd_kel']);
+           $this->db->delete('ref_kel');
+           $this->createLog('DELETE REFERENSI KODE BARANG KELOMPOK','ref_kel');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdBrgKelompok()
+    {
+
+        $this->db->from('ref_kel');
+        $this->db->where('kd_gol',$_POST['kd_gol']);
+        $this->db->where('kd_bid',$_POST['kd_bid']);
+        $this->db->where('kd_kel',$_POST['kd_kel']);
+        $result = $this->db->get();
 
         if($result->num_rows() === 1)
         {

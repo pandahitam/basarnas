@@ -363,7 +363,7 @@ class Dashboard extends CI_Controller{
   function grafik_kategoribarang_totalaset()
   {
       $query = $this->db->query( 'select 
-                (select (sum(rph_aset)/1000000) from asset_alatbesar) as "Alat Besar", 
+                (select (sum(rph_aset)/1000000) from asset_alatbesar) as "Peralatan", 
                 (select (sum(rph_aset)/1000000) from asset_angkutan) as "Angkutan",
                 (select (sum(rph_aset)/1000000) from asset_bangunan) as "Bangunan",
                 (select (sum(rph_aset)/1000000) from asset_perairan) as "Perairan",

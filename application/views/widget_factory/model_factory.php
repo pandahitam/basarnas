@@ -4,6 +4,33 @@
 <script>
 ////// Model In View
 
+Ext.define('MKdBrgKelompok', {extend: 'Ext.data.Model',
+    fields: ['kd_gol', 'ur_gol','kd_bid','ur_bid','kd_kel','ur_kel'
+    ]
+});
+
+Ext.define('MKdBrgBidang', {extend: 'Ext.data.Model',
+    fields: ['kd_gol', 'ur_gol','kd_bid','ur_bid',
+    ]
+});
+
+Ext.define('MKdBrgGolongan', {extend: 'Ext.data.Model',
+    fields: ['kd_gol', 'ur_gol',
+    ]
+});
+
+Ext.define('MKabkota', {extend: 'Ext.data.Model',
+    fields: ['ID_KK', 'kode_prov', 'kode_kabkota',
+        'nama_kabkota','nama_prov'
+    ]
+});
+
+Ext.define('MProvinsi', {extend: 'Ext.data.Model',
+    fields: ['ID_Prov', 'kode_prov', 
+        'nama_prov'
+    ]
+});
+
 Ext.define('MInventoryPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_inventory', 
         'kd_brg', 'no_aset', 

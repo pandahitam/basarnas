@@ -544,6 +544,14 @@
                 var presetData = {};
                 presetData.kd_gol = '3';
                 presetData.kd_bid = '02';
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
                 form.getForm().setValues(presetData);
             }
 
@@ -973,8 +981,14 @@
             {
                 var dataForm = selected[0].data;
                 var form = AngkutanLaut.Form.createPemeliharaan(AngkutanLaut.dataStorePemeliharaan, dataForm, true);
-                Tab.addToForm(form, 'angkutanLaut-edit-pemeliharaan', 'Edit Pemeliharaan');
-                Modal.assetEdit.show();
+//                Tab.addToForm(form, 'angkutanLaut-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Modal.assetEdit.show();
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
                 AngkutanLaut.dataStorePemeliharaanPart.changeParams({params:{id_pemeliharaan:dataForm.id}});
             }
         };
@@ -1007,7 +1021,13 @@
             };
 
             var form = AngkutanLaut.Form.createPemeliharaan(AngkutanLaut.dataStorePemeliharaan, dataForm, false);
-            Tab.addToForm(form, 'angkutanLaut-add-pemeliharaan', 'Add Pemeliharaan');
+//            Tab.addToForm(form, 'angkutanLaut-add-pemeliharaan', 'Add Pemeliharaan');
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
         };
 
         AngkutanLaut.Action.pemeliharaanList = function() {

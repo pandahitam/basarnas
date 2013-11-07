@@ -190,6 +190,14 @@
                 var presetData = {};
                 presetData.kd_gol = '4';
 //                presetData.kd_bid = '09';
+                if(user_kd_lokasi != null)
+                {
+                    presetData.kd_lokasi = user_kd_lokasi;
+                }
+                if(user_kode_unor != null)
+                {
+                    presetData.kode_unor = user_kode_unor;
+                }
                 form.getForm().setValues(presetData);
             }
 
@@ -793,7 +801,13 @@
                 var dataForm = selected[0].data;
                 var form = Bangunan.Form.createPemeliharaan(Bangunan.dataStorePemeliharaan, dataForm, true)
                 
-                Tab.addToForm(form, 'bangunan-edit-pemeliharaan', 'Edit Pemeliharaan');
+//                Tab.addToForm(form, 'bangunan-edit-pemeliharaan', 'Edit Pemeliharaan');
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                }
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
             }
         };
 
@@ -823,7 +837,13 @@
                 no_aset: data.no_aset
             };
             var form = Bangunan.Form.createPemeliharaan(Bangunan.dataStorePemeliharaan, dataForm, false)
-            Tab.addToForm(form, 'bangunan-add-pemeliharaan', 'Add Pemeliharaan');
+//            Tab.addToForm(form, 'bangunan-add-pemeliharaan', 'Add Pemeliharaan');
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
         };
 
 
