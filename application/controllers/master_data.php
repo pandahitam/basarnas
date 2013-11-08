@@ -20,6 +20,8 @@ class Master_Data extends MY_Controller {
         $this->load->model('Kd_Brg_Golongan_Model', '', TRUE);
         $this->load->model('Kd_Brg_Bidang_Model', '', TRUE);
         $this->load->model('Kd_Brg_Kelompok_Model', '', TRUE);
+        $this->load->model('Kd_Brg_SubKelompok_Model', '', TRUE);
+        $this->load->model('Kd_Brg_SubSubKelompok_Model', '', TRUE);
 //		$this->load->model('Jabatan_Model','',TRUE);
 //		$this->load->model('TTD_Model','',TRUE);
 	$this->load->model('Prov_Model','',TRUE);
@@ -1943,6 +1945,239 @@ class Master_Data extends MY_Controller {
         $this->db->where('kd_gol',$_POST['kd_gol']);
         $this->db->where('kd_bid',$_POST['kd_bid']);
         $this->db->where('kd_kel',$_POST['kd_kel']);
+        $result = $this->db->get();
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    // KODE BARANG SUB KELOMPOK
+    function kd_brg_subkelompok() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/kd_brg_subkelompok_view', $data);
+        } else {
+            $this->load->view('master/kd_brg_subkelompok_view');
+        }
+    }
+
+    function kd_brg_subkelompok_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Kd_Brg_SubKelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function kd_brg_subkelompok_createKdBrgSubKelompok() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','kd_kel','kd_skel','ur_skel'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_skelbrg'] = $data['kd_gol'].$data['kd_bid'].$data['kd_kel'].$data['kd_skel'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_subkel');
+        $this->createLog('INSERT REFERENSI KODE BARANG SUB KELOMPOK','ref_subkel');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_subkelompok_modifyKdBrgSubKelompok() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','kd_kel','kd_skel','ur_skel'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('kd_gol', $data['kd_gol']);
+        $this->db->where('kd_bid', $data['kd_bid']);
+        $this->db->where('kd_kel', $data['kd_kel']);
+        $this->db->where('kd_skel', $data['kd_skel']);
+        unset($data['kd_gol'],$data['kd_bid'],$data['kd_kel'],$data['kd_skel']);
+        $this->db->update('ref_subkel',$data);
+         $this->createLog('UPDATE REFERENSI KODE BARANG SUB KELOMPOK','ref_subkel');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_subkelompok_deleteKdBrgSubKelompok()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_gol', $data['kd_gol']);
+           $this->db->where('kd_bid', $data['kd_bid']);
+           $this->db->where('kd_kel', $data['kd_kel']);
+           $this->db->where('kd_skel', $data['kd_skel']);
+           $this->db->delete('ref_subkel');
+           $this->createLog('DELETE REFERENSI KODE BARANG SUB KELOMPOK','ref_subkel');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdBrgSubKelompok()
+    {
+
+        $this->db->from('ref_subkel');
+        $this->db->where('kd_gol',$_POST['kd_gol']);
+        $this->db->where('kd_bid',$_POST['kd_bid']);
+        $this->db->where('kd_kel',$_POST['kd_kel']);
+        $this->db->where('kd_skel', $_POST['kd_skel']);
+        $result = $this->db->get();
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    // KODE BARANG SUB SUB KELOMPOK
+    function kd_brg_subsubkelompok() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/kd_brg_subsubkelompok_view', $data);
+        } else {
+            $this->load->view('master/kd_brg_subsubkelompok_view');
+        }
+    }
+
+    function kd_brg_subsubkelompok_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Kd_Brg_SubSubKelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function kd_brg_subsubkelompok_createKdBrgSubSubKelompok() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','kd_kel','kd_skel','kd_sskel','ur_sskel'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kd_brg'] = $data['kd_gol'].$data['kd_bid'].$data['kd_kel'].$data['kd_skel'].$data['kd_sskel'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_subsubkel');
+        $this->createLog('INSERT REFERENSI KODE BARANG SUB SUB KELOMPOK','ref_subkel');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_subsubkelompok_modifyKdBrgSubSubKelompok() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_gol','kd_bid','kd_kel','kd_skel','kd_sskel','ur_sskel'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('kd_gol', $data['kd_gol']);
+        $this->db->where('kd_bid', $data['kd_bid']);
+        $this->db->where('kd_kel', $data['kd_kel']);
+        $this->db->where('kd_skel', $data['kd_skel']);
+        $this->db->where('kd_sskel', $data['kd_sskel']);
+        unset($data['kd_gol'],$data['kd_bid'],$data['kd_kel'],$data['kd_skel'],$data['kd_sskel']);
+        $this->db->update('ref_subsubkel',$data);
+        $this->createLog('UPDATE REFERENSI KODE BARANG SUB SUB KELOMPOK','ref_subsubkel');
+        echo "{success: true}";
+    }
+    
+    function kd_brg_subsubkelompok_deleteKdBrgSubSubKelompok()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_gol', $data['kd_gol']);
+           $this->db->where('kd_bid', $data['kd_bid']);
+           $this->db->where('kd_kel', $data['kd_kel']);
+           $this->db->where('kd_skel', $data['kd_skel']);
+           $this->db->where('kd_sskel', $data['kd_sskel']);
+           $this->db->delete('ref_subsubkel');
+           $this->createLog('DELETE REFERENSI KODE BARANG SUB SUB KELOMPOK','ref_subsubkel');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkKdBrgSubSubKelompok()
+    {
+
+        $this->db->from('ref_subsubkel');
+        $this->db->where('kd_gol',$_POST['kd_gol']);
+        $this->db->where('kd_bid',$_POST['kd_bid']);
+        $this->db->where('kd_kel',$_POST['kd_kel']);
+        $this->db->where('kd_skel', $_POST['kd_skel']);
+        $this->db->where('kd_sskel', $_POST['kd_sskel']);
         $result = $this->db->get();
 
         if($result->num_rows() === 1)

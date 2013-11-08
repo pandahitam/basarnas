@@ -12,6 +12,7 @@ class Kd_Brg_Bidang_Model extends MY_Model {
                 $query = "$this->selectColumn 
                         FROM $this->table as t
                         LEFT JOIN ref_golongan as a ON a.kd_gol = t.kd_gol
+                        ORDER BY ur_gol, kd_bid
                         LIMIT $start, $limit";
             }
             else
@@ -19,6 +20,7 @@ class Kd_Brg_Bidang_Model extends MY_Model {
                 $query = "$this->selectColumn 
                         FROM $this->table as t
                         LEFT JOIN ref_golongan as a ON a.kd_gol = t.kd_gol
+                        ORDER BY ur_gol, kd_bid
                         ";
             }
             

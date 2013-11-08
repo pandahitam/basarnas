@@ -40,8 +40,8 @@ var Center_MD = {
                             {text: 'Golongan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_golongan', BASE_URL + 'master_data/kd_brg_golongan');}, tooltip: {text: 'Referensi Kode Barang Golongan'}},
                             {text: 'Bidang', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_bidang', BASE_URL + 'master_data/kd_brg_bidang');}, tooltip: {text: 'Referensi Kode Barang Bidang'}},
                             {text: 'Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_kelompok', BASE_URL + 'master_data/kd_brg_kelompok');}, tooltip: {text: 'Referensi Kode Barang Kelompok'}},
-                            {text: 'Sub Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){}, tooltip: {text: 'Referensi Kode Barang Sub Kelompok'}},
-                            {text: 'Sub Sub Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){}, tooltip: {text: 'Referensi Kode Barang Sub Sub Kelompok'}},
+                            {text: 'Sub Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_subkelompok', BASE_URL + 'master_data/kd_brg_subkelompok');}, tooltip: {text: 'Referensi Kode Barang Sub Kelompok'}},
+                            {text: 'Sub Sub Kelompok', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_subsubkelompok', BASE_URL + 'master_data/kd_brg_subsubkelompok');}, tooltip: {text: 'Referensi Kode Barang Sub Sub Kelompok'}},
                         ]
                 }},
                 {text: 'Klasifikasi Aset', iconCls: 'icon-templates', disabled: false, menu:{

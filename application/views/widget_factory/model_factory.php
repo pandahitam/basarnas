@@ -3,6 +3,15 @@
     
 <script>
 ////// Model In View
+Ext.define('MKdBrgSubSubKelompok', {extend: 'Ext.data.Model',
+    fields: ['kd_gol', 'ur_gol','kd_bid','ur_bid','kd_kel','ur_kel','kd_skel','ur_skel','kd_sskel','ur_sskel'
+    ]
+});
+
+Ext.define('MKdBrgSubKelompok', {extend: 'Ext.data.Model',
+    fields: ['kd_gol', 'ur_gol','kd_bid','ur_bid','kd_kel','ur_kel','kd_skel','ur_skel'
+    ]
+});
 
 Ext.define('MKdBrgKelompok', {extend: 'Ext.data.Model',
     fields: ['kd_gol', 'ur_gol','kd_bid','ur_bid','kd_kel','ur_kel'

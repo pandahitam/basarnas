@@ -1455,11 +1455,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             {
                                                 var bidangField = Ext.getCmp('referensi_kd_bid');
                                                     if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                        bidangField.enable();
                                                         if(setting.isEditing != true)
                                                         {
                                                             bidangField.setValue('');
+                                                            bidangField.setDisabled(true);
                                                         }
+                                                        bidangField.enable();
                                                         Reference.Data.bidang.changeParams({params: {id_open: 1, kd_gol: value}});
                                                     }
                                                     else {
@@ -1509,6 +1510,326 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             
             return form;
         }
+        
+        Form.referensiKdBrgSubKelompok = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'SUB KELOMPOK',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'combo',
+                                fieldLabel: 'Golongan',
+                                name: 'kd_gol',
+                                id: 'referensi_kd_gol',
+                                hideLabel: false,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.golongan,
+                                valueField: 'kd_gol',
+                                displayField: 'ur_gol', emptyText: 'Golongan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var bidangField = Ext.getCmp('referensi_kd_bid');
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                            bidangField.setValue('');
+                                                            bidangField.setDisabled(true);
+                                                        }
+                                                        bidangField.enable();
+                                                        
+                                                        Reference.Data.bidang.changeParams({params: {id_open: 1, kd_gol: value}});
+                                                    }
+                                                    else {
+                                                        bidangField.disable();
+                                                    }
+                                               
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'combo',
+                                fieldLabel: 'Bidang',
+                                name: 'kd_bid',
+                                id: 'referensi_kd_bid',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.bidang,
+                                valueField: 'kd_bid',
+                                displayField: 'ur_bid', emptyText: 'Bidang',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var kelompokField = Ext.getCmp('referensi_kd_kel');
+                                                var golonganValue = Ext.getCmp('referensi_kd_gol').value;
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                            kelompokField.setValue('');
+                                                            kelompokField.setDisabled(true);
+                                                        }
+                                                        kelompokField.enable();
+                                                        
+                                                        Reference.Data.kelompok.changeParams({params: {id_open: 1, kd_gol: golonganValue, kd_bid: value}});
+                                                    }
+                                                    else {
+                                                        kelompokField.disable();
+                                                    }
+                                               
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'combo',
+                                fieldLabel: 'Kelompok',
+                                name: 'kd_kel',
+                                id: 'referensi_kd_kel',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.kelompok,
+                                valueField: 'kd_kel',
+                                displayField: 'ur_kel', emptyText: 'Kelompok',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Kelompok',
+                            },
+                            {
+                                fieldLabel:'Kode Sub Kelompok',
+                                name: 'kd_skel',
+                                readOnly:setting.isEditing,
+                                maxLength:3,
+                                allowBlank:false,
+                            },
+                            {
+                                fieldLabel:'Nama Sub Kelompok',
+                                name: 'ur_skel',
+                                allowBlank:false,
+
+                            },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKdBrgSubKelompok(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
+         Form.referensiKdBrgSubSubKelompok = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'SUB KELOMPOK',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'combo',
+                                fieldLabel: 'Golongan',
+                                name: 'kd_gol',
+                                id: 'referensi_kd_gol',
+                                hideLabel: false,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.golongan,
+                                valueField: 'kd_gol',
+                                displayField: 'ur_gol', emptyText: 'Golongan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var bidangField = Ext.getCmp('referensi_kd_bid');
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                            bidangField.setValue('');
+                                                            bidangField.setDisabled(true);
+                                                        }
+                                                        bidangField.enable();
+                                                        
+                                                        Reference.Data.bidang.changeParams({params: {id_open: 1, kd_gol: value}});
+                                                    }
+                                                    else {
+                                                        bidangField.disable();
+                                                    }
+                                               
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'combo',
+                                fieldLabel: 'Bidang',
+                                name: 'kd_bid',
+                                id: 'referensi_kd_bid',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.bidang,
+                                valueField: 'kd_bid',
+                                displayField: 'ur_bid', emptyText: 'Bidang',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var kelompokField = Ext.getCmp('referensi_kd_kel');
+                                                var golonganValue = Ext.getCmp('referensi_kd_gol').value;
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                            kelompokField.setValue('');
+                                                            kelompokField.setDisabled(true);
+                                                        }
+                                                        kelompokField.enable();
+                                                        
+                                                        Reference.Data.kelompok.changeParams({params: {id_open: 1, kd_gol: golonganValue, kd_bid: value}});
+                                                    }
+                                                    else {
+                                                        kelompokField.disable();
+                                                    }
+                                               
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'combo',
+                                fieldLabel: 'Kelompok',
+                                name: 'kd_kel',
+                                id: 'referensi_kd_kel',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.kelompok,
+                                valueField: 'kd_kel',
+                                displayField: 'ur_kel', emptyText: 'Kelompok',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Kelompok',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var subKelompokField = Ext.getCmp('referensi_kd_skel');
+                                                var bidangValue = Ext.getCmp('referensi_kd_bid').value;
+                                                var golonganValue = Ext.getCmp('referensi_kd_gol').value;
+                                                    if (!isNaN(value) && value.length > 0) {
+                                                        if(setting.isEditing != true)
+                                                        {
+                                                            subKelompokField.setValue('');
+                                                            subKelompokField.setDisabled(true);
+                                                        }
+                                                        subKelompokField.enable();
+                                                        
+                                                        Reference.Data.subKelompok.changeParams({params: {id_open: 1,
+                                                        kd_gol: golonganValue,
+                                                        kd_bid: bidangValue,
+                                                        kd_kel: value}});
+                                                    }
+                                                    else {
+                                                        subKelompokField.disable();
+                                                    }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'combo',
+                                fieldLabel: 'Sub Kelompok',
+                                name: 'kd_skel',
+                                id: 'referensi_kd_skel',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.subKelompok,
+                                valueField: 'kd_skel',
+                                displayField: 'ur_skel', emptyText: 'Sub Kelompok',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Sub Kelompok',
+                              
+                            },
+                            {
+                                fieldLabel:'Kode Sub Sub Kelompok',
+                                name: 'kd_sskel',
+                                readOnly:setting.isEditing,
+                                maxLength:3,
+                                allowBlank:false,
+                            },
+                            {
+                                fieldLabel:'Nama Sub Sub Kelompok',
+                                name: 'ur_sskel',
+                                allowBlank:false,
+
+                            },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKdBrgSubSubKelompok(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
+        
+        
         
         Form.referensiProvinsi = function(setting)
         {
@@ -3870,7 +4191,6 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             if(!edit)
                                             {
                                                 form.reset();
-                                                form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
                                             }
     
     
@@ -3951,7 +4271,176 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             if(!edit)
                                             {
                                                 form.reset();
-                                                form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
+                                                 Ext.getCmp('referensi_kd_bid').setDisabled(true);
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        
+        Form.panelReferensiKdBrgSubKelompok = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-kodeBarang',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_kodebarang', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kd_gol = formValues.kd_gol;
+                            var kd_bid = formValues.kd_bid;
+                            var kd_kel = formValues.kd_kel;
+                            var kd_skel = formValues.kd_skel;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdBrgSubKelompok',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kd_gol:kd_gol, kd_bid:kd_bid, kd_kel:kd_kel, kd_skel:kd_skel, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                 Ext.getCmp('referensi_kd_bid').setDisabled(true);
+                                                Ext.getCmp('referensi_kd_kel').setDisabled(true);
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiKdBrgSubSubKelompok = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-kodeBarang',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_kodebarang', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kd_gol = formValues.kd_gol;
+                            var kd_bid = formValues.kd_bid;
+                            var kd_kel = formValues.kd_kel;
+                            var kd_skel = formValues.kd_skel;
+                            var kd_sskel = formValues.kd_sskel;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkKdBrgSubSubKelompok',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kd_gol:kd_gol, kd_bid:kd_bid, kd_kel:kd_kel, kd_skel:kd_skel, kd_sskel:kd_sskel, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+                                                form.reset();
+                                                Ext.getCmp('referensi_kd_bid').setDisabled(true);
+                                                Ext.getCmp('referensi_kd_kel').setDisabled(true);
+                                                Ext.getCmp('referensi_kd_skel').setDisabled(true);
                                             }
     
     

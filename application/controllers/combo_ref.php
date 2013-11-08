@@ -486,7 +486,6 @@ class Combo_Ref extends CI_Controller {
             foreach ($Q->result() as $obj) {
                 $data[] = $obj;
             }
-
             echo json_encode($data);
         }
     }
@@ -496,7 +495,6 @@ class Combo_Ref extends CI_Controller {
             $data = array();
             $this->db->select('kd_kel,ur_kel');
             $this->db->from('ref_kel');
-
             if ($this->input->get_post('query')) {
                 $this->db->like('ur_kel', $this->input->get_post('query'));
             }
