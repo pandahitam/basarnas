@@ -454,6 +454,7 @@ class Combo_Ref extends CI_Controller {
             $Q = $this->db->get('');
 
             foreach ($Q->result() as $obj) {
+                $obj->ur_gol = trim($obj->ur_gol);
                 $data[] = $obj;
             }
 
@@ -484,9 +485,13 @@ class Combo_Ref extends CI_Controller {
             $this->db->group_by('kd_bid');
             $Q = $this->db->get('');
             foreach ($Q->result() as $obj) {
-                $data[] = $obj;
+                $obj->ur_bid = trim($obj->ur_bid);
+                $data[] =$obj;
             }
+
             echo json_encode($data);
+//            var_dump(json_encode($data));
+//            die;
         }
     }
 
@@ -507,6 +512,7 @@ class Combo_Ref extends CI_Controller {
             $this->db->order_by('ur_kel', 'ASC');
             $Q = $this->db->get('');
             foreach ($Q->result() as $obj) {
+                $obj->ur_kel = trim($obj->ur_kel);
                 $data[] = $obj;
             }
 
@@ -533,6 +539,7 @@ class Combo_Ref extends CI_Controller {
             $this->db->order_by('ur_skel', 'ASC');
             $Q = $this->db->get('');
             foreach ($Q->result() as $obj) {
+                $obj->ur_skel = trim($obj->ur_skel);
                 $data[] = $obj;
             }
 
@@ -569,6 +576,7 @@ class Combo_Ref extends CI_Controller {
             $this->db->order_by('ur_sskel', 'ASC');
             $Q = $this->db->get('');
             foreach ($Q->result() as $obj) {
+                $obj->ur_skel = trim($obj->ur_sskel);
                 $data[] = $obj;
             }
 

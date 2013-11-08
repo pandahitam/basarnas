@@ -79,6 +79,19 @@ Perencanaan.Form.create = function(data,edit){
 //		repeat:2
 //	    });
 	}
+        else
+        {
+            var presetData = {};
+            if(user_kd_lokasi != null)
+            {
+                presetData.kd_lokasi = user_kd_lokasi;
+            }
+            if(user_kode_unor != null)
+            {
+                presetData.kode_unor = user_kode_unor;
+            }
+            form.getForm().setValues(presetData);
+        }
         
 	return form;
 };
