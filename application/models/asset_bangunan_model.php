@@ -178,6 +178,16 @@ class Asset_Bangunan_Model extends MY_Model{
             
             return $this->Get_By_Query($query);
         }
+        
+        function get_Bangunan($kd_lokasi,$kd_brg,$no_aset)
+        {
+            $query = "$this->selectColumn 
+                      FROM
+                      $this->viewTable
+                      where kd_lokasi = '$kd_lokasi' AND kd_brg = '$kd_brg' AND no_aset = '$no_aset'";
+            $result = $this->db->query($query);
+            return $result->row();
+        }
 	
 	function get_byIDs($ids)
 	{		

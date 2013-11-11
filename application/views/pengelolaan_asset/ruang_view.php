@@ -835,7 +835,7 @@
                 }
 
                 var _form = Ruang.Form.create(dataForm, true);
-                Tab.addToForm(_form, 'bangunan-details', 'Simak Details');
+                Tab.addToForm(_form, 'ruang-details', 'Simak Details');
                 Modal.assetEdit.show();
             }
         };

@@ -190,6 +190,16 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                 return $data;
             
         }
+        
+        function get_AngkutanUdara($kd_lokasi,$kd_brg,$no_aset)
+        {
+            $query = "$this->selectColumn 
+                      FROM
+                      $this->viewTable
+                      where kd_lokasi = '$kd_lokasi' AND kd_brg = '$kd_brg' AND no_aset = '$no_aset'";
+            $result = $this->db->query($query);
+            return $result->row();
+        }
 	
 	function get_byIDs($ids)
 	{		

@@ -1486,6 +1486,7 @@ var search = [{
         
         
         Grid.inventarisGrid = function(setting, data) {
+          
             if (setting === null)
             {
                 console.log('setting is null');

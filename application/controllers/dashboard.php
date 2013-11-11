@@ -327,6 +327,62 @@ class Dashboard extends CI_Controller{
 	echo json_encode($dataSend);
   }
   
+  function cari_global_getFormData()
+  {
+      $jenis_asset = strtolower($_POST['jenis_asset']);
+      $kd_brg = $_POST['kd_brg'];
+      $kd_lokasi = $_POST['kd_lokasi'];
+      $no_aset = $_POST['no_aset'];
+      $formData = null;
+      
+      switch($jenis_asset){
+          case "peralatan" : 
+              $this->load->model('Asset_Alatbesar_Model');
+              $formData = $this->Asset_Alatbesar_Model->get_Alatbesar($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "angkutan_darat":
+              $this->load->model('Asset_Angkutan_Darat_Model');
+              $formData = $this->Asset_Angkutan_Darat_Model->get_AngkutanDarat($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "angkutan_laut":
+              $this->load->model('Asset_Angkutan_Laut_Model');
+              $formData = $this->Asset_Angkutan_Laut_Model->get_AngkutanLaut($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "angkutan_udara":
+              $this->load->model('Asset_Angkutan_Udara_Model');
+              $formData = $this->Asset_Angkutan_Udara_Model->get_AngkutanUdara($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "bangunan":
+              $this->load->model('Asset_Bangunan_Model');
+              $formData = $this->Asset_Bangunan_Model->get_Bangunan($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "dil":
+              $this->load->model('Asset_Luar_Model');
+              $formData = $this->Asset_Luar_Model->get_Luar($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "perairan":
+              $this->load->model('Asset_Perairan_Model');
+              $formData = $this->Asset_Perairan_Model->get_Perairan($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "ruang":
+              $this->load->model('Asset_Ruang_Model');
+              $formData = $this->Asset_Ruang_Model->get_Ruang($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "senjata":
+              $this->load->model('Asset_Senjata_Model');
+              $formData = $this->Asset_Senjata_Model->get_Senjata($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          case "tanah":
+              $this->load->model('Asset_Tanah_Model');
+              $formData = $this->Asset_Tanah_Model->get_Tanah($kd_lokasi,$kd_brg,$no_aset);
+              break;
+          default: break;
+      }
+      
+      echo json_encode($formData);
+      
+  }
+  
   
   function grafik_unker_totalaset()
   {

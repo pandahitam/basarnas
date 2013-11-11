@@ -187,6 +187,16 @@ class Asset_Alatbesar_Model extends MY_Model{
 		return $this->Get_By_Query($query);
 	}
         
+        function get_Alatbesar($kd_lokasi,$kd_brg,$no_aset)
+        {
+            $query = "$this->selectColumn 
+                      FROM
+                      $this->viewTable
+                      where kd_lokasi = '$kd_lokasi' AND kd_brg = '$kd_brg' AND no_aset = '$no_aset'";
+            $result = $this->db->query($query);
+            return $result->row();
+        }
+        
         
 	
 	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){
