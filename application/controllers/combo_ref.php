@@ -37,16 +37,32 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_status_asset()
+    {
+        $data = array();
+        $query = "select kd_status div 1, ur_status from t_status";
+        $query_data = $this->db->query($query);
+        
+        foreach($query_data->result() as $obj)
+        {
+            $data[] = $obj;
+        }
+
+        echo json_encode($data);
+    }
+    
     function combo_asset_perlengkapan_part()
     {
         $data = array();
         if($this->input->get_post("id_open"))
         {
-            $query = "select id, part_number, serial_number from asset_perlengkapan 
-                      where warehouse_id > 0 and ruang_id > 0";
+            $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, concat(a.nama,'/',t.part_number,'/',t.serial_number) as nama from asset_perlengkapan as t
+                      LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number
+                      where no_induk_asset = '' or no_induk_asset = null";
             if($_POST['id_open'] == 2)
             {
-                $query = 'select id, part_number, serial_number from asset_perlengkapan';
+                $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, concat(a.nama,'/',t.part_number,'/',t.serial_number) as nama from asset_perlengkapan as t
+                      LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number";
             }
             
             $query_data = $this->db->query($query);

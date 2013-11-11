@@ -114,6 +114,38 @@ class Asset_Angkutan_Darat extends MY_Controller {
             }
         }
         
+         function getSpecificPerlengkapanAngkutanDaratWithoutIdExtAsset()
+        {
+                $kd_brg = $_POST['kd_brg'];
+                $kd_lokasi = $_POST['kd_lokasi'];
+                $no_aset = $_POST['no_aset'];
+                $queryIdExtAsset = $this->db->query("select id from ext_asset_angkutan where kd_brg = '$kd_brg' and kd_lokasi = '$kd_lokasi' and no_aset = '$no_aset'");
+                $queryIdExtAsset_result = $queryIdExtAsset->row();
+                $data = $this->model->getSpecificPerlengkapanAngkutanUdara($queryIdExtAsset_result->id);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+        }
+        
+        function getIdExtAsset()
+        {
+            $receivedData = array(
+              'kd_brg'=>$_POST['kd_brg'],
+              'kd_lokasi'=>$_POST['kd_lokasi'],
+              'no_aset'=>$_POST['no_aset'],
+            );
+            $query = $this->db->query("select id from ext_asset_angkutan where kd_brg='".$receivedData['kd_brg']."' and kd_lokasi ='".$receivedData['kd_lokasi']."' and no_aset = '".$receivedData['no_aset']."'");
+            $query_result = $query->row();
+            $idExt = $query_result->id;
+            $sendData = array(
+              'status'=>'success',
+              'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
+        
         function modifyPerlengkapanAngkutanDarat()
         {
             $dataPerlengkapanDarat = array();
@@ -124,8 +156,30 @@ class Asset_Angkutan_Darat extends MY_Controller {
             foreach ($dataPerlengkapanDaratFields as $field) {
 			$dataPerlengkapanDarat[$field] = $this->input->post($field);
             }
+            
+            if($dataPerlengkapanDarat['keterangan'] == '' || $dataPerlengkapanDarat['keterangan'] == null)
+            {
+                $dataPerlengkapanDarat['keterangan'] = '-';
+            }
                 $this->db->set($dataPerlengkapanDarat);
                 $this->db->replace('ext_asset_angkutan_darat_perlengkapan');
+                
+            //update asset perlengkapan, remove from warehouse, set kode induk asset
+            if($dataPerlengkapanDarat['id_asset_perlengkapan'] != ''  && $dataPerlengkapanDarat['id_asset_perlengkapan'] != 0)
+            {
+                $query_data = $this->db->query("select kd_brg, no_aset, kd_lokasi from view_asset_angkutan_darat where id = ".$dataPerlengkapanDarat['id_ext_asset']);
+                $query_result = $query_data->row();
+                $no_induk_asset = $query_result->kd_brg.$query_result->kd_lokasi.$query_result->no_aset;
+                
+                $update_data_no_induk = array(
+                    'warehouse_id' => 0,
+                    'ruang_id'=>0,
+                    'rak_id'=>0,
+                    'no_induk_asset'=>$no_induk_asset
+                );
+                $this->db->where('id',$dataPerlengkapanDarat['id_asset_perlengkapan']);
+                $this->db->update('asset_perlengkapan',$update_data_no_induk);
+            }
                
         }
         

@@ -74,7 +74,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAssetAngkutanUdara(tipe_angkutan, PemeliharaanUdara.dataStorePemeliharaanParts));
+                            Modal.assetSelection.add(Grid.selectionAssetAngkutan(tipe_angkutan, PemeliharaanUdara.dataStorePemeliharaanParts));
                             Modal.assetSelection.show();
                         }
                         else
@@ -98,7 +98,7 @@
                 dataStore:PemeliharaanUdara.dataStorePemeliharaanParts
             };
 
-            var form = Form.pemeliharaanWithPartsAngkutanUdara(setting,setting_grid_pemeliharaan_part);
+            var form = Form.pemeliharaanWithPartsAngkutan(setting,setting_grid_pemeliharaan_part);
 
             if (data !== null)
             {

@@ -9,14 +9,14 @@
         Ext.namespace('PemeliharaanDarat', 'PemeliharaanDarat.reader', 'PemeliharaanDarat.proxy', 'PemeliharaanDarat.Data', 'PemeliharaanDarat.Grid', 'PemeliharaanDarat.Window', 'PemeliharaanDarat.Form', 'PemeliharaanDarat.Action', 'PemeliharaanDarat.URL');
         
         PemeliharaanDarat.dataStorePemeliharaanParts = new Ext.create('Ext.data.Store', {
-            model: MPemeliharaanPart, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            model: MAngkutanDaratPerlengkapan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
             proxy: new Ext.data.AjaxProxy({
                 actionMethods: {read: 'POST'},
                 api: {
-                read: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanParts',
-                create: BASE_URL + 'pemeliharaan_part/createPemeliharaanParts',
-                update: BASE_URL + 'pemeliharaan_part/updatePemeliharaanParts',
-                destroy: BASE_URL + 'pemeliharaan_part/destroyPemeliharaanParts'
+                read: BASE_URL + 'pemeliharaan_part/getSpecificPemeliharaanPartsAngkutanDarat',
+                create: BASE_URL + 'pemeliharaan_part/createPemeliharaanPartsAngkutanDarat',
+                update: BASE_URL + 'pemeliharaan_part/updatePemeliharaanPartsAngkutanDarat',
+                destroy: BASE_URL + 'pemeliharaan_part/destroyPemeliharaanPartsAngkutanDarat'
                 },
                 writer: {
                 type: 'json',
@@ -75,7 +75,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAsset(tipe_angkutan));
+                            Modal.assetSelection.add(Grid.selectionAssetAngkutan(tipe_angkutan));
                             Modal.assetSelection.show();
                         }
                         else
@@ -99,7 +99,7 @@
                 dataStore:PemeliharaanDarat.dataStorePemeliharaanParts
             };
 
-            var form = Form.pemeliharaanWithParts(setting,setting_grid_pemeliharaan_part);
+            var form = Form.pemeliharaanWithPartsAngkutan(setting,setting_grid_pemeliharaan_part);
             if (data !== null)
             {
                 if(data.unit_waktu != 0)
@@ -118,20 +118,20 @@
                             }
                         });
                 
-                $.ajax({
-                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
-                       type: "POST",
-                       dataType:'json',
-                       async:false,
-                       data:{tipe_angkutan:'darat',id_ext_asset:data.id},
-                       success:function(response, status){
-                        if(response.status == 'success')
-                        {
-                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
-                        }
-                           
-                       }
-                    });
+//                $.ajax({
+//                       url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+//                       type: "POST",
+//                       dataType:'json',
+//                       async:false,
+//                       data:{tipe_angkutan:'darat',id_ext_asset:data.id},
+//                       success:function(response, status){
+//                        if(response.status == 'success')
+//                        {
+//                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+//                        }
+//                           
+//                       }
+//                    });
                 
                 form.getForm().setValues(data);
             }
@@ -144,8 +144,9 @@
                     Modal.assetSecondaryWindow.setTitle('Tambah Part');
                 }
                     var form = Form.secondaryWindowAsset(PemeliharaanDarat.dataStorePemeliharaanParts,'add');
-                    form.insert(0, Form.Component.dataPemeliharaanParts());
-                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+//                    form.insert(0, Form.Component.dataPemeliharaanParts());
+//                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat());
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
         };
@@ -165,9 +166,9 @@
                     Modal.assetSecondaryWindow.setTitle('Edit Part');
                 }
                     var form = Form.secondaryWindowAsset(PemeliharaanDarat.dataStorePemeliharaanParts, 'edit',storeIndex);
-                    form.insert(0, Form.Component.dataPemeliharaanParts(true));
-                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
-
+//                    form.insert(0, Form.Component.dataPemeliharaanParts(true));
+//                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat());
                     if (data !== null)
                     {
                         Ext.Object.each(data,function(key,value,myself){
@@ -227,11 +228,42 @@
                 {
                     Modal.processEdit.setTitle('Edit Pemeliharaan Darat');
                 }
+                
+                 var id_ext_asset = 0;
+                $.ajax({
+                       url:BASE_URL + 'asset_angkutan_darat/getIdExtAsset',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{kd_brg:data.kd_brg, kd_lokasi:data.kd_lokasi, no_aset:data.no_aset},
+                       success:function(response, status){
+                        if(status == 'success')
+                        {
+                            id_ext_asset = response.idExt;
+                            PemeliharaanDarat.dataStorePemeliharaanParts.changeParams({params:{id_ext_asset:id_ext_asset}});
+                            PemeliharaanDarat.dataStorePemeliharaanParts.removed = [];
+                        }     
+                       }
+                    });
+                    
+                $.ajax({
+                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaan',
+                    type: "POST",
+                    dataType:'json',
+                    async:false,
+                    data:{tipe_angkutan:'darat',id_ext_asset:id_ext_asset},
+                    success:function(response, status){
+                     if(response.status == 'success')
+                     {
+                         data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+                     }
+
+                    }
+                 });
+                 
                 var _form = PemeliharaanDarat.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
-                PemeliharaanDarat.dataStorePemeliharaanParts.changeParams({params:{id_pemeliharaan:data.id}});
-                PemeliharaanDarat.dataStorePemeliharaanParts.removed = [];
             }
         };
 

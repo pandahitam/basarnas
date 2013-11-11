@@ -890,7 +890,7 @@
                     {header: 'Kode Lokasi', dataIndex: 'kd_lokasi', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'No Aset', dataIndex: 'no_aset', width: 90, groupable: false, filter: {type: 'string'}},
-                    {header: 'No Induk Pesawat', dataIndex: 'no_induk_pesawat', width: 90, groupable: false, filter: {type: 'string'}},
+                    {header: 'No Induk Asset', dataIndex: 'no_induk_asset', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Warehouse', dataIndex: 'nama_warehouse', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Ruang', dataIndex: 'nama_ruang', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Rak', dataIndex: 'nama_rak', width: 150, groupable: false, filter: {type: 'string'}},

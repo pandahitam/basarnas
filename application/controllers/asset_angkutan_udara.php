@@ -156,7 +156,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
             $this->db->set($dataPerlengkapanUdara);
             $this->db->replace('ext_asset_angkutan_udara_perlengkapan');
 
-            //update asset perlengkapan, remove from warehouse, set kode induk pesawat
+            //update asset perlengkapan, remove from warehouse, set kode induk asset
             if($dataPerlengkapanUdara['id_asset_perlengkapan'] != ''  && $dataPerlengkapanUdara['id_asset_perlengkapan'] != 0)
             {
                 $query_data_pesawat = $this->db->query("select kd_brg, no_aset, kd_lokasi from view_asset_angkutan_udara where id = ".$dataPerlengkapanUdara['id_ext_asset']);
@@ -167,7 +167,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
                     'warehouse_id' => 0,
                     'ruang_id'=>0,
                     'rak_id'=>0,
-                    'no_induk_pesawat'=>$no_induk_pesawat
+                    'no_induk_asset'=>$no_induk_pesawat
                 );
                 $this->db->where('id',$dataPerlengkapanUdara['id_asset_perlengkapan']);
                 $this->db->update('asset_perlengkapan',$update_data_no_induk);
@@ -195,7 +195,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 if(!empty($updatedAssetPerlengkapan))
                 {
                     $this->db->where_in('id',$updatedAssetPerlengkapan);
-                    $this->db->update('asset_perlengkapan',array('no_induk_pesawat'=>''));
+                    $this->db->update('asset_perlengkapan',array('no_induk_asset'=>''));
                 }
 	}
         

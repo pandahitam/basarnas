@@ -459,7 +459,7 @@
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         };
         
-        Grid.angkutanUdaraPerlengkapan = function(setting)
+        Grid.angkutanPerlengkapan = function(setting)
         {
  
             var settingGrid = {
@@ -481,20 +481,20 @@
                         ]
                     },
                     search: {
-                        id: 'search_angkutanUdara_perlengkapan'
+                        id: 'search_angkutan_perlengkapan'
                     },
                     toolbar: {
-                        id: 'toolbar_angkutanUdara_perlengkapan',
+                        id: 'toolbar_angkutan_perlengkapan',
                         add: {
-                            id: 'button_add_angkutanUdara_perlengkapan',
+                            id: 'button_add_angkutan_perlengkapan',
                             action: setting.toolbar.add
                         },
                         edit: {
-                            id: 'button_edit_angkutanUdara_perlengkapan',
+                            id: 'button_edit_angkutan_perlengkapan',
                             action: setting.toolbar.edit
                         },
                         remove: {
-                            id: 'button_remove_angkutanUdara_perlengkapan',
+                            id: 'button_remove_angkutan_perlengkapan',
                             action: setting.toolbar.remove
                         }
                     }
@@ -1899,7 +1899,7 @@ var search = [{
             return _grid;
         };
         
-         Grid.selectionAssetAngkutanUdara = function(tipe_angkutan,store) {
+         Grid.selectionAssetAngkutan = function(tipe_angkutan,store) {
 
             var data = new Ext.create('Ext.data.Store', {
                 fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
@@ -1976,14 +1976,24 @@ var search = [{
 
                                             data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = 'Mesin 1: ' + total_penggunaan_mesin1  +'<br />' + 'Mesin 2: ' + total_penggunaan_mesin2;
                                         }
+                                        
+                                        else if(tipe_angkutan == "darat")
+                                        {
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Km';
+                                        }
+                                        else if(tipe_angkutan == "laut")
+                                        {
+                                            data.pemeliharaan_status_penggunaan_angkutan_sampai_saat_ini = response.total + ' Jam';
+                                        }
                                             
                                          
                                      }
 
                                     }
                                  });
-                                 
-                                 $.ajax({
+                                if(tipe_angkutan == "udara")
+                                {
+                                    $.ajax({
                                     url:BASE_URL + 'asset_angkutan_udara/getSpecificPerlengkapanAngkutanUdaraWithoutIdExtAsset',
                                     type: "POST",
                                     dataType:'json',
@@ -2011,13 +2021,51 @@ var search = [{
 //                                                })
                                             }
                                             
-                                            Ext.getCmp('grid_pemeliharaan_perlengkapan_angkutan_udara').setDisabled(false);
                                         }
 
                                     }
                                  });
+                                }
+                                
+                                else if(tipe_angkutan == "darat")
+                                {
+                                    $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_darat/getSpecificPerlengkapanAngkutanDaratWithoutIdExtAsset',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{kd_brg:data.kd_brg,kd_lokasi:data.kd_lokasi,no_aset:data.no_aset},
+                                    success:function(response, status){
+                                     
+                                        if(status == "success")
+                                        {
+                                            var data = response.results;
+                                            if(data.length > 0)
+                                            {
+                                                var id_ext_asset = data[0].id_ext_asset;
+                                                store.changeParams({params:{id_ext_asset:id_ext_asset}});
+//                                                Ext.each(data,function(value,index){
+//                                                    var partsData = {};
+//                                                    partsData.id = value.id;
+//                                                    partsData.id_asset_perlengkapan = value.id_asset_perlengkapan;
+//                                                    partsData.id_ext_asset = value.id_ext_asset;
+//                                                    partsData.jenis_perlengkapan = value.jenis_perlengkapan;
+//                                                    partsData.keterangan = value.keterangan;
+//                                                    partsData.nama = value.nama;
+//                                                    partsData.no = value.no;
+//                                                    store.add(partsData);
+//                                                })
+                                            }
+                                            
+                                           
+                                        }
+
+                                    }
+                                 });
+                                }
                                  
-                                 
+                                
+                                  Ext.getCmp('grid_pemeliharaan_perlengkapan_angkutan').setDisabled(false); 
                             }
                             var temp = Ext.getCmp('form-process');
                             if (temp !== null && temp != undefined)

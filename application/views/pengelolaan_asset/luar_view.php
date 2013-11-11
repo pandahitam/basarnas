@@ -1009,6 +1009,7 @@
                     {header: 'Lokasi Fisik', dataIndex: 'lok_fisik', width: 150, groupable: true, filter: {type: 'string'}},
                     {header: 'Image Url', dataIndex: 'image_url', width: 50, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Document Url', dataIndex: 'document_url', width: 50, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Rph Asset', dataIndex: 'rph_aset', width: 120, hidden: false, filter: {type: 'numeric'}},
                 ]
             },
             search: {

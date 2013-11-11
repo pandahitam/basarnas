@@ -16,7 +16,7 @@ class Asset_Perlengkapan_Model extends MY_Model{
 //                            ,f.nama as nama_klasifikasi_aset, t.kd_klasifikasi_aset,
 //                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3";
                 
-                $this->selectColumn = "SELECT id,warehouse_id,ruang_id,rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_pesawat,
+                $this->selectColumn = "SELECT id,warehouse_id,ruang_id,rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_asset,
                             serial_number, part_number,kd_brg,kd_lokasi,
                             no_aset,kondisi, kuantitas, dari,
                             tanggal_perolehan,no_dana,penggunaan_waktu,
