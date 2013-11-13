@@ -34,6 +34,36 @@
             return grid;
         };
         
+        Grid.baseGridAssetInventaris = function(setting, data, feature_list) {
+            var grid = new Ext.create('Ext.grid.Panel', {
+                id: setting.grid.id,
+                store: data,
+//                tools:[{xtype:'displayfield', readOnly:true,fieldLabel:'Total Nilai Asset', id:'total_'+setting.grid.id, height:10}],
+                title: setting.grid.title,
+                frame: true,
+                region: 'center',
+                border: true,
+                loadMask: true,
+                autoScroll:true,
+                style: 'margin:0 auto;',
+                height: '100%',
+                selModel: feature_list.selmode,
+                columns: setting.grid.column,
+                columnLines: true,
+                features: feature_list.filter,
+                tbar: feature_list.toolbar,
+                bbar:['->',{xtype:'textfield', labelWidth:110, readOnly:true,fieldLabel:'Total Nilai Asset(Rp.)', id:'total_'+setting.grid.id}],
+                dockedItems: [{xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true}],
+                listeners: {
+                    itemdblclick: function(dataview, record, item, index, e) {
+                        Ext.getCmp(setting.toolbar.edit.id).handler.call(Ext.getCmp(setting.toolbar.edit.id).scope);
+                    }
+                }
+            });
+
+            return grid;
+        };
+        
         
         Grid.inventoryPerlengkapan = function(setting)
         {
@@ -1597,13 +1627,8 @@ var search = [{
         };
         
         
-        Grid.inventarisGrid = function(setting, data) {
+        Grid.inventarisGrid = function(setting, data, noTotalNilaiAssetField) {
           
-            if (setting === null)
-            {
-                console.log('setting is null');
-                return;
-            }
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
                 ftype: 'filters', autoReload: true, local: false, encode: true, paramPrefix:'gridFilter',
@@ -1666,8 +1691,16 @@ var search = [{
                 selmode: selMode,
                 toolbar: toolbar
             };
-
-            return Grid.baseGrid(setting, data, feature_list);
+            
+            if(noTotalNilaiAssetField == true)
+            {
+                return Grid.baseGrid(setting, data, feature_list);
+            }
+            else
+            {
+                return Grid.baseGridAssetInventaris(setting, data, feature_list);
+            }
+            
         };
         
         Grid.mutasiGridNoCRUD = function(setting, data) {

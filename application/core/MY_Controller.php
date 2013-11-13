@@ -126,6 +126,11 @@ class MY_Controller extends CI_Controller{
 //                $total = count($countData);
                 $dataSend['total'] = $queryData['count'];
 		$dataSend['results'] = $queryData['data'];
+                if(isset($queryData['total_rph_aset']))
+                {
+                    $dataSend['total_rph_aset'] = $queryData['total_rph_aset'];
+                }
+                
 		echo json_encode($dataSend);
 	}
 	

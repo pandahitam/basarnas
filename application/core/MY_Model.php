@@ -67,11 +67,78 @@ class MY_Model extends CI_Model{
 		}
 	}
         
-        function Get_By_Query_New($query,$countQuery)
+        function filterByUserUnkerUnor($query,$unkerControl,$unorControl)
         {
-            $query_count = $this->db->query($countQuery);
+             $extra_qr = $this->extractLimitQuery($query);
+			$gorupid_zs_simpeg = $this->session->userdata("gorupid_zs_simpeg");
+			if($gorupid_zs_simpeg == '4' ){
+				$q_ori = $query;
+				
+				$temp_kode_unker_zs_simpeg = $this->session->userdata("temp_kode_unker_zs_simpeg");
+				$temp_kode_unor_zs_simpeg = $this->session->userdata("temp_kode_unor_zs_simpeg");
+				
+				if(((str_replace(' ','', strtolower($temp_kode_unker_zs_simpeg))=="badansarnasional") || $temp_kode_unker_zs_simpeg=='107010199414370000KP') && $temp_kode_unor_zs_simpeg!=0){
+					if($unorControl == true){
+						$split_where = explode(' where ', $extra_qr['query']);
+						$query_wo_where = $split_where[0];
+						$split_where[0] = '';
+						$split_where2 = implode('', $split_where);
+					
+						$extra_qr['byss'] = "where kode_unor = '".$temp_kode_unor_zs_simpeg."'".(strlen($split_where2) > 1 ? ' and ' : '');
+						$q_ori = $query_wo_where.' '.$extra_qr['byss'].' '.$split_where2.' '.$extra_qr['limit_num'];
+						
+					}
+				}else{
+					if($unkerControl == true){
+						$split_where = explode(' where ', $extra_qr['query']);
+						$query_wo_where = $split_where[0];
+						$split_where[0] = '';
+						$split_where2 = implode('', $split_where);
+					
+						$extra_qr['byss'] = "where kd_lokasi = '".$temp_kode_unker_zs_simpeg."'".(strlen($split_where2) > 1 ? ' and ' : '');
+						$q_ori = $query_wo_where.' '.$extra_qr['byss'].' '.$split_where2.' '.$extra_qr['limit_num'];
+					}
+				}
+			
+				return $this->db->query($q_ori);
+			}
+                        else
+                        {
+                                return $this->db->query($query);
+                        }
+        }
+        
+        /*PARAMS
+         * $query = the main query
+         * $countQuery = the query for determining the total row of $query
+         * $nilaiAssetQuery = query to set total nilai asset in the grid
+         * $accessControl = access control for OPD user which can only view their respectives unker or unor data.
+         *                  There are 2 options, unker only, and unker and unor
+         *                  All query will be filtered again by the access control if the user is opd plus the access control option
+         */
+        function Get_By_Query_New($query,$countQuery,$accessControl = null,$nilaiAssetQuery =null)
+        {
+            $unkerControl = false;
+            $unorControl = false;
+            if(isset($accessControl['unker']))
+            {
+                $unkerControl = true;
+            }
+            
+            if(isset($accessControl['unor']))
+            {
+                $unorControl = true;
+            }
+              
+            $total_rph_aset = null;
+            $query_count = $this->filterByUserUnkerUnor($countQuery,$unkerControl,$unorControl);
             $count = $query_count->row()->total;
-            $r = $this->db->query($query);
+            if($nilaiAssetQuery != null)
+            {
+                $query_nilai_asset = $this->filterByUserUnkerUnor($nilaiAssetQuery,$unkerControl,$unorControl);
+                $total_rph_aset = $query_nilai_asset->row()->nilai_asset;
+            }
+            $r = $this->filterByUserUnkerUnor($query,$unkerControl,$unorControl);
             $data = array();
             if ($r->num_rows() > 0)
             {
@@ -88,7 +155,14 @@ class MY_Model extends CI_Model{
                 'data'=>$data,
                 'count'=>$count,
             );
+            if($total_rph_aset != null)
+            {
+                $returnedData['total_rph_aset'] = $total_rph_aset;
+            }
             return $returnedData;
+              
+            
+            
         }
 	
 	function Get_By_Query($query,$isGridFilter = null, $searchByFieldTable =null)

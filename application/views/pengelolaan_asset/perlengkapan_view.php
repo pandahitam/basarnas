@@ -936,7 +936,7 @@
             }
         };
 
-        Perlengkapan.Grid.grid = Grid.inventarisGrid(setting, Perlengkapan.Data);
+        Perlengkapan.Grid.grid = Grid.inventarisGrid(setting, Perlengkapan.Data,true);
 
 
         var new_tabpanel_Asset = {

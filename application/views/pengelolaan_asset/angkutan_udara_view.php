@@ -137,16 +137,27 @@
             timeout:600000,
             afterRequest: function(request, success) {
                 //Params_M_AngkutanUdara = request.operation.params;
-                
-                //USED FOR MAP SEARCH
-                var paramsUnker = request.params.searchUnker;
-                if(paramsUnker != null && paramsUnker != undefined)
+                 if(success == true)
                 {
-//                    AngkutanUdara.Data.clearFilter();
-//                    AngkutanUdara.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
-                      var gridFilterObject = {type:'string',value:paramsUnker,field:'kd_lokasi'};
-                    var gridFilter = JSON.stringify(gridFilterObject);
-                    AngkutanUdara.Data.changeParams({params:{"gridFilter":'['+gridFilter+']'}})
+                    var responseObject = eval ("(" + request.operation.response.responseText + ")");
+                    var total_asset_field = Ext.getCmp('total_grid_AngkutanUdara');
+
+                    if(responseObject.total_rph_aset !=null && responseObject.total_rph_aset != undefined)
+                    {
+                        
+                        total_asset_field.setValue(responseObject.total_rph_aset.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    }
+                    
+                    //USED FOR MAP SEARCH
+                    var paramsUnker = request.params.searchUnker;
+                    if(paramsUnker != null && paramsUnker != undefined)
+                    {
+    //                    AngkutanUdara.Data.clearFilter();
+    //                    AngkutanUdara.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+                          var gridFilterObject = {type:'string',value:paramsUnker,field:'kd_lokasi'};
+                        var gridFilter = JSON.stringify(gridFilterObject);
+                        AngkutanUdara.Data.changeParams({params:{"gridFilter":'['+gridFilter+']'}})
+                    }
                 }
             }
         });

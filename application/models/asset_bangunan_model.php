@@ -90,20 +90,113 @@ class Asset_Bangunan_Model extends MY_Model{
 //
 //            return $this->Get_By_Query($query);	
             
-            $isGridFilter = false;
+            
+            
+//            $isGridFilter = false;
+//            if($start != null && $limit != null)
+//            {
+//                $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                                LIMIT $start, $limit";
+//                if($searchByBarcode != null)
+//                {
+//                    $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+//                                LIMIT $start, $limit";
+//                }
+//                else if($searchByField !=null)
+//                {
+//                    $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                                where 
+//                                kd_brg like '%$searchByField%' OR
+//                                kd_lokasi like '%$searchByField%' OR
+//                                nama_unker like '%$searchByField%' OR
+//                                nama_unor like '%$searchByField%'                                   
+//                                LIMIT $start, $limit";
+//                }
+//                else if($gridFilter != null)
+//                {
+//                    $query = "$this->selectColumn
+//                               FROM $this->viewTable
+//                               where $gridFilter
+//                               LIMIT $start, $limit
+//                                ";
+//                    $isGridFilter = true;
+//                }
+//            }
+//            else
+//            {
+//                $query = "$this->selectColumn
+//                                 FROM $this->viewTable
+//                                ";
+//
+//                if($searchByBarcode != null)
+//                {
+//                    $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+//                                ";
+//                }
+//                else if($searchByField !=null)
+//                {
+//                    $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                                where 
+//                                kd_brg like '%$searchByField%' OR
+//                                kd_lokasi like '%$searchByField%' OR
+//                                nama_unker like '%$searchByField%' OR
+//                                nama_unor like '%$searchByField%'                                   
+//                                ";
+//                }
+//                else if($gridFilter != null)
+//                {
+//                    $query = "$this->selectColumn
+//                                FROM $this->viewTable
+//                               where $gridFilter
+//                                ";
+//                    $isGridFilter = true;
+//                }
+//            }
+//
+//            if($isGridFilter == true)
+//            {
+//                return $this->Get_By_Query($query,true);	
+//            }
+//            else if($searchByField != null)
+//            {
+//                return $this->Get_By_Query($query,false,'view_asset_bangunan');	
+//            }
+//            else
+//            {
+//                return $this->Get_By_Query($query);	
+//            }	
+            
+            $countQuery = "select count(*) as total
+                                FROM $this->viewTable";
+            $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                              FROM $this->viewTable";
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn
                                 FROM $this->viewTable
                                 LIMIT $start, $limit";
+                
                 if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
                                 where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
                                 LIMIT $start, $limit";
+                     $countQuery = "select count(*) as total
+                                FROM $this->viewTable
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
+                     $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                                    FROM $this->viewTable
+                                    where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
                 }
-                else if($searchByField !=null)
+                else if($searchByField != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
@@ -113,6 +206,20 @@ class Asset_Bangunan_Model extends MY_Model{
                                 nama_unker like '%$searchByField%' OR
                                 nama_unor like '%$searchByField%'                                   
                                 LIMIT $start, $limit";
+                     $countQuery = "select count(*) as total
+                                FROM $this->viewTable
+                                where 
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                nama_unker like '%$searchByField%' OR
+                                nama_unor like '%$searchByField%'";
+                    $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                                    FROM $this->viewTable
+                                    where 
+                                    kd_brg like '%$searchByField%' OR
+                                    kd_lokasi like '%$searchByField%' OR
+                                    nama_unker like '%$searchByField%' OR
+                                    nama_unor like '%$searchByField%'";
                 }
                 else if($gridFilter != null)
                 {
@@ -121,23 +228,35 @@ class Asset_Bangunan_Model extends MY_Model{
                                where $gridFilter
                                LIMIT $start, $limit
                                 ";
-                    $isGridFilter = true;
+                     $countQuery = "select count(*) as total
+                                FROM $this->viewTable
+                                where $gridFilter";
+                     $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                                    FROM $this->viewTable
+                                    where $gridFilter";
                 }
             }
             else
             {
                 $query = "$this->selectColumn
-                                 FROM $this->viewTable
-                                ";
-
+                                FROM $this->viewTable
+                                LIMIT $start, $limit";
+          
+                
                 if($searchByBarcode != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
-                               where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
                                 ";
+                     $countQuery = "select count(*) as total
+                                FROM $this->viewTable
+                                where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
+                     $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                                    FROM $this->viewTable
+                                    where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
                 }
-                else if($searchByField !=null)
+                else if($searchByField != null)
                 {
                     $query = "$this->selectColumn
                                 FROM $this->viewTable
@@ -147,29 +266,42 @@ class Asset_Bangunan_Model extends MY_Model{
                                 nama_unker like '%$searchByField%' OR
                                 nama_unor like '%$searchByField%'                                   
                                 ";
+                     $countQuery = "select count(*) as total
+                                FROM $this->viewTable
+                                where 
+                                kd_brg like '%$searchByField%' OR
+                                kd_lokasi like '%$searchByField%' OR
+                                nama_unker like '%$searchByField%' OR
+                                nama_unor like '%$searchByField%'";
+                    $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                                    FROM $this->viewTable
+                                    where 
+                                    kd_brg like '%$searchByField%' OR
+                                    kd_lokasi like '%$searchByField%' OR
+                                    nama_unker like '%$searchByField%' OR
+                                    nama_unor like '%$searchByField%'";
                 }
                 else if($gridFilter != null)
                 {
                     $query = "$this->selectColumn
-                                FROM $this->viewTable
+                               FROM $this->viewTable
                                where $gridFilter
+                               
                                 ";
-                    $isGridFilter = true;
+                     $countQuery = "select count(*) as total
+                                FROM $this->viewTable
+                                where $gridFilter";
+                     $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
+                                    FROM $this->viewTable
+                                    where $gridFilter";
                 }
             }
-
-            if($isGridFilter == true)
-            {
-                return $this->Get_By_Query($query,true);	
-            }
-            else if($searchByField != null)
-            {
-                return $this->Get_By_Query($query,false,'view_asset_bangunan');	
-            }
-            else
-            {
-                return $this->Get_By_Query($query);	
-            }	
+            
+            $accessControl = array(
+                'unker'=>true,
+                'unor'=>true
+            );
+            return $this->Get_By_Query_New($query, $countQuery, $accessControl, $nilaiAssetQuery);
 	}
         
         function get_ExtAllData($kd_lokasi,$kd_brg,$no_aset){
