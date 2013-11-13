@@ -168,7 +168,7 @@
                     var form = Form.secondaryWindowAsset(PemeliharaanDarat.dataStorePemeliharaanParts, 'edit',storeIndex);
 //                    form.insert(0, Form.Component.dataPemeliharaanParts(true));
 //                    form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
-                    form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat());
+                    form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat('',true));
                     if (data !== null)
                     {
                         Ext.Object.each(data,function(key,value,myself){

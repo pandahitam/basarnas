@@ -454,6 +454,145 @@ class Pemeliharaan_Part extends MY_Controller {
             
         }
         
+         //ANGKUTAN LAUT
+        function createPemeliharaanPartsAngkutanLaut(){
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                   
+                    if($row->jenis_perlengkapan == "Part")
+                    {
+                        $query_asset = $this->db->query("select kd_brg,kd_lokasi,no_aset from ext_asset_angkutan where id = $row->id_ext_asset");
+                        $query_asset_result = $query_asset->row();
+                        $this->db->where('id',$row->id_asset_perlengkapan);
+                        $updateWithNomorInduk = array(
+                            'warehouse_id'=>0,
+                            'ruang_id'=>0,
+                            'rak_id'=>0,
+                            'no_induk_asset'=>$query_asset_result->kd_brg.$query_asset_result->kd_lokasi.$query_asset_result->no_aset,
+                        );
+                        $this->db->update('asset_perlengkapan',$updateWithNomorInduk);
+                    }
+                    unset($row->part_number,$row->serial_number,$row->kd_brg);
+                    $this->db->insert('ext_asset_angkutan_laut_perlengkapan',$row);
+                }
+            }
+            else
+            {
+                
+                if($data->jenis_perlengkapan == "Part")
+                {
+                    $query_asset = $this->db->query("select kd_brg,kd_lokasi,no_aset from ext_asset_angkutan where id = $data->id_ext_asset");
+                    $query_asset_result = $query_asset->row();
+                    $this->db->where('id',$data->id_asset_perlengkapan);
+                    $updateWithNomorInduk = array(
+                        'warehouse_id'=>0,
+                        'ruang_id'=>0,
+                        'rak_id'=>0,
+                        'no_induk_asset'=>$query_asset_result->kd_brg.$query_asset_result->kd_lokasi.$query_asset_result->no_aset,
+                    );
+                    $this->db->update('asset_perlengkapan',$updateWithNomorInduk);
+                }
+                unset($data->part_number,$data->serial_number,$data->kd_brg);
+                $this->db->insert('ext_asset_angkutan_laut_perlengkapan',$data);
+            }
+            
+            echo "{success:true}";
+	}
+        
+       function updatePemeliharaanPartsAngkutanLaut(){
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    unset($row->part_number,$row->serial_number,$row->kd_brg);
+                    $this->db->set($row);
+                    $this->db->replace('ext_asset_angkutan_laut_perlengkapan');
+                }
+            }
+            else
+            {
+                    unset($data->part_number,$data->serial_number,$data->kd_brg);
+                    $this->db->set($data);
+                    $this->db->replace('ext_asset_angkutan_laut_perlengkapan');
+            }
+            
+            echo "{success:true}"; 
+       }
+	
+	function destroyPemeliharaanPartsAngkutanLaut()
+	{
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    $this->db->delete('ext_asset_angkutan_laut_perlengkapan', array('id' => $row->id));
+                    if($row->jenis_perlengkapan == "Part")
+                    {
+                        $this->db->where('id',$row->id_asset_perlengkapan);
+                        $removedFromAngkutan = array(
+                            'warehouse_id'=>0,
+                            'ruang_id'=>0,
+                            'rak_id'=>0,
+                            'no_induk_asset'=>''
+                        );
+                        $this->db->update('asset_perlengkapan',$removedFromAngkutan);
+                    }
+                    
+                }
+            }
+            else
+            {
+                    $this->db->delete('ext_asset_angkutan_laut_perlengkapan', array('id' => $data->id));
+                    if($data->jenis_perlengkapan == "Part")
+                    {
+                        $this->db->where('id',$data->id_asset_perlengkapan);
+                        $removedFromAngkutan = array(
+                            'warehouse_id'=>0,
+                            'ruang_id'=>0,
+                            'rak_id'=>0,
+                            'no_induk_asset'=>''
+                        );
+                        $this->db->update('asset_perlengkapan',$removedFromAngkutan);
+                    }
+            }
+            
+		 echo "{success:true}"; 
+	}
+        
+        function getSpecificPemeliharaanPartsAngkutanLaut()
+        {
+            $data = array();
+            if(isset($_POST['id_ext_asset']))
+            {
+                $id_ext_asset = $this->input->post('id_ext_asset');
+                $query = "select t.id,t.id_ext_asset,t.id_asset_perlengkapan,t.jenis_perlengkapan,t.no,t.nama,t.keterangan,a.part_number,a.serial_number, a.kd_brg
+                        FROM ext_asset_angkutan_laut_perlengkapan as t
+                        LEFT JOIN asset_perlengkapan as a on t.id_asset_perlengkapan = a.id
+                        WHERE id_ext_asset = $id_ext_asset";
+//                return $this->Get_By_Query($query);
+                $r = $this->db->query($query);
+                $data = array();
+                if ($r->num_rows() > 0)
+		{
+		    foreach ($r->result() as $obj)
+		    {
+			$data[] = $obj;
+		    }  
+		}
+                
+                $datasend["results"] = $data;
+//                $datasend["total"] = $data['count'];
+                echo json_encode($datasend);
+            }
+            
+            
+        }
+        
         
 	
 }

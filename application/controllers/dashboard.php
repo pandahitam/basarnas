@@ -405,6 +405,10 @@ class Dashboard extends CI_Controller{
         a.kd_lokasi
             UNION
             select kd_lokasi, ur_upb, rph_aset from asset_tanah as a inner join ref_unker on ref_unker.kdlok = a.kd_lokasi
+            UNION
+            select kd_lokasi, ur_upb, rph_aset from ext_asset_ruang as a inner join ref_unker on ref_unker.kdlok = a.kd_lokasi
+            UNION
+            select kd_lokasi, ur_upb, rph_aset from ext_asset_dil as a inner join ref_unker on ref_unker.kdlok = a.kd_lokasi
         ) as UnitKerjaTotalAsset inner join ref_unker on ref_unker.kdlok = UnitKerjaTotalAsset.kd_lokasi
         group by kd_lokasi
         ";
@@ -419,10 +423,12 @@ class Dashboard extends CI_Controller{
   function grafik_kategoribarang_totalaset()
   {
       $query = $this->db->query( 'select 
-                (select (sum(rph_aset)/1000000) from asset_alatbesar) as "Peralatan", 
                 (select (sum(rph_aset)/1000000) from asset_angkutan) as "Angkutan",
                 (select (sum(rph_aset)/1000000) from asset_bangunan) as "Bangunan",
+                (select (sum(rph_aset)/1000000) from ext_asset_dil) as "Luar",
                 (select (sum(rph_aset)/1000000) from asset_perairan) as "Perairan",
+                (select (sum(rph_aset)/1000000) from asset_alatbesar) as "Peralatan",
+                (select (sum(rph_aset)/1000000) from ext_asset_ruang) as "Ruang",
                 (select (sum(rph_aset)/1000000) from asset_senjata) as "Senjata",
                 (select (sum(rph_aset)/1000000) from asset_tanah) as "Tanah"');
       $result = $query->row_array();

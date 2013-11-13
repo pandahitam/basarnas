@@ -121,7 +121,7 @@ class Asset_Angkutan_Darat extends MY_Controller {
                 $no_aset = $_POST['no_aset'];
                 $queryIdExtAsset = $this->db->query("select id from ext_asset_angkutan where kd_brg = '$kd_brg' and kd_lokasi = '$kd_lokasi' and no_aset = '$no_aset'");
                 $queryIdExtAsset_result = $queryIdExtAsset->row();
-                $data = $this->model->getSpecificPerlengkapanAngkutanUdara($queryIdExtAsset_result->id);
+                $data = $this->model->getSpecificPerlengkapanAngkutanDarat($queryIdExtAsset_result->id);
                 //                $total = $this->model->get_CountData();
 //                $dataSend['total'] = $total;
 		$dataSend['results'] = $data;

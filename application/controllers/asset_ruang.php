@@ -41,7 +41,7 @@ class Asset_Ruang extends MY_Controller {
                 );
                 
                 $extFields = array(
-                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
+                        'kd_lokasi', 'kd_brg', 'no_aset', 'id','rph_aset',
                         'kode_unor','image_url', 'document_url','kd_klasifikasi_aset','dihapus','lang','long'
                 );
 		

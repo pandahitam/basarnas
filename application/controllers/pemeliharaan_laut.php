@@ -84,7 +84,9 @@ class Pemeliharaan_Laut extends MY_Controller {
                     $this->db->replace('pemeliharaan');
                     $this->createLog('UPDATE PEMELIHARAAN KENDARAAN LAUT','pemeliharaan');
                 }
-                echo "{success:true, id:$id}";
+                 $query_id_ext_asset = $this->db->query("select id from ext_asset_angkutan where kd_brg='".$data['kd_brg']."' and kd_lokasi='".$data['kd_lokasi']."' and no_aset= '".$data['no_aset']."'");
+                $query_id_ext_asset_result = $query_id_ext_asset->row();
+                echo "{success:true, id:$query_id_ext_asset_result->id}";
 	}
 	
 	function deletePemeliharaanLaut()

@@ -940,7 +940,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan', id: 'save_pemeliharaan_parts_angkutan', iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             var imageField = form.findField('image_url');
@@ -994,6 +994,104 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 data.load();
                                             }
                                             Modal.closeProcessWindow();
+    //                                        if (edit)
+    //                                        {
+    //                                            Modal.closeProcessWindow();
+    //                                        }
+    //                                        else
+    //                                        {
+    //                                            form.reset();
+    //                                        }
+
+
+
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelPemeliharaanPartsAngkutanInAsset = function(url, data, edit, dataStoreParts, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-pemeliharaan-parts-in-asset',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_pemeliharaan_parts_angkutan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            if (form.isValid())
+                            {
+                                    form.submit({
+                                        success: function(form,action) {
+                                            
+                                            var id = action.result.id;
+                                            var gridStore = dataStoreParts;
+                                            var new_records = gridStore.getNewRecords();
+    //                                        var updated_records = grid.getUpdatedRecords();
+    //                                        var removed_records = grid.getRemovedRecords();
+                                            Ext.each(new_records, function(obj){
+                                                var index = gridStore.indexOf(obj);
+                                                var record = gridStore.getAt(index);
+                                                record.set('id_ext_asset',id);
+                                            });
+                                            
+                                                gridStore.sync();
+
+
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            Modal.assetSecondaryWindow.close();
     //                                        if (edit)
     //                                        {
     //                                            Modal.closeProcessWindow();
@@ -1136,13 +1234,27 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 form.insert(2, Form.Component.pemeliharaan());
                 if(setting_grid_pemeliharaan_part != null && setting_grid_pemeliharaan_part != undefined)
                 {
-//                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
                 }
                 
             }
             
             return form;
         }
+        
+        Form.pemeliharaanInAssetWithParts = function(setting,setting_grid_pemeliharaan_part){
+            var form = Form.panelPemeliharaanPartsAngkutanInAsset(setting.url, setting.data, setting.isEditing, setting_grid_pemeliharaan_part.dataStore, setting.addBtn);
+            form.insert(1, Form.Component.hiddenIdentifier());
+            form.insert(4, Form.Component.fileUpload());
+            var tipe_angkutan = setting.tipe_angkutan;
+            form.insert(2, Form.Component.pemeliharaan(tipe_angkutan));
+            form.insert(3, Form.Component.gridPemeliharaanAngkutanPerlengkapan(setting_grid_pemeliharaan_part,true));
+            
+            return form;
+        }
+        
+        
+        
         
         Form.peraturan = function(setting)
         {
@@ -2968,6 +3080,50 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        Form.tertiaryWindowAsset= function(data,operationType,storeIndex) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: '',
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_tertiary_window_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                if(operationType == 'add')
+                                {
+                                    data.add(formValues);
+                                }
+                                if(operationType == 'edit')
+                                {
+                                    var record = data.getAt(storeIndex);
+                                    record.set(formValues);
+                                }
+                                if(operationType == 'remove')
+                                {
+//                                    data.removeAt(storeIndex);
+//                                    data.commitChanges();
+                                }
+                                
+                                
+                                Modal.assetTertiaryWindow.close();
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
         Form.panelInventory = function(url, data, edit, dataStoreParts) {
             var _form = Ext.create('Ext.form.Panel', {
                 id : 'form-process',
@@ -3334,80 +3490,6 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
-        Form.panelPemeliharaanInAsset = function(url, data, edit, addBtn) {
-            var _form = Ext.create('Ext.form.Panel', {
-                id : 'form-process',
-                frame: true,
-                url: url,
-                bodyStyle: 'padding:5px',
-                width: '100%',
-                height: '100%',
-                autoScroll:true,
-                trackResetOnLoad:true,
-                fieldDefaults: {
-                    msgTarget: 'side'
-                },
-                buttons: [{
-                        text: 'Simpan', id: 'save_process', iconCls: 'icon-save', formBind: true,
-                        handler: function() {
-                            var form = _form.getForm();
-                            var imageField = form.findField('image_url');
-                            var documentField = form.findField('document_url');
-                            if (imageField !== null)
-                            {
-                                var arrayPhoto = [];
-                                var photoStore = Utils.getPhotoStore(_form);
-                                
-                                _.each(photoStore.data.items, function(obj) {
-                                    arrayPhoto.push(obj.data.name);
-                                });
-                                
-                                imageField.setRawValue(arrayPhoto.join());
-                            }
-                            
-                            if (documentField !== null)
-                            {
-                                var arrayDoc = [];
-                                
-                                var documentStore = Utils.getDocumentStore(_form);
-                                
-                                _.each(documentStore.data.items, function(obj) {
-                                    arrayDoc.push(obj.data.name);
-                                });
-                                
-                                documentField.setRawValue(arrayDoc.join());
-                            }
-                            
-//                            console.log(form.getValues());
-                            
-                            if (form.isValid())
-                            {
-//                                console.log(form.getValues());
-                                form.submit({
-                                    success: function(form) {
-                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        if (data !== null)
-                                        {
-                                            data.load();
-                                        }
-                                        Modal.assetSecondaryWindow.close();
-                                    },
-                                    failure: function() {
-                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
-                                    }
-                                });
-                            }
-                            
-                        }
-                    }, {
-                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
-                        handler: addBtn.fn
-                    }]
-            });
-
-
-            return _form;
-        };
 
         Form.process = function(url, data, edit, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
@@ -7507,7 +7589,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             {
                                 xtype:'hidden',
                                 name:'id_ext_asset',
-                                value:id_ext_asset,
+                                value:(id_ext_asset != '')?id_ext_asset:'',
                             },
                             {
                                 xtype: 'combo',
@@ -7518,6 +7600,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 store: Reference.Data.jenisPerlengkapanAngkutanDarat,
                                 valueField: 'value',
                                 editable:false,
+                                readOnly:(readOnly == true)?true:false,
                                 displayField: 'value', emptyText: 'Pilih Jenis',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
                                 listeners: {
@@ -7558,6 +7641,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 anchor: '100%',
                                 allowBlank: true,
                                 disabled:true,
+                                readOnly:(readOnly == true)?true:false,
                                 id:'angkutan_darat_asset_perlengkapan_part',
                                 store: Reference.Data.assetPerlengkapanPart,
                                 valueField: 'id',
@@ -7622,7 +7706,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         };
         
-        Form.Component.dataPerlengkapanAngkutanLaut = function (id_ext_asset)
+        Form.Component.dataPerlengkapanAngkutanLaut = function (id_ext_asset,readOnly)
         {
             var component = {
                 xtype: 'fieldset',
@@ -7649,7 +7733,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             {
                                 xtype:'hidden',
                                 name:'id_ext_asset',
-                                value:id_ext_asset,
+                                value:(id_ext_asset != '')?id_ext_asset:'',
                             },
                             {
                                 xtype: 'combo',
@@ -7657,25 +7741,33 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'jenis_perlengkapan',
                                 anchor: '100%',
                                 allowBlank: false,
+                                readOnly:(readOnly == true)?true:false,
                                 store: Reference.Data.jenisPerlengkapanAngkutanLaut,
                                 valueField: 'value',
                                 displayField: 'value', emptyText: 'Pilih Jenis',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Jenis',
                                 listeners: {
-//                                    'focus': {
-//                                        fn: function(comboField) {
-//                                            var store = comboField.getStore();
-//                                            store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
-//                                            comboField.expand();
-//                                        },
-//                                        scope: this
-//                                    },
-//                                    'change': {
-//                                        fn: function(obj, value) {
-//
-//                                        },
-//                                        scope: this
-//                                    }
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if(value == "Part")
+                                            {
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_part').setDisabled(false);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_serial_number').setDisabled(false);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_part_number').setDisabled(false);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_kd_brg').setDisabled(false);
+//                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(true);
+                                            }
+                                            else
+                                            {
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_part').setDisabled(true);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_serial_number').setDisabled(true);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_part_number').setDisabled(true);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_kd_brg').setDisabled(true);
+//                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(false);
+                                            }
+                                        },
+                                        scope: this
+                                    }
                                 }
                             },
                             {
@@ -7687,37 +7779,70 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             },
                             {
                                 xtype: 'combo',
-                                fieldLabel: 'Part Number',
+                                fieldLabel: 'Part',
                                 name: 'id_asset_perlengkapan',
+                                id:'angkutan_laut_asset_perlengkapan_part',
+                                disabled:true,
                                 anchor: '100%',
                                 allowBlank: true,
+                                readOnly:(readOnly == true)?true:false,
                                 store: Reference.Data.assetPerlengkapanPart,
                                 valueField: 'id',
                                 editable:false,
-                                displayField: 'part_number', emptyText: 'Pilih Part',
+                                displayField: 'nama', emptyText: 'Pilih Part',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih part',
                                 listeners: {
                                     'change': {
                                         fn: function(obj, value) {
-                                            var serial_number = obj.valueModels[0].data.serial_number;
-                                           Ext.getCmp('angkutan_laut_asset_perlengkapan_part').setValue(serial_number);
+                                            if(readOnly == true)
+                                            {
+                                                Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 2}});
+                                            }
+                                            else
+                                            {
+                                                var serial_number = obj.valueModels[0].data.serial_number;
+                                                var part_number = obj.valueModels[0].data.part_number;
+                                                var kd_brg = obj.valueModels[0].data.kd_brg;
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_serial_number').setValue(serial_number);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_part_number').setValue(part_number);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_kd_brg').setValue(kd_brg);
+                                            }
                                         },
                                         scope: this
                                     }
                                 }
                             },
-                            {
+                             {
+                                disabled:true,
                                 xtype:'textfield',
-                                fieldLabel:'Serial',
+                                fieldLabel:'Kode Barang',
+                                name:'kd_brg',
+                                id:'angkutan_laut_asset_perlengkapan_kd_brg',
+                                readOnly:true,
+                            },
+                            {
+                                disabled:true,
+                                xtype:'textfield',
+                                fieldLabel:'Part Number',
+                                name:'part_number',
+                                id:'angkutan_laut_asset_perlengkapan_part_number',
+                                readOnly:true,
+                            },
+                            {
+                                disabled:true,
+                                xtype:'textfield',
+                                fieldLabel:'Serial Number',
                                 name:'serial_number',
-                                id:'angkutan_laut_asset_perlengkapan_part',
+                                id:'angkutan_laut_asset_perlengkapan_serial_number',
                                 readOnly:true,
                             },
                             {
                                 xtype:'textarea',
                                 fieldLabel: 'Keterangan',
-                                name: 'keterangan'
-                            }]
+                                name: 'keterangan',
+                                id:'perlengkapan_angkutan_laut_keterangan'
+                            },
+                            ]
                     },]
             };
 
@@ -7752,7 +7877,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             {
                                 xtype:'hidden',
                                 name:'id_ext_asset',
-                                value:id_ext_asset,
+                                value:(id_ext_asset != '')?id_ext_asset:'',
                             },
                             {
                                 xtype: 'combo',
@@ -9301,6 +9426,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     layout: 'anchor'
                 },
                 items:[{
+                    xtype:'numberfield',
+                    fieldLabel:'Harga Aset',
+                    name:'rph_aset'
+                    },{
                     xtype: 'textfield',
                     fieldLabel: 'Lokasi Fisik',
                     name: 'lok_fisik',
@@ -9331,6 +9460,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     layout: 'anchor'
                 },
                 items:[{
+                    xtype:'numberfield',
+                    fieldLabel:'Harga Aset',
+                    name:'rph_aset'
+                    },{
                     xtype: 'combo',
                     fieldLabel: 'Ruang *',
                     name: 'kd_ruang',
