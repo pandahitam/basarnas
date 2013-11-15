@@ -174,9 +174,9 @@ class Asset_Bangunan_Model extends MY_Model{
 //            }	
             
             $countQuery = "select count(*) as total
-                                FROM $this->viewTable";
+                                FROM $this->table";
             $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
-                              FROM $this->viewTable";
+                              FROM $this->table";
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn
@@ -190,10 +190,10 @@ class Asset_Bangunan_Model extends MY_Model{
                                 where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
                                 LIMIT $start, $limit";
                      $countQuery = "select count(*) as total
-                                FROM $this->viewTable
+                                FROM $this->table
                                 where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
                      $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
-                                    FROM $this->viewTable
+                                    FROM $this->table
                                     where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
                 }
                 else if($searchByField != null)
@@ -250,10 +250,10 @@ class Asset_Bangunan_Model extends MY_Model{
                                 where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
                                 ";
                      $countQuery = "select count(*) as total
-                                FROM $this->viewTable
+                                FROM $this->table
                                 where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
                      $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
-                                    FROM $this->viewTable
+                                    FROM $this->table
                                     where CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'";
                 }
                 else if($searchByField != null)

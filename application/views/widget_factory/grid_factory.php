@@ -34,7 +34,7 @@
             return grid;
         };
         
-        Grid.baseGridAssetInventaris = function(setting, data, feature_list) {
+        Grid.baseGridWithTotalAsset= function(setting, data, feature_list) {
             var grid = new Ext.create('Ext.grid.Panel', {
                 id: setting.grid.id,
                 store: data,
@@ -1698,12 +1698,12 @@ var search = [{
             }
             else
             {
-                return Grid.baseGridAssetInventaris(setting, data, feature_list);
+                return Grid.baseGridWithTotalAsset(setting, data, feature_list);
             }
             
         };
         
-        Grid.mutasiGridNoCRUD = function(setting, data) {
+        Grid.mutasiPenghapusanGridNoCRUD = function(setting, data) {
             if (setting === null)
             {
                 console.log('setting is null');
@@ -1762,7 +1762,7 @@ var search = [{
                 toolbar: toolbar
             };
 
-            return Grid.baseGrid(setting, data, feature_list);
+            return Grid.baseGridWithTotalAsset(setting, data, feature_list);
         };
         
         Grid.referensiGrid = function(setting, data) {

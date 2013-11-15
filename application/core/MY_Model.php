@@ -136,7 +136,15 @@ class MY_Model extends CI_Model{
             if($nilaiAssetQuery != null)
             {
                 $query_nilai_asset = $this->filterByUserUnkerUnor($nilaiAssetQuery,$unkerControl,$unorControl);
-                $total_rph_aset = $query_nilai_asset->row()->nilai_asset;
+                if($query_nilai_asset->num_rows > 0)
+                {
+                    $total_rph_aset = $query_nilai_asset->row()->nilai_asset;
+                }
+                else
+                {
+                    $total_rph_aset = 0;
+                }
+                
             }
             $r = $this->filterByUserUnkerUnor($query,$unkerControl,$unorControl);
             $data = array();
@@ -155,7 +163,7 @@ class MY_Model extends CI_Model{
                 'data'=>$data,
                 'count'=>$count,
             );
-            if($total_rph_aset != null)
+            if($total_rph_aset !== null)
             {
                 $returnedData['total_rph_aset'] = $total_rph_aset;
             }

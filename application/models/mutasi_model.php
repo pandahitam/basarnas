@@ -10,6 +10,10 @@ class Mutasi_Model extends MY_Model{
 	}
 	
 	function get_AllData($start=null, $limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
+            $nilaiAssetQuery = "SELECT sum(abs(rph_aset)) as nilai_asset FROM 
+                                t_masteru as u 
+                                where `u`.`jns_trn` IN('102','302','506','507','392')";
+            
             $countQuery = "
 						SELECT count(*) as total
 						FROM
@@ -34,7 +38,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))    AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -112,7 +116,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -173,7 +177,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -209,7 +213,15 @@ class Mutasi_Model extends MY_Model{
                                                 )AS z ON x.kd_lokasi = z.kdlok
                         LIMIT $start, $limit";
                      
-                     $countQuery = "                 SELECT count(*) as total
+                     $nilaiAssetQuery = "SELECT sum(abs(u.rph_aset)) as nilai_asset
+                                         FROM `t_masteru` `u`
+                                         WHERE `u`.`jns_trn` IN('102','302','506','507','392')
+                                         AND 
+                                         CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                         GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+                                        ";
+                     
+                     $countQuery = "SELECT count(*) as total
 						FROM
 						(
 							SELECT
@@ -232,7 +244,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -294,7 +306,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))     AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -335,6 +347,69 @@ class Mutasi_Model extends MY_Model{
                                                 merk_type like'%$searchByField%')
                         LIMIT $start, $limit";
                      
+                     $nilaiAssetQuery = "SELECT sum(abs(rph_aset)) as nilai_asset
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							SUM(ABS(`u`.`rph_aset`))     AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('102','302','506','507','392')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                (jenis_transaksi like '%$searchByField%' OR
+                                                kd_brg like '%$searchByField%' OR
+                                                no_sppa like '%$searchByField%' OR
+                                                ur_upb like '%$searchByField%' OR
+                                                ur_baru like '%$searchByField%' OR
+                                                merk_type like'%$searchByField%')";
+                     
                      $countQuery = "SELECT count(*) as total
 						FROM
 						(
@@ -358,7 +433,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -424,7 +499,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -459,6 +534,64 @@ class Mutasi_Model extends MY_Model{
                                                 WHERE
                                                 $gridFilter
                         LIMIT $start, $limit";
+                    
+                     $nilaiAssetQuery = "SELECT sum(abs(rph_aset))as nilai_asset
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('102','302','506','507','392')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                $gridFilter";
                      
                      $countQuery = "SELECT count(*) as total
 						FROM
@@ -483,7 +616,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -566,7 +699,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -624,7 +757,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))    AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -659,6 +792,15 @@ class Mutasi_Model extends MY_Model{
                                                     SELECT ur_upb, kdlok FROM ref_unker
                                                 )AS z ON x.kd_lokasi = z.kdlok
                         ";
+                     
+                      $nilaiAssetQuery = "SELECT sum(abs(u.rph_aset)) as nilai_asset
+                                         FROM `t_masteru` `u`
+                                         WHERE `u`.`jns_trn` IN('102','302','506','507','392')
+                                         AND 
+                                         CONCAT(kd_brg,kd_lokasi,no_aset) = '$searchByBarcode'
+                                         GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+                                        ";
+                      
                   $countQuery = "SELECT count(*) as total
 						FROM
 						(
@@ -682,7 +824,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))    AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -743,7 +885,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -783,6 +925,70 @@ class Mutasi_Model extends MY_Model{
                                                 ur_baru like '%$searchByField%' OR
                                                 merk_type like'%$searchByField%')
                         ";
+                     
+                      $nilaiAssetQuery = "SELECT sum(abs(rph_aset)) as nilai_asset
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							SUM(ABS(`u`.`rph_aset`))     AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('102','302','506','507','392')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                (jenis_transaksi like '%$searchByField%' OR
+                                                kd_brg like '%$searchByField%' OR
+                                                no_sppa like '%$searchByField%' OR
+                                                ur_upb like '%$searchByField%' OR
+                                                ur_baru like '%$searchByField%' OR
+                                                merk_type like'%$searchByField%')";
+                      
                      $countQuery = "
 						SELECT count(*) as total
 						FROM
@@ -807,7 +1013,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -874,7 +1080,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -909,6 +1115,64 @@ class Mutasi_Model extends MY_Model{
                                                 WHERE
                                                 $gridFilter
                         ";
+                    
+                     $nilaiAssetQuery = "SELECT sum(abs(rph_aset))as nilai_asset
+						FROM
+						(
+							SELECT
+							MIN(`u`.`no_aset`) AS `no_awal`,
+							MAX(`u`.`no_aset`) AS `no_akhir`,
+							`c`.`ur_trn`      AS `jenis_transaksi`,
+							`u`.`thn_ang`     AS `thn_ang`,
+							`u`.`periode`     AS `periode`,
+							`u`.`kd_lokasi`   AS `kd_lokasi`,
+							`u`.`no_sppa`     AS `no_sppa`,
+							`u`.`kd_brg`      AS `kd_brg`,
+							`u`.`no_aset`     AS `no_aset`,
+							`u`.`tgl_perlh`   AS `tgl_perlh`,
+							`u`.`tercatat`    AS `tercatat`,
+							`u`.`kondisi`     AS `kondisi`,
+							`u`.`tgl_buku`    AS `tgl_buku`,
+							`u`.`jns_trn`     AS `jns_trn`,
+							`u`.`dsr_hrg`     AS `dsr_hrg`,
+							`u`.`kd_data`     AS `kd_data`,
+							`u`.`flag_sap`    AS `flag_sap`,
+							`u`.`kuantitas`   AS `kuantitas`,
+							ABS(`u`.`rph_sat`)     AS `rph_sat`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
+							`u`.`flag_kor`    AS `flag_kor`,
+							`u`.`keterangan`  AS `keterangan`,
+							`u`.`merk_type`   AS `merk_type`,
+							`u`.`asal_perlh`  AS `asal_perlh`,
+							`u`.`no_bukti`    AS `no_bukti`,
+							`u`.`no_dsr_mts`  AS `no_dsr_mts`,
+							`u`.`tgl_dsr_mts` AS `tgl_dsr_mts`,
+							`u`.`flag_ttp`    AS `flag_ttp`,
+							`u`.`flag_krm`    AS `flag_krm`,
+							`u`.`kdblu`       AS `kdblu`,
+							`u`.`setatus`     AS `setatus`,
+							`u`.`noreg`       AS `noreg`,
+							`u`.`kdbapel`     AS `kdbapel`,
+							`u`.`kdkpknl`     AS `kdkpknl`,
+							`u`.`umeko`       AS `umeko`,
+							`u`.`rph_res`     AS `rph_res`,
+							`u`.`kdkppn`      AS `kdkppn`
+							FROM `t_masteru` `u` LEFT JOIN `t_croleh` `c` ON `u`.`jns_trn` = `c`.`jns_trn`
+							GROUP BY `u`.`kd_brg`,`u`.`kd_lokasi`,`u`.`no_sppa`
+							HAVING `u`.`jns_trn` IN('102','302','506','507','392')
+						) AS `x` LEFT JOIN
+						(
+							SELECT `z`.kd_brgbaru, `z`.ur_baru
+							FROM t_mapbrg AS `z`
+							GROUP BY `z`.kd_brgbaru
+							ORDER BY `z`.kd_brgbaru, `z`.ur_baru
+						) AS `y` ON `x`.`kd_brg` = `y`.`kd_brgbaru`
+                                                LEFT JOIN
+                                                (
+                                                    SELECT ur_upb, kdlok FROM ref_unker
+                                                )AS z ON x.kd_lokasi = z.kdlok
+                                                WHERE
+                                                $gridFilter";
                      
                      $countQuery = "SELECT count(*) as total
 						FROM
@@ -933,7 +1197,7 @@ class Mutasi_Model extends MY_Model{
 							`u`.`flag_sap`    AS `flag_sap`,
 							`u`.`kuantitas`   AS `kuantitas`,
 							ABS(`u`.`rph_sat`)     AS `rph_sat`,
-							ABS(`u`.`rph_aset`)    AS `rph_aset`,
+							SUM(ABS(`u`.`rph_aset`))      AS `rph_aset`,
 							`u`.`flag_kor`    AS `flag_kor`,
 							`u`.`keterangan`  AS `keterangan`,
 							`u`.`merk_type`   AS `merk_type`,
@@ -973,7 +1237,7 @@ class Mutasi_Model extends MY_Model{
                     $accessControl = array(
                         'unker'=>true
                     );
-                    return $this->Get_By_Query_New($query, $countQuery,$accessControl);
+                    return $this->Get_By_Query_New($query, $countQuery,$accessControl,$nilaiAssetQuery);
                 
 			
 	}

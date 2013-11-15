@@ -26,13 +26,22 @@ Penghapusan.proxy = new Ext.create('Ext.data.AjaxProxy', {
     reader: Penghapusan.reader,
     afterRequest: function(request, success) {
         Params_M_TB = request.operation.params;
-
-        //USED FOR MAP SEARCH
-        var paramsUnker = request.params.searchUnker;
-        if(paramsUnker != null && paramsUnker != undefined)
+        if(success == true)
         {
-            Penghapusan.Data.clearFilter();
-            Penghapusan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+            var responseObject = eval ("(" + request.operation.response.responseText + ")");
+            var total_asset_field = Ext.getCmp('total_grid_Penghapusan');
+
+            if(responseObject.total_rph_aset !=null && responseObject.total_rph_aset != undefined)
+            {
+               total_asset_field.setValue(responseObject.total_rph_aset.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            }
+            //USED FOR MAP SEARCH
+            var paramsUnker = request.params.searchUnker;
+            if(paramsUnker != null && paramsUnker != undefined)
+            {
+                Penghapusan.Data.clearFilter();
+                Penghapusan.Data.filter([{property: 'kd_lokasi', value: paramsUnker, anyMatch:true}]);
+            }
         }
 
     }
@@ -238,7 +247,7 @@ var setting = {
         }
 };
 
-Penghapusan.Grid.grid = Grid.inventarisGrid(setting,Penghapusan.Data);
+Penghapusan.Grid.grid = Grid.mutasiPenghapusanGridNoCRUD(setting,Penghapusan.Data);
 
 /*var new_tabpanel = {
     xtype:'panel',
