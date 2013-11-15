@@ -151,12 +151,16 @@ class Dashboard extends CI_Controller{
                                 ((DATEDIFF( DATE( rencana_waktu ) , CURDATE() ) <=0
                                 AND rencana_waktu != '0000-00-00')
                                 OR
-                                CASE
-                                                WHEN unit_pengunaan = 1 THEN total_penggunaan >= (freq_pengunaan/1000)
-                                                WHEN unit_pengunaan = 3 THEN total_penggunaan >= (freq_pengunaan * 1.60934)
-                                                ELSE
-                                                    total_penggunaan >= (freq_pengunaan/1000)
-                                                END
+                                (
+                                total_penggunaan >= (CASE
+                                                WHEN unit_pengunaan = 1 THEN (freq_pengunaan/1000)
+						WHEN unit_pengunaan = 2 THEN freq_pengunaan
+                                                WHEN unit_pengunaan = 3 THEN (freq_pengunaan * 1.60934)
+                                                ELSE 0
+                                              END)
+                                AND unit_pengunaan != 0
+                                
+                                )
                                 )
                                 ";
             

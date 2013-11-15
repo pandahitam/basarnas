@@ -1024,6 +1024,92 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        Form.panelPemeliharaanInAsset = function(url, data, edit, addBtn) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-pemeliharaan-in-asset',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_pemeliharaan_in_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            if (form.isValid())
+                            {
+                                    form.submit({
+                                        success: function(form,action) {
+                                            
+                       
+
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            Modal.assetSecondaryWindow.close();
+    //                                        if (edit)
+    //                                        {
+    //                                            Modal.closeProcessWindow();
+    //                                        }
+    //                                        else
+    //                                        {
+    //                                            form.reset();
+    //                                        }
+
+
+
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
         Form.panelPemeliharaanPartsAngkutanInAsset = function(url, data, edit, dataStoreParts, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
                 id : 'form-pemeliharaan-parts-in-asset',
@@ -1232,10 +1318,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             else
             {
                 form.insert(2, Form.Component.pemeliharaan());
-                if(setting_grid_pemeliharaan_part != null && setting_grid_pemeliharaan_part != undefined)
-                {
-                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
-                }
+//                if(setting_grid_pemeliharaan_part != null && setting_grid_pemeliharaan_part != undefined)
+//                {
+//                    form.insert(3, Form.Component.gridPemeliharaanPart(setting_grid_pemeliharaan_part,setting.isEditing));
+//                }
                 
             }
             

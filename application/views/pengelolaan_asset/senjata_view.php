@@ -358,6 +358,15 @@
 
             if (dataForm !== null)
             {
+                if(dataForm.unit_waktu != 0 && edit == true)
+                {
+                    dataForm.comboUnitWaktuOrUnitPenggunaan = 1;
+                }
+                else if(dataForm.unit_pengunaan != 0 && edit == true)
+                {
+                    dataForm.comboUnitWaktuOrUnitPenggunaan = 2;
+                }
+                
                 Ext.Object.each(dataForm,function(key,value,myself){
                             if(dataForm[key] == '0000-00-00')
                             {
