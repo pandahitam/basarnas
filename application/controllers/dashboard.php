@@ -450,6 +450,42 @@ class Dashboard extends CI_Controller{
       
   }
   
+  function memo()
+  {
+      $user_kd_lokasi = $this->session->userdata('temp_kode_unker_zs_simpeg');
+      $user_kode_unor = $this->session->userdata('temp_kode_unor_zs_simpeg');
+      if($user_kd_lokasi == 0 || $user_kd_lokasi == null)
+      {
+          $user_kd_lokasi = '';
+      }
+      else
+      {
+          $user_kd_lokasi = "AND t.kd_lokasi='".$user_kd_lokasi."' ";
+      }
+      
+      if($user_kode_unor == 0 || $user_kode_unor == null)
+      {
+          $user_kode_unor = '';
+      }
+      else
+      {
+          $user_kode_unor = "AND t.kode_unor='".$user_kode_unor."' ";
+      }
+      
+      $query = "SELECT t.id, t.kd_brg, t.kd_lokasi, t.no_aset, DATE_FORMAT(t.date_created,'%b %d %Y (%H:%i)') as date_created,t.created_by, t.isi, a.ur_upb AS nama_unker, b.nama_unor, c.ur_sskel as nama
+                                 FROM memo AS t
+                                 LEFT JOIN ref_unker AS a ON t.kd_lokasi = a.kdlok
+                                 LEFT JOIN ref_unor AS b ON t.kode_unor = b.kode_unor
+                                 LEFT JOIN ref_subsubkel as c on t.kd_brg = c.kd_brg
+                                 WHERE
+                                 is_read = 0
+                                 $user_kd_lokasi $user_kode_unor";
+      
+      $data = $this->Get_By_Query($query);
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
+  }
+  
 
 }
 ?>

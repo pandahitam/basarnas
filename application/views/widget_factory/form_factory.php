@@ -5973,16 +5973,6 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
                                 listeners: {
-                                    'focus': {
-                                        fn: function(comboField) {
-                                            if(isReadOnly != true)
-                                            {
-                                                comboField.expand();
-                                            }
-                                            
-                                        },
-                                        scope: this
-                                    },
                                     'change': {
                                         fn: function(obj, value) {
 
