@@ -173,6 +173,7 @@
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                     {header: 'id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'vendor_id', dataIndex: 'vendor_id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kelompok Part', dataIndex: 'nama_kelompok', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Part Number', dataIndex: 'part_number', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Part Number Substitusi', dataIndex: 'part_number_substitusi', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},

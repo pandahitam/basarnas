@@ -5,7 +5,7 @@ class Part_Number_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_perlengkapan';
             
-            $this->selectColumn = "SELECT id, vendor_id, part_number, kd_brg, merek, jenis, nama, part_number_substitusi, umur_maks";
+            $this->selectColumn = "SELECT t.id, vendor_id, part_number, kd_brg, merek, jenis, nama, part_number_substitusi, umur_maks, nama_kelompok";
 	}
 	
 	function get_AllData($start=null, $limit=null){
@@ -13,13 +13,15 @@ class Part_Number_Model extends MY_Model{
             if($start !=null && $limit !=null)
             {
                 $query = "$this->selectColumn 
-                        FROM $this->table AS t 
+                        FROM $this->table AS t
+                        LEFT JOIN ref_kelompok_part as a on a.id = t.id_kelompok_part
                         LIMIT $start, $limit";
             }
             else
             {
                 $query = "$this->selectColumn 
                         FROM $this->table AS t 
+                        LEFT JOIN ref_kelompok_part as a on a.id = t.id_kelompok_part
                         ";
             }
             

@@ -34,6 +34,79 @@
             return grid;
         };
         
+        Grid.baseGridAngkutanPerlengkapan = function(setting, data, feature_list) {
+            var grid = new Ext.create('Ext.grid.Panel', {
+                id: setting.grid.id,
+                store: data,
+                title: setting.grid.title,
+                frame: true,
+                region: 'center',
+                border: true,
+                loadMask: true,
+                autoScroll:true,
+                style: 'margin:0 auto;',
+                height: '100%',
+                selModel: feature_list.selmode,
+                columns: setting.grid.column,
+                columnLines: true,
+                features: feature_list.filter,
+                tbar: feature_list.toolbar,
+                dockedItems: [{xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true}],
+                listeners: {
+                    itemdblclick: function(dataview, record, item, index, e) {
+                        var id = record.data.id_asset_perlengkapan;
+                        if(id == 0 || id == '')
+                        {
+                            Ext.MessageBox.alert('Tidak Terdapat Data','Pilihan yang dipilih tidak memiliki data dari asset perlengkapan');
+                        }
+                        else
+                        {
+                               $.ajax({
+                                url:BASE_URL + 'asset_perlengkapan/getSpecificPerlengkapan',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{id:id},
+                                success:function(response, status){
+                                    if(status == "success")
+                                    {
+                                        if (Modal.assetSecondaryWindow.items.length === 0)
+                                        {
+                                            Modal.assetSecondaryWindow.setTitle('Edit Part');
+                                        }
+                                        var form = Ext.create('Ext.form.Panel', {
+                                            frame: true,
+                                            bodyStyle: 'padding:5px',
+                                            width: '100%',
+                                            height: '100%',
+                                            autoScroll:true,
+                                            fieldDefaults: {
+                                                msgTarget: 'side'
+                                            },
+                                        });
+                                        
+                                        
+                                        form.insert(0, Form.Component.unit(true,form));
+                                        form.insert(1, Form.Component.klasifikasiAset(true))
+                                        form.insert(2, Form.Component.perlengkapan(true));
+                                        form.insert(3, Form.Component.fileUpload(true));
+                                        
+                                        
+                                        form.getForm().setValues(response);
+                                        Modal.assetSecondaryWindow.add(form);
+                                        Modal.assetSecondaryWindow.show();
+                                    }
+                                }
+                             });
+                        }
+//                        Ext.getCmp(setting.toolbar.edit.id).handler.call(Ext.getCmp(setting.toolbar.edit.id).scope);
+                    }
+                }
+            });
+
+            return grid;
+        };
+        
         Grid.baseGridWithTotalAsset= function(setting, data, feature_list) {
             var grid = new Ext.create('Ext.grid.Panel', {
                 id: setting.grid.id,
@@ -377,7 +450,7 @@
                 toolbar: toolbar
             };
 
-            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+            return Grid.baseGridAngkutanPerlengkapan(settingGrid, setting.dataStore, feature_list);
         };
         
         Grid.angkutanLautPerlengkapan = function(setting)
@@ -486,7 +559,7 @@
                 toolbar: toolbar
             };
 
-            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+            return Grid.baseGridAngkutanPerlengkapan(settingGrid, setting.dataStore, feature_list);
         };
         
         Grid.angkutanUdaraPerlengkapan = function(setting)
@@ -598,7 +671,7 @@
                 toolbar: toolbar
             };
 
-            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+            return Grid.baseGridAngkutanPerlengkapan(settingGrid, setting.dataStore, feature_list);
         }
         
         Grid.angkutanPerlengkapan = function(setting)
@@ -710,7 +783,7 @@
                 toolbar: toolbar
             };
 
-            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+            return Grid.baseGridAngkutanPerlengkapan(settingGrid, setting.dataStore, feature_list);
         }
         
         Grid.parts = function(setting,isInventoryPenyimpanan, isInventoryPengeluaran)

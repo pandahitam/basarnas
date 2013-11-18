@@ -41,7 +41,16 @@
             unkerForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unit_kerja_referensi_warehouse_ruang_rak',
             unorForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unor_referensi_warehouse_ruang_rak',
             statusAsset: BASE_URL + 'combo_ref/combo_status_asset',
+            kelompokPart: BASE_URL + 'combo_ref/combo_kelompok_part'
         };
+        
+        Reference.Data.kelompokPart = new Ext.create('Ext.data.Store', {
+             fields: ['id', 'nama_kelompok'], storeId: 'DataReferensiKelompokPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.kelompokPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         
         Reference.Data.unorForReferensiWarehouseRuangRak = new Ext.create('Ext.data.Store', {
@@ -224,9 +233,10 @@
         
         Reference.Data.kategoriAset = new Ext.create('Ext.data.Store', {
             fields: ['kategori', 'value'],
-            data: [{kategori: 'Alat Besar', value: 1}, {kategori: 'Angkutan', value: 2},
-                    {kategori: 'Bangunan', value: 3}, {kategori: 'Perairan', value: 4},
-                    {kategori: 'Senjata', value: 5}, {kategori: 'Tanah', value: 6}]
+            data: [{kategori: 'Angkutan', value: 1}, {kategori: 'Bangunan', value: 2},
+                    {kategori: 'Luar', value: 3}, {kategori: 'Perairan', value: 4},
+                    {kategori: 'Peralatan', value: 5}, {kategori: 'Ruang', value: 6},
+                    {kategori: 'Senjata', value: 7}, {kategori: 'Tanah', value: 8},]
         });
         
         Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan = new Ext.create('Ext.data.Store', {
@@ -1535,6 +1545,44 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return form;
         }
         
+         Form.referensiKelompokPart = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'KELOMPOK PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id'
+                                    },
+                                    {
+                                        fieldLabel:'Nama',
+                                        name: 'nama_kelompok',
+                                        allowBlank:false,
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiKelompokPart(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
         Form.referensiKdBrgGolongan = function(setting)
         {
             var formComponentReferensi = [{
@@ -2190,6 +2238,18 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                                         {
                                         fieldLabel:'Nama',
                                         name: 'nama',
+                                    },
+                                    {
+                                        fieldLabel:'Kelompok Part',
+                                        name: 'id_kelompok_part', 
+                                        xtype:'combo',
+                                        allowBlank: true,
+                                        store: Reference.Data.kelompokPart,
+                                        valueField: 'id',
+                                        displayField: 'nama_kelompok', emptyText: 'Pilih Kelompok',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Kelompok',
+                                        
                                     },
                                     {
                                         fieldLabel:'Part Number',
@@ -4159,6 +4219,60 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             
                         }
                     }]
+            });
+
+
+            return _form;
+        };
+        
+        
+        Form.panelReferensiKelompokPart= function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiKelompokPart',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensiKelompokPart', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                           
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            Modal.smallWindow.close();
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Part Number Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                }]
             });
 
 
@@ -10463,19 +10577,19 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'unit_waktu',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboUnitWaktu = Ext.getCmp('combo_unit_waktu');
-                                            if (comboUnitWaktu !== null)
-                                            {
-                                                comboUnitWaktu.setValue(value);
-                                            }
-                                            if(value != 0 && value != null)
-                                            {
-                                                var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
-                                                pilihUnit.setValue(1);
-                                            }
-                                        }
+//                                        if (edit)
+//                                        {
+//                                            var comboUnitWaktu = Ext.getCmp('combo_unit_waktu');
+//                                            if (comboUnitWaktu !== null)
+//                                            {
+//                                                comboUnitWaktu.setValue(value);
+//                                            }
+//                                            if(value != 0 && value != null)
+//                                            {
+//                                                var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
+//                                                pilihUnit.setValue(1);
+//                                            }
+//                                        }
                                     }
                                 }
                             },
@@ -10484,19 +10598,19 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'unit_freq',
                                 listeners: {
                                     change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboUnitFreq = Ext.getCmp('combo_unit_freq');
-                                            if (comboUnitFreq !== null)
-                                            {
-                                                comboUnitFreq.setValue(value);
-                                            }
-                                            if(value != 0 && value != null)
-                                            {
-                                                var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
-                                                pilihUnit.setValue(2);
-                                            }
-                                        }
+//                                        if (edit)
+//                                        {
+//                                            var comboUnitFreq = Ext.getCmp('combo_unit_freq');
+//                                            if (comboUnitFreq !== null)
+//                                            {
+//                                                comboUnitFreq.setValue(value);
+//                                            }
+//                                            if(value != 0 && value != null)
+//                                            {
+//                                                var pilihUnit = Ext.getCmp('comboUnitWaktuOrUnitPenggunaan');
+//                                                pilihUnit.setValue(2);
+//                                            }
+//                                        }
                                     }
                                 }
                             },
@@ -10779,153 +10893,160 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 labelWidth: 120
                             },
                             defaultType: 'textfield',
-                            items: [{
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'Pilih Unit',
-                                    name: 'comboUnitWaktuOrUnitPenggunaan',
-                                    id : 'comboUnitWaktuOrUnitPenggunaan',
-                                    allowBlank: true,
-                                    store: Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan,
-                                    valueField: 'value',
-                                    displayField: 'text', emptyText: 'Pilih Unit',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit',
-                                    listeners: {
-                                        change: function(obj, value) {
-                                            var unitWaktu = Ext.getCmp('combo_unit_waktu');
-                                            var unitPengunaan = Ext.getCmp('combo_unit_freq');
-                                            var freqwaktu = Ext.getCmp('penggunaan_waktu');
-                                            var freqpengunaan = Ext.getCmp('penggunaan_freq');
-                                            if (value === 1)
-                                            {
-                                                unitWaktu.enable();
-                                                unitPengunaan.disable();
-                                                freqwaktu.enable();
-                                                freqpengunaan.disable();
-                                                
-                                            }
-                                            else if (value === 2)
-                                            {
-                                                unitWaktu.disable();
-                                                unitPengunaan.enable();
-                                                freqwaktu.disable();
-                                                freqpengunaan.enable();
-                                            }
-                                            else
-                                            {
-                                                unitWaktu.disable();
-                                                unitPengunaan.disable();
-                                                freqwaktu.disable();
-                                                freqpengunaan.disable();
-                                            }
-                                        }
-                                    }
-                                },
+                            items: [
+//                                {
+//                                    xtype: 'combo',
+//                                    disabled: false,
+//                                    fieldLabel: 'Pilih Unit',
+//                                    name: 'comboUnitWaktuOrUnitPenggunaan',
+//                                    id : 'comboUnitWaktuOrUnitPenggunaan',
+//                                    allowBlank: true,
+//                                    store: Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan,
+//                                    valueField: 'value',
+//                                    displayField: 'text', emptyText: 'Pilih Unit',
+//                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit',
+//                                    listeners: {
+//                                        change: function(obj, value) {
+//                                            var unitWaktu = Ext.getCmp('combo_unit_waktu');
+//                                            var unitPengunaan = Ext.getCmp('combo_unit_freq');
+//                                            var freqwaktu = Ext.getCmp('penggunaan_waktu');
+//                                            var freqpengunaan = Ext.getCmp('penggunaan_freq');
+//                                            if (value === 1)
+//                                            {
+//                                                unitWaktu.enable();
+//                                                unitPengunaan.disable();
+//                                                freqwaktu.enable();
+//                                                freqpengunaan.disable();
+//                                                
+//                                            }
+//                                            else if (value === 2)
+//                                            {
+//                                                unitWaktu.disable();
+//                                                unitPengunaan.enable();
+//                                                freqwaktu.disable();
+//                                                freqpengunaan.enable();
+//                                            }
+//                                            else
+//                                            {
+//                                                unitWaktu.disable();
+//                                                unitPengunaan.disable();
+//                                                freqwaktu.disable();
+//                                                freqpengunaan.disable();
+//                                            }
+//                                        }
+//                                    }
+//                                },
+//                                {
+//                                    disabled:true,
+//                                    xtype: 'numberfield',
+//                                    fieldLabel: 'Penggunaan Waktu',
+//                                    name: 'penggunaan_waktu',
+//                                    id:'penggunaan_waktu'
+//                                },{
+//                                    disabled:true,
+//                                    xtype: 'numberfield',
+//                                    fieldLabel: 'Penggunaan Freq',
+//                                    name: 'penggunaan_freq',
+//                                    id: 'penggunaan_freq',
+//                                },
+//                                {
+//                                    disabled:true,
+//                                    xtype: 'combo',
+//                                    fieldLabel: 'Unit Waktu',
+//                                    name: 'combo_unit_waktu',
+//                                    id : 'combo_unit_waktu',
+//                                    allowBlank: true,
+//                                    store: Reference.Data.unitWaktu,
+//                                    valueField: 'value',
+//                                    displayField: 'text', emptyText: 'Pilih Unit Waktu',
+//                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu',
+//                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+//                                        'change': {
+//                                            fn: function(obj, value) {
+//
+//                                                if (value !== null)
+//                                                {
+//                                                    var fieldUnitWaktu = Ext.getCmp('unit_waktu');
+//                                                    
+//                                                    if (fieldUnitWaktu != null) {
+//                                                        
+//                                                            fieldUnitWaktu.setValue(value);
+//                                                        
+//                                                    }
+//                                                    else {
+//                                                        console.error('error');
+//                                                    }
+//                                                }
+//
+//                                            },
+//                                            scope: this
+//                                        }
+//                                    }
+//                                },{
+//                                    disabled:true,
+//                                    xtype: 'combo',
+//                                    fieldLabel: 'Unit Freq',
+//                                    name: 'combo_unit_freq',
+//                                    id : 'combo_unit_freq',
+//                                    allowBlank: true,
+//                                    store: Reference.Data.unitPengunaan,
+//                                    valueField: 'value',
+//                                    displayField: 'text', emptyText: 'Pilih Unit Freq',
+//                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Freq',
+//                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+//                                        'change': {
+//                                            fn: function(obj, value) {
+//
+//                                                if (value !== null)
+//                                                {
+//                                                    var fieldUnitFreq = Ext.getCmp('unit_freq');
+//                                                    if (fieldUnitFreq != null) {
+//                                                    
+//                                                            fieldUnitFreq.setValue(value);
+//                                                        
+//                                                    }
+//                                                    else {
+//                                                        console.error('error');
+//                                                    }
+//                                                }
+//
+//                                            },
+//                                            scope: this
+//                                        }
+//                                    }
+//                                },
+//                                {
+//                                    xtype: 'checkboxfield',
+//                                    value: 0,
+//                                    inputValue: 1,
+//                                    fieldLabel: 'Disimpan',
+//                                    name: 'disimpan',
+//                                    boxLabel: 'Ya'
+//                                },
+//                                {
+//                                    xtype: 'checkboxfield',
+//                                    inputValue: 1,
+//                                    fieldLabel: 'Dihapus',
+//                                    name: 'dihapus',
+//                                    boxLabel: 'Ya'
+//                                },
                                 {
-                                    disabled:true,
                                     xtype: 'numberfield',
-                                    fieldLabel: 'Penggunaan Waktu',
-                                    name: 'penggunaan_waktu',
-                                    id:'penggunaan_waktu'
-                                },{
-                                    disabled:true,
-                                    xtype: 'numberfield',
-                                    fieldLabel: 'Penggunaan Freq',
-                                    name: 'penggunaan_freq',
-                                    id: 'penggunaan_freq',
-                                },
-                                {
-                                    disabled:true,
-                                    xtype: 'combo',
-                                    fieldLabel: 'Unit Waktu',
-                                    name: 'combo_unit_waktu',
-                                    id : 'combo_unit_waktu',
-                                    allowBlank: true,
-                                    store: Reference.Data.unitWaktu,
-                                    valueField: 'value',
-                                    displayField: 'text', emptyText: 'Pilih Unit Waktu',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Waktu',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var fieldUnitWaktu = Ext.getCmp('unit_waktu');
-                                                    
-                                                    if (fieldUnitWaktu != null) {
-                                                        
-                                                            fieldUnitWaktu.setValue(value);
-                                                        
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                },{
-                                    disabled:true,
-                                    xtype: 'combo',
-                                    fieldLabel: 'Unit Freq',
-                                    name: 'combo_unit_freq',
-                                    id : 'combo_unit_freq',
-                                    allowBlank: true,
-                                    store: Reference.Data.unitPengunaan,
-                                    valueField: 'value',
-                                    displayField: 'text', emptyText: 'Pilih Unit Freq',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Unit Freq',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var fieldUnitFreq = Ext.getCmp('unit_freq');
-                                                    if (fieldUnitFreq != null) {
-                                                    
-                                                            fieldUnitFreq.setValue(value);
-                                                        
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                },
-                                {
-                                    xtype: 'checkboxfield',
-                                    value: 0,
-                                    inputValue: 1,
-                                    fieldLabel: 'Disimpan',
-                                    name: 'disimpan',
-                                    boxLabel: 'Ya'
-                                },
-                                {
-                                    xtype: 'checkboxfield',
-                                    inputValue: 1,
-                                    fieldLabel: 'Dihapus',
-                                    name: 'dihapus',
-                                    boxLabel: 'Ya'
+                                    fieldLabel: 'Umur (Jam)',
+                                    name: 'umur',
+                                    minValue:0
                                 },
                                 
                             ]

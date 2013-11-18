@@ -37,6 +37,20 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_kelompok_part()
+    {
+        $data = array();
+        $query = "select id, nama_kelompok from ref_kelompok_part";
+        $query_data = $this->db->query($query);
+        
+        foreach($query_data->result() as $obj)
+        {
+            $data[] = $obj;
+        }
+
+        echo json_encode($data);
+    }
+    
     function combo_status_asset()
     {
         $data = array();

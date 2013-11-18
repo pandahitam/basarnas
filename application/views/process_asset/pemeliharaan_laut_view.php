@@ -74,7 +74,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAssetAngkutan(tipe_angkutan));
+                            Modal.assetSelection.add(Grid.selectionAssetAngkutan(tipe_angkutan, PemeliharaanLaut.dataStorePemeliharaanParts));
                             Modal.assetSelection.show();
                         }
                         else
@@ -229,7 +229,7 @@
 
                 if (Modal.processEdit.items.length === 0)
                 {
-                    Modal.processEdit.setTitle('Edit PemeliharaanLaut');
+                    Modal.processEdit.setTitle('Edit Pemeliharaan Laut');
                 }
                  var id_ext_asset = 0;
                 $.ajax({

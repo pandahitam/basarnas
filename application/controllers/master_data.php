@@ -24,6 +24,7 @@ class Master_Data extends MY_Controller {
         $this->load->model('Kd_Brg_SubSubKelompok_Model', '', TRUE);
 //		$this->load->model('Jabatan_Model','',TRUE);
 //		$this->load->model('TTD_Model','',TRUE);
+        $this->load->model('Kelompok_Part_Model','',TRUE);
 	$this->load->model('Prov_Model','',TRUE);
         $this->load->model('KabKota_Model','',TRUE);
 //		$this->load->model('Kec_Model','',TRUE);
@@ -1572,7 +1573,7 @@ class Master_Data extends MY_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks'
+            'id','vendor_id','id_kelompok_part','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks'
         );
         
         foreach ($dataFields as $field) {
@@ -2202,6 +2203,79 @@ class Master_Data extends MY_Controller {
         {
             echo "false";
         }
+    }
+    
+    //MASTER KELOMPOK PART
+      function kelompok_part() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/kelompok_part_view', $data);
+        } else {
+            $this->load->view('master/kelompok_part_view');
+        }
+    }
+    
+    function kelompok_part_getAllData() {
+        if ($this->input->get_post("id_open")) {
+            $resultData = $this->Kelompok_Part_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function kelompok_part_createKelompokPart() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','nama_kelompok'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        
+        $this->db->set($data);
+        $this->db->replace('ref_kelompok_part');
+        $this->createLog('INSERT REFERENSI KELOMPOK PART','ref_kelompok_part');
+        echo "{success: true}";
+    }
+    
+    function kelompok_part_modifyKelompokPart() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','nama_kelompok'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        $this->db->where('id', $data['id']);
+        unset($data['id']);
+        $this->db->update('ref_kelompok_part',$data);
+        $this->createLog('UPDATE REFERENSI KELOMPOK PART','ref_kelompok_part');
+        echo "{success: true}";
+    }
+    
+    function kelompok_part_deleteKelompokPart()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_kelompok_part');
+           $this->createLog('DELETE REFERENSI KELOMPOK PART','ref_kelompok_part');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
     }
 
 }

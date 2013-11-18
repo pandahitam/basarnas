@@ -34,7 +34,12 @@ var Center_MD = {
 		items: [
 	  	{text: 'Unit Kerja', iconCls: 'icon-course', disabled: false, handler: function(){Load_TabPage_MD('master_unit_kerja', BASE_URL + 'master_data/unit_kerja');}, tooltip: {text: 'Referensi Unit Kerja'}},
 	  	{text: 'Unit Organisasi', iconCls: 'icon-spell', disabled: false, handler: function(){Load_TabPage_MD('master_unit_organisasi', BASE_URL + 'master_data/unit_organisasi');}, tooltip: {text: 'Referensi Unit Organisasi'}},
-                {text: 'Part Number', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_partnumber', BASE_URL + 'master_data/part_number');}, tooltip: {text: 'Referensi Part Number'}},
+                {text: 'Part', iconCls: 'icon-templates', disabled: false, menu:{
+                        items:[
+                            {text: 'Kelompok Part', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kelompok_part', BASE_URL + 'master_data/kelompok_part');}, tooltip: {text: 'Referensi Kelompok Part'}},
+                            {text: 'Part Number', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_partnumber', BASE_URL + 'master_data/part_number');}, tooltip: {text: 'Referensi Part Number'}},
+                        ]
+                }},
                 {text: 'Kode Barang', iconCls: 'icon-templates', disabled: false, menu:{
                         items:[
                             {text: 'Golongan', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kd_brg_golongan', BASE_URL + 'master_data/kd_brg_golongan');}, tooltip: {text: 'Referensi Kode Barang Golongan'}},
@@ -50,7 +55,7 @@ var Center_MD = {
                             {text: 'Klasifikasi Aset Lvl 2', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset_lvl2', BASE_URL + 'master_data/klasifikasi_aset_lvl2');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl2'}},
                             {text: 'Klasifikasi Aset Lvl 3', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_klasifikasi_aset_lvl3', BASE_URL + 'master_data/klasifikasi_aset_lvl3');}, tooltip: {text: 'Referensi Klasifikasi Aset Lvl3'}},
                         ]
-                    }},
+                }},
                 {text: 'Penyimpanan', iconCls: 'icon-templates', disabled: false, menu:{
                         items:[
                             {text: 'Warehouse', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_warehouse', BASE_URL + 'master_data/warehouse');}, tooltip: {text: 'Referensi Warehouse'}},

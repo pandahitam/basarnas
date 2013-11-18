@@ -3,6 +3,12 @@
     
 <script>
 ////// Model In View
+
+Ext.define('MKelompokPart', {extend: 'Ext.data.Model',
+    fields: ['id','nama_kelompok'
+    ]
+});
+
 Ext.define('MKdBrgSubSubKelompok', {extend: 'Ext.data.Model',
     fields: ['kd_gol', 'ur_gol','kd_bid','ur_bid','kd_kel','ur_kel','kd_skel','ur_skel','kd_sskel','ur_sskel'
     ]
@@ -158,7 +164,7 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
         'dihapus','image_url','document_url'
-        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan','no_induk_asset','nama_part']
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan','no_induk_asset','nama_part','umur']
 });
 
 
@@ -575,7 +581,7 @@ Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
 })
 
 Ext.define('MPartNumber', { extend:'Ext.data.Model',
-    fields: ['id','vendor_id','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
+    fields: ['id','vendor_id','part_number','nama_kelompok','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
 })
 
 

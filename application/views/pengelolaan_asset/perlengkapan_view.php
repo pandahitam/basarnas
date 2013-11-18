@@ -903,6 +903,7 @@
                     {header: 'Nama Warehouse', dataIndex: 'nama_warehouse', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Ruang', dataIndex: 'nama_ruang', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Rak', dataIndex: 'nama_rak', width: 150, groupable: false, filter: {type: 'string'}},
+                    {header: 'Umur', dataIndex: 'umur', width: 150, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Id Warehouse', dataIndex: 'warehouse_id', hidden: true, width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Id Ruang', dataIndex: 'ruang_id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Id Rak', dataIndex: 'rak_id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},

@@ -36,34 +36,45 @@ class laporan_aset_kategoribarang extends MY_Controller {
                 $tahun = $_POST['tahun'];
             }
             
-            if($kategori == 1 && ($tahun !='' || $tahun != null)) //Alat Besar
+            
+            if($kategori == 1 && ($tahun !='' || $tahun != null)) //Angkutan
             {
-                $query = "select kd_lokasi, ur_upb, sum(rph_aset)as totalAset from asset_alatbesar as a inner join ref_unker on ref_unker.kdlok = 
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from asset_angkutan as a inner join ref_unker on ref_unker.kdlok = 
                           a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
-            else if($kategori == 2 && ($tahun !='' || $tahun != null)) //Angkutan
+            else if($kategori == 2 && ($tahun !='' || $tahun != null)) //Bangunan
             {
-                $query = "select kd_lokasi, ur_upb, sum(rph_aset)as totalAset from asset_angkutan as a inner join ref_unker on ref_unker.kdlok = 
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from asset_bangunan as a inner join ref_unker on ref_unker.kdlok = 
                           a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
-            else if($kategori == 3 && ($tahun !='' || $tahun != null)) //Bangunan
+            else if($kategori == 3 && ($tahun !='' || $tahun != null)) //Luar
             {
-                $query = "select kd_lokasi, ur_upb, sum(rph_aset)as totalAset from asset_bangunan as a inner join ref_unker on ref_unker.kdlok = 
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from ext_asset_dil as a inner join ref_unker on ref_unker.kdlok = 
                           a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
             else if($kategori == 4 && ($tahun !='' || $tahun != null)) //Perairan
             {
-                $query = "select kd_lokasi, ur_upb, sum(rph_aset)as totalAset from asset_perairan as a inner join ref_unker on ref_unker.kdlok = 
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from asset_perairan as a inner join ref_unker on ref_unker.kdlok = 
                           a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
-            else if($kategori == 5 && ($tahun !='' || $tahun != null)) //Senjata
+            else if($kategori == 5 && ($tahun !='' || $tahun != null)) //Peralatan
             {
-                $query = "select kd_lokasi, ur_upb, sum(rph_aset)as totalAset from asset_senjata as a inner join ref_unker on ref_unker.kdlok = 
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from asset_alatbesar as a inner join ref_unker on ref_unker.kdlok = 
                           a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
-            else if($kategori == 6 && ($tahun !='' || $tahun != null)) //Tanah
+            else if($kategori == 6 && ($tahun !='' || $tahun != null)) //Ruang
             {
-                $query = "select kd_lokasi, ur_upb, sum(rph_aset)as totalAset from asset_alatbesar as a inner join ref_unker on ref_unker.kdlok = 
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from ext_asset_ruang as a inner join ref_unker on ref_unker.kdlok = 
+                          a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
+            }
+            else if($kategori == 7 && ($tahun !='' || $tahun != null)) //Senjata
+            {
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from asset_senjata as a inner join ref_unker on ref_unker.kdlok = 
+                          a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
+            }
+            else if($kategori == 8 && ($tahun !='' || $tahun != null)) //Tanah
+            {
+                $query = "select kd_lokasi, ur_upb, sum(rph_aset) as totalAset from asset_tanah as a inner join ref_unker on ref_unker.kdlok = 
                           a.kd_lokasi where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
           
@@ -101,29 +112,37 @@ class laporan_aset_kategoribarang extends MY_Controller {
                 $tahun = $_POST['tahun'];
             }
             
-            if($kategori == 1 && ($tahun !='' || $tahun != null)) //Alat Besar
-            {
-                $query = "select * from asset_alatbesar where YEAR(tgl_buku) = $tahun";
-            }
-            else if($kategori == 2 && ($tahun !='' || $tahun != null)) //Angkutan
+            if($kategori == 1 && ($tahun !='' || $tahun != null)) //Angkutan
             {
                 $query = "select * from asset_angkutan where YEAR(tgl_buku) = $tahun";
             }
-            else if($kategori == 3 && ($tahun !='' || $tahun != null)) //Bangunan
+            else if($kategori == 2 && ($tahun !='' || $tahun != null)) //Bangunan
             {
-                $query = "select * from asset_bangunan where YEAR(tgl_buku) = $tahun";
+                $query = "select * where YEAR(tgl_buku) = $tahun group by kd_lokasi";
+            }
+            else if($kategori == 3 && ($tahun !='' || $tahun != null)) //Luar
+            {
+                $query = "select * from ext_asset_dil where YEAR(tgl_buku) = $tahun";
             }
             else if($kategori == 4 && ($tahun !='' || $tahun != null)) //Perairan
             {
                 $query = "select * from asset_perairan where YEAR(tgl_buku) = $tahun";
             }
-            else if($kategori == 5 && ($tahun !='' || $tahun != null)) //Senjata
+            else if($kategori == 5 && ($tahun !='' || $tahun != null)) //Peralatan
             {
-                $query = "select * from asset_senjata where YEAR(tgl_buku) = $tahun";
+                $query = "select * from asset_alatbesar where YEAR(tgl_buku) = $tahun";
             }
-            else if($kategori == 6 && ($tahun !='' || $tahun != null)) //Tanah
+            else if($kategori == 6 && ($tahun !='' || $tahun != null)) //Ruang
             {
-                $query = "select * from asset_tanah where YEAR(tgl_buku) = $tahun";
+                $query = "select * from ext_asset_ruang where YEAR(tgl_buku) = $tahun group by kd_lokasi";
+            }
+            else if($kategori == 7 && ($tahun !='' || $tahun != null)) //Senjata
+            {
+                $query = "select * from asset_senjata where YEAR(tgl_buku) = $tahun group by kd_lokasi";
+            }
+            else if($kategori == 8 && ($tahun !='' || $tahun != null)) //Tanah
+            {
+                $query = "select * from asset_tanah where YEAR(tgl_buku) = $tahun group by kd_lokasi";
             }
           
           if($query != '')

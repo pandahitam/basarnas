@@ -75,7 +75,7 @@
 
                         if (Modal.assetSelection.items.length === 0)
                         {
-                            Modal.assetSelection.add(Grid.selectionAssetAngkutan(tipe_angkutan));
+                            Modal.assetSelection.add(Grid.selectionAssetAngkutan(tipe_angkutan, PemeliharaanDarat.dataStorePemeliharaanParts));
                             Modal.assetSelection.show();
                         }
                         else

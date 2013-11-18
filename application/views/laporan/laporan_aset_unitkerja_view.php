@@ -1,12 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
 <?php header("Content-Type: application/x-javascript"); ?>
-
+    
 <?php if(isset($jsscript) && $jsscript == TRUE){ ?>
 <script>
 ////PANEL UTAMA MASTER DATA  -------------------------------------------- START
-
-
-
 Ext.namespace('LaporanAsetUnitKerja');
 
 LaporanAsetUnitKerja.URL = {
@@ -25,7 +22,7 @@ LaporanAsetUnitKerja.proxyLaporanGrid = new Ext.create('Ext.data.AjaxProxy', {
             });
 
 LaporanAsetUnitKerja.modelLaporanGrid = Ext.define('MLaporanAsetUnitKerja_LaporanGrid', {extend: 'Ext.data.Model',
-                fields: ['kd_lokasi','no_aset','kd_brg','type','merk','kondisi','kategori_aset']
+                fields: ['kd_lokasi','no_aset','kd_brg','type','merk','kondisi','kategori_aset','rph_aset']
             });
 
 LaporanAsetUnitKerja.DataLaporanGrid = new Ext.create('Ext.data.Store', {
@@ -52,16 +49,6 @@ LaporanAsetUnitKerja.DataLaporanChart = new Ext.create('Ext.data.Store', {
                 proxy: LaporanAsetUnitKerja.proxyLaporanChart, groupField: 'tipe'
             });
             
-
-var Tab_PA = Ext.createWidget('tabpanel', {
-	id: 'Tab_PA', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
-  defaults: {autoScroll:true},
-  items: [{
-      id: 'default_Tab_MD', 
-      bodyPadding: 10,
-      closable: false
-  }]
-});
 
 LaporanAsetUnitKerja.LaporanChart = Ext.create('Ext.chart.Chart', {
                             width:800,
@@ -109,11 +96,12 @@ LaporanAsetUnitKerja.LaporanChartContainer = Ext.create(Ext.panel.Panel,{
                     id: 'LaporanAsetUnitKerjaLaporanChartContainer',
                     title: "Chart", 
                     autoScroll: true, 
+                    border:false,
                     height: 600,
                     layout:{
                         type:'table',
                         tableAttrs:{
-                            style:'width:99%'
+                            style:'width:100%'
                         },
                         tdAttrs:{
                             align:'center'
@@ -130,19 +118,42 @@ LaporanAsetUnitKerja.GridLaporan = Ext.create('Ext.grid.Panel', {
                         { header: 'Kode Aset',  dataIndex: 'kd_brg', width:150},
                         { header: 'Nama', dataIndex: 'type', width:150},
                         { header: 'Merk', dataIndex: 'merk', width:150 },
-                        { header: 'Kondisi', dataIndex: 'kondisi', width:150 }
+                        { header: 'Kondisi', dataIndex: 'kondisi', width:150,
+                        renderer: function(value) {
+                                if (value === '1')
+                                {
+                                    return "BAIK";
+                                }
+                                else if (value === '2')
+                                {
+                                    return "RUSAK RINGAN";
+                                }
+                                else if (value === '3')
+                                {
+                                    return "RUSAK BERAT";
+                                }
+                                else if (value === '4')
+                                {
+                                    return "HILANG";
+                                }
+                                else
+                                {
+                                    return "";
+                                }
+                            }
+                        },
+                        { header: 'Rph Aset', dataIndex: 'rph_aset', width:150 }
                     ],
                     height: 300,
-                    dockedItems: [{xtype: 'pagingtoolbar', store: LaporanAsetUnitKerja.DataLaporanGrid, dock: 'bottom', displayInfo: true}],
+//                    dockedItems: [{xtype: 'pagingtoolbar', store: LaporanAsetUnitKerja.DataLaporanGrid, dock: 'bottom', displayInfo: true}],
 //                    width: 400,
 //                    renderTo: Ext.getBody()
                 });
 
 LaporanAsetUnitKerja.ContainerLaporan = Ext.create(Ext.panel.Panel,{
-                    id: 'LaporanAsetUnitKerja_Container',
-                    title: "Laporan Aset Unit Kerja", 
                     autoScroll: true, 
                     height: 600,
+                    border:false,
                     layout:{
                         type:'table',
                         tableAttrs:{
@@ -154,9 +165,9 @@ LaporanAsetUnitKerja.ContainerLaporan = Ext.create(Ext.panel.Panel,{
                     items:[LaporanAsetUnitKerja.GridLaporan,LaporanAsetUnitKerja.LaporanChartContainer]
                     });
 
-var Center_PA = {
-  region: 'center', layout: 'card', collapsible: false, margins: '0 0 0 0', width: '100%', border: true, autoScroll: true,
-  items: [Tab_PA],
+LaporanAsetUnitKerja.Container = {
+  region: 'center', id:'laporan_aset_unit_kerja_container', layout: 'card', collapsible: false, margins: '0 0 0 0', width: '100%', border: false, autoScroll: true,
+  items: [LaporanAsetUnitKerja.ContainerLaporan],
   tbar: Ext.create('Ext.toolbar.Toolbar', {
 	  layout: {overflowHandler: 'Menu'},
 		items: [{
@@ -261,7 +272,11 @@ var Center_PA = {
                                 {
                                     LaporanAsetUnitKerja.DataLaporanGrid.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
                                     LaporanAsetUnitKerja.DataLaporanChart.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
-                                    Ext.getCmp('Tab_PA').add(LaporanAsetUnitKerja.ContainerLaporan).show();
+//                                    Ext.getCmp('laporan_aset_unit_kerja_container').add(LaporanAsetUnitKerja.ContainerLaporan).show();
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Error','Harap mengisi unit kerja dan tahun terlebih dahulu');
                                 }
                                 
                             }
@@ -269,43 +284,14 @@ var Center_PA = {
   })
 };
 
-var Container_PA = {
-	xtype: 'container', region: 'center', layout: 'border', border: false,
-  items: [Center_PA]
-};
+//var Container_PA = {
+//	xtype: 'container', region: 'center', layout: 'border', border: false,
+//  items: []
+//};
 
 var new_tabpanel = {
-	id: 'laporan_aset_unitkerja_panel', title: 'Laporan Aset Unit Kerja', iconCls: 'icon-menu_impasing', border: false, closable: true, 
-	layout: 'fit', items: [Container_PA]
+    id: 'laporan_aset_unitkerja_panel', title: 'Laporan Aset Unit Kerja', iconCls: 'icon-menu_impasing', border: false, closable: true, 
+    layout: 'border', items: [LaporanAsetUnitKerja.Container]
 };
-
-//function Load_TabPage_Asset(tab_id,tab_url){
-//	Ext.getCmp('layout-body').body.mask("Loading...", "x-mask-loading");
-//	var new_tab_id = Ext.getCmp(tab_id);
-//	if(new_tab_id){
-//		Ext.getCmp('Tab_PA').setActiveTab(tab_id);
-//		Ext.getCmp('layout-body').body.unmask(); 
-//	}else{
-//		Ext.Ajax.timeout = Time_Out;
-//		Ext.Ajax.request({
-//  		url: tab_url, method: 'POST', params: {id_open: 1}, scripts: true, 
-//    	success: function(response){
-//    		var jsonData = response.responseText.substring(13);   
-//			var aHeadNode = document.getElementsByTagName('head')[0]; 
-//			var aScript = document.createElement('script'); 
-//			aScript.text = jsonData; 
-//			aHeadNode.appendChild(aScript);
-//    		if(new_tabpanel_Asset != "GAGAL"){
-//    			Ext.getCmp('Tab_PA').add(new_tabpanel_Asset).show();
-//    		}else{
-//    			Ext.MessageBox.show({title:'Peringatan !', msg:'Anda tidak dapat mengakses ke halaman ini !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR});    			
-//    		}
-//   		},
-//    	failure: function(response){ Ext.MessageBox.show({title:'Peringatan !', msg:'Gagal memuat dokumen !', buttons: Ext.MessageBox.OK, icon: Ext.MessageBox.ERROR}); }, 
-//    	callback: function(response){ Ext.getCmp('layout-body').body.unmask(); },
-//    	scope : this
-//		});
-//	}	
-//}
-
-<?php }else{ echo "var new_tabpanel = 'GAGAL';"; } ?>
+            
+<?php }else{ echo "var new_tabpanel_MD = 'GAGAL';"; } ?>

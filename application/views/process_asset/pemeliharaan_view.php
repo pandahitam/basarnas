@@ -212,8 +212,8 @@
                 var _form = Pemeliharaan.Form.create(data, true);
                 Modal.processEdit.add(_form);
                 Modal.processEdit.show();
-                 Pemeliharaan.dataStorePemeliharaanParts.changeParams({params:{id_pemeliharaan:data.id}});
-                Pemeliharaan.dataStorePemeliharaanParts.removed = [];
+//                 Pemeliharaan.dataStorePemeliharaanParts.changeParams({params:{id_pemeliharaan:data.id}});
+//                Pemeliharaan.dataStorePemeliharaanParts.removed = [];
             }
         };
 

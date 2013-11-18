@@ -36,7 +36,7 @@ class Asset_Perlengkapan extends MY_Controller {
 //                );
                 
 	  	$simakFields = array(
-			'id','warehouse_id','ruang_id','rak_id',
+			'id','warehouse_id','ruang_id','rak_id','umur',
                         'serial_number', 'part_number','kd_brg','kd_lokasi',
                         'no_aset','kondisi', 'kuantitas', 'dari',
                         'tanggal_perolehan','no_dana','penggunaan_waktu',

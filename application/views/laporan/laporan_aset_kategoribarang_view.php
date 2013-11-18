@@ -25,7 +25,7 @@ LaporanAsetKategoriBarang.proxyLaporanGrid = new Ext.create('Ext.data.AjaxProxy'
             });
 
 LaporanAsetKategoriBarang.modelLaporanGrid = Ext.define('MLaporanAsetKategoriBarang_LaporanGrid', {extend: 'Ext.data.Model',
-                fields: ['kd_lokasi','no_aset','kd_brg','type','merk','kondisi','kategori_aset']
+                fields: ['kd_lokasi','no_aset','kd_brg','type','merk','kondisi','kategori_aset','rph_aset']
             });
 
 LaporanAsetKategoriBarang.DataLaporanGrid = new Ext.create('Ext.data.Store', {
@@ -53,15 +53,15 @@ LaporanAsetKategoriBarang.DataLaporanChart = new Ext.create('Ext.data.Store', {
             });
             
 
-var Tab_PA = Ext.createWidget('tabpanel', {
-	id: 'Tab_PA', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
-  defaults: {autoScroll:true},
-  items: [{
-      id: 'default_Tab_MD', 
-      bodyPadding: 10,
-      closable: false
-  }]
-});
+//var Tab_PA = Ext.createWidget('tabpanel', {
+//	id: 'Tab_PA', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
+//  defaults: {autoScroll:true},
+//  items: [{
+//      id: 'default_Tab_MD', 
+//      bodyPadding: 10,
+//      closable: false
+//  }]
+//});
 
 LaporanAsetKategoriBarang.LaporanChart = Ext.create('Ext.chart.Chart', {
                             width:800,
@@ -82,7 +82,7 @@ LaporanAsetKategoriBarang.LaporanChart = Ext.create('Ext.chart.Chart', {
                                 type: 'Numeric',
                                 position: 'left',
                                 fields: ['totalAset'],
-                                title: 'Aset Dalam Rupiah x 1 jt',
+                                title: 'Aset Dalam Rupiah',
                                 label: {
                                         renderer: Ext.util.Format.numberRenderer('0,0')
                                 },
@@ -110,6 +110,7 @@ LaporanAsetKategoriBarang.LaporanChartContainer = Ext.create(Ext.panel.Panel,{
                     title: "Chart", 
                     autoScroll: true, 
                     height: 600,
+                    border:false,
                     layout:{
                         type:'table',
                         tableAttrs:{
@@ -130,19 +131,44 @@ LaporanAsetKategoriBarang.GridLaporan = Ext.create('Ext.grid.Panel', {
                         { header: 'Kode Aset',  dataIndex: 'kd_brg', width:150},
                         { header: 'Nama', dataIndex: 'type', width:150},
                         { header: 'Merk', dataIndex: 'merk', width:150 },
-                        { header: 'Kondisi', dataIndex: 'kondisi', width:150 }
+                        { header: 'Kondisi', dataIndex: 'kondisi', width:150,
+                            renderer: function(value) {
+                                if (value === '1')
+                                {
+                                    return "BAIK";
+                                }
+                                else if (value === '2')
+                                {
+                                    return "RUSAK RINGAN";
+                                }
+                                else if (value === '3')
+                                {
+                                    return "RUSAK BERAT";
+                                }
+                                else if (value === '4')
+                                {
+                                    return "HILANG";
+                                }
+                                else
+                                {
+                                    return "";
+                                }
+                            }
+                        },
+                        { header: 'Rph Aset', dataIndex: 'rph_aset', width:150 }
                     ],
                     height: 300,
-                    dockedItems: [{xtype: 'pagingtoolbar', store: LaporanAsetKategoriBarang.DataLaporanGrid, dock: 'bottom', displayInfo: true}],
+//                    dockedItems: [{xtype: 'pagingtoolbar', store: LaporanAsetKategoriBarang.DataLaporanGrid, dock: 'bottom', displayInfo: true}],
 //                    width: 400,
 //                    renderTo: Ext.getBody()
                 });
 
 LaporanAsetKategoriBarang.ContainerLaporan = Ext.create(Ext.panel.Panel,{
-                    id: 'LaporanAsetKategoriBarang_Container',
-                    title: "Laporan Aset Unit Kerja", 
+//                    id: 'LaporanAsetKategoriBarang_Container',
+//                    title: "Laporan Aset Unit Kerja", 
                     autoScroll: true, 
                     height: 600,
+                    border:false,
                     layout:{
                         type:'table',
                         tableAttrs:{
@@ -154,9 +180,9 @@ LaporanAsetKategoriBarang.ContainerLaporan = Ext.create(Ext.panel.Panel,{
                     items:[LaporanAsetKategoriBarang.GridLaporan,LaporanAsetKategoriBarang.LaporanChartContainer]
                     });
 
-var Center_PA = {
-  region: 'center', layout: 'card', collapsible: false, margins: '0 0 0 0', width: '100%', border: true, autoScroll: true,
-  items: [Tab_PA],
+LaporanAsetKategoriBarang.Container = {
+  region: 'center', layout: 'card', collapsible: false, margins: '0 0 0 0',  border: false, autoScroll: true,
+  items: [LaporanAsetKategoriBarang.ContainerLaporan],
   tbar: Ext.create('Ext.toolbar.Toolbar', {
 	  layout: {overflowHandler: 'Menu'},
 		items: [{
@@ -190,7 +216,11 @@ var Center_PA = {
                                 {
                                     LaporanAsetKategoriBarang.DataLaporanGrid.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
                                     LaporanAsetKategoriBarang.DataLaporanChart.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
-                                    Ext.getCmp('Tab_PA').add(LaporanAsetKategoriBarang.ContainerLaporan).show();
+//                                    Ext.getCmp('Tab_PA').add(LaporanAsetKategoriBarang.ContainerLaporan).show();
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Error','Harap mengisi kategori barang dan tahun terlebih dahulu');
                                 }
                                 
                             }
@@ -198,14 +228,14 @@ var Center_PA = {
   })
 };
 
-var Container_PA = {
-	xtype: 'container', region: 'center', layout: 'border', border: false,
-  items: [Center_PA]
-};
+//var Container_PA = {
+//	xtype: 'container', region: 'center', layout: 'border', border: false,
+//  items: [Center_PA]
+//};
 
 var new_tabpanel = {
 	id: 'laporan_aset_kategoribarang_panel', title: 'Laporan Aset Kategori Barang', iconCls: 'icon-menu_impasing', border: false, closable: true, 
-	layout: 'fit', items: [Container_PA]
+	layout: 'fit', items: [LaporanAsetKategoriBarang.Container]
 };
 
 
