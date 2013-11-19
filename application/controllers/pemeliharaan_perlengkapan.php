@@ -100,6 +100,10 @@ class Pemeliharaan_Perlengkapan extends MY_Controller {
 		$data = $this->input->post('data');
                 foreach($data as $dataContent)
                 {
+                    $this->db->query("update asset_perlengkapan set umur=umur-".$dataContent['umur']." where
+                        kd_lokasi='".$dataContent['kd_lokasi']."' AND
+                        kd_brg='".$dataContent['kd_brg']."' AND
+                        no_aset='".$dataContent['no_aset']."'");
                     $this->createLog('DELETE PEMELIHARAAN PERLENGKAPAN','pemeliharaan_perlengkapan');
                 }
 		return $this->deleteProcess($data);

@@ -3,9 +3,10 @@ class Pemeliharaan_Perlengkapan_Model extends MY_Model{
 	
 	function __construct(){
 		parent::__construct();
-//		$this->extTable = 'pemeliharaan';
-//                $this->viewTable = 'view_pemeliharaan_lainnya';
-//                $this->countTable = 'view_pemeliharaan_lainnya';
+                $this->table = 'pemeliharaan_perlengkapan';
+		$this->extTable = 'pemeliharaan_perlengkapan';
+                $this->viewTable = 'pemeliharaan_perlengkapan';
+                $this->countTable = 'pemeliharaan_perlengkapan';
                 
                 $this->selectColumn = "SELECT id, kd_brg, kd_lokasi, no_aset, umur,
                             kode_unker, kode_unor, nama_unker, nama_unor,jenis, nama, 

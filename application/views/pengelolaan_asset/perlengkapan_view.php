@@ -686,11 +686,55 @@
                 var arrayDeleted = [];
                 _.each(selected, function(obj) {
                     var data = {
-                        id: obj.data.id
+                        id: obj.data.id,
+                        umur:obj.data.umur,
+                        kd_lokasi:obj.data.kd_lokasi,
+                        no_aset:obj.data.no_aset,
+                        kd_brg:obj.data.kd_brg,
                     };
                     arrayDeleted.push(data);
                 });
-                Modal.deleteAlert(arrayDeleted, Perlengkapan.URL.removePemeliharaan, Perlengkapan.dataStorePemeliharaan);
+                Ext.Msg.show({
+                title: 'Konfirmasi',
+                msg: 'Apakah Anda yakin untuk menghapus ?',
+                buttons: Ext.Msg.YESNO, 
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        /*debugger;*/
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url:  Perlengkapan.URL.removePemeliharaan,
+                            success: function(data) {
+                                 Perlengkapan.dataStorePemeliharaan.load();
+                                 Perlengkapan.Data.load();
+                                 $.ajax({
+                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
+                                                type: "POST",
+                                                dataType:'json',
+                                                async:false,
+                                                data:{kd_brg:arrayDeleted[0].kd_brg, kd_lokasi:arrayDeleted[0].kd_lokasi, no_aset:arrayDeleted[0].no_aset},
+                                                success:function(response, status){
+                                                    if(status == "success")
+                                                    {
+                                                        Ext.getCmp('asset_perlengkapan_umur').setValue(response);
+                                                    }
+
+                                                }
+                                 });
+                            }
+                        });
+                    }
+                }
+            })
+//                Modal.deleteAlert(arrayDeleted, Perlengkapan.URL.removePemeliharaan, Perlengkapan.dataStorePemeliharaan);
             }
         };
 
@@ -784,7 +828,6 @@
                 };
                 arrayDeleted.push(data);
             });
-            console.log(arrayDeleted);
 //            Asset.Window.createDeleteAlert(arrayDeleted, Perlengkapan.URL.remove, Perlengkapan.Data);
             Modal.deleteAlert(arrayDeleted,Perlengkapan.URL.remove,Perlengkapan.Data);
         };
