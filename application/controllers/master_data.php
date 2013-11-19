@@ -2229,7 +2229,7 @@ class Master_Data extends MY_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','nama_kelompok'
+            'id','nama_kelompok','jenis_asset'
         );
         
         foreach ($dataFields as $field) {
@@ -2248,7 +2248,7 @@ class Master_Data extends MY_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','nama_kelompok'
+            'id','nama_kelompok','jenis_asset'
         );
         
         foreach ($dataFields as $field) {

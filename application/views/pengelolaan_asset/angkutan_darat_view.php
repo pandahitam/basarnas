@@ -106,8 +106,8 @@
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePemeliharaanPart: BASE_URL + 'pemeliharaan_part/modifyPemeliharaanPart',
             removePemeliharaanPart: BASE_URL + 'pemeliharaan_part/deletePemeliharaanPart',
-            createUpdateDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutan',
-            removeDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutan',
+            createUpdateDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/modifyDetailPenggunaanAngkutanDarat',
+            removeDetailPenggunaanAngkutan: BASE_URL + 'asset_angkutan_detail_penggunaan/deleteDetailPenggunaanAngkutanDarat',
             createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
             removePengelolaan: BASE_URL + 'pengelolaan/deletePengelolaan'
             
@@ -353,7 +353,7 @@
                     form.insert(0, Form.Component.dataPerlengkapanAngkutanDarat(data.id));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
-                    Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1}});
+                    Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1, jenis_asset:"darat"}});
                 
             }
         };
@@ -421,7 +421,7 @@
                     Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
                 }
                     var form = Form.detailPenggunaanAngkutan(AngkutanDarat.URL.createUpdateDetailPenggunaanAngkutan, AngkutanDarat.dataStoreDetailPenggunaanAngkutan, false,'darat');
-                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'darat'));
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'darat',false));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 
@@ -442,7 +442,7 @@
                     Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
                 }
                     var form = Form.detailPenggunaanAngkutan(AngkutanDarat.URL.createUpdateDetailPenggunaanAngkutan, AngkutanDarat.dataStoreDetailPenggunaanAngkutan, true,'darat');
-                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'darat'));
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'darat',true));
                     
                     if (data !== null)
                     {
@@ -512,7 +512,7 @@
                         Form.Component.klasifikasiAset(edit),
                         Form.Component.basicAsset(edit),
                         Form.Component.mechanical(),
-                        Form.Component.angkutan(),
+                        Form.Component.angkutan(edit,(edit==false)?'':data.kd_lokasi),
                         Form.Component.detailPenggunaanAngkutan(setting_grid_detail_penggunaan,edit),
                         Form.Component.fileUpload(),
                        ],

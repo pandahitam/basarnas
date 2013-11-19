@@ -23,7 +23,7 @@ class Asset_Perlengkapan_Model extends MY_Model{
                             penggunaan_freq,unit_waktu,unit_freq,disimpan, 
                             dihapus,image_url,document_url,kode_unor
                             ,nama_klasifikasi_aset, kd_klasifikasi_aset,
-                            kd_lvl1,kd_lvl2,kd_lvl3,id_pengadaan,nama_part,umur";
+                            kd_lvl1,kd_lvl2,kd_lvl3,id_pengadaan,nama_part,umur,jenis_asset,nama_kelompok";
                             }
 	
 	function get_AllData($start=null,$limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){

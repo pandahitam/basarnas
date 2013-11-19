@@ -149,6 +149,7 @@
             form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara());
             Modal.assetSecondaryWindow.add(form);
             Modal.assetSecondaryWindow.show();
+            Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1, jenis_asset:"udara"}});
             
         };
         

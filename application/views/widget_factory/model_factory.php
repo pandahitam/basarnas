@@ -4,8 +4,17 @@
 <script>
 ////// Model In View
 
+Ext.define('MPemeliharaanPerlengkapan', {extend: 'Ext.data.Model',
+    fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset','umur',
+        'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
+        'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
+        'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
+        'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
+        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url']
+});
+
 Ext.define('MKelompokPart', {extend: 'Ext.data.Model',
-    fields: ['id','nama_kelompok'
+    fields: ['id','nama_kelompok','jenis_asset'
     ]
 });
 
@@ -159,7 +168,7 @@ Ext.define('MLuar', {extend: 'Ext.data.Model',
 
 Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id','warehouse_id','ruang_id','rak_id','nama_warehouse','nama_ruang','nama_rak',
-        'serial_number', 'part_number','kd_brg','kd_lokasi',
+        'serial_number', 'part_number','kd_brg','kd_lokasi','nama_kelompok','jenis_asset',
         'no_aset','kondisi', 'kuantitas', 'dari',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
@@ -581,7 +590,7 @@ Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
 })
 
 Ext.define('MPartNumber', { extend:'Ext.data.Model',
-    fields: ['id','vendor_id','part_number','nama_kelompok','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
+    fields: ['id','vendor_id','part_number','nama_kelompok','jenis_asset','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
 })
 
 

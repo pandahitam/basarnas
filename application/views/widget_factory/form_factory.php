@@ -239,6 +239,11 @@
                     {kategori: 'Senjata', value: 7}, {kategori: 'Tanah', value: 8},]
         });
         
+        Reference.Data.jenisAsetKelompokPart= new Ext.create('Ext.data.Store', {
+            fields: ['value'],
+            data: [{value: 'Darat'}, {value: 'Laut'},
+                    {value: 'Udara'}]});
+        
         Reference.Data.pemeliharaanUnitWaktuOrUnitPenggunaan = new Ext.create('Ext.data.Store', {
             fields: ['text', 'value'],
             data: [{text: 'Waktu', value: 1}, {text: 'Penggunaan', value: 2}]
@@ -1120,6 +1125,111 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        Form.panelPemeliharaanInAssetPerlengkapan = function(url, data, edit, addBtn,dataMainGrid) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-pemeliharaan-in-asset',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_pemeliharaan_in_asset', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = Utils.getPhotoStore(_form);
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                
+                                var documentStore = Utils.getDocumentStore(_form);
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            if (form.isValid())
+                            {
+                                    form.submit({
+                                        success: function(form,action) {
+                                            
+                       
+                                            
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            
+                                            Modal.assetSecondaryWindow.close();
+                                            dataMainGrid.load();
+                                            $.ajax({
+                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
+                                                type: "POST",
+                                                dataType:'json',
+                                                async:false,
+                                                data:{kd_brg:formValues.kd_brg, kd_lokasi:formValues.kd_lokasi, no_aset:formValues.no_aset},
+                                                success:function(response, status){
+                                                    if(status == "success")
+                                                    {
+                                                        Ext.getCmp('asset_perlengkapan_umur').setValue(response);
+                                                    }
+
+                                                }
+                                             });
+                                            
+//                                           Modal.assetEdit.addListener("close",function(){ dataMainGrid.load() },this)
+    //                                        if (edit)
+    //                                        {
+    //                                            Modal.closeProcessWindow();
+    //                                        }
+    //                                        else
+    //                                        {
+    //                                            form.reset();
+    //                                        }
+
+
+
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                
+                            }
+                            
+                        }
+                    }, {
+                        text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
+                        handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
         Form.panelPemeliharaanPartsAngkutanInAsset = function(url, data, edit, dataStoreParts, addBtn) {
             var _form = Ext.create('Ext.form.Panel', {
                 id : 'form-pemeliharaan-parts-in-asset',
@@ -1349,6 +1459,15 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return form;
         }
         
+        Form.pemeliharaanInAssetPerlengkapan= function(setting){
+            var form = Form.panelPemeliharaanInAssetPerlengkapan(setting.url, setting.data, setting.isEditing, setting.addBtn, setting.dataMainGrid);
+            form.insert(1, Form.Component.hiddenIdentifier());
+            form.insert(4, Form.Component.fileUpload());
+            form.insert(2, Form.Component.pemeliharaanPerlengkapan(setting.isEditing));
+            
+            return form;
+        }
+        
         
         
         
@@ -1572,6 +1691,20 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         fieldLabel:'Nama',
                                         name: 'nama_kelompok',
                                         allowBlank:false,
+                                    },
+                                    {
+                                        xtype:'combo',
+                                        name:'jenis_asset',
+                                        fieldLabel:'Jenis Angkutan',
+                                        allowBlank:false,
+                                        editable:false,
+//                                        readOnly:setting.isEditing,
+                                        readOnly:false,
+                                        store: Reference.Data.jenisAsetKelompokPart,
+                                        valueField: 'value',
+                                        displayField: 'value', emptyText: 'Jenis',
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis'
+                                        
                                     },
                                    ]
                         }]
@@ -3983,6 +4116,47 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     }, {
                         text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
                         handler: addBtn.fn
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelSalinKeAssetPerlengkapan = function(url) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-peraturan',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Kirim', id: 'kirim_ke_asset_perlengkapan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function() {
+                                        Ext.MessageBox.alert('Success', 'Data Berhasil Disalin ke Asset Perlengkapan');
+                                        Modal.smallWindow.close();
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Data Gagal Disalin ke Asset Perlengkapan');
+                                    }
+                                });
+                            }
+                            
+                        }
                     }]
             });
 
@@ -8188,7 +8362,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         
         }
         
-        Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan = function(tipe_angkutan)
+        Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan = function(tipe_angkutan,edit)
         {
           if(tipe_angkutan == "darat")
           {
@@ -8201,6 +8375,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     fieldLabel: 'Satuan Penggunaan',
                                     name: 'satuan_penggunaan',
                                     allowBlank: false,
+                                    readOnly:edit,
                                     store: Reference.Data.unitPengunaanAngkutanDarat,
                                     valueField: 'value',
                                     displayField: 'text', emptyText: 'Pilih Satuan',
@@ -8255,7 +8430,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
           }
         };
         
-        Form.Component.dataDetailPenggunaanAngkutan= function(id_ext_asset,tipe_angkutan)
+        Form.Component.dataDetailPenggunaanAngkutan= function(id_ext_asset,tipe_angkutan,edit)
         {
             var component = {
                 xtype: 'fieldset',
@@ -8298,8 +8473,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'jumlah_penggunaan',
                                 allowBlank:false,
                                 minValue:1,
+                                readOnly:edit,
                             },
-                            Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan(tipe_angkutan)
+                            Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan(tipe_angkutan,edit)
                            ]
                     }, {
                         columnWidth: .50,
@@ -8777,7 +8953,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return component;
         };
 
-        Form.Component.angkutan = function() {
+        Form.Component.angkutan = function(edit,kd_lokasi) {
             var component = {
                 xtype: 'fieldset',
                 layout: 'column',
@@ -8836,7 +9012,26 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             }, {
                                 fieldLabel: 'No BPKB',
                                 name: 'no_bpkb'
-                            }]
+                            },
+                            {
+                                xtype:'container',
+                                border:false,
+                                items:[{
+                                    xtype:'button',
+                                    text:'Salin ke Asset Perlengkapan',
+                                    disabled:!edit,
+                                    handler:function(){
+                                        var url = BASE_URL + 'asset_perlengkapan/salinKeAssetPerlengkapan';
+                                        var form = Form.panelSalinKeAssetPerlengkapan(url);
+                                        form.insert(0,Form.Component.salinKeAssetPerlengkapan(kd_lokasi));
+                                        Modal.smallWindow.setTitle('Salin Ke Asset Perlengkapan');
+                                        Modal.smallWindow.add(form);
+                                        Modal.smallWindow.show();
+                                    }   
+                                }]
+                                
+                            }
+                            ]
                     }]
             };
 
@@ -10352,6 +10547,130 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return component;
         };
+        
+        Form.Component.pemeliharaanPerlengkapan = function(edit) {
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PEMELIHARAAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [{
+                            columnWidth: .34,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+                                    xtype: 'combo',
+                                    fieldLabel: 'Jenis',
+                                    name: 'jenis',
+                                    allowBlank: true,
+                                    store: Reference.Data.jenisPemeliharaan,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Jenis',
+                                    value: 3,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
+
+                                }, {
+                                    xtype: 'datefield',
+                                    fieldLabel: 'Tanggal Pelaksana',
+                                    name: 'pelaksana_tgl',
+                                    id: 'pelaksana_tgl',
+                                    format: 'Y-m-d',
+                                }, {
+                                    fieldLabel: 'Pelaksana',
+                                    name: 'pelaksana_nama'
+                                }, {
+                                    fieldLabel: 'Kode Angaran',
+                                    name: 'kode_angaran'
+                                }, {
+                                    xtype: 'combo',
+                                    fieldLabel: 'Tahun Anggaran',
+                                    name: 'tahun_angaran',
+                                    allowBlank: true,
+                                    store: Reference.Data.year,
+                                    valueField: 'year',
+                                    displayField: 'year', emptyText: '',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
+                                },
+                                
+                            ]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Kondisi',
+                                    name: 'kondisi',
+                                    id : 'kondisi_perlengkapan',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Kondisi',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },{
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Harga',
+                                    name: 'harga'
+                                }, {
+                                    fieldLabel: 'Status',
+                                    name: 'status'
+                                }, {
+                                    fieldLabel: 'Durasi',
+                                    name: 'durasi'
+                                },
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel: 'Penambahan Umur',
+                                    name: 'umur',
+                                    allowBlank:false,
+                                    value:0,
+                                    minValue:0,
+                                    readOnly:edit
+                                }]
+                        },
+                    {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    xtype: 'textarea',
+                                    fieldLabel: 'Deskripsi',
+                                    name: 'deskripsi'
+                                },
+//                                {
+//                                    xtype: 'checkboxfield',
+//                                    inputValue: 1,
+//                                    fieldLabel: 'Alert',
+//                                    name: 'alert',
+//                                    id: 'alert',
+//                                    boxLabel: 'Yes',
+//                                    disabled: true
+//                                }
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
 
         Form.Component.pemeliharaanHidden = function() {
             
@@ -11046,7 +11365,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     xtype: 'numberfield',
                                     fieldLabel: 'Umur (Jam)',
                                     name: 'umur',
-                                    minValue:0
+                                    id:'asset_perlengkapan_umur'
                                 },
                                 
                             ]
@@ -12210,6 +12529,61 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return component;
         };
+        
+        Form.Component.salinKeAssetPerlengkapan = function(kd_lokasi) {
+            
+        var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'SALIN KE ASSET PERLENGKAPAN',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        items: [{
+                                    xtype:'hidden',
+                                    name:'kd_lokasi',
+                                    value:kd_lokasi
+                                },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Part Number *',
+                                    name: 'part_number',
+                                    id : 'part_number',
+                                    allowBlank: false,
+                                    store: Reference.Data.partNumber,
+                                    valueField: 'part_number',
+                                    editable:false,
+                                    displayField: 'nama', emptyText: 'Pilih Part Number',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                },
+                                {
+                                    xtype:'textfield',
+                                    fieldLabel:'Serial Number',
+                                    name:'serial_number'
+                                }
+                                    
+                               ]
+                    },
+                    ]
+            };
+
+            return component;
+        };
+        
+        
+                
+        
 
     <?php } else {
         echo "var new_tabpanel_MD = 'GAGAL';";

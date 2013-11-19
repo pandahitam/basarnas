@@ -38,9 +38,9 @@
         });
         
         Perlengkapan.dataStorePemeliharaan = new Ext.create('Ext.data.Store', {
-            model: MPemeliharaan, autoLoad: false, noCache: false,
+            model: MPemeliharaanPerlengkapan, autoLoad: false, noCache: false,
             proxy: new Ext.data.AjaxProxy({
-                url: BASE_URL + 'Pemeliharaan/getSpecificPemeliharaan', actionMethods: {read: 'POST'},
+                url: BASE_URL + 'Pemeliharaan_Perlengkapan/getSpecificPemeliharaan', actionMethods: {read: 'POST'},
                 reader: new Ext.data.JsonReader({
                     root: 'results', totalProperty: 'total', idProperty: 'id'})
             })
@@ -50,8 +50,8 @@
             read: BASE_URL + 'asset_perlengkapan/getAllData',
             createUpdate: BASE_URL + 'asset_perlengkapan/modifyPerlengkapan',
             remove: BASE_URL + 'asset_perlengkapan/deletePerlengkapan',
-            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan/modifyPemeliharaan',
-            removePemeliharaan: BASE_URL + 'Pemeliharaan/deletePemeliharaan',
+            createUpdatePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/modifyPemeliharaan',
+            removePemeliharaan: BASE_URL + 'Pemeliharaan_Perlengkapan/deletePemeliharaan',
             createUpdatePendayagunaan: BASE_URL +'pendayagunaan/modifyPendayagunaan',
             removePendayagunaan: BASE_URL + 'pendayagunaan/deletePendayagunaan',
             createUpdatePengelolaan: BASE_URL +'pengelolaan/modifyPengelolaan',
@@ -132,6 +132,7 @@
                 data: dataGrid,
                 isEditing: edit,
                 isPerlengkapan: true,
+                dataMainGrid: Perlengkapan.Data,
                 addBtn: {
                     isHidden: true,
                     text: '',
@@ -142,7 +143,7 @@
                 }
             };
 
-            var form = Form.pemeliharaanInAsset(setting);
+            var form = Form.pemeliharaanInAssetPerlengkapan(setting);
             
             if (dataForm !== null)
             {
@@ -734,7 +735,8 @@
                     data: data,
                     dataStore: Perlengkapan.dataStorePemeliharaan,
                     toolbar: toolbarIDs,
-                    isPerlengkapan: true
+                    isPerlengkapan: true,
+                    dataMainGrid: Perlengkapan.data,
                 };
                 var _perlengkapanPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
                 Tab.addToForm(_perlengkapanPemeliharaanGrid, 'perlengkapan-pemeliharaan', 'Pemeliharaan');
@@ -893,6 +895,8 @@
                     {header: 'Kode Klasifikasi Aset Level 3', dataIndex: 'kd_lvl3', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Kode Klasifikasi Aset', dataIndex: 'kd_klasifikasi_aset', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
+                    {header: 'Kelompok Part', dataIndex: 'nama_kelompok', width: 150, groupable: false, filter: {type: 'string'}},
+                    {header: 'Jenis Angkutan', dataIndex: 'jenis_asset', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama Part', dataIndex: 'nama_part', width: 150, groupable: false, filter: {type: 'string'}},
                     {header: 'Part Number', dataIndex: 'part_number', width: 90, groupable: false, filter: {type: 'string'}},
                     {header: 'Serial Number', dataIndex: 'serial_number', width: 90, groupable: false, filter: {type: 'string'}},

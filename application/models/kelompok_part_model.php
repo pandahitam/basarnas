@@ -3,7 +3,7 @@ class Kelompok_Part_Model extends MY_Model {
 	function __construct(){
 		parent::__construct();
             $this->table = 'ref_kelompok_part';    
-            $this->selectColumn = "SELECT id, nama_kelompok";
+            $this->selectColumn = "SELECT id, nama_kelompok, jenis_asset";
 	}
 	
         function get_AllData($start=null, $limit=null){

@@ -20,6 +20,29 @@ class Asset_Perlengkapan extends MY_Controller {
 		}
 	}
 	
+        function salinKeAssetPerlengkapan()
+        {
+            $data = array(
+                'kd_lokasi'=>$_POST['kd_lokasi'],
+                'part_number'=>$_POST['part_number'],
+                'serial_number'=>$_POST['serial_number']
+            );
+            
+            $partNumberDetails = $this->model->get_partNumberDetails($data['part_number']);
+            $data['kd_brg'] = $partNumberDetails->kd_brg;
+//            $data['umur'] = $partNumberDetails->umur_maks;
+            
+//            if($data['kd_brg'] == '' || $data['kd_brg'] == null)
+//            {
+//                $data['kd_brg'] = '-';
+//            }
+            
+            $data['no_aset'] = $this->noAssetGenerator($data['kd_brg'], $data['kd_lokasi']);
+            $this->createLog('SALIN KE ASSET PERLENGKAPAN','asset_perlengkapan');
+            $this->db->insert('asset_perlengkapan',$data);
+            echo "{success:true}";
+        }
+        
 	function modifyPerlengkapan(){
             
                 $dataSimak = array();
@@ -65,11 +88,10 @@ class Asset_Perlengkapan extends MY_Controller {
                 
                 $partNumberDetails = $this->model->get_partNumberDetails($dataSimak['part_number']);
                 $dataSimak['kd_brg'] = $partNumberDetails->kd_brg;
-
-                if($dataSimak['kd_brg'] == '' || $dataSimak['kd_brg'] == null)
-                {
-                    $dataSimak['kd_brg'] = '-';
-                }
+//                if($dataSimak['kd_brg'] == '' || $dataSimak['kd_brg'] == null)
+//                {
+//                    $dataSimak['kd_brg'] = '-';
+//                }
                 foreach($klasifikasiAsetFields as $field)
                 {
                     $dataKlasifikasiAset[$field] =  $this->input->post($field);

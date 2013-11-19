@@ -366,7 +366,7 @@
                     form.insert(0, Form.Component.dataPerlengkapanAngkutanUdara(data.id));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
-                    Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1}});
+                    Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 1, jenis_asset:"udara"}});
                 
             }
         };
@@ -434,7 +434,7 @@
                     Modal.assetSecondaryWindow.setTitle('Tambah Penggunaan');
                 }
                     var form = Form.detailPenggunaanAngkutanUdara(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutanUdara, AngkutanUdara.dataStoreDetailPenggunaanAngkutanUdara, false,'1');
-                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara'));
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara',false));
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
                 
@@ -455,7 +455,7 @@
                     Modal.assetSecondaryWindow.setTitle('Edit Penggunaan');
                 }
                     var form = Form.detailPenggunaanAngkutanUdara(AngkutanUdara.URL.createUpdateDetailPenggunaanAngkutanUdara, AngkutanUdara.dataStoreDetailPenggunaanAngkutanUdara, true,'1');
-                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara'));
+                    form.insert(0, Form.Component.dataDetailPenggunaanAngkutan(data.id,'udara',true));
                     
                     if (data !== null)
                     {
@@ -480,6 +480,7 @@
                 var data = {
                     id: obj.data.id,
                     id_ext_asset:obj.data.id_ext_asset,
+                    jumlah_penggunaan:obj.data.jumlah_penggunaan,
                 };
                 arrayDeleted.push(data);
             });
@@ -603,7 +604,7 @@
                         Form.Component.klasifikasiAset(edit),
                         Form.Component.basicAsset(edit),
                         Form.Component.mechanicalAngkutanUdara(),
-                        Form.Component.angkutan(),
+                        Form.Component.angkutan(edit,(edit==false)?'':data.kd_lokasi),
                         Form.Component.detailPenggunaanAngkutanUdara(setting_grid_detail_penggunaan_mesin1,edit,'1'),
 //                        Form.Component.detailPenggunaanAngkutanUdara(setting_grid_detail_penggunaan_mesin2,edit,'2'),
                         Form.Component.fileUpload(),
