@@ -129,7 +129,7 @@ LaporanAsetKategoriBarang.GridLaporan = Ext.create('Ext.grid.Panel', {
                     columns: [
                         {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                         { header: 'Kode Aset',  dataIndex: 'kd_brg', width:150},
-                        { header: 'Nama', dataIndex: 'type', width:150},
+                        { header: 'Type', dataIndex: 'type', width:150},
                         { header: 'Merk', dataIndex: 'merk', width:150 },
                         { header: 'Kondisi', dataIndex: 'kondisi', width:150,
                             renderer: function(value) {
@@ -224,7 +224,28 @@ LaporanAsetKategoriBarang.Container = {
                                 }
                                 
                             }
-                            }]
+                            },
+//                            {
+//                            xtype : 'button',
+//                            text : "Cetak",
+//                            iconCls:'icon-printer',
+//                            handler: function(){
+//                                var kategori = Ext.getCmp('laporan_aset_kategoribarang_kategori').value;
+//                                var tahun = Ext.getCmp('laporan_aset_kategoribarang_tahun').value;
+//                                if(kategori != null && tahun != null)
+//                                {
+//                                    LaporanAsetKategoriBarang.DataLaporanGrid.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
+//                                    LaporanAsetKategoriBarang.DataLaporanChart.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
+////                                    Ext.getCmp('Tab_PA').add(LaporanAsetKategoriBarang.ContainerLaporan).show();
+//                                }
+//                                else
+//                                {
+//                                    Ext.MessageBox.alert('Error','Harap mengisi kategori barang dan tahun terlebih dahulu');
+//                                }
+//                                
+//                            }
+//                        }
+                        ]
   })
 };
 

@@ -43,7 +43,8 @@ class Asset_Luar extends MY_Controller {
                 
                 $extFields = array(
                         'kd_lokasi', 'kd_brg', 'no_aset', 'id','kode_unor',
-                        'image_url','document_url','kd_klasifikasi_aset','rph_aset'
+                        'image_url','document_url','kd_klasifikasi_aset','rph_aset',
+                        'kuantitas','tgl_buku','tgl_prl',
                 );
                 
                 foreach ($kodeFields as $field) {

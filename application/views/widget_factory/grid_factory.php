@@ -1483,6 +1483,122 @@ var search = [{
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         };
 
+
+        Grid.pemeliharaanPerlengkapanGrid = function(setting) {
+            
+                var settingGrid = {
+                    grid: {
+                        id: setting.toolbar.idGrid,
+                        title: 'Pemeliharaan',
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'Jenis', dataIndex: 'jenis', width: 120, groupable: false, hidden: false, filter: {type: 'string'},
+                                renderer: function(value){
+                                    if (value === '1')
+                                    {
+                                        return "Predictive";
+                                    }
+                                    else if (value === '2')
+                                    {
+                                        return "Preventive";
+                                    }
+                                    else if (value === '3')
+                                    {
+                                        return "Corrective";
+                                    }
+                                }
+                            },
+                            {header: 'Tahun Anggaran', dataIndex: 'tahun_angaran', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Pelaksana Tanggal', dataIndex: 'pelaksana_tgl', width: 150, groupable: false, hidden: false, filter: {type: 'date'}},
+                            {header: 'Pelaksana Nama', dataIndex: 'pelaksana_nama', width: 150, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Kondisi', dataIndex: 'kondisi', width: 100, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Deskripsi', dataIndex: 'deskripsi', width: 150, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Harga', dataIndex: 'harga', width: 100, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Kode Anggaran', dataIndex: 'kode_anggaran', width: 100, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Frekuensi Waktu', dataIndex: 'freq_waktu', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Frekuensi Penggunaan', dataIndex: 'freq_penggunaan', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Status', dataIndex: 'status', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Durasi', dataIndex: 'durasi', width: 90, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Rencana Waktu', dataIndex: 'rencana_waktu', width: 120, groupable: false, hidden: false, filter: {type: 'date'}},
+                            {header: 'Rencana Penggunaan', dataIndex: 'rencana_penggunaan', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Rencana Keterangan', dataIndex: 'rencana_keterangan', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Penambahan Umur', dataIndex: 'umur', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                        ]
+                    },
+                    search: {
+                        id: 'search_pemeliharaan'
+                    },
+                    toolbar: {
+                        id: 'toolbar_pemeliharaan',
+                        add: {
+                            id: 'button_add_pemeliharaan',
+                            action: setting.toolbar.add
+                        },
+                        edit: {
+                            id: 'button_edit_pemeliharaan',
+                            action: setting.toolbar.edit
+                        },
+                        remove: {
+                            id: 'button_remove_pemeliharaan',
+                            action: setting.toolbar.remove
+                        }
+                    }
+                };
+            
+
+
+
+            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+                ftype: 'filters', autoReload: true, local: true, encode: true
+            });
+
+//            var search = new Ext.create('Ext.ux.form.SearchField', {
+//                id: settingGrid.search.id, store: setting.dataStore, width: 180
+//            });
+
+            var search = [{
+                    xtype:'searchfield',
+                    id:settingGrid.search.id,
+                    store:setting.dataStore,
+                    width:180
+            }];
+            
+            var selMode = new Ext.create('Ext.selection.CheckboxModel');
+
+            var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
+                id: settingGrid.toolbar.id,
+                items: [{
+                        text: 'Tambah', id: settingGrid.toolbar.add.id, iconCls: 'icon-add', handler: function() {
+                            settingGrid.toolbar.add.action();
+                        }
+                    }, '-', {
+                        text: 'Ubah', id: settingGrid.toolbar.edit.id, iconCls: 'icon-edit', handler: function() {
+                            settingGrid.toolbar.edit.action();
+                        }
+                    }, '-', {
+                        text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
+                            settingGrid.toolbar.remove.action();
+                        }
+                    }, '-', {
+                        text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
+                        handler: function() {
+                            _grid.filters.clearFilters();
+                        }
+                    }, '->',search
+                ]
+            });
+
+
+            var feature_list = {
+                filter: filter,
+                search: search,
+                selmode: selMode,
+                toolbar: toolbar
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
+        
     // use in inventaris asset, 
         Grid.pemeliharaanGrid = function(setting) {
             if (setting.isBangunan)

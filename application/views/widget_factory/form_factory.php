@@ -9812,6 +9812,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 },
                 items:[{
                     xtype:'numberfield',
+                    fieldLabel:'Kuantitas',
+                    name:'kuantitas',
+                    minValue: 0,
+                    },{
+                    xtype:'numberfield',
                     fieldLabel:'Harga Aset',
                     name:'rph_aset'
                     },{
@@ -9845,6 +9850,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     layout: 'anchor'
                 },
                 items:[{
+                    xtype:'numberfield',
+                    fieldLabel:'Kuantitas',
+                    name:'kuantitas',
+                    minValue: 0,
+                    },{
                     xtype:'numberfield',
                     fieldLabel:'Harga Aset',
                     name:'rph_aset'

@@ -222,13 +222,13 @@ class laporan_aset_unitkerja extends MY_Controller {
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."'
                           UNION
                           select t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','DIL' as kategori_aset,rph_aset from ext_asset_dil as t
-                          where t.kd_lokasi = '".$kd_lokasi."'
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."'
                           UNION
                           select t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Perairan' as kategori_aset,rph_aset from asset_perairan as t
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."'
                           UNION
                           select t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Ruang' as kategori_aset,rph_aset from ext_asset_ruang as t
-                          where t.kd_lokasi = '".$kd_lokasi."'
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."'
                           UNION
                           select t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Tanah' as kategori_aset,rph_aset from asset_tanah as t
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."'

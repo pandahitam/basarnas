@@ -782,7 +782,7 @@
                     isPerlengkapan: true,
                     dataMainGrid: Perlengkapan.data,
                 };
-                var _perlengkapanPemeliharaanGrid = Grid.pemeliharaanGrid(setting);
+                var _perlengkapanPemeliharaanGrid = Grid.pemeliharaanPerlengkapanGrid(setting);
                 Tab.addToForm(_perlengkapanPemeliharaanGrid, 'perlengkapan-pemeliharaan', 'Pemeliharaan');
             }
         };

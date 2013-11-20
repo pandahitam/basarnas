@@ -116,7 +116,7 @@ LaporanAsetUnitKerja.GridLaporan = Ext.create('Ext.grid.Panel', {
                     columns: [
                         {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
                         { header: 'Kode Aset',  dataIndex: 'kd_brg', width:150},
-                        { header: 'Nama', dataIndex: 'type', width:150},
+                        { header: 'Type', dataIndex: 'type', width:150},
                         { header: 'Merk', dataIndex: 'merk', width:150 },
                         { header: 'Kondisi', dataIndex: 'kondisi', width:150,
                         renderer: function(value) {
@@ -279,8 +279,32 @@ LaporanAsetUnitKerja.Container = {
                                     Ext.MessageBox.alert('Error','Harap mengisi unit kerja dan tahun terlebih dahulu');
                                 }
                                 
+                                },
+                            },
+                        {
+                            xtype : 'button',
+                            text : "Cetak",
+                            iconCls:'icon-printer',
+                            handler: function(){
+                                var unker = Ext.getCmp('laporan_aset_unitkerja_nama_unker').value;
+                                var unor = Ext.getCmp('laporan_aset_unitkerja_nama_unor').value;
+                                var tahun = Ext.getCmp('laporan_aset_unitkerja_tahun').value;
+                                var nama_unker = Ext.getCmp('laporan_aset_unitkerja_nama_unker').rawValue;
+
+                                if(unker != null && tahun != null)
+                                {
+                                    window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun;
+//                                    LaporanAsetUnitKerja.DataLaporanGrid.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
+//                                    LaporanAsetUnitKerja.DataLaporanChart.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
+//                                    Ext.getCmp('laporan_aset_unit_kerja_container').add(LaporanAsetUnitKerja.ContainerLaporan).show();
+                                }
+                                else
+                                {
+                                    Ext.MessageBox.alert('Error','Harap mengisi unit kerja dan tahun terlebih dahulu');
+                                }
+                                
                             }
-                            }]
+                        }]
   })
 };
 

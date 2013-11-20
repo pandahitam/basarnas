@@ -160,7 +160,7 @@ Ext.define('MInventoryPengeluaran', {extend: 'Ext.data.Model',
 Ext.define('MLuar', {extend: 'Ext.data.Model',
     fields: ['kd_lokasi','kd_brg','no_aset','lok_fisik',
         'id', 'kode_unor','image_url','document_url',
-        'nama_unker','nama_unor', 'nama','rph_aset',
+        'nama_unker','nama_unor', 'nama','rph_aset','kuantitas','tgl_buku','tgl_prl',
         'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' // kode barang
         ,'ur_sskel','kd_klasifikasi_aset','nama_klasifikasi_aset',
         'kd_lvl1','kd_lvl2','kd_lvl3',]
@@ -486,9 +486,9 @@ Ext.define('MRuang', {extend: 'Ext.data.Model',
             'nip_pjrug', 'ur_sskel',
             'lok_fisik','nama_unker',
             'nama_unor', 'rph_aset',
-            'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel' ,'ur_sskel'
+            'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel',
             ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
-            'kd_lvl1','kd_lvl2','kd_lvl3',
+            'kd_lvl1','kd_lvl2','kd_lvl3','kuantitas','tgl_buku','tgl_prl'
         ]
 });
 

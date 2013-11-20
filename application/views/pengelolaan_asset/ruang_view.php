@@ -990,7 +990,7 @@
                     {header: 'No Asset', dataIndex: 'no_aset', width: 60, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 130, groupable: true, filter: {type: 'string'}},
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, groupable: true, filter: {type: 'string'}},
-                    {header: 'Nama', dataIndex: 'ur_sskel', width: 150, hidden: false, filter: {type: 'string'}},
+//                    {header: 'Nama', dataIndex: 'ur_sskel', width: 150, hidden: false, filter: {type: 'string'}},
                     {header: 'Ruang', dataIndex: 'ruang', width: 120, hidden: false, filter: {type: 'string'}},
                     {header: 'Rph Asset', dataIndex: 'rph_aset', width: 120, hidden: false, filter: {type: 'numeric'}},
 //                    {header: 'Pejabat Ruang', dataIndex: 'pejabat_ruang', width: 150, hidden: false, filter: {type: 'string'}},

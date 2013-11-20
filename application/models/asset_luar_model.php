@@ -13,12 +13,13 @@ class Asset_Luar_Model extends MY_Model{
 //                                            f.nama as nama_klasifikasi_aset, a.kd_klasifikasi_aset,
 //                            f.kd_lvl1,f.kd_lvl2,f.kd_lvl3
 //                                        ";
-                $this->selectColumn = "SELECT kd_lokasi, kd_brg, no_aset, lok_fisik, id, kode_unor, image_url, document_url, rph_aset,
-                                        nama_unker, nama_unor, nama,
-                                        kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel,
-                                            nama_klasifikasi_aset, kd_klasifikasi_aset,
-                            kd_lvl1,kd_lvl2,kd_lvl3
-                                        ";
+//                $this->selectColumn = "SELECT kd_lokasi, kd_brg, no_aset, lok_fisik, id, kode_unor, image_url, document_url, rph_aset,kuantitas,tgl_prl,tgl_buku
+//                                        nama_unker, nama_unor, nama,
+//                                        kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel,
+//                                            nama_klasifikasi_aset, kd_klasifikasi_aset,
+//                            kd_lvl1,kd_lvl2,kd_lvl3
+//                                        ";
+                  $this->selectColumn = "Select *";
 	}
 	
 	function get_AllData($start=null,$limit=null, $searchByBarcode = null, $gridFilter = null, $searchByField = null){
