@@ -240,7 +240,7 @@ class Asset_Bangunan_Model extends MY_Model{
             {
                 $query = "$this->selectColumn
                                 FROM $this->viewTable
-                                LIMIT $start, $limit";
+                                ";
           
                 
                 if($searchByBarcode != null)
