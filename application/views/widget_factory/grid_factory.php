@@ -1849,19 +1849,23 @@ var search = [{
                 items: [{
                         text: 'Tambah', id: setting.toolbar.add.id, disabled:(setting.toolbar.add.disabled == true)?true:false, iconCls: 'icon-add', handler: function() {
                             setting.toolbar.add.action();
-                        }
+                        },
+						disabled:fnCheckControlButton(setting, 'insert') //semar
                     }, '-', {
                         text: 'Ubah', id: setting.toolbar.edit.id, disabled:(setting.toolbar.edit.disabled == true)?true:false, iconCls: 'icon-edit', handler: function() {
                             setting.toolbar.edit.action();
-                        }
+                        },
+						disabled:fnCheckControlButton(setting, 'update') //semar
                     }, '-', {
                         text: 'Hapus', id: setting.toolbar.remove.id, hidden:(setting.toolbar.remove.disabled == true)?true:false, iconCls: 'icon-delete', handler: function() {
                             setting.toolbar.remove.action();
-                        }
+                        },
+						disabled:fnCheckControlButton(setting, 'delete') //semar
                     }, '-', {
                         text: 'Cetak', id: setting.toolbar.print.id, hidden:(setting.toolbar.print.disabled == true)?true:false, iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
-                        }
+                        },
+						disabled:fnCheckControlButton(setting, 'print') //semar
                     }, '-', 
                             {
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',

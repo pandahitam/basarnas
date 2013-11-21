@@ -2762,6 +2762,18 @@
                 });
             }
             SemarObjTemp = {};
+			
+			//semar
+			function fnCheckControlButton(settingGrid, typeControl){
+				var dfControl = false;
+				if(settingGrid.toolbar['prefix']!=undefined){
+					if(window[settingGrid.toolbar['prefix']+'_'+typeControl]!=undefined){
+						dfControl = window[settingGrid.toolbar['prefix']+'_'+typeControl];
+					}
+				}
+				return dfControl;
+			};
+			//semar
         </script>
     </head>
     <body>
