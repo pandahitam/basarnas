@@ -32,6 +32,7 @@ var Center_PA = {
 	  layout: {overflowHandler: 'Menu'},
 		items: [
 		{text: 'Tanah', iconCls: 'icon-tanah_bangunan',
+				disabled:( window['asset_tanah_access']!=undefined ? window['asset_tanah_access'] : false ), //semar
 				handler: function(){
 					Load_TabPage_Asset('tanah_panel', BASE_URL + 'asset_tanah/tanah');
 				}, 
