@@ -148,6 +148,7 @@ class Asset_Angkutan_Darat extends MY_Controller {
         
         function modifyPerlengkapanAngkutanDarat()
         {
+            
             $dataPerlengkapanDarat = array();
             $dataPerlengkapanDaratFields = array(
                 'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','id_asset_perlengkapan'
@@ -163,14 +164,14 @@ class Asset_Angkutan_Darat extends MY_Controller {
             }
                 $this->db->set($dataPerlengkapanDarat);
                 $this->db->replace('ext_asset_angkutan_darat_perlengkapan');
-                
             //update asset perlengkapan, remove from warehouse, set kode induk asset
-            if($dataPerlengkapanDarat['id_asset_perlengkapan'] != ''  && $dataPerlengkapanDarat['id_asset_perlengkapan'] != 0)
+            if($dataPerlengkapanDarat['id_asset_perlengkapan'] != null  && $dataPerlengkapanDarat['id_asset_perlengkapan'] != 0)
             {
                 $query_data = $this->db->query("select kd_brg, no_aset, kd_lokasi from view_asset_angkutan_darat where id = ".$dataPerlengkapanDarat['id_ext_asset']);
                 $query_result = $query_data->row();
                 $no_induk_asset = $query_result->kd_brg.$query_result->kd_lokasi.$query_result->no_aset;
-                
+//                var_dump(array($no_induk_asset,$dataPerlengkapanDarat['id_ext_asset'],$dataPerlengkapanDarat['id_asset_perlengkapan']));
+//                die;
                 $update_data_no_induk = array(
                     'warehouse_id' => 0,
                     'ruang_id'=>0,
@@ -190,10 +191,18 @@ class Asset_Angkutan_Darat extends MY_Controller {
                 foreach($data as $deleted)
                 {
                     $deletedArray[] =$deleted['id'];
+                    if($deleted['id_asset_perlengkapan'] != null && $deleted['id_asset_perlengkapan'] != 0)
+                    {
+                        $updatedAssetPerlengkapan = $deleted['id_asset_perlengkapan'];
+                    }
                 }
                 $this->db->where_in('id',$deletedArray);
-                
 		$this->db->delete('ext_asset_angkutan_darat_perlengkapan');
+                if(!empty($updatedAssetPerlengkapan))
+                {
+                    $this->db->where_in('id',$updatedAssetPerlengkapan);
+                    $this->db->update('asset_perlengkapan',array('no_induk_asset'=>''));
+                }
 	}
         
         

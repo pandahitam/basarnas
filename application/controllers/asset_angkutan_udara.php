@@ -157,7 +157,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
             $this->db->replace('ext_asset_angkutan_udara_perlengkapan');
 
             //update asset perlengkapan, remove from warehouse, set kode induk asset
-            if($dataPerlengkapanUdara['id_asset_perlengkapan'] != ''  && $dataPerlengkapanUdara['id_asset_perlengkapan'] != 0)
+            if($dataPerlengkapanUdara['id_asset_perlengkapan'] != null  && $dataPerlengkapanUdara['id_asset_perlengkapan'] != 0)
             {
                 $query_data_pesawat = $this->db->query("select kd_brg, no_aset, kd_lokasi from view_asset_angkutan_udara where id = ".$dataPerlengkapanUdara['id_ext_asset']);
                 $query_result = $query_data_pesawat->row();
@@ -185,7 +185,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 {
                     $deletedArray[] =$deleted['id'];
                     
-                    if($deleted['id_asset_perlengkapan'] != '' && $deleted['id_asset_perlengkapan'] != 0)
+                    if($deleted['id_asset_perlengkapan'] != null && $deleted['id_asset_perlengkapan'] != 0)
                     {
                         $updatedAssetPerlengkapan = $deleted['id_asset_perlengkapan'];
                     }

@@ -64,7 +64,7 @@ class Asset_Perlengkapan extends MY_Controller {
                         'no_aset','kondisi', 'kuantitas', 'dari',
                         'tanggal_perolehan','no_dana','penggunaan_waktu',
                         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
-                        'dihapus','image_url','document_url','kd_klasifikasi_aset','kode_unor');
+                        'dihapus','image_url','document_url','kd_klasifikasi_aset','kode_unor','alert','no_induk_asset');
                 
 //                $extFields = array(
 //                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',

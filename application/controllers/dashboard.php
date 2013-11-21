@@ -48,6 +48,23 @@ class Dashboard extends CI_Controller{
         return $data;
     }
   
+  function alert_perlengkapan()
+  {
+      $query = "SELECT id,warehouse_id,ruang_id,rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_asset,
+                            serial_number, part_number,kd_brg,kd_lokasi,nama_unker,nama_unor,
+                            no_aset,kondisi, kuantitas, dari,
+                            tanggal_perolehan,no_dana,penggunaan_waktu,
+                            penggunaan_freq,unit_waktu,unit_freq,disimpan, 
+                            dihapus,image_url,document_url,kode_unor
+                            ,nama_klasifikasi_aset, kd_klasifikasi_aset,
+                            kd_lvl1,kd_lvl2,kd_lvl3,id_pengadaan,nama_part,umur,jenis_asset,nama_kelompok,alert
+                FROM view_asset_perlengkapan
+                WHERE alert =1  and umur <= 10 and (no_induk_asset != '' or no_induk_asset is not null)";
+      $data = $this->Get_By_Query($query);
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
+  }
+  
   function alert_pemeliharaan()
   {
       //      $query = "select ur_upb,nama, max(rencana_waktu) as tanggal_kadaluarsa from pemeliharaan as a

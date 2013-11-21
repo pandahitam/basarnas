@@ -181,7 +181,7 @@
                     {header: 'Kode Barang', dataIndex: 'kd_brg', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Merek', dataIndex: 'merek', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Jenis', dataIndex: 'jenis', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
-                    {header: 'Umur Maksimum (Jam)', dataIndex: 'umur_maks', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Umur Maksimum (Jam/Km)', dataIndex: 'umur_maks', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     
              
                 ]

@@ -1193,7 +1193,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 success:function(response, status){
                                                     if(status == "success")
                                                     {
-                                                        Ext.getCmp('asset_perlengkapan_umur').setValue(response);
+                                                        var fieldUmur = Ext.getCmp('asset_perlengkapan_umur');
+                                                        if(fieldUmur != undefined && fieldUmur !=null)
+                                                        {
+                                                            fieldUmur.setValue(response);
+                                                        }
+                                                        
                                                     }
 
                                                 }
@@ -2418,7 +2423,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     },
                                     {
                                         xtype:'numberfield',
-                                        fieldLabel:'Umur Maksimum (Jam)',
+                                        fieldLabel:'Umur Maksimum (Jam/Km)',
                                         name: 'umur_maks',
                                     },
                                    ]
@@ -5754,7 +5759,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     success: function() {
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        
+                                     
+                                        var asset_perlengkapan_grid = Ext.getCmp('grid_aset_perlengkapan');
+                                        if(asset_perlengkapan_grid != undefined && asset_perlengkapan_grid != null)
+                                        {
+                                            asset_perlengkapan_grid.getStore().load();
+                                        }
                                         if (Modal.assetSecondaryWindow.isVisible(true))
                                         {
                                             var id_ext_asset = Ext.getCmp('id_ext_asset_detail_penggunaan_angkutan').value;
@@ -5824,7 +5834,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     success: function() {
                                         data.load();
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
-                                        
+                                        var asset_perlengkapan_grid = Ext.getCmp('grid_aset_perlengkapan');
+                                        if(asset_perlengkapan_grid != undefined && asset_perlengkapan_grid != null)
+                                        {
+                                            asset_perlengkapan_grid.getStore().load();
+                                        }
                                         if (Modal.assetSecondaryWindow.isVisible(true))
                                         {
                                             var id_ext_asset = Ext.getCmp('id_ext_asset_detail_penggunaan_angkutan').value;
@@ -10549,7 +10563,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     fieldLabel: 'Alert',
                                     name: 'alert',
                                     id: 'alert',
-                                    boxLabel: 'Yes',
+                                    boxLabel: 'Ya',
                                     disabled: true
                                 }]
                         }]
@@ -10856,6 +10870,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                         {
                         defaultType: 'hidden',
                         items: [{
+                                name:'no_induk_asset',
+                        }
+                            ,{
                                 name: 'warehouse_id',
                                 id: 'warehouse_id',
                                 listeners: {
@@ -11373,10 +11390,17 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //                                },
                                 {
                                     xtype: 'numberfield',
-                                    fieldLabel: 'Umur (Jam)',
+                                    fieldLabel: 'Sisa Umur',
                                     name: 'umur',
                                     id:'asset_perlengkapan_umur'
                                 },
+                                {
+                                    xtype: 'checkboxfield',
+                                    inputValue: 1,
+                                    fieldLabel: 'Alert',
+                                    name: 'alert',
+                                    boxLabel: 'Ya',
+                                }
                                 
                             ]
                         }]

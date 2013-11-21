@@ -43,6 +43,23 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
            }
            else
            {
+               $penggunaan = (double)0;
+               $satuan_penggunaan = $dataPenggunaan['satuan_penggunaan'];
+                if($satuan_penggunaan == 1) //satuan in meter
+                {
+                    $penggunaan = (double)$dataPenggunaan['jumlah_penggunaan']/(double)1000;
+
+                }
+                else if($satuan_penggunaan == 2) //satuan in km
+                {
+                    $penggunaan = (double)$dataPenggunaan['jumlah_penggunaan'];
+                }
+                else if($satuan_penggunaan == 3) //satuan in mil
+                {
+                    $penggunaan = (double)$dataPenggunaan['jumlah_penggunaan'] * (double)1.60934;
+                }
+               $this->db->query("update asset_perlengkapan set umur= umur-".$penggunaan." 
+                                 where id in (select id_asset_perlengkapan from ext_asset_angkutan_darat_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." ) ");
                $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_detail_penggunaan');
            }
                
@@ -55,6 +72,23 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 foreach($data as $deleted)
                 {
                     $this->createLog('DELETE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$deleted['id_ext_asset'].']','ext_asset_angkutan_detail_penggunaan');
+                    $penggunaan = (double)0;
+                    $satuan_penggunaan = $deleted['satuan_penggunaan'];
+                     if($satuan_penggunaan == 1) //satuan in meter
+                     {
+                         $penggunaan = (double)$deleted['jumlah_penggunaan']/(double)1000;
+
+                     }
+                     else if($satuan_penggunaan == 2) //satuan in km
+                     {
+                         $penggunaan = (double)$deleted['jumlah_penggunaan'];
+                     }
+                     else if($satuan_penggunaan == 3) //satuan in mil
+                     {
+                         $penggunaan = (double)$deleted['jumlah_penggunaan'] * (double)1.60934;
+                     }
+                    $this->db->query("update asset_perlengkapan set umur= umur+".$penggunaan." 
+                                 where id in (select id_asset_perlengkapan from ext_asset_angkutan_darat_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." ) ");
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);

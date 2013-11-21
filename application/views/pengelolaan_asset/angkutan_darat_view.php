@@ -467,6 +467,8 @@
                 var data = {
                     id: obj.data.id,
                     id_ext_asset:obj.data.id_ext_asset,
+                    satuan_penggunaan:obj.data.satuan_penggunaan,
+                    jumlah_penggunaan:obj.data.jumlah_penggunaan
                 };
                 arrayDeleted.push(data);
             });

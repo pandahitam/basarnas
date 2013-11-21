@@ -165,7 +165,7 @@ class Asset_Angkutan_Laut extends MY_Controller {
                 $this->db->set($dataPerlengkapanLaut);
                 $this->db->replace('ext_asset_angkutan_laut_perlengkapan');
                             //update asset perlengkapan, remove from warehouse, set kode induk asset
-            if($dataPerlengkapanLaut['id_asset_perlengkapan'] != ''  && $dataPerlengkapanLaut['id_asset_perlengkapan'] != 0)
+            if($dataPerlengkapanLaut['id_asset_perlengkapan'] != null  && $dataPerlengkapanLaut['id_asset_perlengkapan'] != 0)
             {
                 $query_data = $this->db->query("select kd_brg, no_aset, kd_lokasi from view_asset_angkutan_laut where id = ".$dataPerlengkapanLaut['id_ext_asset']);
                 $query_result = $query_data->row();
@@ -190,10 +190,18 @@ class Asset_Angkutan_Laut extends MY_Controller {
                 foreach($data as $deleted)
                 {
                     $deletedArray[] =$deleted['id'];
+                    if($deleted['id_asset_perlengkapan'] != null && $deleted['id_asset_perlengkapan'] != 0)
+                    {
+                        $updatedAssetPerlengkapan = $deleted['id_asset_perlengkapan'];
+                    }
                 }
                 $this->db->where_in('id',$deletedArray);
-                
 		$this->db->delete('ext_asset_angkutan_laut_perlengkapan');
+                if(!empty($updatedAssetPerlengkapan))
+                {
+                    $this->db->where_in('id',$updatedAssetPerlengkapan);
+                    $this->db->update('asset_perlengkapan',array('no_induk_asset'=>''));
+                }
 	}
         
         function requestIdExtAsset()
