@@ -1079,6 +1079,7 @@
             },
             toolbar: {
                 id: 'toolbar_alatbesar',
+                prefix:'asset_alatbesar', //semar
                 add: {
                     id: 'button_add_Alatbesar',
                     action: Alatbesar.Action.add

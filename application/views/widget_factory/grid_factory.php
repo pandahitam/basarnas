@@ -841,7 +841,8 @@
                             {header: 'id', dataIndex: 'id', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'id_penyimpanan', dataIndex: 'id_penyimpanan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
                             {header: 'id_penyimpanan_data_perlengkapan', dataIndex: 'id_penyimpanan_data_perlengkapan', width: 150, hidden: true, groupable: false, filter: {type: 'string'}},
-                            {header: 'No. Berita Acara Penyimpanan', dataIndex: 'nomor_berita_acara', width: 180, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'ID Warehouse', dataIndex: 'id_warehouse', width: 180, hidden: true, groupable: false, filter: {type: 'string'}},
+                            {header: 'Warehouse', dataIndex: 'nama_warehouse', width: 180, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Part Number', dataIndex: 'part_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                             {header: 'Qty Keluar', dataIndex: 'qty_keluar', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                         ]
@@ -1847,25 +1848,25 @@ var search = [{
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 id: setting.toolbar.id,
                 items: [{
-                        text: 'Tambah', id: setting.toolbar.add.id, disabled:(setting.toolbar.add.disabled == true)?true:false, iconCls: 'icon-add', handler: function() {
+                        text: 'Tambah', id: setting.toolbar.add.id, disabled:fnCheckControlButton(setting, 'insert'), iconCls: 'icon-add', handler: function() {
                             setting.toolbar.add.action();
                         },
-						disabled:fnCheckControlButton(setting, 'insert') //semar
+						 
                     }, '-', {
-                        text: 'Ubah', id: setting.toolbar.edit.id, disabled:(setting.toolbar.edit.disabled == true)?true:false, iconCls: 'icon-edit', handler: function() {
+                        text: 'Ubah', id: setting.toolbar.edit.id, disabled:fnCheckControlButton(setting, 'update'), iconCls: 'icon-edit', handler: function() {
                             setting.toolbar.edit.action();
                         },
-						disabled:fnCheckControlButton(setting, 'update') //semar
+						 
                     }, '-', {
-                        text: 'Hapus', id: setting.toolbar.remove.id, hidden:(setting.toolbar.remove.disabled == true)?true:false, iconCls: 'icon-delete', handler: function() {
+                        text: 'Hapus', id: setting.toolbar.remove.id, disabled:fnCheckControlButton(setting, 'delete'), iconCls: 'icon-delete', handler: function() {
                             setting.toolbar.remove.action();
                         },
-						disabled:fnCheckControlButton(setting, 'delete') //semar
+						 
                     }, '-', {
-                        text: 'Cetak', id: setting.toolbar.print.id, hidden:(setting.toolbar.print.disabled == true)?true:false, iconCls: 'icon-printer', handler: function() {
+                        text: 'Cetak', id: setting.toolbar.print.id, disabled:fnCheckControlButton(setting, 'print'), iconCls: 'icon-printer', handler: function() {
                             setting.toolbar.print.action();
                         },
-						disabled:fnCheckControlButton(setting, 'print') //semar
+						
                     }, '-', 
                             {
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',

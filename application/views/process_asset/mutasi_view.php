@@ -103,12 +103,16 @@ Mutasi.Action.remove = function(){
 Mutasi.Action.print = function() {
             var selected = Mutasi.Grid.grid.getSelectionModel().getSelection();
             var selectedData = "";
+            var selectedRecordsJSON = "";
             if (selected.length > 0)
             {
-                for (var i = 0; i < selected.length; i++)
-                {
-                    selectedData += selected[i].data.id + ",";
-                }
+                 var selectedRecords = selected.map(function(r){ return r.data });
+                 selectedRecordsJSON = Ext.encode(selectedRecords);
+//                for (var i = 0; i < selected.length; i++)
+//                {
+//                    selectedData += selected[i].data.id + ",";
+//                }
+                
             }
             var gridHeader = Mutasi.Grid.grid.getView().getHeaderCt().getVisibleGridColumns();
             var gridHeaderList = "";
@@ -132,7 +136,7 @@ Mutasi.Action.print = function() {
             my_form = document.createElement('FORM');
             my_form.name = 'myForm';
             my_form.method = 'POST';
-            my_form.action = BASE_URL + 'excel_management/exportToExcel/';
+            my_form.action = BASE_URL + 'excel_management/exportToExcelMutasiPenghapusan/';
 
             my_tb = document.createElement('INPUT');
             my_tb.type = 'HIDDEN';
@@ -164,7 +168,7 @@ Mutasi.Action.print = function() {
             my_tb = document.createElement('INPUT');
             my_tb.type = 'HIDDEN';
             my_tb.name = 'selectedData';
-            my_tb.value = selectedData;
+            my_tb.value = selectedRecordsJSON;
             my_form.appendChild(my_tb);
             document.body.appendChild(my_form);
 

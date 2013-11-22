@@ -974,6 +974,7 @@
             },
             toolbar: {
                 id: 'toolbar_perlengkapan',
+                prefix:'asset_perlengkapan', //semar
                 add: {
                     id: 'button_add_perlengkapan',
                     action: Perlengkapan.Action.add

@@ -41,6 +41,7 @@ var Center_PA = {
 				}
 		},
 		{text: 'Bangunan', iconCls: 'icon-tanah_bangunan',
+                                disabled:( window['asset_bangunan_access']!=undefined ? window['asset_bangunan_access'] : false ),
 				handler: function(){
 					Load_TabPage_Asset('bangunan_panel', BASE_URL + 'asset_bangunan/bangunan');
 				}, 
@@ -48,7 +49,7 @@ var Center_PA = {
 					text: 'Inventaris Asset - Bangunan'
 				}
 		},
-	  	{text: 'Peralatan', iconCls: 'icon-kendaraan', 
+	  	{text: 'Peralatan', iconCls: 'icon-kendaraan',disabled:( window['asset_alatbesar_access']!=undefined ? window['asset_alatbesar_access'] : false ), 
 				handler: function(){
 					Load_TabPage_Asset('alatbesar_panel', BASE_URL+'asset_alatbesar/alatbesar')
 				}, 
@@ -60,19 +61,19 @@ var Center_PA = {
                                 menu:{
                                     items:[
                                         {
-                                            text:"Angkutan Darat", iconCls: 'icon-book',
+                                            text:"Angkutan Darat", iconCls: 'icon-book',disabled:( window['asset_angkutanDarat_access']!=undefined ? window['asset_angkutanDarat_access'] : false ),
                                             handler: function(){
                                                 Load_TabPage_Asset('angkutan_darat_panel',BASE_URL+'asset_angkutan_darat/angkutan_darat')
                                             },
                                         },
                                         {
-                                            text:"Angkutan Laut", iconCls: 'icon-book',
+                                            text:"Angkutan Laut", iconCls: 'icon-book',disabled:( window['asset_angkutanLaut_access']!=undefined ? window['asset_angkutanLaut_access'] : false ),
                                             handler: function(){
                                                 Load_TabPage_Asset('angkutan_laut_panel',BASE_URL+'asset_angkutan_laut/angkutan_laut')
                                             },
                                         },
                                         {
-                                            text:"Angkutan Udara", iconCls: 'icon-book',
+                                            text:"Angkutan Udara", iconCls: 'icon-book',disabled:( window['asset_angkutanUdara_access']!=undefined ? window['asset_angkutanUdara_access'] : false ),
                                             handler: function(){
                                                 Load_TabPage_Asset('angkutan_udara_panel',BASE_URL+'asset_angkutan_udara/angkutan_udara')
                                             },
@@ -90,7 +91,7 @@ var Center_PA = {
 					text: 'Inventaris Asset - Angkutan'
 				}
 		},
-		{text: 'Perairan', iconCls: 'icon-book', 
+		{text: 'Perairan', iconCls: 'icon-book', disabled:( window['asset_perairan_access']!=undefined ? window['asset_perairan_access'] : false ),
                                 handler: function(){
                                     Load_TabPage_Asset('perairan_panel',BASE_URL+'asset_perairan/perairan')
                                 }, 
@@ -98,7 +99,7 @@ var Center_PA = {
                                     text: 'Inventaris Asset - Perairan'
                                 }
                 },
-                {text: 'Senjata', iconCls: 'icon-book', 
+                {text: 'Senjata', iconCls: 'icon-book', disabled:( window['asset_senjata_access']!=undefined ? window['asset_senjata_access'] : false ),
                                 handler: function(){
                                     Load_TabPage_Asset('senjata_panel',BASE_URL+'asset_senjata/senjata')
                                 }, 
@@ -106,7 +107,7 @@ var Center_PA = {
                                     text: 'Inventaris Asset - Senjata'
                                 }
                 },
-                {text: 'Ruang', iconCls: 'icon-book', 
+                {text: 'Ruang', iconCls: 'icon-book',disabled:( window['asset_ruang_access']!=undefined ? window['asset_ruang_access'] : false ), 
                                 handler: function(){
                                     Load_TabPage_Asset('ruang_panel',BASE_URL+'asset_ruang/ruang')
                                 }, 
@@ -114,7 +115,7 @@ var Center_PA = {
                                     text: 'Inventaris Asset - Ruang'
                                 }
                 },
-                {text: 'Luar', iconCls: 'icon-book', 
+                {text: 'Luar', iconCls: 'icon-book', disabled:( window['asset_luar_access']!=undefined ? window['asset_luar_access'] : false ),
                                 handler: function(){
                                     Load_TabPage_Asset('luar_panel',BASE_URL+'asset_luar/luar')
                                 }, 
@@ -122,7 +123,7 @@ var Center_PA = {
                                     text: 'Inventaris Asset - Luar'
                                 }
                 },
-                {text: 'Perlengkapan', iconCls: 'icon-book', 
+                {text: 'Perlengkapan', iconCls: 'icon-book',disabled:( window['asset_perlengkapan_access']!=undefined ? window['asset_perlengkapan_access'] : false ), 
                                 handler: function(){
                                     Load_TabPage_Asset('perlengkapan_panel',BASE_URL+'asset_perlengkapan/perlengkapan')
                                 }, 

@@ -1167,8 +1167,7 @@
                 id: 'search_tanah'
             },
             toolbar: {
-				prefix:'asset_tanah', //semar
-				
+		prefix:'asset_tanah', //semar
                 id: 'toolbar_tanah',
                 add: {
                     id: 'button_add_tanah',

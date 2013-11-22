@@ -30,7 +30,7 @@ class Asset_Perlengkapan extends MY_Controller {
             
             $partNumberDetails = $this->model->get_partNumberDetails($data['part_number']);
             $data['kd_brg'] = $partNumberDetails->kd_brg;
-//            $data['umur'] = $partNumberDetails->umur_maks;
+            $data['umur'] = $partNumberDetails->umur_maks;
             
 //            if($data['kd_brg'] == '' || $data['kd_brg'] == null)
 //            {
@@ -124,6 +124,7 @@ class Asset_Perlengkapan extends MY_Controller {
                 }
                 else
                 {
+                    $dataSimak['umur'] = $partNumberDetails->umur_maks;
                     $this->createLog('INSERT ASSET PERLENGKAPAN','asset_perlengkapan');
                 }
                 

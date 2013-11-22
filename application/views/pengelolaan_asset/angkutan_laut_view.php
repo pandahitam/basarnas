@@ -1403,6 +1403,7 @@
             },
             toolbar: {
                 id: 'toolbar_angkutanLaut',
+                prefix:'asset_angkutanLaut', //semar
                 add: {
                     id: 'button_add_AngkutanLaut',
                     action: AngkutanLaut.Action.add

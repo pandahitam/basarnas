@@ -1035,6 +1035,7 @@
             },
             toolbar: {
                 id: 'toolbar_perairan',
+                prefix:'asset_perairan', //semar
                 add: {
                     id: 'button_add_perairan',
                     action: Perairan.Action.add

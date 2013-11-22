@@ -119,6 +119,7 @@
                     var form = Form.secondaryWindowAsset(InventoryPengeluaran.dataStoreParts,'add');
                     form.insert(0, Form.Component.dataInventoryPerlengkapanPengeluaran());
                     form.insert(1, Form.Component.dataInventoryPerlengkapan(true));
+                    Reference.Data.warehouseInventoryPengeluaran.changeParams({params:{create:true}});
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
         };
@@ -152,6 +153,7 @@
                         });
                          form.getForm().setValues(data);
                     }
+                    Reference.Data.warehouseInventoryPengeluaran.changeParams({params:{edit:true}});
                     Modal.assetSecondaryWindow.add(form);
                     Modal.assetSecondaryWindow.show();
 

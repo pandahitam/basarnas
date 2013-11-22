@@ -34,13 +34,16 @@ class inventory_perlengkapan extends MY_Controller {
                    
                     if($row->kd_brg == '')
                     {
-                        $row->kd_brg = '-';
+                        $row->kd_brg = 0;
                     }
                     $no_aset = $this->noAssetGenerator($row->kd_brg,$row->kd_lokasi);
+                    $data_part = $this->model->get_partNumberDetails($row->part_number);
+                    $umur = $data_part->umur_maks;
                     $asset_perlengkapan_data = array(
                         'kd_brg'=>$row->kd_brg,
                         'kd_lokasi'=>$row->kd_lokasi,
                         'part_number'=>$row->part_number,
+                        'umur'=>$umur,
                         'kondisi'=>$row->status_barang,
                         'dari'=>$row->asal_barang,
                         'serial_number'=>$row->serial_number,
@@ -63,13 +66,16 @@ class inventory_perlengkapan extends MY_Controller {
                 
                 if($data->kd_brg == '')
                 {
-                    $data->kd_brg = '-';
+                    $data->kd_brg = 0;
                 }
                 $no_aset = $this->noAssetGenerator($data->kd_brg,$data->kd_lokasi);
+                $data_part = $this->model->get_partNumberDetails($data->part_number);
+                $umur = $data_part->umur_maks;
                 $asset_perlengkapan_data = array(
                         'kd_brg'=>$data->kd_brg,
                         'kd_lokasi'=>$data->kd_lokasi,
                         'part_number'=>$data->part_number,
+                        'umur'=>$umur,
                         'kondisi'=>$data->status_barang,
                         'dari'=>$data->asal_barang,
                         'serial_number'=>$data->serial_number,
@@ -234,6 +240,8 @@ class inventory_perlengkapan extends MY_Controller {
          */
 	function createInventoryPenyimpananPerlengkapan(){
             $data = json_decode($this->input->post('data'));
+//            var_dump($data);
+//            die;
             
             
             if(count($data) > 1)
@@ -242,6 +250,7 @@ class inventory_perlengkapan extends MY_Controller {
                 {
                     unset($row->nama_warehouse,$row->nama_ruang,$row->nama_rak,$row->invalid_grid_field_count);
                     $this->db->insert('inventory_penyimpanan_data_perlengkapan',$row);
+                    $last_insert_id_penyimpanan = $this->db->insert_id();
                     if($row->id_asset_perlengkapan != 0 && $row->id_asset_perlengkapan != null)
                     {
                         $query = "select b.id_pengadaan from inventory_penyimpanan as a
@@ -259,14 +268,46 @@ class inventory_perlengkapan extends MY_Controller {
                         $this->db->update('asset_perlengkapan',$data_warehouse);
                         
                     }
+                    else
+                    {
+                        $data_part = $this->model->get_partNumberDetails($row->part_number);
+                        $umur = $data_part->umur_maks;
+                        $query = $this->db->query("select * from inventory_penyimpanan where id=$row->id_source");
+                        $result = $query->row();
+                         $perlengkapan_data = array(
+                            "kd_lokasi"=>$result->kd_lokasi,
+                            "kode_unor"=>$result->kode_unor,
+                            "kd_brg"=>$row->kd_brg,
+                            "umur"=>$umur,
+                            "no_aset"=>$this->noAssetGenerator($row->kd_brg, $result->kd_lokasi),
+                            "kuantitas"=>$row->qty,
+                            "kondisi"=>$row->status_barang,
+                            "dari"=>$row->asal_barang,
+                            "part_number"=>$row->part_number,
+                            "serial_number"=>$row->serial_number,
+                            "warehouse_id"=>$row->id_warehouse,
+                            "ruang_id"=>$row->id_warehouse_ruang,
+                            "rak_id"=>$row->id_warehouse_rak
+                        );
+                         $this->db->insert("asset_perlengkapan",$perlengkapan_data);
+                         $last_insert_id_perlengkapan = $this->db->insert_id();
+                         $update_data = array(
+                             "id_asset_perlengkapan"=>$last_insert_id_perlengkapan
+                         );
+                         $this->db->where("id",$last_insert_id_penyimpanan);
+                         $this->db->update("inventory_penyimpanan_data_perlengkapan",$update_data);
+                         
+                    }
                     $this->createLog('INSERT INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$row->id_source.']','inventory_penyimpanan_data_perlengkapan');
                     
                 }
+                
             }
             else
             {
                 unset($data->nama_warehouse,$data->nama_ruang,$data->nama_rak,$data->invalid_grid_field_count);
                 $this->db->insert('inventory_penyimpanan_data_perlengkapan',$data);
+                $last_insert_id_penyimpanan = $this->db->insert_id();
                 if($data->id_asset_perlengkapan != 0 && $data->id_asset_perlengkapan != null)
                 {
                     $query = "select b.id_pengadaan from inventory_penyimpanan as a
@@ -283,6 +324,36 @@ class inventory_perlengkapan extends MY_Controller {
                     $this->db->where('id',$data->id_asset_perlengkapan);
                     $this->db->update('asset_perlengkapan',$data_warehouse);
                     
+                }
+                else
+                {
+                    $data_part = $this->model->get_partNumberDetails($data->part_number);
+                    $umur = $data_part->umur_maks;
+                    $query = $this->db->query("select * from inventory_penyimpanan where id=$data->id_source");
+                    $result = $query->row();
+                     $perlengkapan_data = array(
+                        "kd_lokasi"=>$result->kd_lokasi,
+                        "kode_unor"=>$result->kode_unor,
+                        "kd_brg"=>$data->kd_brg,
+                        "kuantitas"=>$data->qty,
+                        "umur"=>$umur,
+                        "no_aset"=>$this->noAssetGenerator($data->kd_brg, $result->kd_lokasi),
+                        "kondisi"=>$data->status_barang,
+                        "dari"=>$data->asal_barang,
+                        "part_number"=>$data->part_number,
+                        "serial_number"=>$data->serial_number,
+                        "warehouse_id"=>$data->id_warehouse,
+                        "ruang_id"=>$data->id_warehouse_ruang,
+                        "rak_id"=>$data->id_warehouse_rak
+                    );
+                     $this->db->insert("asset_perlengkapan",$perlengkapan_data);
+                     $last_insert_id_perlengkapan = $this->db->insert_id();
+                     $update_data = array(
+                         "id_asset_perlengkapan"=>$last_insert_id_perlengkapan
+                     );
+                     $this->db->where("id",$last_insert_id_penyimpanan);
+                     $this->db->update("inventory_penyimpanan_data_perlengkapan",$update_data);
+
                 }
                 $this->createLog('INSERT INVENTORY PENYIMPANAN PERLENGKAPAN [id_inventory_penyimpanan='.$data->id_source.']','inventory_penyimpanan_data_perlengkapan');
             }
@@ -424,12 +495,14 @@ class inventory_perlengkapan extends MY_Controller {
          */
 	function createInventoryPengeluaranPerlengkapan(){
             $data = json_decode($this->input->post('data'));
+//            var_dump($_POST);
+//            die;
             if(count($data) > 1)
             {
                 foreach($data as $row)
                 {
                     $qty_akhir = ($row->qty) - ($row->qty_keluar);
-                    unset($row->qty,$row->nomor_berita_acara,$row->part_number);
+                    unset($row->qty,$row->nomor_berita_acara,$row->part_number,$row->nama_warehouse);
                     $this->db->insert('inventory_pengeluaran_data_perlengkapan',$row);
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$row->id_penyimpanan_data_perlengkapan";
                     $this->db->query($query);
@@ -439,7 +512,7 @@ class inventory_perlengkapan extends MY_Controller {
             else
             {
                 $qty_akhir = ($data->qty) - ($data->qty_keluar);
-                unset($data->qty,$data->nomor_berita_acara,$data->part_number);
+                unset($data->qty,$data->nomor_berita_acara,$data->part_number,$data->nama_warehouse);
                 $this->db->insert('inventory_pengeluaran_data_perlengkapan',$data);
                 $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$data->id_penyimpanan_data_perlengkapan";
                 $this->db->query($query);
@@ -456,7 +529,7 @@ class inventory_perlengkapan extends MY_Controller {
                 foreach($data as $row)
                 {
                     $qty_akhir = ($row->qty) - ($row->qty_keluar);
-                    unset($row->qty,$row->nomor_berita_acara,$row->part_number);
+                    unset($row->qty,$row->nomor_berita_acara,$row->part_number,$row->nama_warehouse);
                     $this->db->set($row);
                     $this->db->replace('inventory_pengeluaran_data_perlengkapan');
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$row->id_penyimpanan_data_perlengkapan";
@@ -467,7 +540,7 @@ class inventory_perlengkapan extends MY_Controller {
             else
             {
                     $qty_akhir = ($data->qty) - ($data->qty_keluar);
-                    unset($data->qty,$data->nomor_berita_acara,$data->part_number);
+                    unset($data->qty,$data->nomor_berita_acara,$data->part_number,$data->nama_warehouse);
                     $this->db->set($data);
                     $this->db->replace('inventory_pengeluaran_data_perlengkapan');
                     $query = "update inventory_penyimpanan_data_perlengkapan set qty= $qty_akhir where id=$data->id_penyimpanan_data_perlengkapan";

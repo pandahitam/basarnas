@@ -1007,6 +1007,7 @@
             },
             toolbar: {
                 id: 'toolbar_ruang',
+                prefix:'asset_ruang', //semar
                 add: {
                     id: 'button_add_ruang',
                     action: Ruang.Action.add

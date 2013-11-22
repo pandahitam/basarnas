@@ -1261,6 +1261,7 @@
             },
             toolbar: {
                 id: 'toolbar_bangunan',
+                prefix:'asset_bangunan', //semar
                 add: {
                     id: 'button_add_bangunan',
                     action: Bangunan.Action.add

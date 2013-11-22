@@ -1540,6 +1540,7 @@
             },
             toolbar: {
                 id: 'toolbar_angkutanUdara',
+                prefix:'asset_angkutanUdara', //semar
                 add: {
                     id: 'button_add_AngkutanUdara',
                     action: AngkutanUdara.Action.add

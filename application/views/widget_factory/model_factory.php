@@ -616,6 +616,6 @@ Ext.define('MPartsPenyimpanan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPartsPengeluaran', {extend: 'Ext.data.Model',
-    fields: ['id','id_penyimpanan','id_source','id_penyimpanan_data_perlengkapan',
+    fields: ['id','id_warehouse','nama_warehouse','id_source','id_penyimpanan_data_perlengkapan',
             'qty_keluar','qty','nomor_berita_acara','part_number']
 });

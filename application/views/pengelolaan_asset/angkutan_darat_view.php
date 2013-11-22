@@ -1448,6 +1448,7 @@
             },
             toolbar: {
                 id: 'toolbar_angkutanDarat',
+                prefix:'asset_angkutanDarat', //semar
                 add: {
                     id: 'button_add_AngkutanDarat',
                     action: AngkutanDarat.Action.add

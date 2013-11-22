@@ -36,6 +36,7 @@
             penyimpanan: BASE_URL + 'combo_ref/combo_penyimpanan',
             partsInventoryPengeluaran: BASE_URL + 'combo_ref/combo_parts_inventory_pengeluaran',
             assetPerlengkapanPart: BASE_URL + 'combo_ref/combo_asset_perlengkapan_part',
+            warehouseInventoryPengeluaran: BASE_URL +'combo_ref/combo_warehouse_inventory_pengeluaran',
             provinsi:BASE_URL + 'combo_ref/combo_prov',
             kabupaten:BASE_URL + 'combo_ref/combo_kabkota',
             unkerForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unit_kerja_referensi_warehouse_ruang_rak',
@@ -150,7 +151,13 @@
             autoLoad: true
         });
         
-     
+        Reference.Data.warehouseInventoryPengeluaran = new Ext.create('Ext.data.Store', {
+            fields: ['id', 'nama'], storeId: 'DataWarehouseInventoryPengeluaran',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.warehouseInventoryPengeluaran, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         Reference.Data.warehouse = new Ext.create('Ext.data.Store', {
             fields: ['id', 'nama'], storeId: 'DataWarehouse',
@@ -11854,24 +11861,27 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         id:'inventory_pengeluaran_data_perlengkapan_parts_nomor_berita_acara',
                                     },
                                     {
-                                    allowBlank:false,
+                                        xtype:'hidden',
+                                        name:'nama_warehouse',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_nama_warehouse',
+                                    },
+                                    {
                                     readOnly:readOnly,
                                     xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'No Berita Acara Penyimpanan *',
-                                    name: 'id_penyimpanan',
-                                    id:'inventory_pengeluaran_data_perlengkapan_parts_id_penyimpanan',
-                                    store: Reference.Data.penyimpanan,
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'id_warehouse',
+                                    id:'inventory_pengeluaran_data_perlengkapan_id_warehouse',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseInventoryPengeluaran,
                                     valueField: 'id',
-                                    editable:false,
-                                    displayField: 'nomor_berita_acara', emptyText: 'Pilih Penyimpanan',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
                                         'change': {
                                             fn: function(obj, value) {
-                                               
                                                 if (value !== null && value !== '')
                                                 {
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_nama_warehouse').setValue(obj.rawValue);
                                                     var excluded_id_penyimpanan_data_perlengkapan = '';
                                                     Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_nomor_berita_acara').setValue(obj.rawValue);
                                                     if(readOnly != true)
@@ -11882,13 +11892,13 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                     Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setValue('');
                                                     var gridData = Ext.getCmp('grid_inventory_pengeluaran_parts').getStore().getRange();
                                                         Ext.Array.each(gridData,function(key,index,self){
-                                                        if(gridData[index].data.id_penyimpanan == value)
+                                                        if(gridData[index].data.id_warehouse == value)
                                                         {
                                                             excluded_id_penyimpanan_data_perlengkapan += gridData[index].data.id_penyimpanan_data_perlengkapan +',';
                                                         }
                                                      });
                                                     }
-                                                    Reference.Data.partsInventoryPengeluaran.changeParams({params: {id_open: 1, id_penyimpanan: value, excluded_id_penyimpanan_data_perlengkapan:excluded_id_penyimpanan_data_perlengkapan.slice(0,-1)}});
+                                                    Reference.Data.partsInventoryPengeluaran.changeParams({params: {id_open: 1, id_warehouse: value, excluded_id_penyimpanan_data_perlengkapan:excluded_id_penyimpanan_data_perlengkapan.slice(0,-1)}});
                                                     Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setDisabled(false);
                                                 }
 

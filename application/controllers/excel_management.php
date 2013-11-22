@@ -503,9 +503,132 @@ class Excel_Management extends CI_Controller{
       $objWriter->save('php://output');
     }
     
-    public function exportLaporanKategoriBarangTotalAset()
-    {
-        
-    }
+  public function exportToExcelMutasiPenghapusan()
+  {
+      
+      $modelName = $_POST["serverSideModelName"];
+      $title = $_POST["title"];
+      $columnString = $_POST["gridHeaderList"];
+      $selectedKeys = $_POST["selectedData"];
+      $columnKeys = $_POST["primaryKeys"];
+     
+      $this->load->model($modelName);
+      $queryResult = $this->$modelName->get_AllData();
+      $data = $queryResult['data'];
+      $excel = new PHPExcel();
+      $header = array();
+      $header_temp = array();
+      $content = array();
+      $content_array = array();
+      $columnToInclude = array();
+      
+      $getColumnString = array_filter(explode('^^',$columnString));
+      foreach($getColumnString as $value)
+      {
+          $y=explode('&&',$value);
+          $header_temp[$y[1]]=$y[0];
+          $columnToInclude[$y[1]] = $y[0];
+//          array_push($header_temp,$y[0]);
+//          array_push($columnToInclude,$y[1]);
+      }
+      
+      
+      
+      if($selectedKeys != '')
+      {
+         $selectedData = json_decode($selectedKeys);
+      }
+      if($columnKeys!='')
+      {
+          $selectedColumn = array_filter(explode(',',$columnKeys));
+      }
+      /* get the data to array*/
+      for( $i=0; $i<count($data); $i++)
+      {
+          if($selectedKeys == '' || $columnKeys == '') //if selected Keys = '' then print all data
+          {
+            foreach ($data[$i] as $key=>$value) {
+              if(isset($columnToInclude[strtolower($key)]))
+              {
+                   if($value == "")
+                   {
+                      //Set a value for cell(s) that has no value, to prevent cell overlapping
+                      $content[$key] = " "; 
+                   }
+                   else if(strtolower($key) == "jenis" || strtolower($key)== "subjenis")
+                   {
+                      $content[$key] = $this->valueParser($modelName, $key, $value);
+                   }
+                   else
+                   {
+                       $content[$key] = $value; 
+                   }
+                   if($i === 0)
+                   {
+//                      $x = array_search($key, $columnToInclude);
+//                       array_push($header,$header_temp[$x]);
+                      $header[]=$header_temp[$key];
+                   }
+              }
+            }
+            array_push($content_array, $content);
+            
+          }
+          else //if selected keys != '', print selected data
+          {
+              $dataTemp = array();
+//            var_dump(array($selectedData,$columnToInclude));
+//            die;
+                foreach($selectedData[$i] as $key=>$value)
+                {
+                    if(isset($columnToInclude[$key]))
+                    {
+                        $dataTemp[$key] = $value;
+                        if($i == 0)
+                        {
+                             $header[]=$header_temp[$key];
+                        }
+                    }
+                }
+                array_push($content_array, $dataTemp);
+                if($i+1 == count($selectedData))
+                {
+                    break 1;
+                }
+          }
+         
+      }
+      
+      $totalColumnCount = count($header);
+      $activeSheet = $excel->getActiveSheet();
+      /*Set title column, its style, and merge its row */
+      $activeSheet->setCellValue('A1',urldecode($title));
+      $activeSheet->mergeCells("A1:".PHPExcel_Cell::stringFromColumnIndex($totalColumnCount - 1)."1");
+      $activeSheet->getStyle('A1')->getFont()->setSize(20);
+      
+      
+      /*fill data to excel */
+      $activeSheet->fromArray($header,NULL,'A3');
+      $activeSheet->fromArray($content_array,NULL,'A4');
+      
+      
+      /*Set column width to autosize and set the header's cells to bold */
+      for($i=0; $i<$totalColumnCount; $i++)
+      {
+          $activeSheet->getColumnDimension(PHPExcel_Cell::stringFromColumnIndex($i))->setAutoSize(true);
+          $activeSheet->getStyle(PHPExcel_Cell::stringFromColumnIndex($i)."3")->getFont()->setBold(true);
+      }
+      
+      /*before excel download settings */
+      $today = date("Y-m-d");  
+      $filename= $title."(".$today.")"; 
+//      header('Content-Type: application/vnd.ms-excel'); 
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); 
+      header('Content-Disposition: attachment;filename="'.$filename.'"'); 
+      header('Cache-Control: max-age=0');
+//      $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel5'); 
+      $objWriter = new PHPExcel_Writer_Excel2007($excel); 
+      $objWriter->save('php://output');
+  }
 }
 ?>

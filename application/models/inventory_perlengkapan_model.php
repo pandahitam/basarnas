@@ -86,14 +86,20 @@ class Inventory_Perlengkapan_Model extends MY_Model{
         
         function get_InventoryPerlengkapanPengeluaran($id)
         {
-            $query = "select t.*, a.nomor_berita_acara, b.part_number
+            $query = "select t.*,a.nama as nama_warehouse, b.part_number
                       FROM inventory_pengeluaran_data_perlengkapan as t
-                      LEFT JOIN inventory_penyimpanan as a on a.id = t.id_penyimpanan
+                      LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
                       LEFT JOIN inventory_penyimpanan_data_perlengkapan as b on b.id = t.id_penyimpanan_data_perlengkapan
                       where t.id_source =$id";
             return $this->Get_By_Query($query); 
         }
         
+        function get_partNumberDetails($part_number)
+        {
+            $this->db->where('part_number',"$part_number");
+            $query = $this->db->get('ref_perlengkapan');
+            return $query->row();
+        }
 	
 	
 //	function ConstructKode($kode_golongan = NULL,$kode_asset = NULL){

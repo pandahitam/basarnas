@@ -1037,6 +1037,7 @@
             },
             toolbar: {
                 id: 'toolbar_senjata',
+                prefix:'asset_senjata', //semar
                 add: {
                     id: 'button_add_Senjata',
                     action: Senjata.Action.add

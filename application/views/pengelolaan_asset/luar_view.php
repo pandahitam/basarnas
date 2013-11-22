@@ -1037,6 +1037,7 @@
             },
             toolbar: {
                 id: 'toolbar_luar',
+                prefix:'asset_luar', //semar
                 add: {
                     id: 'button_add_Luar',
                     action: Luar.Action.add
