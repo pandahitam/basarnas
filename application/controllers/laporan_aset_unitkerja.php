@@ -40,35 +40,35 @@ class laporan_aset_unitkerja extends MY_Controller {
                 $tahun = $_POST['tahun'];
             }
             
-            if($kd_unor !=null || $kd_unor != '')
+            if($kd_unor !=null && $kd_unor != '')
             {
                 if($kd_lokasi !=null && $tahun !=null)
                 {
                     $query = $this->db->query( "select 
                     (select (sum(rph_aset)) from asset_alatbesar as t 
                     LEFT JOIN ext_asset_alatbesar AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Peralatan', 
                     (select (sum(rph_aset)) from asset_angkutan as t LEFT JOIN ext_asset_angkutan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Angkutan',
                     (select (sum(rph_aset)) from asset_bangunan as t LEFT JOIN ext_asset_bangunan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Bangunan',
                     (select (sum(rph_aset)) from asset_perairan as t LEFT JOIN ext_asset_perairan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Perairan',
                     (select (sum(rph_aset)) from asset_senjata as t LEFT JOIN ext_asset_senjata AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Senjata',
                     (select (sum(rph_aset)) from asset_tanah as t LEFT JOIN ext_asset_tanah AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
-                    as 'Tanah'
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    as 'Tanah',
                     (select (sum(rph_aset)) from ext_asset_dil as t 
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Luar',
                     (select (sum(rph_aset)) from ext_asset_ruang as t 
-                    where kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
+                    where t.kd_lokasi='".$kd_lokasi."' and YEAR(tgl_buku) ='".$tahun."' and kode_unor ='".$kd_unor."') 
                     as 'Ruang'");
                     $result = $query->row_array();
                     $result_array = array();
@@ -146,35 +146,35 @@ class laporan_aset_unitkerja extends MY_Controller {
 //                          UNION
                         $query = "select kode_unor,kd_lokasi,no_aset,kd_brg,type,merk,kondisi,kategori_aset,rph_aset from
                           (
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Peralatan' as kategori_aset,rph_aset from asset_alatbesar as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Peralatan' as kategori_aset,t.rph_aset from asset_alatbesar as t
                           LEFT JOIN ext_asset_alatbesar AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Angkutan' as kategori_aset,rph_aset from asset_angkutan as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Angkutan' as kategori_aset,t.rph_aset from asset_angkutan as t
                           LEFT JOIN ext_asset_angkutan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,'-','-','Bangunan' as kategori_aset,rph_aset from asset_bangunan as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,'-','-','Bangunan' as kategori_aset,t.rph_aset from asset_bangunan as t
                           LEFT JOIN ext_asset_angkutan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi,'Senjata' as kategori_aset,rph_aset from asset_senjata as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi,'Senjata' as kategori_aset,t.rph_aset from asset_senjata as t
                           LEFT JOIN ext_asset_senjata AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','DIL' as kategori_aset,rph_aset from ext_asset_dil as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','DIL' as kategori_aset,t.rph_aset from ext_asset_dil as t
                           LEFT JOIN ext_asset_dil AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Perairan' as kategori_aset,rph_aset from asset_perairan as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Perairan' as kategori_aset,t.rph_aset from asset_perairan as t
                           LEFT JOIN ext_asset_perairan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Ruang' as kategori_aset,rph_aset from ext_asset_ruang as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Ruang' as kategori_aset,t.rph_aset from ext_asset_ruang as t
                           LEFT JOIN ext_asset_ruang AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and b.kode_unor = '".$kd_unor."'
                           UNION
-                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Tanah' as kategori_aset,rph_aset from asset_tanah as t
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Tanah' as kategori_aset,t.rph_aset from asset_tanah as t
                           LEFT JOIN ext_asset_tanah AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
                           where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
                           ) as result

@@ -290,7 +290,7 @@ class Excel_Management extends CI_Controller{
      }
   }
   
-    public function exportLaporanUnkerTotalAset($unitkerja,$kd_lokasi,$tahun)
+    public function exportLaporanUnkerTotalAset($unitkerja,$kd_lokasi,$tahun,$kd_unor=null)
     {
       $excel = new PHPExcel();
       $active_sheet = $excel->getActiveSheet();
@@ -365,7 +365,9 @@ class Excel_Management extends CI_Controller{
       
       
       /* Data Row */
-       $query = "select ur_sskel,kd_lokasi,no_aset,kd_brg,type,merk,kondisi,kategori_aset,rph_aset,kuantitas,tgl_prl from
+      if($kd_unor == null)
+      {
+          $query = "select ur_sskel,kd_lokasi,no_aset,kd_brg,type,merk,kondisi,kategori_aset,rph_aset,kuantitas,tgl_prl from
                 (
                 select a.ur_sskel,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Peralatan' as kategori_aset,rph_aset,kuantitas,YEAR(tgl_prl) as tgl_prl from asset_alatbesar as t
                 LEFT JOIN ref_subsubkel as a on t.kd_brg = a.kd_brg
@@ -402,6 +404,48 @@ class Excel_Management extends CI_Controller{
 
 
                 ";
+      }
+      else
+      {
+          $query = "select kode_unor,kd_lokasi,no_aset,kd_brg,type,merk,kondisi,kategori_aset,rph_aset from
+                          (
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Peralatan' as kategori_aset,t.rph_aset from asset_alatbesar as t
+                          LEFT JOIN ext_asset_alatbesar AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi, 'Angkutan' as kategori_aset,t.rph_aset from asset_angkutan as t
+                          LEFT JOIN ext_asset_angkutan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,'-','-','Bangunan' as kategori_aset,t.rph_aset from asset_bangunan as t
+                          LEFT JOIN ext_asset_angkutan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,type,merk,kondisi,'Senjata' as kategori_aset,t.rph_aset from asset_senjata as t
+                          LEFT JOIN ext_asset_senjata AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','DIL' as kategori_aset,t.rph_aset from ext_asset_dil as t
+                          LEFT JOIN ext_asset_dil AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Perairan' as kategori_aset,t.rph_aset from asset_perairan as t
+                          LEFT JOIN ext_asset_perairan AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Ruang' as kategori_aset,t.rph_aset from ext_asset_ruang as t
+                          LEFT JOIN ext_asset_ruang AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and b.kode_unor = '".$kd_unor."'
+                          UNION
+                          select b.kode_unor,t.kd_lokasi,t.no_aset,t.kd_brg,'-','-','-','Tanah' as kategori_aset,t.rph_aset from asset_tanah as t
+                          LEFT JOIN ext_asset_tanah AS b ON t.kd_lokasi = b.kd_lokasi AND t.kd_brg = b.kd_brg AND t.no_aset = b.no_aset
+                          where t.kd_lokasi = '".$kd_lokasi."' and YEAR(t.tgl_buku) = '".$tahun."' and b.kode_unor = '".$kd_unor."'
+                          ) as result
+                          
+
+                          ";
+      }
+       
        $r = $this->db->query($query);
        $data = array();
        $totalRows = $r->num_rows(); 
@@ -417,6 +461,7 @@ class Excel_Management extends CI_Controller{
 //       die;
 //      $active_sheet->fromArray($data,NULL,'A10');
        $i=1;
+       $cellIndex = 0;
       foreach($data as $result)
       {
         $cellIndex = $i+9;

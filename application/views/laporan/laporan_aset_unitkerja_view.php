@@ -196,6 +196,7 @@ LaporanAsetUnitKerja.Container = {
                                                 var unorField = Ext.getCmp('laporan_aset_unitkerja_nama_unor');
                                                 if (unorField !== null) {
                                                     if (value.length > 0) {
+                                                        unorField.setValue('');
                                                         unorField.enable();
                                                         Reference.Data.unor.changeParams({params: {id_open: 1, kd_lokasi: value}});
                                                     }
@@ -293,7 +294,15 @@ LaporanAsetUnitKerja.Container = {
 
                                 if(unker != null && tahun != null)
                                 {
-                                    window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun;
+                                    if(unor != null && unor != '')
+                                    {
+                                        window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun+'/'+unor;
+                                    }
+                                    else
+                                    {
+                                        window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun;
+                                    }
+                                    
 //                                    LaporanAsetUnitKerja.DataLaporanGrid.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
 //                                    LaporanAsetUnitKerja.DataLaporanChart.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
 //                                    Ext.getCmp('laporan_aset_unit_kerja_container').add(LaporanAsetUnitKerja.ContainerLaporan).show();

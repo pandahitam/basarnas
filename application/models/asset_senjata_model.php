@@ -169,9 +169,9 @@ class Asset_Senjata_Model extends MY_Model{
 //            }
             
             $countQuery = "select count(*) as total
-                                FROM $this->table";
+                                FROM $this->viewTable";
             $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
-                              FROM $this->table";
+                              FROM $this->viewTable";
             if($start != null && $limit != null)
             {
                 $query = "$this->selectColumn

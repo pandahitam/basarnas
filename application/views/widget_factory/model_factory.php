@@ -201,7 +201,7 @@ Ext.define('MBangunan', {extend: 'Ext.data.Model',
             'kode_unor','image_url','document_url',
             'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel','ur_sskel', // kode barang
             ,'kd_klasifikasi_aset','nama_klasifikasi_aset',
-            'kd_lvl1','kd_lvl2','kd_lvl3',
+            'kd_lvl1','kd_lvl2','kd_lvl3','rph_aset'
         ]
 });
 

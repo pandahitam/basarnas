@@ -169,10 +169,10 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
 //            }	
             
             $countQuery = "select count(*) as total
-                               FROM $this->table
+                               FROM $this->viewTable
                               WHERE kd_brg LIKE '30205%'";
             $nilaiAssetQuery = "select sum(abs(rph_aset)) as nilai_asset
-                              FROM $this->table
+                              FROM $this->viewTable
                               WHERE kd_brg LIKE '30205%'";
             if($start != null && $limit != null)
             {

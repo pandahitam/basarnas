@@ -43,7 +43,7 @@ class asset_bangunan extends MY_Controller {
                         'kd_prov', 'kd_kab', 'kd_kec', 'kd_kel', 
                         'alamat', 'kd_rtrw', 'no_kibtnh', 
                         'dari', 'kondisi', 'unit_pmk', 
-                        'alm_pmk', 'catatan', 'rphwajar', 
+                        'alm_pmk', 'catatan', 'rphwajar', 'rph_aset',
                         'rphnjop', 'status', 'luas_dsr', 
                         'luas_bdg', 'jml_lt'
                 );

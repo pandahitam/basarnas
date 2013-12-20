@@ -1216,7 +1216,7 @@
                     {header: 'Unit Kerja', dataIndex: 'nama_unker', width: 130, groupable: true, filter: {type: 'string'}},
                     {header: 'Unit Organisasi', dataIndex: 'nama_unor', width: 130, groupable: true, filter: {type: 'string'}},
                     {header: 'Kuantitas', dataIndex: 'kuantitas', width: 70, groupable: false, filter: {type: 'numeric'}},
-                    {header: 'RPH Asset', dataIndex: 'rph_aset', width: 120, hidden: true, groupable: false, filter: {type: 'numeric'}},
+                    {header: 'RPH Asset', dataIndex: 'rph_aset', width: 120, hidden: false, groupable: false, filter: {type: 'numeric'}},
                     {header: 'No KIB', dataIndex: 'no_kib', width: 70, groupable: false, filter: {type: 'numeric'}},
                     {header: 'Type', dataIndex: 'type', width: 110, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Tahun Selesai', dataIndex: 'thn_sls', width: 90, groupable: false, hidden: true, filter: {type: 'string'}},
