@@ -165,12 +165,24 @@ LaporanAsetUnitKerja.ContainerLaporan = Ext.create(Ext.panel.Panel,{
                     items:[LaporanAsetUnitKerja.GridLaporan,LaporanAsetUnitKerja.LaporanChartContainer]
                     });
 
-LaporanAsetUnitKerja.Container = {
-  region: 'center', id:'laporan_aset_unit_kerja_container', layout: 'card', collapsible: false, margins: '0 0 0 0', width: '100%', border: false, autoScroll: true,
-  items: [LaporanAsetUnitKerja.ContainerLaporan],
-  tbar: Ext.create('Ext.toolbar.Toolbar', {
-	  layout: {overflowHandler: 'Menu'},
-		items: [{
+
+
+LaporanAsetUnitKerja.unker = function(edit) {
+            var component = {
+                xtype: 'fieldset',
+                title: 'UNIT KERJA/UNIT ORGANISASI',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
                                 xtype:'combo',
                                 fieldLabel: 'Unit Kerja',
                                 name: 'laporan_aset_unitkerja_nama_unker',
@@ -251,8 +263,15 @@ LaporanAsetUnitKerja.Container = {
 //                                        }
 //                                    }
 //                                }
-                            },
-                            {
+                            }]
+                    }, {
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
                                     xtype: 'combo',
                                     fieldLabel: 'Tahun',
                                     id:'laporan_aset_unitkerja_tahun',
@@ -262,17 +281,307 @@ LaporanAsetUnitKerja.Container = {
                                     valueField: 'year',
                                     displayField: 'year', emptyText: 'Year',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
-                            },'|',{
+                            },
+                            ]
+                    }]
+            };
+
+
+            return component;
+        };
+
+LaporanAsetUnitKerja.kode = function(edit) {
+            var component = {
+                xtype: 'fieldset',
+                title: 'BARANG',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_gol',
+                                id: 'kd_gol',
+                                listeners: {
+                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboGolongan = Ext.getCmp('nama_golongan');
+                                            if (comboGolongan !== null)
+                                            {
+                                                comboGolongan.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_bid',
+                                id: 'kd_bid',
+                                listeners: {
+                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboBidang = Ext.getCmp('nama_bidang');
+                                            if (comboBidang !== null)
+                                            {
+                                                comboBidang.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_kelompok',
+                                id: 'kd_kelompok',
+                                listeners: {
+                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboKelompok = Ext.getCmp('nama_kelompok');
+                                            if (comboKelompok !== null)
+                                            {
+                                                comboKelompok.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_skel',
+                                id: 'kd_skel',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboSubKelompok = Ext.getCmp('nama_subkel');
+                                            if (comboSubKelompok !== null)
+                                            {
+                                                comboSubKelompok.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, 
+//                            {
+//                                name: 'kd_sskel',
+//                                id: 'kd_sskel',
+//                                listeners: {
+//                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+//                                            var comboSubSubKelompok = Ext.getCmp('nama_subsubkel');
+//                                            if (comboSubSubKelompok !== null)
+//                                            {
+//                                                comboSubSubKelompok.setValue(value);
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+                            ]
+                    }, {
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Golongan',
+                                name: 'nama_golongan',
+                                id: 'nama_golongan',
+                                hideLabel: false,
+                                allowBlank: false,
+                                store: Reference.Data.golongan,
+                                valueField: 'kd_gol',
+                                displayField: 'ur_gol', emptyText: 'Golongan',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Golongan',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var bidangField = Ext.getCmp('nama_bidang');
+                                                var golonganField = Ext.getCmp('kd_gol');
+                                                if (golonganField !== null && bidangField !== null) {
+                                                    if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                        bidangField.enable();
+                                                        golonganField.setValue(value);
+                                                        Reference.Data.bidang.changeParams({params: {id_open: 1, kd_gol: value}});
+                                                    }
+                                                    else {
+                                                        bidangField.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('error');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'Kelompok',
+                                name: 'nama_kelompok',
+                                id: 'nama_kelompok',
+                                disabled: true,
+                                allowBlank: true,
+                                store: Reference.Data.kelompok,
+                                valueField: 'kd_kel',
+                                displayField: 'ur_kel', emptyText: 'Kelompok',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Kelompok',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var subKelompokField = Ext.getCmp('nama_subkel');
+                                            var kelompokField = Ext.getCmp('kd_kelompok');
+                                            var bidangFieldValue = Ext.getCmp('kd_bid').getValue();
+                                            var golonganFieldValue = Ext.getCmp('kd_gol').getValue();
+
+                                            if (kelompokField !== null && subKelompokField !== null && !isNaN(value)) {
+                                                kelompokField.setValue(value);
+                                                subKelompokField.enable();
+                                                Reference.Data.subKelompok.changeParams({params: {id_open: 1,
+                                                        kd_gol: golonganFieldValue,
+                                                        kd_bid: bidangFieldValue,
+                                                        kd_kel: value}});
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Bidang',
+                                name: 'nama_bidang',
+                                id: 'nama_bidang',
+                                disabled: true,
+                                allowBlank: true,
+                                store: Reference.Data.bidang,
+                                valueField: 'kd_bid',
+                                displayField: 'ur_bid', emptyText: 'Bidang',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Bidang',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var kelompokField = Ext.getCmp('nama_kelompok');
+                                            var bidangField = Ext.getCmp('kd_bid');
+                                            var golonganField = Ext.getCmp('kd_gol').getValue();
+                                            if (kelompokField !== null && bidangField !== null) {
+                                                if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                    kelompokField.enable();
+                                                    bidangField.setValue(value);
+                                                    Reference.Data.kelompok.changeParams({params: {id_open: 1, kd_gol: golonganField, kd_bid: value}});
+                                                }
+                                                else {
+                                                    kelompokField.disable();
+                                                }
+                                            }
+                                            else {
+                                                console.error('error');
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'Sub Kelompok',
+                                name: 'nama_subkel',
+                                id: 'nama_subkel',
+                                disabled: true,
+                                allowBlank: true,
+                                store: Reference.Data.subKelompok,
+                                valueField: 'kd_skel',
+                                displayField: 'ur_skel', emptyText: 'Sub Kelompok',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Sub Kelompok',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+//                                            var subSubKelompokField = Ext.getCmp('nama_subsubkel');
+//                                            var kelompokFieldValue = Ext.getCmp('kd_kelompok').getValue();
+//                                            var bidangFieldValue = Ext.getCmp('kd_bid').getValue();
+//                                            var golonganFieldValue = Ext.getCmp('kd_gol').getValue();
+//                                            var subkelField = Ext.getCmp('kd_skel');
+//
+//                                            if (subkelField !== null && subSubKelompokField !== null && !isNaN(value)) {
+//                                                subkelField.setValue(value);
+//                                                subSubKelompokField.enable();
+//                                                Reference.Data.subSubKelompok.changeParams({params: {id_open: 1,
+//                                                        kd_gol: golonganFieldValue,
+//                                                        kd_bid: bidangFieldValue,
+//                                                        kd_kel: kelompokFieldValue,
+//                                                        kd_skel: value}});
+//                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            ]
+                    }]
+            };
+
+
+            return component;
+        };
+      
+
+LaporanAsetUnitKerja.Container = {
+  region: 'center', id:'laporan_aset_unit_kerja_container', layout: 'card', collapsible: false, margins: '0 0 0 0', width: '100%', border: false, autoScroll: true,
+  items: [LaporanAsetUnitKerja.ContainerLaporan],
+  tbar: Ext.create('Ext.toolbar.Toolbar', {
+	  layout: 'column',
+		items: [
+                            LaporanAsetUnitKerja.unker(),{xtype:'splitter'},
+                            LaporanAsetUnitKerja.kode(),{xtype:'splitter'},
+                            {xtype:'fieldset',title:'TINDAKAN',items:[
+                            {
                             xtype : 'button',
                             text : "Tampilkan",
                             handler: function(){
                                 var unker = Ext.getCmp('laporan_aset_unitkerja_nama_unker').value;
                                 var unor = Ext.getCmp('laporan_aset_unitkerja_nama_unor').value;
                                 var tahun = Ext.getCmp('laporan_aset_unitkerja_tahun').value;
+                                debugger;
+                                var golongan = Ext.getCmp('kd_gol').value;
+                                var bidang = Ext.getCmp('kd_bid').value;
+                                var kelompok = Ext.getCmp('kd_kelompok').value;
+                                var sub_kelompok = Ext.getCmp('kd_skel').value;
                                 if(unker != null && tahun != null)
                                 {
-                                    LaporanAsetUnitKerja.DataLaporanGrid.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
-                                    LaporanAsetUnitKerja.DataLaporanChart.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
+                                    LaporanAsetUnitKerja.DataLaporanGrid.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun, golongan:golongan, bidang:bidang, kelompok:kelompok, sub_kelompok:sub_kelompok}});
+                                    LaporanAsetUnitKerja.DataLaporanChart.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun, golongan:golongan, bidang:bidang, kelompok:kelompok, sub_kelompok:sub_kelompok}});
 //                                    Ext.getCmp('laporan_aset_unit_kerja_container').add(LaporanAsetUnitKerja.ContainerLaporan).show();
                                 }
                                 else
@@ -290,18 +599,30 @@ LaporanAsetUnitKerja.Container = {
                                 var unker = Ext.getCmp('laporan_aset_unitkerja_nama_unker').value;
                                 var unor = Ext.getCmp('laporan_aset_unitkerja_nama_unor').value;
                                 var tahun = Ext.getCmp('laporan_aset_unitkerja_tahun').value;
+                                var golongan_val = Ext.getCmp('kd_gol').value;
+                                var bidang_val = Ext.getCmp('kd_bid').value;
+                                var kelompok_val = Ext.getCmp('kd_kelompok').value;
+                                var sub_kelompok_val = Ext.getCmp('kd_skel').value;
                                 var nama_unker = Ext.getCmp('laporan_aset_unitkerja_nama_unker').rawValue;
-
+                                
+                                var golongan = (golongan_val == undefined || golongan_val == "")?"":"/"+golongan_val;
+                                var bidang = (bidang_val == undefined || bidang_val == "")?"":"/"+bidang_val;
+                                var kelompok = (kelompok_val == undefined || kelompok_val == "")?"":"/"+kelompok_val;
+                                var sub_kelompok = (sub_kelompok_val == undefined || sub_kelompok_val == "")?"":"/"+sub_kelompok_val;
+                                
+                                var param_barang = golongan+bidang+kelompok+sub_kelompok;
+                                
                                 if(unker != null && tahun != null)
                                 {
-                                    if(unor != null && unor != '')
-                                    {
-                                        window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun+'/'+unor;
-                                    }
-                                    else
-                                    {
-                                        window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun;
-                                    }
+                                      if(unor !=  null && unor != '')
+                                      {
+                                          window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun+'/'+unor+param_barang;
+                                      }
+                                      else
+                                      {
+                                          window.location.href= BASE_URL+'excel_management/exportLaporanUnkerTotalAset/'+nama_unker+'/'+unker+'/'+tahun+'/0'+param_barang;
+                                      }
+                                      
                                     
 //                                    LaporanAsetUnitKerja.DataLaporanGrid.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
 //                                    LaporanAsetUnitKerja.DataLaporanChart.changeParams({params: {id_open: 1, kd_lokasi: unker, kd_unor:unor, tahun:tahun}});
@@ -313,9 +634,12 @@ LaporanAsetUnitKerja.Container = {
                                 }
                                 
                             }
-                        }]
+                        }
+                        ]}]
   })
 };
+
+
 
 //var Container_PA = {
 //	xtype: 'container', region: 'center', layout: 'border', border: false,

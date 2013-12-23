@@ -53,15 +53,6 @@ LaporanAsetKategoriBarang.DataLaporanChart = new Ext.create('Ext.data.Store', {
             });
             
 
-//var Tab_PA = Ext.createWidget('tabpanel', {
-//	id: 'Tab_PA', layout: 'fit', resizeTabs: true, enableTabScroll: false, deferredRender: true, border: false,
-//  defaults: {autoScroll:true},
-//  items: [{
-//      id: 'default_Tab_MD', 
-//      bodyPadding: 10,
-//      closable: false
-//  }]
-//});
 
 LaporanAsetKategoriBarang.LaporanChart = Ext.create('Ext.chart.Chart', {
                             width:800,
@@ -158,14 +149,9 @@ LaporanAsetKategoriBarang.GridLaporan = Ext.create('Ext.grid.Panel', {
                         { header: 'Rph Aset', dataIndex: 'rph_aset', width:150 }
                     ],
                     height: 300,
-//                    dockedItems: [{xtype: 'pagingtoolbar', store: LaporanAsetKategoriBarang.DataLaporanGrid, dock: 'bottom', displayInfo: true}],
-//                    width: 400,
-//                    renderTo: Ext.getBody()
                 });
 
 LaporanAsetKategoriBarang.ContainerLaporan = Ext.create(Ext.panel.Panel,{
-//                    id: 'LaporanAsetKategoriBarang_Container',
-//                    title: "Laporan Aset Unit Kerja", 
                     autoScroll: true, 
                     height: 600,
                     border:false,
@@ -216,7 +202,6 @@ LaporanAsetKategoriBarang.Container = {
                                 {
                                     LaporanAsetKategoriBarang.DataLaporanGrid.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
                                     LaporanAsetKategoriBarang.DataLaporanChart.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
-//                                    Ext.getCmp('Tab_PA').add(LaporanAsetKategoriBarang.ContainerLaporan).show();
                                 }
                                 else
                                 {
@@ -225,34 +210,10 @@ LaporanAsetKategoriBarang.Container = {
                                 
                             }
                             },
-//                            {
-//                            xtype : 'button',
-//                            text : "Cetak",
-//                            iconCls:'icon-printer',
-//                            handler: function(){
-//                                var kategori = Ext.getCmp('laporan_aset_kategoribarang_kategori').value;
-//                                var tahun = Ext.getCmp('laporan_aset_kategoribarang_tahun').value;
-//                                if(kategori != null && tahun != null)
-//                                {
-//                                    LaporanAsetKategoriBarang.DataLaporanGrid.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
-//                                    LaporanAsetKategoriBarang.DataLaporanChart.changeParams({params: {id_open: 1, kategori: kategori, tahun:tahun}});
-////                                    Ext.getCmp('Tab_PA').add(LaporanAsetKategoriBarang.ContainerLaporan).show();
-//                                }
-//                                else
-//                                {
-//                                    Ext.MessageBox.alert('Error','Harap mengisi kategori barang dan tahun terlebih dahulu');
-//                                }
-//                                
-//                            }
-//                        }
                         ]
   })
 };
 
-//var Container_PA = {
-//	xtype: 'container', region: 'center', layout: 'border', border: false,
-//  items: [Center_PA]
-//};
 
 var new_tabpanel = {
 	id: 'laporan_aset_kategoribarang_panel', title: 'Laporan Aset Kategori Barang', iconCls: 'icon-menu_impasing', border: false, closable: true, 
