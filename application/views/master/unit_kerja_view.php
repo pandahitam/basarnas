@@ -9,7 +9,8 @@
         Ext.namespace('UnitKerja', 'UnitKerja.reader', 'UnitKerja.proxy', 'UnitKerja.Data', 'UnitKerja.Grid', 'UnitKerja.Window', 'UnitKerja.Form', 'UnitKerja.Action', 'UnitKerja.URL');
         UnitKerja.URL = {
             read: BASE_URL + 'master_data/unitkerja_getAllData',
-            createUpdate: BASE_URL + 'master_data/unitkerja_modifyUnitKerja',
+            create: BASE_URL + 'master_data/unitkerja_createUnitKerja',
+            update: BASE_URL + 'master_data/unitkerja_modifyUnitKerja',
             remove: BASE_URL + 'master_data/unitkerja_deleteUnitKerja'
         };
 
@@ -36,12 +37,25 @@
         });
 
         UnitKerja.Form.create = function(data, edit) {
-            var setting = {
-                url: UnitKerja.URL.createUpdate,
+            if(edit == true)
+            {
+                var setting = {
+                url: UnitKerja.URL.update,
                 data: UnitKerja.Data,
                 isEditing: edit,
                
-            };
+                };
+            }
+            else if(edit == false)
+            {
+                var setting = {
+                url: UnitKerja.URL.create,
+                data: UnitKerja.Data,
+                isEditing: edit,
+               
+                };
+            }
+            
 
             var form = Form.referensiUnitKerja(setting);
 

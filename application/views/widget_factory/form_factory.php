@@ -2691,6 +2691,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 allowBlank: false,
                                 readOnly:setting.isEditing,
                                 store: Reference.Data.unker,
+                                editable:false,
                                 valueField: 'kdlok',
                                 displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
@@ -2740,6 +2741,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 allowBlank: true,
                                 readOnly:setting.isEditing,
                                 store: Reference.Data.unor,
+                                editable:false,
                                 valueField: 'kode_unor',
                                 displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
@@ -2784,6 +2786,203 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return form;
         }
         
+        
+        Form.referensiReferensiRuang = function(setting)
+        {
+            
+            var pilihUnkerUnor = {
+                xtype: 'fieldset',
+                itemId : 'unit_selection',
+                title: 'UNIT',
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lokasi',
+                                id: 'kd_lokasi',
+                                listeners: {
+                                    change: function(ob, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnker = Ext.getCmp('nama_unker');
+                                            var unorField = Ext.getCmp('nama_unor');
+                                                unorField.setValue('');
+                                            if (comboUnker !== null)
+                                            {
+                                                comboUnker.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kode_unor',
+                                id: 'kode_unor',
+                                listeners: {
+                                    change: function(obj, value) {
+//                                        if (edit)
+//                                        {
+                                            var comboUnor = Ext.getCmp('nama_unor');
+                                            if (comboUnor !== null)
+                                            {
+                                                comboUnor.setValue(value);
+                                            }
+//                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .99,
+                        layout: 'anchor',
+                        itemId:'column_unker',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Kerja *',
+                                name: 'nama_unker',
+                                id: 'nama_unker',
+                                itemId: 'unker',
+                                allowBlank: false,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.unker,
+                                valueField: 'kdlok',
+                                editable:false,
+                                displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(setting.isEditing != true)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+
+                                            if (value !== null)
+                                            {
+                                                var unorField = Ext.getCmp('nama_unor');
+                                                var kodeUnkerField = Ext.getCmp('kd_lokasi');
+                                                if (unorField !== null && kodeUnkerField !== null) {
+                                                    if (value.length > 0) {
+                                                        unorField.enable();
+                                                        Ext.getCmp('fieldset_ruang').setDisabled(false);
+                                                        kodeUnkerField.setValue(value);
+                                                        Reference.Data.unor.changeParams({params: {id_open: 1, kode_unker: value}});
+                                                    }
+                                                    else {
+                                                        unorField.disable();
+                                                        Ext.getCmp('fieldset_ruang').setDisabled(true);
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: ' Unit Organisasi',
+                                name: 'nama_unor',
+                                id: 'nama_unor',
+                                disabled: false,
+                                allowBlank: true,
+                                readOnly:setting.isEditing,
+                                store: Reference.Data.unor,
+                                valueField: 'kode_unor',
+                                editable:false,
+                                displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(setting.isEditing != true)
+                                            {
+                                                var dataStore = comboField.getStore();
+                                            var kd_lokasi = Utils.getUnkerCombo(form).getValue();
+                                            if (kd_lokasi !== null)
+                                            {
+                                                
+                                                dataStore.clearFilter();
+                                                dataStore.filter({property:"kd_lokasi", value:kd_lokasi});
+                                            }
+                                            comboField.expand();
+                                            }
+                                            
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var kodeUnorField = form.getForm().findField('kode_unor');
+                                            if (kodeUnorField !== null && !isNaN(value)) {
+                                                kodeUnorField.setValue(value);
+                                                console.log(kodeUnorField.getValue());
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    },]
+            };
+            
+            var formComponentReferensiRuang = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'RUANG',
+                    id:'fieldset_ruang',
+                    disabled:true,
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+                                        fieldLabel:'Kode Ruang',
+                                        name: 'kd_ruang',
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing,
+                                        maxLength:20,
+                                    },
+                                    {
+                                        fieldLabel:'Nama Ruang',
+                                        name: 'ur_ruang',
+                                        allowBlank:false,
+                                    }
+                                   ]
+                        }]
+                }];
+
+            var form = Form.panelReferensiReferensiRuang(setting.url,setting.data,setting.isEditing);
+            form.insert(0, pilihUnkerUnor);
+            form.insert(1, formComponentReferensiRuang);
+            
+            return form;
+        }
+        
+        //ruang pada penyimpanan
         Form.referensiRuang = function(setting)
         {
             var pilihUnkerUnor = {
@@ -5008,6 +5207,82 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 form.reset();
                                                 form.setValues({kode_prov:parseInt(formValues.kode_prov) + 1});
                                             }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiReferensiRuang = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensiReferensiRuang',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensi', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var kd_lokasi = formValues.kd_lokasi;
+                            var kd_ruang = formValues.kd_ruang;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkReferensiRuang',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{kd_lokasi:kd_lokasi, kd_ruang:kd_ruang, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            Form.panelReferensiReferensiRuang.close();
     
     
                                         },

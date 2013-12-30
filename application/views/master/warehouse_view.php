@@ -282,7 +282,7 @@
             }
         };
 
-        Warehouse.Grid.grid = Grid.processGrid(setting, Warehouse.Data);
+        Warehouse.Grid.grid = Grid.referensiGrid(setting, Warehouse.Data);
 
         var new_tabpanel_MD = {
             xtype: 'panel',

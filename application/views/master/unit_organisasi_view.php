@@ -189,10 +189,10 @@
                 title: 'Unit Organisasi',
                 column: [
                 {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                {header: "Kode Unor", dataIndex: 'kode_unor', groupable: false, width: 150},
-                {header: "Nama Unor", dataIndex: 'nama_unor', width: 300},
+                {header: "Kode Unor", dataIndex: 'kode_unor', groupable: false, width: 150, filter: {type: 'string'}},
+                {header: "Nama Unor", dataIndex: 'nama_unor', width: 300, filter: {type: 'string'}},
 //                {header: "Nama Jabatan", dataIndex: 'jabatan_unor', width: 300},
-                {header: "Nama Unit Kerja", dataIndex: 'nama_unker', width: 300},
+                {header: "Nama Unit Kerja", dataIndex: 'nama_unker', width: 300, filter: {type: 'string'}},
              
                 ]
             },

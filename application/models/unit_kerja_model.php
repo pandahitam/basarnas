@@ -8,26 +8,77 @@ class Unit_Kerja_Model extends MY_Model {
         $this->selectColumn = "SELECT kdlok, ur_upb, kd_pebin,kd_pbi,kd_ppbi,kd_upb,kd_subupb,kd_jk";
     }
 
-    function get_AllData($start = null, $limit = null) {
-        $result = array();
-        
-        if ($start != null && $limit != null) {
-            $query = "$this->selectColumn
-                            FROM $this->table AS t
-                            LIMIT $start,$limit";
-        } else {
-            $query = "$this->selectColumn
-                            FROM $this->table AS t
-                            ";
+    function get_AllData($start=null, $limit=null,$gridFilter = null, $searchByField = null){
+            $countQuery = "select count(*) as total
+                                FROM $this->table";
+            if($start !=null && $limit !=null)
+            {
+                $query = "$this->selectColumn 
+                        FROM $this->table
+                        LIMIT $start, $limit";
+                
+                if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->table
+                                where 
+                                kdlok like '%$searchByField%' OR
+                                ur_upb like '%$searchByField%'
+                                LIMIT $start, $limit";
+                     $countQuery = "select count(*) as total
+                                FROM $this->table
+                                where 
+                                kdlok like '%$searchByField%' OR
+                                ur_upb like '%$searchByField%'
+                             ";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                               FROM $this->table
+                               where $gridFilter
+                               LIMIT $start, $limit
+                                ";
+                     $countQuery = "select count(*) as total
+                                FROM $this->table
+                                where $gridFilter";
+                }
+            }
+            else
+            {
+                $query = "$this->selectColumn 
+                        FROM $this->table
+                        ";
+                
+                if($searchByField != null)
+                {
+                    $query = "$this->selectColumn
+                                FROM $this->table
+                                where 
+                                kdlok like '%$searchByField%' OR
+                                ur_upb like '%$searchByField%'             
+                                ";
+                     $countQuery = "select count(*) as total
+                                FROM $this->table
+                                where 
+                                kdlok like '%$searchByField%' OR
+                                ur_upb like '%$searchByField%' 
+                             ";
+                }
+                else if($gridFilter != null)
+                {
+                    $query = "$this->selectColumn
+                               FROM $this->table
+                               where $gridFilter
+                                ";
+                     $countQuery = "select count(*) as total
+                                FROM $this->table
+                                where $gridFilter";
+                }
+            }
+            
+            return $this->Get_By_Query_New($query,$countQuery);
         }
-        
-        return $this->Get_By_Query($query);
-
-//        $result["results"] = $returnedResult['data'];
-//        $result["total"] = $returnedResult['count'];
-//        
-//        return $result;
-    }
 
     function get_CountData() {
         

@@ -227,7 +227,7 @@
                 title: 'KELOMPOK PART',
                 column: [
                     {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
-                    {header: 'Id', dataIndex: 'id', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
+                    {header: 'Id', dataIndex: 'id', width: 130, hidden: true, groupable: false, filter: {type: 'string'}},
                     {header: 'Nama', dataIndex: 'nama_kelompok', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                     {header: 'Jenis Angkutan', dataIndex: 'jenis_asset', width: 130, hidden: false, groupable: false, filter: {type: 'string'}},
                 ]

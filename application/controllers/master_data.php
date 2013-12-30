@@ -27,6 +27,7 @@ class Master_Data extends MY_Controller {
         $this->load->model('Kelompok_Part_Model','',TRUE);
 	$this->load->model('Prov_Model','',TRUE);
         $this->load->model('KabKota_Model','',TRUE);
+        $this->load->model('Referensi_Ruang_Model','',TRUE);
 //		$this->load->model('Kec_Model','',TRUE);
 //		$this->load->model('Tasset_tanah_Model','',TRUE);		
 //		$this->load->model('Tasset_bangunan_Model','',TRUE);
@@ -242,13 +243,34 @@ class Master_Data extends MY_Controller {
     
         function unitkerja_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Unit_Kerja_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Unit_Kerja_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Unit_Kerja_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
 //			$total = $this->Unit_Kerja_Model->get_CountData();	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
 //            echo '({results:' . json_encode($data) . '})';
         }
+    }
+    
+    function unitkerja_createUnitKerja() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'ur_upb', 'kdlok','kd_pebin','kd_pbi','kd_ppbi','kd_upb','kd_subupb','kd_jk'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $data['kdlok'] = $data['kd_pebin'].$data['kd_pbi'].$data['kd_ppbi'].$data['kd_upb'].$data['kd_subupb'].$data['kd_jk'];
+        
+        $this->db->set($data);
+        $this->db->replace('ref_unker');
+        $this->createLog('INSERT REFERENSI UNIT KERJA','ref_unker');
+        echo "{success: true}";
     }
     
     function unitkerja_modifyUnitKerja() {
@@ -267,17 +289,10 @@ class Master_Data extends MY_Controller {
         
         $this->db->set($data);
         $this->db->replace('ref_unker');
-        
-        if($data['id'] != '')
-        {
-            $this->createLog('UPDATE REFERENSI UNIT KERJA','ref_unker');
-        }
-        else
-        {
-            $this->createLog('INSERT REFERENSI UNIT KERJA','ref_unker');
-        }
+        $this->createLog('UPDATE REFERENSI UNIT KERJA','ref_unker');
         echo "{success: true}";
     }
+    
     
     function unitkerja_deleteUnitKerja()
     {
@@ -431,7 +446,8 @@ class Master_Data extends MY_Controller {
     
     function unitorganisasi_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Unit_Organisasi_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Unit_Organisasi_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Unit_Organisasi_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
 //			$total = $this->Unit_Kerja_Model->get_CountData();	  
@@ -763,7 +779,8 @@ class Master_Data extends MY_Controller {
 
     function provinsi_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Prov_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Prov_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Prov_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -880,7 +897,8 @@ class Master_Data extends MY_Controller {
 
     function kabkota_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->KabKota_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->KabKota_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('KabKota_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1067,7 +1085,8 @@ class Master_Data extends MY_Controller {
 
     function klasifikasi_aset_lvl3_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Klasifikasi_Aset_Lvl3_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Klasifikasi_Aset_Lvl3_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Klasifikasi_Aset_Lvl3_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1145,7 +1164,8 @@ class Master_Data extends MY_Controller {
 
     function klasifikasi_aset_lvl2_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Klasifikasi_Aset_Lvl2_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Klasifikasi_Aset_Lvl2_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Klasifikasi_Aset_Lvl2_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1224,7 +1244,8 @@ class Master_Data extends MY_Controller {
 
     function klasifikasi_aset_lvl1_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Klasifikasi_Aset_Lvl1_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Klasifikasi_Aset_Lvl1_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Klasifikasi_Aset_Lvl1_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1335,7 +1356,8 @@ class Master_Data extends MY_Controller {
 
     function warehouse_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Warehouse_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Warehouse_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Warehouse_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
    		echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1410,7 +1432,8 @@ class Master_Data extends MY_Controller {
 
     function ruang_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Ruang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Ruang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Ruang_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
    		echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1484,7 +1507,8 @@ class Master_Data extends MY_Controller {
 
     function rak_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Rak_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Rak_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Rak_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
 //			$total = $this->Unit_Kerja_Model->get_CountData();	  
@@ -1559,7 +1583,8 @@ class Master_Data extends MY_Controller {
 
     function partNumber_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Part_Number_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Part_Number_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Part_Number_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
 //			$total = $this->Unit_Kerja_Model->get_CountData();	  
@@ -1661,7 +1686,8 @@ class Master_Data extends MY_Controller {
 
     function kd_brg_golongan_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Kd_Brg_Golongan_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Kd_Brg_Golongan_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Kd_Brg_Golongan_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1765,7 +1791,8 @@ class Master_Data extends MY_Controller {
 
     function kd_brg_bidang_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Kd_Brg_Bidang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Kd_Brg_Bidang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Kd_Brg_Bidang_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1872,7 +1899,8 @@ class Master_Data extends MY_Controller {
 
     function kd_brg_kelompok_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Kd_Brg_Kelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Kd_Brg_Kelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Kd_Brg_Kelompok_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -1984,7 +2012,8 @@ class Master_Data extends MY_Controller {
 
     function kd_brg_subkelompok_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Kd_Brg_SubKelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Kd_Brg_SubKelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Kd_Brg_SubKelompok_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -2099,7 +2128,8 @@ class Master_Data extends MY_Controller {
 
     function kd_brg_subsubkelompok_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Kd_Brg_SubSubKelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Kd_Brg_SubSubKelompok_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Kd_Brg_SubSubKelompok_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -2217,7 +2247,8 @@ class Master_Data extends MY_Controller {
     
     function kelompok_part_getAllData() {
         if ($this->input->get_post("id_open")) {
-            $resultData = $this->Kelompok_Part_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+//            $resultData = $this->Kelompok_Part_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Kelompok_Part_Model');
             $data = $resultData['data'];
             $total = $resultData['count'];	  
             echo '({total:'. $total . ',results:'.json_encode($data).'})';
@@ -2276,6 +2307,140 @@ class Master_Data extends MY_Controller {
                        'success'=>true);
 						
         echo json_encode($result);
+    }
+    
+    //MASTER REFERENSI RUANG
+    function referensi_ruang() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/referensi_ruang_view', $data);
+        } else {
+            $this->load->view('master/referensi_ruang_view');
+        }
+    }
+
+    function referensi_ruang_getAllData() {
+        if ($this->input->get_post("id_open")) {
+//            $resultData = $this->Referensi_Ruang_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Referensi_Ruang_Model');
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+   		echo '({total:'. $total . ',results:'.json_encode($data).'})';
+//            echo '({results:' . json_encode($data) . '})';
+        }
+    }
+    
+    function referensi_ruang_createReferensiRuang() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'kd_lokasi','kode_unor','kd_ruang','ur_ruang'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        $this->db->set($data);
+        $this->db->replace('ref_ruang');
+        $this->createLog('INSERT REFERENSI RUANG','ref_ruang');
+        echo "{success: true}";
+    }
+    
+    function referensi_ruang_modifyReferensiRuang() {
+        
+        $data = array();
+        
+        $dataFields = array(
+             'kd_lokasi','kode_unor','kd_ruang','ur_ruang'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        
+        $this->db->where('kd_lokasi', $data['kd_lokasi']);
+        $this->db->where('kd_ruang', $data['kd_ruang']);
+        unset($data['kd_lokasi'],$data['kd_ruang']);
+        $this->db->update('ref_ruang',$data);
+        $this->createLog('UPDATE REFERENSI RUANG','ref_ruang');
+        echo "{success: true}";
+    }
+    
+    
+    function referensi_ruang_deleteReferensiRuang()
+    {
+       $deletedData = $this->input->post('data');
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('kd_lokasi', $data['kd_lokasi']);
+           $this->db->where('kd_ruang', $data['kd_ruang']);
+           $this->db->delete('ref_ruang');
+           $this->createLog('DELETE REFERENSI RUANG','ref_ruang');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkReferensiRuang()
+    {
+
+        $this->db->from('ref_ruang');
+        $this->db->where('kd_lokasi',$_POST['kd_lokasi']);
+        $this->db->where('kd_ruang',$_POST['kd_ruang']);
+        $result = $this->db->get();
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    private function getDataWithFilter($model_name)
+    {
+        $filterString = null;
+        $searchByField = null;
+        if(isset($_POST['gridFilter']))
+        {
+            $filterString = $this->generateFilterQueryString($_POST['gridFilter']);
+        }
+        if(isset($_POST['search']))
+        {
+            //$this->model->get_FilteredData(json_decode($_POST['filter']));
+            $searchByField = $_POST['search'];
+        }
+        
+        if(isset($_POST['start']) && isset($_POST['limit']))
+        {
+            $start = $_POST['start'];
+            $limit = $_POST['limit'];
+        }
+                
+        $queryData = $this->$model_name->get_AllData($start,$limit,$filterString,$searchByField);
+        
+        return $queryData;
     }
 
 }

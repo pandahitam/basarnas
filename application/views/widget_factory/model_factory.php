@@ -4,6 +4,11 @@
 <script>
 ////// Model In View
 
+Ext.define('MReferensiRuang', {extend: 'Ext.data.Model',
+    fields: ['kd_lokasi','kd_ruang','ur_ruang','kode_unor','nama_unker','nama_unor'
+    ]
+});
+
 Ext.define('MPemeliharaanPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset','umur',
         'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 

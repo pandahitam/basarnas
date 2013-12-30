@@ -69,6 +69,7 @@ var Center_MD = {
                             {text: 'Kota/Kabupaten', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kabkota', BASE_URL + 'master_data/kabkota');}, tooltip: {text: 'Referensi Kota/Kabupaten'}},
                         ]
                     }},
+                {text:'Ruang', iconCls:'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_referensi_ruang', BASE_URL + 'master_data/referensi_ruang');}}
                
 	  ]
   })

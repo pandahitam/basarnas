@@ -1871,10 +1871,10 @@ var search = [{
                             {
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
-//                            Ext.getCmp(setting.grid.id).filters.clearFilters();
+                            Ext.getCmp(setting.grid.id).filters.clearFilters();
 //                              var dataProxy = data.getProxy();
-                              delete data.getProxy().extraParams.gridFilter;
-                              data.load()
+//                              delete data.getProxy().extraParams.gridFilter;
+//                              data.load()
                         }
                     }, '->',searchField,searchCode
                 ]
@@ -1960,25 +1960,25 @@ var search = [{
         };
         
         Grid.referensiGrid = function(setting, data) {
-            if (setting === null)
-            {
-                console.log('setting is null');
-                return;
-            }
+//            var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
+//                ftype: 'filters', autoReload: true, local: true, encode: true
+//            });
 
             var filter = new Ext.create('Ext.ux.grid.filter.Filter', {
-                ftype: 'filters', autoReload: true, local: true, encode: true
+                ftype: 'filters', autoReload: true, local: false, encode: true, paramPrefix:'gridFilter',
+                id:'referensi_grid_filter',
+                updateBuffer: 2000,
             });
 
-            var searchCode = [{
-                    xtype:'searchfield',
-                    id:setting.search.id + 'code',
-                    store:data,
-                    width:180,
-                    emptyText:'Scan Barcode/RFID',
-                    paramName:'query'
-            }];
-        
+//            var searchCode = [{
+//                    xtype:'searchfield',
+//                    id:setting.search.id + 'code',
+//                    store:data,
+//                    width:180,
+//                    emptyText:'Scan Barcode/RFID',
+//                    paramName:'query'
+//            }];
+//        
             var searchField = [{
                     xtype:'searchfield',
                     id:setting.search.id + 'field',
@@ -2007,9 +2007,10 @@ var search = [{
                     }, '-', {
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
-                            _grid.filters.clearFilters();
+                            Ext.getCmp(setting.grid.id).filters.clearFilters();
                         }
-                    }, '->',searchField,searchCode
+                    }, '->'
+                    ,searchField
                 ]
             });
 
@@ -2370,6 +2371,43 @@ var search = [{
                                 {
                                     $.ajax({
                                     url:BASE_URL + 'asset_angkutan_darat/getSpecificPerlengkapanAngkutanDaratWithoutIdExtAsset',
+                                    type: "POST",
+                                    dataType:'json',
+                                    async:false,
+                                    data:{kd_brg:data.kd_brg,kd_lokasi:data.kd_lokasi,no_aset:data.no_aset},
+                                    success:function(response, status){
+                                     
+                                        if(status == "success")
+                                        {
+                                            var data = response.results;
+                                            if(data.length > 0)
+                                            {
+                                                var id_ext_asset = data[0].id_ext_asset;
+                                                store.changeParams({params:{id_ext_asset:id_ext_asset}});
+//                                                Ext.each(data,function(value,index){
+//                                                    var partsData = {};
+//                                                    partsData.id = value.id;
+//                                                    partsData.id_asset_perlengkapan = value.id_asset_perlengkapan;
+//                                                    partsData.id_ext_asset = value.id_ext_asset;
+//                                                    partsData.jenis_perlengkapan = value.jenis_perlengkapan;
+//                                                    partsData.keterangan = value.keterangan;
+//                                                    partsData.nama = value.nama;
+//                                                    partsData.no = value.no;
+//                                                    store.add(partsData);
+//                                                })
+                                            }
+                                            
+                                           
+                                        }
+
+                                    }
+                                 });
+                                }
+                                
+                                else if(tipe_angkutan == "laut")
+                                {
+                                    $.ajax({
+                                    url:BASE_URL + 'asset_angkutan_laut/getSpecificPerlengkapanAngkutanLautWithoutIdExtAsset',
                                     type: "POST",
                                     dataType:'json',
                                     async:false,
