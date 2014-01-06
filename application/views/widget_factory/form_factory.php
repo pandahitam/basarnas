@@ -5282,7 +5282,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             {
                                                 data.load();
                                             }
-                                            Form.panelReferensiReferensiRuang.close();
+                                            Modal.smallWindow.close();
     
     
                                         },
@@ -10168,7 +10168,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                         'focus': {
                             fn: function(comboField) {
                                 var store = comboField.getStore();
-                                store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue()}} );
+                                if (form !== null)
+                                {
+                                   var kode_unor = form.getForm().findField("nama_unor").getValue();
+                                }
+                                store.changeParams({params: {kd_lokasi:Utils.getUnkerCombo(form).getValue(), kode_unor:kode_unor}} );
                                 comboField.expand();
                             },
                             scope: this

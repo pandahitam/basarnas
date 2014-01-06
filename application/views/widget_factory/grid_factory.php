@@ -2135,9 +2135,9 @@ var search = [{
                 width: '100%',
                 columnLines: true,
                 tbar: toolbar,
-                dockedItems: [
-                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
-                ],
+//                dockedItems: [
+//                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
+//                ],
                 listeners: {
                     itemdblclick: function(dataview, record, item, index, e) {
                         var data = record.data;
@@ -2248,29 +2248,68 @@ var search = [{
                     extraParams: {id_open: 1, kd_lokasi: 0, kd_gol: 0, kd_bid: 0, kd_kel: 0, kd_skel: 0, kd_sskel: 0}
                 })
             });
+            var specific_data = null;
+            
+            if(tipe_angkutan == 'udara')
+            {
+                specific_data = new Ext.create('Ext.data.Store', {
+                fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
+                proxy: new Ext.data.AjaxProxy({
+                    url: BASE_URL + 'asset_master/assetAngkutan/udara', actionMethods: {read: 'POST'},
+                    extraParams: {id_open: 1, kd_lokasi: 0, kd_gol: 0, kd_bid: 0, kd_kel: 0, kd_skel: 0, kd_sskel: 0}
+                })
+                });
+            }
+            else if(tipe_angkutan == 'darat')
+            {
+                specific_data = new Ext.create('Ext.data.Store', {
+                fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
+                proxy: new Ext.data.AjaxProxy({
+                    url: BASE_URL + 'asset_master/assetAngkutan/darat', actionMethods: {read: 'POST'},
+                    extraParams: {id_open: 1, kd_lokasi: 0, kd_gol: 0, kd_bid: 0, kd_kel: 0, kd_skel: 0, kd_sskel: 0}
+                })
+                });
+            }
+            else if(tipe_angkutan == 'laut')
+            {
+                specific_data = new Ext.create('Ext.data.Store', {
+                fields: ['nama', 'unker', 'kd_lokasi', 'kd_brg', 'no_aset', 'kd_gol', 'kd_bid', 'kd_kel', 'kd_skel', 'kd_sskel'], autoLoad: false,
+                proxy: new Ext.data.AjaxProxy({
+                    url: BASE_URL + 'asset_master/assetAngkutan/laut', actionMethods: {read: 'POST'},
+                    extraParams: {id_open: 1, kd_lokasi: 0, kd_gol: 0, kd_bid: 0, kd_kel: 0, kd_skel: 0, kd_sskel: 0}
+                })
+                });
+            }
             
            
-                
+            var toolbar = ToolbarGrid.gridSelectionAsset(true, data, specific_data);
 
-            var toolbar = ToolbarGrid.gridSelectionAsset(true, data);
+            
             
             
             if(tipe_angkutan == 'darat' || tipe_angkutan =='laut')
             {
                 Ext.getCmp('select_gol').setValue('3');
                 Ext.getCmp('select_bidang').setValue('02');
-                data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: 3, kd_bid: 02, kd_kel: 0, kd_skel: 0, kd_sskel: 0}})
+                Ext.getCmp('select_gol').setReadOnly(true);
+                Ext.getCmp('select_bidang').setReadOnly(true);
+                specific_data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: '3', kd_bid: '02', kd_kel: '0', kd_skel: '0', kd_sskel: '0'}})
             }
             else if(tipe_angkutan == 'udara')
             {
                 Ext.getCmp('select_gol').setValue('3');
                 Ext.getCmp('select_bidang').setValue('02');
                 Ext.getCmp('select_kel').setValue('05');
-                data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: 3, kd_bid: 02, kd_kel: 05, kd_skel: 0, kd_sskel: 0}})
+                Ext.getCmp('select_gol').setReadOnly(true);
+                Ext.getCmp('select_bidang').setReadOnly(true);
+                Ext.getCmp('select_kel').setReadOnly(true);
+                specific_data.changeParams({params:{id_open: 1, kd_lokasi: 0, kd_gol: '3', kd_bid: '02', kd_kel: '05', kd_skel: 0, kd_sskel: 0}})
             }
             
+            
+            
             var _grid = Ext.create('Ext.grid.Panel', {
-                store: data,
+                store: (specific_data == undefined || specific_data == null)?data:specific_data,
                 title: 'SELECT ASSET',
                 frame: true,
                 border: true,
@@ -2280,9 +2319,9 @@ var search = [{
                 width: '100%',
                 columnLines: true,
                 tbar: toolbar,
-                dockedItems: [
-                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
-                ],
+//                dockedItems: [
+//                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
+//                ],
                 listeners: {
                     itemdblclick: function(dataview, record, item, index, e) {
                         var data = record.data;
@@ -2520,9 +2559,9 @@ var search = [{
                 width: '100%',
                 columnLines: true,
                 tbar: toolbar,
-                dockedItems: [
-                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
-                ],
+//                dockedItems: [
+//                    {xtype: 'pagingtoolbar', store: data, dock: 'bottom', displayInfo: true},
+//                ],
                 listeners: {
                     itemdblclick: function(dataview, record, item, index, e) {
                         var data = record.data;
@@ -2582,9 +2621,13 @@ var search = [{
 //            return toolbar;
 //        };
         
-        ToolbarGrid.gridSelectionAsset = function(WithLokasi, data) {
-            var cmp_selection = ToolbarGrid.component(WithLokasi, data);
-            var cmp_write = ToolbarGrid.componentWrite(WithLokasi, data);
+        ToolbarGrid.gridSelectionAsset = function(WithLokasi, data, specific_data) {
+            if(specific_data == undefined || specific_data == null)
+            {
+                specific_data = data;
+            }
+            var cmp_selection = ToolbarGrid.component(WithLokasi, specific_data);
+            var cmp_write = ToolbarGrid.componentWrite(WithLokasi, specific_data);
 
             var toolbar = new Ext.create('Ext.toolbar.Toolbar', {
                 layout:'column',
@@ -2610,6 +2653,7 @@ var search = [{
                     typeAhead: true,
                     width: 130,
                     store: Reference.Data.golongan,
+                    editable:false,
                     listeners: {
                         change: function(obj, value) {
                             if (value !== null)
@@ -2640,6 +2684,7 @@ var search = [{
                     disabled: true,
                     width: 120,
                     store: Reference.Data.bidang,
+                    editable:false,
                     listeners: {
                         change: function(obj, value) {
                             if (value !== null)
@@ -2671,6 +2716,7 @@ var search = [{
                     disabled: true,
                     width: 110,
                     store: Reference.Data.kelompok,
+                    editable:false,
                     listeners: {
                         change: function(obj, value) {
                             if (value !== null)
@@ -2704,6 +2750,7 @@ var search = [{
                     disabled: true,
                     width: 110,
                     store: Reference.Data.subKelompok,
+                    editable:false,
                     listeners: {
                         change: function(obj, value) {
                             if (value !== null)
@@ -2740,6 +2787,7 @@ var search = [{
                     disabled: true,
                     width: 110,
                     store: Reference.Data.subSubKelompok,
+                    editable:false,
                     listeners: {
                         change: function(obj, value) {
                             if (value !== null)

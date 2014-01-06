@@ -785,6 +785,11 @@ class Combo_Ref extends CI_Controller {
         if ($this->input->post('kd_lokasi') > 0) {
             $this->db->where('kd_lokasi', $this->input->post('kd_lokasi'));
         }
+        
+        if($this->input->post('kode_unor') != "")
+        {
+            $this->db->where('kode_unor', $this->input->post('kode_unor'));
+        }
 
         $this->db->order_by('ur_ruang', 'ASC');
         $Q = $this->db->get('');

@@ -676,6 +676,422 @@ class Excel_Management extends CI_Controller{
       $objWriter->save('php://output');
   }
   
+  public function getColumnSize()
+  {
+//      $inputFileName = './a.xls';
+//
+//     /** Load $inputFileName to a PHPExcel Object  **/
+//     $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
+//     
+//     $active_sheet = $objPHPExcel->getActiveSheet();
+//     
+//     for($i=0; $i<30; $i++)
+//     {
+//         echo PHPExcel_Cell::stringFromColumnIndex($i)." ". $active_sheet->getColumnDimension(PHPExcel_Cell::stringFromColumnIndex($i))->getWidth()."<br />";
+//     }
+      die;
+      
+  }
+  
+  public function exportLaporanUdara()
+  {
+      //new page setiap 33 atau 32 baris
+      
+      $excel = new PHPExcel();
+      $active_sheet = $excel->getActiveSheet();
+      
+      $data_kelompok = array(
+          "ROTOR","MAIN ROTOR BLADE","-"
+      );
+      
+      $data = array(
+          array(
+          "kelompok" =>"ROTOR",
+          "designation" => "M / R  Transmission"),
+          array(
+          "kelompok" =>"ROTOR",
+          "designation" => "Rotor Mast"),
+          array(
+          "kelompok" =>"ROTOR",
+          "designation" => "Trans Support LH"),
+          array(
+          "kelompok" => "ROTOR",
+          "designation"=>"Trans Support RH"
+          ),
+          array(
+          "kelompok" => "MAIN ROTOR BLADE",
+          "designation"=>"Main Rotor Blade"
+          ),
+          array(
+          "kelompok" => "MAIN ROTOR BLADE",
+          "designation"=>"Main Rotor Blade"
+          ),
+          array(
+          "kelompok" => "-",
+          "designation"=>"Swash Plate"
+          ),
+          array(
+          "kelompok" => "-",
+          "designation"=>"Control Ring"
+          ),
+          
+      );
+      
+//      $i=1;
+//      $cellIndex = 0;
+//      foreach($data as $result)
+//      {
+//        $cellIndex = $i+9;
+//        $active_sheet->setCellValue('A'.$cellIndex,$i); //NO
+//        $active_sheet->setCellValue('B'.$cellIndex,$result->ur_sskel); //JENIS ASSET
+//        $i++;
+//      }
+      
+      $cellIndex = 10;
+      foreach($data_kelompok as $x)
+      {
+          if($x == "-")
+          {
+            foreach($data as $y)
+            {
+                if($y["kelompok"] == $x)
+                {
+                    $active_sheet->setCellValue('B'.$cellIndex,$result->ur_sskel); //JENIS ASSET
+                }
+
+            }
+          }
+          else
+          {
+            echo $x."</br>";
+            foreach($data as $y)
+            {
+                if($y["kelompok"] == $x)
+                {
+                    echo "&nbsp;&nbsp;&nbsp;".$y["designation"]."</br>";
+                }
+
+            }
+          }
+      }
+      
+//      foreach($data as $y)
+//      {
+//            if($y["kelompok"] == "-")
+//            {
+//                echo $y["nama"]."</br>";
+//            }
+//
+//      }
+      
+      die;
+//      $active_sheet->setBreak('A50', PHPExcel_Worksheet::BREAK_ROW);
+      $active_sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+      $active_sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+      $active_sheet->getPageSetup()->setScale(74);
+//      $active_sheet->getPageSetup()->setFitToWidth(1);
+      $active_sheet->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(1, 9);
+      $active_sheet->getDefaultStyle()->getFont()->setName('Arial');
+      $active_sheet->freezePane('A9');
+      
+      /* SET COLUMN WIDTH */
+      $active_sheet->getColumnDimension('A')->setWidth(3.140625);
+      $active_sheet->getColumnDimension('B')->setWidth(19.85546875);
+      $active_sheet->getColumnDimension('C')->setWidth(12.42578125);
+      $active_sheet->getColumnDimension('D')->setWidth(10.140625);
+      $active_sheet->getColumnDimension('E')->setWidth(3.28515625);
+      $active_sheet->getColumnDimension('F')->setWidth(0.85546875);
+      $active_sheet->getColumnDimension('G')->setWidth(3.140625);
+      $active_sheet->getColumnDimension('H')->setWidth(1);
+      $active_sheet->getColumnDimension('I')->setWidth(4.28515625);
+      $active_sheet->getColumnDimension('J')->setWidth(2.42578125);
+      $active_sheet->getColumnDimension('K')->setWidth(1.28515625);
+      $active_sheet->getColumnDimension('L')->setWidth(2.42578125);
+      $active_sheet->getColumnDimension('M')->setWidth(0.85546875);
+      $active_sheet->getColumnDimension('N')->setWidth(4.85546875);
+      $active_sheet->getColumnDimension('O')->setWidth(7);
+      $active_sheet->getColumnDimension('P')->setWidth(6.85546875);
+      $active_sheet->getColumnDimension('Q')->setWidth(3);
+      $active_sheet->getColumnDimension('R')->setWidth(5.28515625);
+      $active_sheet->getColumnDimension('S')->setWidth(4.28515625);
+      $active_sheet->getColumnDimension('T')->setWidth(3.85546875);
+      $active_sheet->getColumnDimension('U')->setWidth(14.5703125);
+      $active_sheet->getColumnDimension('V')->setWidth(3.42578125);
+      $active_sheet->getColumnDimension('W')->setWidth(7.5703125);
+      $active_sheet->getColumnDimension('X')->setWidth(3.5703125);
+      $active_sheet->getColumnDimension('Y')->setWidth(7.5703125);
+      $active_sheet->getColumnDimension('Z')->setWidth(3);
+      $active_sheet->getColumnDimension('AA')->setWidth(7);
+      $active_sheet->getColumnDimension('AB')->setWidth(6);
+      $active_sheet->getColumnDimension('AC')->setWidth(6.140625);
+      
+      
+      
+      
+      /* HEADER */
+      
+       $active_sheet->getStyle('A1:B6')->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('A1:B6')->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('A1:AC1')->getBorders()->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      
+      $active_sheet->getStyle('A2:B4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('A2:B4')->getFont()->setSize(10);
+      $active_sheet->getStyle('A2:B4')->getFont()->setName('Arial Black');
+      $active_sheet->getStyle('A2:B4')->getFont()->setBold(true);
+      
+      $active_sheet->setCellValue('A2',"KOARMATIM");
+      $active_sheet->mergeCells('A2:B2');
+      
+      $active_sheet->setCellValue('A3',"WING UDARA");
+      $active_sheet->mergeCells('A3:B3');
+      
+      $active_sheet->setCellValue('A4',"SUSDALITAS");
+      $active_sheet->mergeCells('A4:B4');
+      
+      
+      
+      
+      
+      $active_sheet->setCellValue('C3',"AIRCRAFT MAJOR COMPONENT STATUS");
+      $active_sheet->mergeCells('C3:U4');
+      $active_sheet->getStyle('C3:U3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('C3:U3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+      $active_sheet->getStyle('C3:U3')->getFont()->setBold(true);
+      $active_sheet->getStyle('C3:U3')->getFont()->setSize(18);
+      $active_sheet->getStyle('C3:U3')->getFont()->setName('Bookman Old Style');
+      
+      
+      
+      
+      
+      $active_sheet->getStyle('V1:Y6')->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('V1:Y6')->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('Z1:AC6')->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('Z1:AC6')->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('V1:W4')->getFont()->setBold(true);
+      $active_sheet->getStyle('V1:W4')->getFont()->setSize(8);
+      $active_sheet->getStyle('V1:W4')->getFont()->setName('Arial');
+      $active_sheet->getStyle('Z1:AA4')->getFont()->setBold(true);
+      $active_sheet->getStyle('Z1:AA4')->getFont()->setSize(8);
+      $active_sheet->getStyle('Z1:AA4')->getFont()->setName('Arial');
+      $active_sheet->getStyle('X1:Y4')->getFont()->setSize(8);
+      $active_sheet->getStyle('X1:Y4')->getFont()->setName('Arial');
+      $active_sheet->getStyle('AB1:AC4')->getFont()->setSize(8);
+      $active_sheet->getStyle('AB1:AC4')->getFont()->setName('Arial');
+      
+      $active_sheet->setCellValue('V1',"A/C. Type");
+      $active_sheet->mergeCells('V1:W1');
+      $active_sheet->setCellValue('X1',"VAL");
+      $active_sheet->mergeCells('X1:Y1'); 
+      
+      $active_sheet->setCellValue('Z1',"Date");
+      $active_sheet->mergeCells('Z1:AA1');
+      $active_sheet->setCellValue('AB1',"VAL");
+      $active_sheet->mergeCells('AB1:AC1');
+     
+      $active_sheet->setCellValue('V2',"A/C. REG");
+      $active_sheet->mergeCells('V2:W2');
+      $active_sheet->setCellValue('X2',"VAL");
+      $active_sheet->mergeCells('X2:Y2');
+      
+      $active_sheet->setCellValue('Z2',"A/C T.T");
+      $active_sheet->mergeCells('Z2:AA2');
+      $active_sheet->setCellValue('AB2',"VAL");
+      $active_sheet->mergeCells('AB2:AC2');
+      
+      $active_sheet->setCellValue('V3',"A/C. S/N");
+      $active_sheet->mergeCells('V3:W3');
+      $active_sheet->setCellValue('X3',"VAL");
+      $active_sheet->mergeCells('X3:Y3');
+      
+      $active_sheet->setCellValue('Z3',"A/C CYL");
+      $active_sheet->mergeCells('Z3:AA3');
+      $active_sheet->setCellValue('AB3',"VAL");
+      $active_sheet->mergeCells('AB3:AC3');
+      
+      $active_sheet->setCellValue('V4',"A/C. OWNER");
+      $active_sheet->mergeCells('V4:W4');
+      $active_sheet->setCellValue('X4',"VAL");
+      $active_sheet->mergeCells('X4:Y4');
+      
+      
+      
+      
+      
+
+      
+     $headerColumnStyle = array(
+        'font'  => array(
+            'bold'  => true,
+            'size'  => 8,
+            'name'  => 'Arial'
+        ),
+        'borders' => array(
+		'allborders' => array(
+			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'color' => array('argb' => '000000'),
+                        ),
+                'bottom' => array(
+			'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+			'color' => array('argb' => '000000'),
+                        ),
+                
+        ),
+        'alignment' => array(
+		'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+	),
+        'fill' => array(
+            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+            'color' => array('argb' => 'C0C0C0')
+        )
+       );
+      
+      $active_sheet->getStyle('A7:AC8')->applyFromArray($headerColumnStyle);
+      
+      $active_sheet->setCellValue('A7',"NO");
+      $active_sheet->mergeCells('A7:A8');
+      
+      $active_sheet->setCellValue('B7',"DESIGNATION");
+      $active_sheet->mergeCells('B7:B8');
+      
+      $active_sheet->setCellValue('C7',"PART NUMBER");
+      $active_sheet->mergeCells('C7:C8');
+      
+      $active_sheet->setCellValue('D7',"SERIAL NO");
+      $active_sheet->mergeCells('D7:D8');
+      
+      $active_sheet->setCellValue('E7',"DATE OF\nMNF./LAST INSP");
+      $active_sheet->mergeCells('E7:I8');
+      $active_sheet->getStyle('E7:I8')->getAlignment()->setWrapText(true);
+      
+      
+      $active_sheet->setCellValue('J7',"INSTALLATION ON/AT");
+      $active_sheet->mergeCells('J7:Q7');
+      $active_sheet->setCellValue('J8',"DATE");
+      $active_sheet->mergeCells('J8:N8');
+      $active_sheet->setCellValue('O8',"A/C TSN");
+      $active_sheet->setCellValue('P8',"COMP TSM");
+      $active_sheet->mergeCells('P8:Q8');
+      
+      $active_sheet->setCellValue('R7',"OPERATING\nTIME LIMIT");
+      $active_sheet->mergeCells('R7:S8');
+      $active_sheet->getStyle('R7:S8')->getAlignment()->setWrapText(true);
+      
+      $active_sheet->setCellValue('T7',"TASK");
+      $active_sheet->mergeCells('T7:T8');
+      
+      $active_sheet->setCellValue('U7',"REMOVE DUE\nA/C. T.T");
+      $active_sheet->mergeCells('U7:V8');
+      $active_sheet->getStyle('U7:U8')->getAlignment()->setWrapText(true);
+      
+      $active_sheet->setCellValue('W7',"TSN/TSO\nCurrent");
+      $active_sheet->mergeCells('W7:X8');
+      $active_sheet->getStyle('W7:X8')->getAlignment()->setWrapText(true);
+      
+      $active_sheet->setCellValue('Y7',"TIME\nAVAILABLE");
+      $active_sheet->mergeCells('Y7:Z8');
+      $active_sheet->getStyle('Y7:Z8')->getAlignment()->setWrapText(true);
+      
+      $active_sheet->setCellValue('AA7',"REMARKS");
+      $active_sheet->mergeCells('AA7:AC8');
+      
+      $this->getLaporanUdaraFooter($active_sheet,44);
+//      $this->getLaporanUdaraFooter($active_sheet,82);
+//      $this->getLaporanUdaraFooter($active_sheet,120);
+      
+
+//      $active_sheet->setCellValue('AB43','&RPage &P of &N');
+      /*before excel download settings */
+      $today = date("Y-m-d");  
+      $filename= "Laporan Udara"."(".$today.")"; 
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); 
+      header('Content-Disposition: attachment;filename="'.$filename.'"'); 
+      header('Cache-Control: max-age=0');
+      $objWriter = new PHPExcel_Writer_Excel2007($excel); 
+      $objWriter->save('php://output');
+  }
+  
+  private function getLaporanUdaraFooter($active_sheet,$start_index)
+  {
+      $i=$start_index;
+      $i1=$start_index+1;
+      $i2=$start_index+2;
+      $i3=$start_index+3;
+      
+//      var_dump(array($i,$i1,$i2,$i3));
+//      die;
+       /*FOOTER*/
+      $active_sheet->getStyle('A'.$i.':AC'.$i3)->getBorders()->getOutline()->setBorderStyle(PHPExcel_Style_Border::BORDER_THICK);
+      $active_sheet->getStyle('A'.$i.':O'.$i3)->getFont()->setSize(8);
+      $active_sheet->getStyle('P'.$i.':AA'.$i)->getFont()->setSize(8);
+      $active_sheet->getStyle('P'.$i2.':AA'.$i2)->getFont()->setSize(8);
+      $active_sheet->getStyle('AB'.$i1.':AC'.$i1)->getFont()->setSize(8);
+      
+      $active_sheet->setCellValue('A'.$i,'TASK CODE:');
+      $active_sheet->mergeCells('A'.$i.':B'.$i);
+      $active_sheet->getStyle('A'.$i.':B'.$i)->getFont()->setUnderline(true);
+      $active_sheet->getStyle('A'.$i.':B'.$i)->getFont()->setBold(true);
+//      $active_sheet->getStyle('A42:B42')->getFont()->setSize(8);
+      $active_sheet->setCellValue('A'.$i1,"(OH) = Overhaul");
+      $active_sheet->mergeCells('A'.$i1.':B'.$i1);
+      $active_sheet->setCellValue('A'.$i2,"(HSI) = Hot Section Insp.");
+      $active_sheet->mergeCells('A'.$i2.':B'.$i2);
+      $active_sheet->setCellValue('A'.$i3,"(BC) = Bench Check");
+      $active_sheet->mergeCells('A'.$i3.':B'.$i3);
+      
+      $active_sheet->setCellValue('C'.$i1,"(HST) = Hydrostatic Test");
+      $active_sheet->mergeCells('C'.$i1.':D'.$i1);
+      $active_sheet->setCellValue('C'.$i2,"(LF) = Life");
+      $active_sheet->mergeCells('C'.$i2.':D'.$i2);
+      $active_sheet->setCellValue('C'.$i3,"(IN) = Inspection/Check");
+      $active_sheet->mergeCells('C'.$i3.':D'.$i3);
+      
+      $active_sheet->setCellValue('E'.$i1,"(SLL) = Service Life Limit");
+      $active_sheet->mergeCells('E'.$i1.':M'.$i1);
+      $active_sheet->setCellValue('E'.$i2,"(Hrs) = Hours");
+      $active_sheet->mergeCells('E'.$i2.':M'.$i2);
+      $active_sheet->setCellValue('E'.$i3,"(Yrs) = Years");
+      $active_sheet->mergeCells('E'.$i3.':M'.$i3);
+      
+      
+      
+      
+      $active_sheet->setCellValue('P'.$i,"Prepared By:");
+      $active_sheet->mergeCells('P'.$i.':T'.$i);
+      $active_sheet->getStyle('P'.$i.':T'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('P'.$i.':T'.$i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_DOUBLE);
+      $active_sheet->setCellValue('P'.$i2,"VAL");
+      $active_sheet->mergeCells('P'.$i2.':T'.$i2);
+      $active_sheet->getStyle('P'.$i2.':T'.$i2)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('P'.$i.':T'.$i3)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('P'.$i.':T'.$i3)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      
+      $active_sheet->setCellValue('U'.$i,"Checked By:");
+      $active_sheet->mergeCells('U'.$i.':W'.$i);
+      $active_sheet->getStyle('U'.$i.':W'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('U'.$i.':W'.$i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_DOUBLE);
+      $active_sheet->setCellValue('U'.$i2,"VAL");
+      $active_sheet->mergeCells('U'.$i2.':W'.$i2);
+      $active_sheet->getStyle('U'.$i2.':W'.$i2)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('U'.$i.':W'.$i3)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('U'.$i.':W'.$i3)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      
+      $active_sheet->setCellValue('X'.$i,"Approved By:");
+      $active_sheet->mergeCells('X'.$i.':AA'.$i);
+      $active_sheet->getStyle('X'.$i.':AA'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('X'.$i.':AA'.$i)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_DOUBLE);
+      $active_sheet->setCellValue('X'.$i2,"VAL");
+      $active_sheet->mergeCells('X'.$i2.':AA'.$i2);
+      $active_sheet->getStyle('X'.$i2.':AA'.$i2)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+      $active_sheet->getStyle('X'.$i.':AA'.$i3)->getBorders()->getLeft()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      $active_sheet->getStyle('X'.$i.':AA'.$i3)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+      
+      $active_sheet->setCellValue('AB'.$i1,'PAGE');
+      $active_sheet->mergeCells('AB'.$i1.':AC'.$i1);
+      $active_sheet->getStyle('AB'.$i1.':AC'.$i1)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+  }
+  
   
   private function getQueryBarang($golongan,$bidang,$kelompok,$sub_kelompok)
   {
