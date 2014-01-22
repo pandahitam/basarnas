@@ -1305,6 +1305,7 @@
                 form.getForm().setValues(presetData);
 
             }
+            
 
             return form;
         };
@@ -1421,7 +1422,7 @@
                                             }
                                             
                                             Modal.assetSecondaryWindow.close();
-                                            var grid_sub_part = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan_sub_part');
+                                            var grid_sub_part = Ext.getCmp('grid_sub_part');
                                             if(grid_sub_part != null)
                                             {
                                                 grid_sub_part.getStore().load();
@@ -2085,12 +2086,61 @@
             if (selected.length === 1)
             {
                 var data = selected[0].data;
-//                var params = {
-//                                kd_lokasi : data.kd_lokasi,
-//                                kd_unor : data.kd_unor,
-//                                kd_brg : data.kd_brg,
-//                                no_aset : data.no_aset
-//                        };
+
+            if(data.id_pengadaan == null || data.id_pengadaan == 0)
+            {
+                var params = {
+                                kd_lokasi : data.kd_lokasi,
+                                kd_unor : data.kd_unor,
+                                kd_brg : data.kd_brg,
+                                no_aset : data.no_aset
+                        };
+                        
+                 Ext.Ajax.request({
+                    url: BASE_URL + 'pengadaan/getByKode/',
+                    params: params,
+                    success: function(resp)
+                    {
+                        var jsonData = params;
+                        var response = Ext.decode(resp.responseText);
+
+                        if (response.length > 0)
+                        {
+                            var jsonData = response[0];
+                        }
+
+                        var setting = {
+                            url: BASE_URL + 'Pengadaan/modifyPengadaan',
+                            data: null,
+                            isEditing: false,
+                            addBtn: {
+                                isHidden: true,
+                                text: '',
+                                fn: function() {
+                                }
+                            },
+                            selectionAsset: {
+                                noAsetHidden: false
+                            }
+                        };
+                        var form = Form.pengadaanInAsset(setting);
+                        if (jsonData !== null && jsonData !== undefined)
+                        {
+                            Ext.Object.each(jsonData,function(key,value,myself){
+                            if(jsonData[key] == '0000-00-00')
+                            {
+                                jsonData[key] = '';
+                            }
+                        });
+                            form.getForm().setValues(jsonData);
+                        }
+                        Tab.addToForm(form, 'perlengkapan-pengadaan', 'Pengadaan');
+                        Modal.assetEdit.show();
+                    }
+                });
+            }
+            else
+            {
                 var params = {
                         id_pengadaan: data.id_pengadaan,
                         isAssetPerlengkapan: true
@@ -2138,6 +2188,8 @@
                         Modal.assetEdit.show();
                     }
                 });
+            }
+                
             }
         };
 
@@ -2556,6 +2608,7 @@
                 var _form = Perlengkapan.Form.create(data, true);
                 Perlengkapan.dataStoreSubPart.changeParams({params:{open:'1',id_part:data.id}});
                 Tab.addToForm(_form, 'perlengkapan-details', 'Simak Details');
+                Modal.assetEdit.addListener("close", function(){ Perlengkapan.Data.load() }, this);
                 Modal.assetEdit.show();
             }
         };

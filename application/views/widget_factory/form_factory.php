@@ -1250,6 +1250,13 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             }
                                             
                                             Modal.assetSecondaryWindow.close();
+                                            
+                                            var grid_sub_part = Ext.getCmp('grid_sub_part');
+                                            if(grid_sub_part != null)
+                                            {
+                                                grid_sub_part.getStore().load();
+                                            }
+                                            
                                             var grid_alert_required_list = Ext.getCmp('alert_perlengkapan_grid_list_required_pemeliharaan');
                                             if(grid_alert_required_list != null)
                                             {
@@ -6340,15 +6347,6 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 fieldDefaults: {
                     msgTarget: 'side'
                 },
-                listeners:{
-                    'activate':{
-                        fn:function(obj,value)
-                        {
-                            debugger;
-                            data.load();
-                        }
-                    }
-                },
                 buttons: [{
                         text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
                         handler: function() {
@@ -9423,7 +9421,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 layout:'anchor',
                 height: (edit == true)?325:150,
                 anchor: '100%',
-                title: 'Riwayat Pajak',
+                title: 'RIWAYAT PAJAK',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -9518,7 +9516,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Tambahan',
+                title: 'TAMBAHAN',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -9810,7 +9808,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 layout: 'anchor',
                 anchor: '100%',
                 height: (edit==true)?325:150,
-                title: 'Perlengkapan Angkutan Darat',
+                title: 'PERLENGKAPAN ANGKUTAN DARAT',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -9829,7 +9827,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Tambahan',
+                title: 'TAMBAHAN',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -9896,7 +9894,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout:'anchor',
                 anchor: '100%',
-                title: 'Darat',
+                title: 'DARAT',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -9962,7 +9960,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor:'100%',
-                title: 'Surat Ukur',
+                title: 'SURAT UKUR',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10015,7 +10013,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Sertifikasi Keselamatan',
+                title: 'SERTIFIKASI KESELAMATAN',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10065,7 +10063,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Sertifikasi Radio',
+                title: 'SERTIFIKASI RADIO',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10115,7 +10113,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Surat Ijin Berlayar',
+                title: 'SURAT IJIN BERLAYAR',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10166,7 +10164,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 layout: 'anchor',
                 anchor: '100%',
                 height: (edit==true)?325:150,
-                title: 'Perlengkapan Angkutan Laut',
+                title: 'PERLENGKAPAN ANGKUTAN LAUT',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10186,7 +10184,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //                layout:{type: 'table', columns: 1,tableAttrs: { style: {width: '99%'}}},
 //                layout:'anchor',
                 anchor: '100%',
-                title: 'Laut',
+                title: 'LAUT',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10212,7 +10210,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Surat Bukti Kepemilikan',
+                title: 'SURAT BUKTI KEPEMLIKAN',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10256,7 +10254,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Sertifikat Pendaftaran Pesawat Udara',
+                title: 'SERTIFIKAN PENDAFTARAN PESAWAT UDARA',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10306,7 +10304,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'column',
                 anchor: '100%',
-                title: 'Sertifikat Kelaikan Udara',
+                title: 'SERTIFIKAT KELAIKAN UDARA',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10357,7 +10355,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 layout: 'anchor',
                 anchor: '100%',
                 height: (edit==true)?325:150,
-                title: 'Perlengkapan Angkutan Udara',
+                title: 'PERLENGKAPAN ANGKUTAN UDARA',
                 border: false,
                 frame: true,
                 defaultType: 'container',
@@ -10374,7 +10372,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 xtype: 'fieldset',
                 layout: 'anchor',
                 anchor: '100%',
-                title: 'Udara',
+                title: 'UDARA',
                 border: false,
                 frame: true,
                 defaultType: 'container',

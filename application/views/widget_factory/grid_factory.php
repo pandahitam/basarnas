@@ -435,7 +435,8 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
            
@@ -548,7 +549,8 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->', search
+                    }, '->', 
+//                            search
                 ]
             });
            
@@ -657,7 +659,8 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
            
@@ -770,7 +773,8 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
            
@@ -882,7 +886,8 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
            
@@ -1415,7 +1420,8 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
            
@@ -1635,7 +1641,8 @@ var search = [{
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
 
@@ -1732,7 +1739,8 @@ var search = [{
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
 
@@ -1875,7 +1883,8 @@ var search = [{
 //                            _grid.filters.clearFilters();
 //                        }
 //                    }, 
-                    '->',search
+                    '->',
+//                            search
                 ]
             });
 
@@ -1996,7 +2005,8 @@ var search = [{
 //                            _grid.filters.clearFilters();
 //                        }
 //                    }, 
-                    '->',search
+                    '->',
+//                            search
                 ]
             });
 
@@ -2115,7 +2125,8 @@ var search = [{
 //                            _grid.filters.clearFilters();
 //                        }
 //                    }, 
-                    '->',search
+                    '->',
+//                            search
                 ]
             });
 
@@ -2331,7 +2342,8 @@ var search = [{
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->',
+//                            search
                 ]
             });
 
