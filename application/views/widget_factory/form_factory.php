@@ -1250,6 +1250,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             }
                                             
                                             Modal.assetSecondaryWindow.close();
+                                            var grid_alert_required_list = Ext.getCmp('alert_perlengkapan_grid_list_required_pemeliharaan');
+                                            if(grid_alert_required_list != null)
+                                            {
+                                                grid_alert_required_list.getStore().load();
+                                            }
 //                                            dataMainGrid.load();
                                             $.ajax({
                                                 url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',

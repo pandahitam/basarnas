@@ -60,7 +60,108 @@ class Dashboard extends CI_Controller{
                             kd_lvl1,kd_lvl2,kd_lvl3,id_pengadaan,nama_part,umur,jenis_asset,nama_kelompok,alert
                 FROM view_asset_perlengkapan
                 WHERE alert =1  and umur_maks - umur <= 10 and (no_induk_asset != '' or no_induk_asset is not null)";
-      $data = $this->Get_By_Query($query);
+      
+      $new_query ="
+          SELECT t.id,warehouse_id,ruang_id,rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_asset,
+                            t.serial_number, t.part_number,kd_brg,kd_lokasi,nama_unker,nama_unor,
+                            no_aset,kondisi, kuantitas, dari,
+                            tanggal_perolehan,no_dana,penggunaan_waktu,
+                            penggunaan_freq,unit_waktu,unit_freq,disimpan, 
+                            dihapus,image_url,document_url,kode_unor
+                            ,nama_klasifikasi_aset, kd_klasifikasi_aset,
+                            kd_lvl1,kd_lvl2,kd_lvl3,id_pengadaan,nama_part,jenis_asset,nama_kelompok,t.alert, t.umur,t.umur_maks,t.cycle, t.cycle_maks,
+		            a.nama AS sub_part_nama,a.cycle AS sub_part_cycle, a.cycle_maks AS sub_part_cycle_maks, a.umur AS sub_part_umur, 
+		            a.umur_maks AS sub_part_umur_maks,
+		            b.nama AS sub_sub_part_nama,b.cycle AS sub_sub_part_cycle,b.cycle_maks AS sub_sub_part_cycle_maks, 
+		            b.umur AS sub_sub_part_umur,
+		            b.umur_maks AS sub_sub_part_umur_maks
+                FROM view_asset_perlengkapan AS t
+                INNER JOIN asset_perlengkapan_sub_part AS a ON t.id = a.id_part
+		INNER JOIN asset_perlengkapan_sub_sub_part AS b ON a.id = b.id_sub_part
+		WHERE t.alert = 1
+		AND (no_induk_asset != '' OR no_induk_asset IS NOT NULL)
+		AND (
+		(t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
+		OR
+		(a.umur_maks - a.umur < 10 OR (CASE WHEN a.is_cycle = 1 AND a.cycle_maks - a.cycle <10 THEN TRUE ELSE FALSE END))
+		OR
+		(b.umur_maks - b.umur < 10 OR (CASE WHEN b.is_cycle = 1 AND b.cycle_maks - b.cycle <10 THEN TRUE ELSE FALSE END))
+		)
+                group by t.id
+          ";
+      $data = $this->Get_By_Query($new_query);
+//      var_dump($data);
+//      die;
+       $dataSend['results'] = $data;
+       echo json_encode($dataSend);
+  }
+  
+  function getAlertPerlengkapanListRequiredPemeliharaan()
+  {
+      $id = $this->input->post("id");
+      
+      $query_part = $this->db->query("SELECT 'Part' AS tipe, 
+                t.nama_part as nama, t.part_number,t.serial_number, 
+                (t.umur_maks - t.umur) AS  perbedaan_umur,
+                IF(t.is_cycle = 1,(t.cycle_maks - t.cycle),'-') AS perbedaan_cycle
+                FROM view_asset_perlengkapan AS  t
+          WHERE alert = 1
+		AND (no_induk_asset != '' OR no_induk_asset IS NOT NULL)
+		AND
+                (t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
+		");
+      
+      $query_sub_part = $this->db->query("select 'Sub Part' as tipe, 
+                t.nama, t.part_number,t.serial_number, 
+                (t.umur_maks - t.umur) as  perbedaan_umur,
+                IF(t.is_cycle = 1,(t.cycle_maks - t.cycle),'-') as perbedaan_cycle 
+                from asset_perlengkapan_sub_part as t
+                INNER JOIN asset_perlengkapan as a on a.id = t.id_part
+                WHERE a.alert = 1
+		AND (a.no_induk_asset != '' OR a.no_induk_asset IS NOT NULL)
+		AND
+                (t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
+		");
+      
+      $query_sub_sub_part = $this->db->query("select 'Sub Sub Part' as tipe, 
+                t.nama, t.part_number,t.serial_number, 
+                (t.umur_maks - t.umur) as  perbedaan_umur,
+                IF(t.is_cycle = 1,(t.cycle_maks - t.cycle),'-') as perbedaan_cycle
+                from asset_perlengkapan_sub_sub_part as t
+                INNER JOIN asset_perlengkapan_sub_part as b on b.id = t.id_sub_part
+                INNER JOIN asset_perlengkapan as a on a.id = b.id_part
+                WHERE a.alert = 1
+		AND (a.no_induk_asset != '' OR a.no_induk_asset IS NOT NULL)
+		AND
+                (t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
+		");
+      
+      $data = array();
+      
+      if($query_part->num_rows() > 0)
+      {
+            foreach ($query_part->result() as $obj)
+            {
+                $data[] = $obj;
+            }  
+      }
+      
+      if($query_sub_part->num_rows() > 0)
+      {
+            foreach ($query_sub_part->result() as $obj)
+            {
+                $data[] = $obj;
+            }  
+      }
+      
+      if($query_sub_sub_part->num_rows() > 0)
+      {
+            foreach ($query_sub_sub_part->result() as $obj)
+            {
+                $data[] = $obj;
+            }  
+      }
+      
        $dataSend['results'] = $data;
        echo json_encode($dataSend);
   }

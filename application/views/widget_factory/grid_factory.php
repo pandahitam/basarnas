@@ -1746,6 +1746,31 @@ var search = [{
 
             return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
         };
+        
+        Grid.alertPerlengkapanListRequiredPemeliharaan = function(setting) {
+                var settingGrid = {
+                    grid: {
+                        id: "alert_perlengkapan_grid_list_required_pemeliharaan",
+                        title: 'Daftar Part Yang Membutuhkan Pemeliharaan',
+                        column: [
+                            {header: 'No', xtype: 'rownumberer', width: 35, resizable: true, style: 'padding-top: .5px;'},
+                            {header: 'Tipe', dataIndex: 'tipe', width: 120, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Nama', dataIndex: 'nama', width: 150, groupable: false, hidden: false, filter: {type: 'date'}},
+                            {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Serial Number', dataIndex: 'serial_number', width: 100, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Perbedaan Umur', dataIndex: 'perbedaan_umur', width: 150, groupable: false, hidden: false, filter: {type: 'string'}},
+                            {header: 'Perbedaan Cycle', dataIndex: 'perbedaan_cycle', width: 100, groupable: false, hidden: false, filter: {type: 'string'}},
+                        ]
+                    },
+                };
+            
+
+
+            var feature_list = {
+            };
+
+            return Grid.baseGrid(settingGrid, setting.dataStore, feature_list);
+        };
 
 
         Grid.pemeliharaanPerlengkapanGrid = function(setting) {

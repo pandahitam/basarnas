@@ -1178,6 +1178,30 @@
                                         var data = gridStore.getAt(rowIndex).data;
                                       
                                       Load_TabPage_Asset_Semar('perlengkapan_panel', BASE_URL + 'asset_perlengkapan/perlengkapan', function(cmpx){    
+                                                
+                                               
+                                                
+                                                Ext.define('MListRequiredPemeliharaan', {extend: 'Ext.data.Model',
+                                                    fields: ['tipe','nama','part_number','serial_number','perbedaan_umur','perbedaan_cycle'
+                                                    ]
+                                                });
+                                                
+                                                
+        
+                                                Perlengkapan.dataStoreListRequiredPemeliharaan = new Ext.create('Ext.data.Store', {
+                                                    model: MListRequiredPemeliharaan, autoLoad: false, noCache: false,
+                                                    proxy: new Ext.data.AjaxProxy({
+                                                        url: BASE_URL + 'Dashboard/getAlertPerlengkapanListRequiredPemeliharaan', actionMethods: {read: 'POST'},
+                                                        reader: new Ext.data.JsonReader({
+                                                            root: 'results', totalProperty: 'total', idProperty: 'id'})
+                                                    })
+                                                });
+                                                
+                                                 var setting_grid_required_pemeliharaan ={};
+                                                setting_grid_required_pemeliharaan.dataStore = Perlengkapan.dataStoreListRequiredPemeliharaan;
+                                                
+                                                Perlengkapan.dataStoreListRequiredPemeliharaan.changeParams({params:{id:data.id}});
+                                                
                                                 Perlengkapan.Action.pemeliharaanAdd = function()
                                                 {
                                                     var dataForm = {
@@ -1196,32 +1220,134 @@
                                                         Modal.assetSecondaryWindow.add(form);
                                                         Modal.assetSecondaryWindow.show();
                                                 };
-                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
-                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
-                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
-                                                Perlengkapan.dataStorePemeliharaan.load();
-                                                var toolbarIDs = {};
-                                                toolbarIDs.idGrid = "asset_perlengkapan_grid_pemeliharaan";
-                                                toolbarIDs.add = Perlengkapan.Action.pemeliharaanAdd;
-                                                toolbarIDs.remove = Perlengkapan.Action.pemeliharaanRemove;
-                                                toolbarIDs.edit = Perlengkapan.Action.pemeliharaanEdit;
-                                                var setting = {
-                                                    data: data,
-                                                    dataStore: Perlengkapan.dataStorePemeliharaan,
-                                                    toolbar: toolbarIDs,
-                                                    isPerlengkapan: true,
-                                                    dataMainGrid: Perlengkapan.data,
+                                                
+                                                Perlengkapan.Action.pemeliharaanSubPartAdd = function()
+                                                {
+                                                    var dataForm = {
+                                                    };
+                                                    Reference.Data.subPartPemeliharaan.changeParams({params:{id_open:1,id_part:data.id}});
+                                                    var form = Perlengkapan.Form.createPemeliharaanSubPart(Perlengkapan.dataStorePemeliharaanSubPart, dataForm, false);
+
+                                        //            Tab.addToForm(form, 'asset_perlengkapan-add-pemeliharaan', 'Add Pemeliharaan');
+                                                        if (Modal.assetSecondaryWindow.items.length === 0)
+                                                        {
+                                                            Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+                                                        }
+                                                        Modal.assetSecondaryWindow.add(form);
+                                                        Modal.assetSecondaryWindow.show();
                                                 };
                                                 
-                                                if (Modal.assetCreate.items.length <= 1)
+                                                 Perlengkapan.Action.pemeliharaanSubSubPartAdd = function()
                                                 {
-                                                    Modal.assetCreate.setTitle('Edit Perlengkapan');
-                                                }
+                                                    var dataForm = {
+                                                    };
+                                                    Reference.Data.subPartPemeliharaan.changeParams({params:{id_open:1,id_part:data.id}});
+                                                    var form = Perlengkapan.Form.createPemeliharaanSubSubPart(Perlengkapan.dataStorePemeliharaanSubSubPart, dataForm, false);
+
+                                        //            Tab.addToForm(form, 'asset_perlengkapan-add-pemeliharaan', 'Add Pemeliharaan');
+                                                        if (Modal.assetSecondaryWindow.items.length === 0)
+                                                        {
+                                                            Modal.assetSecondaryWindow.setTitle('Tambah Pemeliharaan');
+                                                        }
+                                                        Modal.assetSecondaryWindow.add(form);
+                                                        Modal.assetSecondaryWindow.show();
+                                                };
+//                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+//                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+//                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+//                                                Perlengkapan.dataStorePemeliharaan.load();
+//                                                var toolbarIDs = {};
+//                                                toolbarIDs.idGrid = "asset_perlengkapan_grid_pemeliharaan";
+//                                                toolbarIDs.add = Perlengkapan.Action.pemeliharaanAdd;
+//                                                toolbarIDs.remove = Perlengkapan.Action.pemeliharaanRemove;
+//                                                toolbarIDs.edit = Perlengkapan.Action.pemeliharaanEdit;
+//                                                var setting = {
+//                                                    data: data,
+//                                                    dataStore: Perlengkapan.dataStorePemeliharaan,
+//                                                    toolbar: toolbarIDs,
+//                                                    isPerlengkapan: true,
+//                                                    dataMainGrid: Perlengkapan.data,
+//                                                };
+//                                                
+//                                                if (Modal.assetCreate.items.length <= 1)
+//                                                {
+//                                                    Modal.assetCreate.setTitle('Edit Perlengkapan');
+//                                                }
+//                                                
+//                                                var _perlengkapanPemeliharaanGrid = Grid.pemeliharaanPerlengkapanGrid(setting);
+//                                                Modal.assetCreate.addListener("close", function(){ gridStore.load() }, this);
+//                                                Modal.assetCreate.add(_perlengkapanPemeliharaanGrid);
+//                                                Modal.assetCreate.show();
+
+                                                  
+                                                    Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
+                                                    Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
+                                                    Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;
+                                                    Perlengkapan.dataStorePemeliharaan.load();
+
+                                                    Perlengkapan.dataStorePemeliharaanSubPart.changeParams({params:{id:data.id}});
+                                                    Perlengkapan.dataStorePemeliharaanSubSubPart.changeParams({params:{id:data.id}});
+
+                                                    var toolbarIDs = {};
+                                                    toolbarIDs.idGrid = "asset_perlengkapan_grid_pemeliharaan";
+                                                    toolbarIDs.add = Perlengkapan.Action.pemeliharaanAdd;
+                                                    toolbarIDs.remove = Perlengkapan.Action.pemeliharaanRemove;
+                                                    toolbarIDs.edit = Perlengkapan.Action.pemeliharaanEdit;
+                                                    var setting = {
+                                                        data: data,
+                                                        dataStore: Perlengkapan.dataStorePemeliharaan,
+                                                        toolbar: toolbarIDs,
+                                                        isPerlengkapan: true,
+                                                        dataMainGrid: Perlengkapan.data,
+                                                    };
+
+                                                    var toolbarSubPartIDs = {};
+                                                    toolbarSubPartIDs.idGrid = "asset_perlengkapan_grid_pemeliharaan_sub_part";
+                                                    toolbarSubPartIDs.add = Perlengkapan.Action.pemeliharaanSubPartAdd;
+                                                    toolbarSubPartIDs.remove = Perlengkapan.Action.pemeliharaanSubPartRemove;
+                                                    toolbarSubPartIDs.edit = Perlengkapan.Action.pemeliharaanSubPartEdit;
+                                                    var setting_sub_part = {
+                                                        data: data,
+                                                        dataStore: Perlengkapan.dataStorePemeliharaanSubPart,
+                                                        toolbar: toolbarSubPartIDs,
+                                                        isPerlengkapan: true,
+                                                        dataMainGrid: Perlengkapan.data,
+                                                    };
+
+                                                    var toolbarSubSubPartIDs = {};
+                                                    toolbarSubSubPartIDs.idGrid = "asset_perlengkapan_grid_pemeliharaan_sub_sub_part";
+                                                    toolbarSubSubPartIDs.add = Perlengkapan.Action.pemeliharaanSubSubPartAdd;
+                                                    toolbarSubSubPartIDs.remove = Perlengkapan.Action.pemeliharaanSubSubPartRemove;
+                                                    toolbarSubSubPartIDs.edit = Perlengkapan.Action.pemeliharaanSubSubPartEdit;
+                                                    var setting_sub_sub_part = {
+                                                        data: data,
+                                                        dataStore: Perlengkapan.dataStorePemeliharaanSubSubPart,
+                                                        toolbar: toolbarSubSubPartIDs,
+                                                        isPerlengkapan: true,
+                                                        dataMainGrid: Perlengkapan.data,
+                                                    };
+                                            
+                                            var _perlengkapanPemeliharaanGrid = [{
+                                            xtype: 'container',
+                                            layout: 'anchor',
+                                            anchor: '100%',
+                                            items: [
+                                               {
+                                                    layout: 'anchor',
+                                                    items: [{xtype:'container',height:300,items:[Grid.alertPerlengkapanListRequiredPemeliharaan(setting_grid_required_pemeliharaan)]},
+                                                            {xtype:'container',style: {marginTop: '10px'},height:300,items:[Grid.pemeliharaanPerlengkapanGrid(setting)]},
+                                                            {xtype:'container',style: {marginTop: '10px'},height:300,items:[Grid.pemeliharaanPerlengkapanSubPartGrid(setting_sub_part)]},
+                                                            {xtype:'container',style: {marginTop: '10px'},height:300,items:[Grid.pemeliharaanPerlengkapanSubSubPartGrid(setting_sub_sub_part)]}
+                                                        ]
+                                                }]
+                                            }];
                                                 
-                                                var _perlengkapanPemeliharaanGrid = Grid.pemeliharaanPerlengkapanGrid(setting);
-//                                                Tab.addToForm(_perlengkapanPemeliharaanGrid, 'perlengkapan-pemeliharaan', 'Pemeliharaan');
                                                 Modal.assetCreate.addListener("close", function(){ gridStore.load() }, this);
                                                 Modal.assetCreate.add(_perlengkapanPemeliharaanGrid);
+                                                if (Modal.assetCreate.items.length <= 1)
+                                                {
+                                                    Modal.assetCreate.setTitle('Edit Pemeliharaan Perlengkapan');
+                                                }
                                                 Modal.assetCreate.show();
                                                 
                                                 
@@ -1238,7 +1364,7 @@
                         {header: 'Nama Part', dataIndex: 'nama_part', width: 150},
                         {header: 'Part Number', dataIndex: 'part_number', width: 150},
                         {header: 'Serial Number', dataIndex: 'serial_number', width: 150},
-                        {header: 'Sisa Umur', dataIndex: 'umur', width: 150},
+//                        {header: 'Sisa Umur', dataIndex: 'umur', width: 150},
                     ],
                     height: 200,
                 });

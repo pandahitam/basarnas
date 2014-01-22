@@ -1427,6 +1427,12 @@
                                                 grid_sub_part.getStore().load();
                                             }
                                             
+                                            var grid_alert_required_list = Ext.getCmp('alert_perlengkapan_grid_list_required_pemeliharaan');
+                                            if(grid_alert_required_list != null)
+                                            {
+                                                grid_alert_required_list.getStore().load();
+                                            }
+                                            
 //                                            Perlengkapan.Data.load();
 //                                            $.ajax({
 //                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
@@ -1564,6 +1570,12 @@
                                             if (dataGrid !== null)
                                             {
                                                 dataGrid.load();
+                                            }
+                                            
+                                            var grid_alert_required_list = Ext.getCmp('alert_perlengkapan_grid_list_required_pemeliharaan');
+                                            if(grid_alert_required_list != null)
+                                            {
+                                                grid_alert_required_list.getStore().load();
                                             }
                                             
                                             Modal.assetSecondaryWindow.close();

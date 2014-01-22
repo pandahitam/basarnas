@@ -88,6 +88,7 @@
             autoDestroy: true,
             closeAction: 'hide',
             layout: 'fit',
+            autoScroll: true,
             width: Measurement.windowWidth, height: Measurement.windowHeight, bodyStyle: 'padding: 5px;',
             listeners: {
                 'beforeclose': function() {
