@@ -481,10 +481,11 @@
                     id: obj.data.id,
                     id_ext_asset:obj.data.id_ext_asset,
                     jumlah_penggunaan:obj.data.jumlah_penggunaan,
+                    jumlah_cycle:obj.data.jumlah_cycle,
                 };
                 arrayDeleted.push(data);
             });
-           Modal.deleteAlertDetailPenggunaanAngkutanUdara(arrayDeleted, AngkutanUdara.URL.removeDetailPenggunaanAngkutanUdara,AngkutanUdara.dataStoreDetailPenggunaanAngkutanUdara,'udara','1');
+           Modal.deleteAlertDetailPenggunaanAngkutanUdara(arrayDeleted, AngkutanUdara.URL.removeDetailPenggunaanAngkutanUdara,AngkutanUdara.dataStoreDetailPenggunaanAngkutanUdara,'udara');
             
                     
         };

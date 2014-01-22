@@ -59,7 +59,7 @@ class Dashboard extends CI_Controller{
                             ,nama_klasifikasi_aset, kd_klasifikasi_aset,
                             kd_lvl1,kd_lvl2,kd_lvl3,id_pengadaan,nama_part,umur,jenis_asset,nama_kelompok,alert
                 FROM view_asset_perlengkapan
-                WHERE alert =1  and umur <= 10 and (no_induk_asset != '' or no_induk_asset is not null)";
+                WHERE alert =1  and umur_maks - umur <= 10 and (no_induk_asset != '' or no_induk_asset is not null)";
       $data = $this->Get_By_Query($query);
        $dataSend['results'] = $data;
        echo json_encode($dataSend);

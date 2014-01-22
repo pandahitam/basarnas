@@ -248,7 +248,7 @@
                                  debugger;*/
                                 dataGrid.load();
                                 $.ajax({
-                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara/'+mesin,
+                                    url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara/',
                                     type: "POST",
                                     dataType:'json',
                                     async:false,
@@ -258,14 +258,9 @@
                                      {
                                         var updateTotalPenggunaanMesin1 = response.total_mesin1 + ' Jam';
                                         var updateTotalPenggunaanMesin2 = response.total_mesin2 + ' Jam';
-                                        if(mesin == '1')
-                                        {
-                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin_'+mesin).setValue(updateTotalPenggunaanMesin1);
-                                        }
-                                        else if(mesin == '2')
-                                        {
-                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin_'+mesin).setValue(updateTotalPenggunaanMesin2);
-                                        }
+                                        
+                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin1').setValue(updateTotalPenggunaanMesin1);
+                                            Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin2').setValue(updateTotalPenggunaanMesin2);
                                          
                                      }
 

@@ -133,7 +133,7 @@ class Asset_Angkutan_Udara extends MY_Controller {
         {
             $dataPerlengkapanUdara = array();
             $dataPerlengkapanUdaraFields = array(
-                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','id_asset_perlengkapan'
+                'id','id_ext_asset','jenis_perlengkapan','no','nama','keterangan','id_asset_perlengkapan','installation_date','installation_ac_tsn','installation_comp_tsn'
             );
             
             foreach ($dataPerlengkapanUdaraFields as $field) {

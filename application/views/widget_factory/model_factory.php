@@ -10,7 +10,7 @@ Ext.define('MReferensiRuang', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MPemeliharaanPerlengkapan', {extend: 'Ext.data.Model',
-    fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset','umur',
+    fields: ['id', 'kd_brg', 'kd_lokasi', 'no_aset','umur','cycle',
         'kode_unor', 'nama_unker', 'nama_unor','jenis', 'nama', 
         'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
         'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
@@ -19,7 +19,7 @@ Ext.define('MPemeliharaanPerlengkapan', {extend: 'Ext.data.Model',
 });
 
 Ext.define('MKelompokPart', {extend: 'Ext.data.Model',
-    fields: ['id','nama_kelompok','jenis_asset'
+    fields: ['id','nama_kelompok','keterangan'
     ]
 });
 
@@ -71,7 +71,7 @@ Ext.define('MInventoryPerlengkapan', {extend: 'Ext.data.Model',
 Ext.define('MDetailPenggunaanAngkutan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'tanggal', 'jumlah_penggunaan', 
-        'satuan_penggunaan','keterangan'
+        'satuan_penggunaan','keterangan','jumlah_cycle'
     ]
 });
 
@@ -178,7 +178,10 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'tanggal_perolehan','no_dana','penggunaan_waktu',
         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
         'dihapus','image_url','document_url'
-        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan','no_induk_asset','nama_part','umur']
+        ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan','no_induk_asset','nama_part','umur','jenis_asset',
+        'umur_maks','installation_date','installation_ac_tsn','installation_comp_tsn','task','is_oc','is_engine','cycle','cycle_maks','is_cycle'
+        ,'eng_type','eng_tso'
+        ]
 });
 
 
@@ -328,7 +331,8 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanUdaraPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg'
+        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg',
+        'installation_date','installation_ac_tsn','installation_comp_tsn'
     ]
 });
   
@@ -595,7 +599,7 @@ Ext.define('MUnitOrganisasi', { extend:'Ext.data.Model',
 })
 
 Ext.define('MPartNumber', { extend:'Ext.data.Model',
-    fields: ['id','vendor_id','part_number','nama_kelompok','jenis_asset','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks']
+    fields: ['id','vendor_id','part_number','nama_kelompok','jenis_asset','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks','id_kelompok_part']
 })
 
 

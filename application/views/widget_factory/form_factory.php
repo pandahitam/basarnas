@@ -42,13 +42,28 @@
             unkerForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unit_kerja_referensi_warehouse_ruang_rak',
             unorForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unor_referensi_warehouse_ruang_rak',
             statusAsset: BASE_URL + 'combo_ref/combo_status_asset',
-            kelompokPart: BASE_URL + 'combo_ref/combo_kelompok_part'
+            kelompokPart: BASE_URL + 'combo_ref/combo_kelompok_part',
+            subPart: BASE_URL + 'combo_ref/combo_sub_part',
+            subPartPemeliharaan: BASE_URL + 'combo_ref/combo_sub_part_pemeliharaan',
+            subSubPart: BASE_URL + 'combo_ref/combo_sub_sub_part',
+            subSubPartPemeliharaan: BASE_URL + 'combo_ref/combo_sub_sub_part_pemeliharaan',
+            listAngkutanUdara: BASE_URL + 'combo_ref/combo_list_angkutan_udara'
         };
+        
+       
         
         Reference.Data.kelompokPart = new Ext.create('Ext.data.Store', {
              fields: ['id', 'nama_kelompok'], storeId: 'DataReferensiKelompokPart',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.kelompokPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.listAngkutanUdara = new Ext.create('Ext.data.Store', {
+             fields: ['kd_lokasi', 'kd_brg','no_aset','merk','no_induk_asset'], storeId: 'DataReferensiKelompokPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.listAngkutanUdara, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
             autoLoad: true
         });
@@ -182,10 +197,42 @@
             }),
             autoLoad: true
         });
-
+        
+        Reference.Data.subPartPemeliharaan = new Ext.create('Ext.data.Store', {
+            fields: ['part_number', 'nama','id','umur','cycle'], storeId: 'DataSubPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.subPartPemeliharaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.subPart = new Ext.create('Ext.data.Store', {
+            fields: ['part_number', 'nama','id','umur','cycle'], storeId: 'DataSubPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.subPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.subSubPartPemeliharaan = new Ext.create('Ext.data.Store', {
+            fields: ['part_number', 'nama','id','umur','cycle'], storeId: 'DataSubPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.subSubPartPemeliharaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        
+        Reference.Data.subSubPart = new Ext.create('Ext.data.Store', {
+            fields: ['part_number', 'nama','id','umur','cycle'], storeId: 'DataSubPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.subSubPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         Reference.Data.partNumber = new Ext.create('Ext.data.Store', {
-            fields: ['part_number', 'nama','kd_brg'], storeId: 'DataPartNumber',
+            fields: ['part_number', 'nama','kd_brg','id'], storeId: 'DataPartNumber',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.partNumber, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
@@ -222,6 +269,19 @@
                 url: Reference.URL.statusAsset, actionMethods: {read: 'POST'}, extraParams: {kd_lokasi: 0}
             }),
             autoLoad: true
+        });
+        
+        
+        Reference.Data.taskLaporanUdara = new Ext.create('Ext.data.Store', {
+            fields: ['value','name'],
+            data: [{name: 'Overhaul (OH)', value:'OH'},
+                   {name: 'Hot Section Insp. (HSI)', value:'HSI'},
+                   {name: 'Bench Check (BC)', value:'BC'},
+                   {name: 'Hydrostatic Test (HST)', value:'HST'},
+                   {name: 'Life (LF)', value:'LF'},
+                   {name: 'Inspection/Check (IN)', value:'IN'},
+                   {name: 'Service Life Limit (SLL)', value:'SLL'},
+                  ]
         });
         
         Reference.Data.kondisiAsset = new Ext.create('Ext.data.Store', {
@@ -1190,7 +1250,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             }
                                             
                                             Modal.assetSecondaryWindow.close();
-                                            dataMainGrid.load();
+//                                            dataMainGrid.load();
                                             $.ajax({
                                                 url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
                                                 type: "POST",
@@ -1201,9 +1261,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                     if(status == "success")
                                                     {
                                                         var fieldUmur = Ext.getCmp('asset_perlengkapan_umur');
+                                                        var fieldCycle = Ext.getCmp('asset_perlengkapan_cycle');
                                                         if(fieldUmur != undefined && fieldUmur !=null)
                                                         {
-                                                            fieldUmur.setValue(response);
+                                                            fieldUmur.setValue(response.umur);
+                                                        }
+                                                        if(fieldCycle != undefined && fieldCycle !=null)
+                                                        {
+                                                            fieldCycle.setValue(response.cycle);
                                                         }
                                                         
                                                     }
@@ -1474,8 +1539,8 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         Form.pemeliharaanInAssetPerlengkapan= function(setting){
             var form = Form.panelPemeliharaanInAssetPerlengkapan(setting.url, setting.data, setting.isEditing, setting.addBtn, setting.dataMainGrid);
             form.insert(1, Form.Component.hiddenIdentifier());
-            form.insert(4, Form.Component.fileUpload());
             form.insert(2, Form.Component.pemeliharaanPerlengkapan(setting.isEditing));
+            form.insert(4, Form.Component.fileUpload());
             
             return form;
         }
@@ -1705,19 +1770,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         allowBlank:false,
                                     },
                                     {
-                                        xtype:'combo',
-                                        name:'jenis_asset',
-                                        fieldLabel:'Jenis Angkutan',
-                                        allowBlank:false,
-                                        editable:false,
-//                                        readOnly:setting.isEditing,
-                                        readOnly:false,
-                                        store: Reference.Data.jenisAsetKelompokPart,
-                                        valueField: 'value',
-                                        displayField: 'value', emptyText: 'Jenis',
-                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis'
-                                        
-                                    },
+                                        xtype:'textarea',
+                                        fieldLabel:'Keterangan',
+                                        name: 'keterangan',
+                                    }
                                    ]
                         }]
                 }];
@@ -2396,6 +2452,20 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Kelompok',
                                         
                                     },
+                                     {
+                                        xtype:'combo',
+                                        name:'jenis_asset',
+                                        fieldLabel:'Jenis Angkutan',
+                                        allowBlank:true,
+                                        editable:false,
+//                                        readOnly:setting.isEditing,
+                                        readOnly:false,
+                                        store: Reference.Data.jenisAsetKelompokPart,
+                                        valueField: 'value',
+                                        displayField: 'value', emptyText: 'Jenis',
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis'
+                                        
+                                    },
                                     {
                                         fieldLabel:'Part Number',
                                         name: 'part_number',
@@ -2439,6 +2509,193 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             
             var form = Form.panelReferensiPartNumber(setting.url,setting.data,setting.isEditing);
             form.insert(1, formComponentPartNumber);
+            
+            return form;
+        }
+        
+        Form.referensiSubPart = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id'
+                                    },
+                                    {
+                                        fieldLabel:'Part Induk',
+                                        name: 'id_part', 
+                                        xtype:'combo',
+                                        allowBlank: false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part Induk',
+                                        editable:false, allowBlank:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part Induk'
+                                    },
+                                    {
+                                        fieldLabel:'Part Number',
+                                        name: 'part_number',
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Nama',
+                                        name: 'nama',
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Umur Maksimum',
+                                        name: 'umur',
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Cycle',
+                                        name: 'cycle',
+                                    },
+//                                    {
+//                                        xtype: 'checkboxfield',
+//                                        inputValue: 1,
+//                                        fieldLabel: 'OC',
+//                                        name: 'is_oc',
+//                                        boxLabel: 'Ya'
+//                                    },
+                                    {
+                                        xtype: 'checkboxfield',
+                                        inputValue: 1,
+                                        fieldLabel: 'Kelompok',
+                                        name: 'is_kelompok',
+                                        boxLabel: 'Ya'
+                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiSubPart(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
+            
+            return form;
+        }
+        
+        Form.referensiSubSubPart = function(setting)
+        {
+            var formComponentReferensi = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'SUB SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id'
+                                    },
+                                    {
+                                        fieldLabel:'Part Induk',
+                                        xtype:'combo',
+                                        name:'id_part_induk',
+                                        allowBlank: false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part Induk',
+                                        editable:false, allowBlank:false,
+                                        readOnly:setting.isEditing,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part Induk',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    var sub_part = Ext.getCmp('id_sub_part');
+                                                    
+                                                    if(setting.isEditing ==  false)
+                                                    {
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    if (value !== null)
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },}
+                                        }    
+                                    },
+                                    {
+                                        disabled:true,
+                                        fieldLabel:'Sub Part Induk',
+                                        name:'id_sub_part',
+                                        id:'id_sub_part',
+                                        xtype:'combo',
+                                        allowBlank: false,
+                                        store: Reference.Data.subPart,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Sub Part Induk',
+                                        editable:false, allowBlank:false,
+                                        readOnly:setting.isEditing,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Sub Part Induk',
+                                        
+                                    },
+                                    {
+                                        fieldLabel:'Part Number',
+                                        name: 'part_number',
+                                        allowBlank:false,
+                                        readOnly:setting.isEditing
+                                    },
+                                    {
+                                        fieldLabel:'Nama',
+                                        name: 'nama',
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Umur Maksimum',
+                                        name: 'umur',
+                                    },
+                                    {
+                                        xtype:'numberfield',
+                                        fieldLabel:'Cycle',
+                                        name: 'cycle',
+                                    },
+//                                    {
+//                                        xtype: 'checkboxfield',
+//                                        inputValue: 1,
+//                                        fieldLabel: 'OC',
+//                                        name: 'is_oc',
+//                                        boxLabel: 'Ya'
+//                                    },
+                                   ]
+                        }]
+                }];
+            
+            var form = Form.panelReferensiSubSubPart(setting.url,setting.data,setting.isEditing);
+            form.insert(1, formComponentReferensi);
             
             return form;
         }
@@ -4664,6 +4921,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        
         Form.panelReferensiPartNumber = function(url, data, edit) {
             var _form = Ext.create('Ext.form.Panel', {
                 id : 'form-referenPartNumber',
@@ -4686,6 +4944,164 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             var pk_check = false;
                             $.ajax({
                                 url:BASE_URL + 'master_data/checkPartNumber',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{part_number:part_number, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+
+                                                form.reset();
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Part Number Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiSubPart = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensi',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensi', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var part_number = formValues.part_number;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkSubPart',
+                                type: "POST",
+                                dataType:'json',
+                                async:false,
+                                data:{part_number:part_number, edit:edit},
+                                success:function(response, status){
+                                if(response == true)
+                                {
+                                    pk_check = true;
+                                }
+                                else
+                                {
+                                    pk_check = false;
+                                }
+
+                                }
+                             });
+                            if(pk_check == true)
+                            {
+                                if (form.isValid())
+                                {
+    //                                console.log(form.getValues());
+                                    form.submit({
+                                        success: function(form) {
+                                            Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                            
+                                            if (data !== null)
+                                            {
+                                                data.load();
+                                            }
+                                            if(!edit)
+                                            {
+
+                                                form.reset();
+                                            }
+    
+    
+                                        },
+                                        failure: function() {
+                                            Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                        }
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert('Fail', 'Kode Part Number Sudah Digunakan!');
+                            }
+
+                            
+                        }
+                    }]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelReferensiSubSubPart = function(url, data, edit) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-referensi',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', id: 'save_referensi', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues(); 
+                            var part_number = formValues.part_number;
+                            var pk_check = false;
+                            $.ajax({
+                                url:BASE_URL + 'master_data/checkSubSubPart',
                                 type: "POST",
                                 dataType:'json',
                                 async:false,
@@ -5919,6 +6335,15 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 fieldDefaults: {
                     msgTarget: 'side'
                 },
+                listeners:{
+                    'activate':{
+                        fn:function(obj,value)
+                        {
+                            debugger;
+                            data.load();
+                        }
+                    }
+                },
                 buttons: [{
                         text: 'Simpan', id: 'save_asset', iconCls: 'icon-save', formBind: true,
                         handler: function() {
@@ -6019,6 +6444,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        
         Form.detailPenggunaanAngkutan = function(url, data, edit,tipe_angkutan) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -6064,11 +6490,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                         var updateTotalPenggunaan = response.total + ' Km';
                                                         Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
                                                     }
-                                                    else if(tipe_angkutan == "laut" || tipe_angkutan == "udara")
+                                                    else if(tipe_angkutan == "laut" )
                                                     {
                                                         var updateTotalPenggunaan = response.total + ' Jam';
                                                         Ext.getCmp('total_detail_penggunaan_angkutan').setValue(updateTotalPenggunaan);
                                                     }
+                                                    
 
                                                  }
 
@@ -6135,7 +6562,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                  {
                                                         var updateTotalPenggunaanMesin1 = response.total_mesin1 + ' Jam';
                                                         var updateTotalPenggunaanMesin2 = response.total_mesin2 + ' Jam';
-                                                        
+                                                       
                                                             Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin1').setValue(updateTotalPenggunaanMesin1);
                                                             Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin2').setValue(updateTotalPenggunaanMesin2);
                                                         
@@ -8559,7 +8986,10 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setDisabled(false);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_part_number').setDisabled(false);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_kd_brg').setDisabled(false);
-//                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(true);
+//                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_date').setDisabled(false);
+//                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_ac_tsn').setDisabled(false);
+//                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_comp_tsn').setDisabled(false);
+
                                             }
                                             else
                                             {
@@ -8567,7 +8997,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_part_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_kd_brg').setDisabled(true);
-//                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(false);
+//                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_date').setDisabled(true);
+//                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_ac_tsn').setDisabled(true);
+//                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_comp_tsn').setDisabled(true);
                                             }
                                             
                                         },
@@ -8644,6 +9076,30 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id:'angkutan_udara_asset_perlengkapan_serial_number',
                                 readOnly:true,
                             },
+//                            {
+//                                disabled:true,
+//                                xtype:'datefield',
+//                                fieldLabel:'Installation Date',
+//                                name:'installation_date',
+//                                id:'angkutan_udara_asset_perlengkapan_installation_date',
+//                                format: 'Y-m-d'
+//                            },
+//              
+//                            {
+//                                disabled:true,
+//                                xtype:'numberfield',
+//                                fieldLabel:'Installation A/C TSN',
+//                                name:'installation_ac_tsn',
+//                                id:'angkutan_udara_asset_perlengkapan_installation_ac_tsn',
+//                            },
+//                            {
+//                                disabled:true,
+//                                xtype:'numberfield',
+//                                fieldLabel:'Installation COMP TSN',
+//                                name:'installation_comp_tsn',
+//                                id:'angkutan_udara_asset_perlengkapan_installation_comp_tsn',
+//                            },
+                   
                             {
                                 xtype:'textarea',
                                 fieldLabel: 'Keterangan',
@@ -8717,6 +9173,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                              xtype: 'displayfield',
                              fieldLabel: 'Satuan Penggunaan',
                              value: 'Jam Terbang',
+                         },
+                         {
+                             xtype: 'numberfield',
+                             name:'jumlah_cycle',
+                             fieldLabel: 'Jumlah Cycle',
+                             allowBlank: false,
                          }
                   ]
               }
@@ -8725,6 +9187,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
           }
         };
+        
+        
+ 
         
         Form.Component.dataDetailPenggunaanAngkutan= function(id_ext_asset,tipe_angkutan,edit)
         {
@@ -8771,7 +9236,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 minValue:1,
                                 readOnly:edit,
                             },
-                            Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan(tipe_angkutan,edit)
+                            Form.SubComponent.jenisSatuanDetailPenggunaanAngkutan(tipe_angkutan,edit),
                            ]
                     }, {
                         columnWidth: .50,
@@ -10034,6 +10499,24 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return component;
         };
+        
+        Form.Component.gridSubPart = function(setting,edit){
+            var subcomponent = {
+                xtype: 'fieldset',
+                layout: 'anchor',
+                anchor: '100%',
+                height: (edit==true)?325:150,
+                title: 'SUB PART',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [(edit==true)?{xtype:'container',height:300,items:[Grid.perlengkapanSubPart(setting)]}:{xtype:'label',text:'Harap Simpan Data Terlebih Dahulu Untuk Mengisi Bagian Ini'}]};
+                
+            return subcomponent;
+        };
 
         Form.Component.alatbesar = function() {
             var component = {
@@ -10950,7 +11433,17 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     value:0,
                                     minValue:0,
                                     readOnly:edit
-                                }]
+                                },
+                                {
+                                    xtype:'numberfield',
+                                    fieldLabel: 'Penambahan Cycle',
+                                    name: 'cycle',
+                                    allowBlank:false,
+                                    value:0,
+                                    minValue:0,
+                                    readOnly:edit
+                                }
+                            ]
                         },
                     {
                             columnWidth: .33,
@@ -11426,16 +11919,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     allowBlank: false,
                                     store: Reference.Data.partNumber,
                                     valueField: 'part_number',
+                                    readOnly:edit,
                                     editable:false,
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                     listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
                                         'change': {
                                             fn: function(obj, value) {
 
@@ -11676,9 +12164,69 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //                                },
                                 {
                                     xtype: 'numberfield',
-                                    fieldLabel: 'Sisa Umur',
+                                    fieldLabel: 'Umur',
                                     name: 'umur',
                                     id:'asset_perlengkapan_umur'
+                                },
+                                {
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Umur Maksimum',
+                                    name: 'umur_maks',
+                                    id:'asset_perlengkapan_umur_maks'
+                                },
+                                {
+                                    xtype: 'checkboxfield',
+                                    inputValue: 1,
+                                    fieldLabel: ' Memiliki Cycle',
+                                    name: 'is_cycle',
+                                    boxLabel: 'Ya',
+                                    listeners:{
+                                        'change':{
+                                            fn:function(obj,value)
+                                            {
+                                                var cycle_field =Ext.getCmp('asset_perlengkapan_cycle');
+                                                var cycle_maks_field = Ext.getCmp('asset_perlengkapan_cycle_maks');
+                                                if(value == true)
+                                                {    
+                                                    if(cycle_field != null)
+                                                    {
+                                                        cycle_field.setDisabled(false);
+                                                    }
+                                                    
+                                                    if(cycle_maks_field != null)
+                                                    {
+                                                        cycle_maks_field.setDisabled(false);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if(cycle_field != null)
+                                                    {
+                                                        cycle_field.setDisabled(true);
+                                                    }
+                                                    
+                                                    if(cycle_maks_field != null)
+                                                    {
+                                                        cycle_maks_field.setDisabled(true);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    disabled:true,
+                                    xtype:'numberfield',
+                                    fieldLabel:'Cycle',
+                                    id:'asset_perlengkapan_cycle',
+                                    name:'cycle',
+                                },
+                                {
+                                    disabled:true,
+                                    xtype:'numberfield',
+                                    fieldLabel:'Maks Cycle',
+                                    id:'asset_perlengkapan_cycle_maks',
+                                    name:'cycle_maks',
                                 },
                                 {
                                     xtype: 'checkboxfield',
@@ -11693,6 +12241,135 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 }]
 
             return component;
+        };
+        
+        Form.Component.perlengkapanDataTambahan = function(){
+        var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DATA PERLENGKAPAN KHUSUS ANGKUTAN UDARA',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .5,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                            {
+                                xtype:'datefield',
+                                fieldLabel:'Installation Date',
+                                name:'installation_date',
+                                id:'angkutan_udara_asset_perlengkapan_installation_date',
+                                format: 'Y-m-d'
+                            },
+                            {
+                                xtype:'numberfield',
+                                fieldLabel:'Installation A/C TSN',
+                                name:'installation_ac_tsn',
+                                id:'angkutan_udara_asset_perlengkapan_installation_ac_tsn',
+                            },
+                            {
+                                xtype:'numberfield',
+                                fieldLabel:'Installation COMP TSN',
+                                name:'installation_comp_tsn',
+                                id:'angkutan_udara_asset_perlengkapan_installation_comp_tsn',
+                            },
+                            {
+                                xtype: 'combo',
+                                disabled: false,
+                                fieldLabel: 'Task',
+                                name: 'task',
+                                store: Reference.Data.taskLaporanUdara,
+                                editable:false,
+                                valueField: 'value',
+                                displayField: 'name', emptyText: 'Pilih Task',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                            }
+                            ]
+                        },
+                        {
+                            columnWidth: .5,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                            {
+                                xtype: 'checkboxfield',
+                                inputValue: 1,
+                                fieldLabel: 'OC',
+                                name: 'is_oc',
+                                boxLabel: 'Ya'
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                inputValue: 1,
+                                fieldLabel: 'Engine/Mesin',
+                                name: 'is_engine',
+                                boxLabel: 'Ya',
+                                listeners:{
+                                        'change':{
+                                            fn:function(obj,value)
+                                            {
+                                                var type_field =Ext.getCmp('asset_perlengkapan_eng_type');
+                                                var tso_field = Ext.getCmp('asset_perlengkapan_eng_tso');
+                                                if(value == true)
+                                                {    
+                                                    if(type_field != null)
+                                                    {
+                                                        type_field.setDisabled(false);
+                                                    }
+                                                    
+                                                    if(tso_field != null)
+                                                    {
+                                                        tso_field.setDisabled(false);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if(type_field != null)
+                                                    {
+                                                        type_field.setDisabled(true);
+                                                    }
+                                                    
+                                                    if(tso_field != null)
+                                                    {
+                                                        tso_field.setDisabled(true);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                            },
+                            {
+                                disabled:true,
+                                xtype:'textfield',
+                                fieldLabel:'ENG Type',
+                                name:'eng_type',
+                                id:'asset_perlengkapan_eng_type'
+                            },
+                            {
+                                disabled:true,
+                                xtype:'textfield',
+                                fieldLabel:'ENG TSO',
+                                name:'eng_tso',
+                                id:'asset_perlengkapan_eng_tso'
+                            },
+                            ]
+                        }]
+                }]
+                           
+                            
+                return component;
         };
         
         
@@ -12111,6 +12788,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return component;
         };
+        
+        
+        
         
         Form.Component.dataInventoryPerlengkapanPengeluaran = function (readOnly){
             var component = [{
@@ -12842,7 +13522,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         xtype:'fieldset',
                                         title:'Daftar Penggunaan',
                                         height:(edit ==true)?325:150,
-                                        items:[(edit==true)?{xtype:'container',height:300,items:[Grid.detailPenggunaanAngkutan(setting_grid_penggunaan,edit)]}:{xtype:'displayfield', value:'Harap Simpan data terlebih dahulu'}]
+                                        items:[(edit==true)?{xtype:'container',height:300,items:[Grid.detailPenggunaanAngkutanUdara(setting_grid_penggunaan,edit)]}:{xtype:'displayfield', value:'Harap Simpan data terlebih dahulu'}]
                                     }
                                     
                                 ]

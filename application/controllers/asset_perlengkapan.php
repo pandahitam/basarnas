@@ -64,7 +64,10 @@ class Asset_Perlengkapan extends MY_Controller {
                         'no_aset','kondisi', 'kuantitas', 'dari',
                         'tanggal_perolehan','no_dana','penggunaan_waktu',
                         'penggunaan_freq','unit_waktu','unit_freq','disimpan', 
-                        'dihapus','image_url','document_url','kd_klasifikasi_aset','kode_unor','alert','no_induk_asset');
+                        'dihapus','image_url','document_url','kd_klasifikasi_aset','kode_unor','alert','no_induk_asset',
+                        'installation_date','installation_ac_tsn','installation_comp_tsn','task','is_oc','umur_maks',
+                        'is_engine','cycle','cycle_maks','is_cycle','eng_type','eng_tso'
+                    );
                 
 //                $extFields = array(
 //                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
@@ -124,7 +127,7 @@ class Asset_Perlengkapan extends MY_Controller {
                 }
                 else
                 {
-                    $dataSimak['umur'] = $partNumberDetails->umur_maks;
+//                    $dataSimak['umur'] = $partNumberDetails->umur_maks;
                     $this->createLog('INSERT ASSET PERLENGKAPAN','asset_perlengkapan');
                 }
                 
@@ -179,6 +182,203 @@ class Asset_Perlengkapan extends MY_Controller {
             $id = $this->input->post('id');
             $result = $this->model->get_Perlengkapan($id);
             echo json_encode($result);
+        }
+        
+        
+        
+       function modifySubPart(){
+            
+                $data = array();
+                //$dataExt = array();
+//                $dataKode = array();
+                
+//                $kodeFields = array(
+//                        'kd_gol','kd_bid','kd_kelompok','kd_skel','kd_sskel'
+//                );
+	  	$dataFields = array(
+			'id','id_part','nama','serial_number','part_number',
+                        'installation_date','installation_ac_tsn','installation_comp_tsn','task','is_oc',
+                        'umur','umur_maks','cycle','cycle_maks','is_cycle','is_engine'
+                    );
+
+		foreach ($dataFields as $field) {
+			$data[$field] = $this->input->post($field);
+		}
+                
+                if($data['id'] != '')
+                {
+                    $id = $data['id'];
+                    $this->db->set($data);
+                    $this->db->replace('asset_perlengkapan_sub_part');
+                    $this->createLog('UPDATE ASSET PERLENGKAPAN SUB PART','asset_perlengkapan_sub_part');
+                }
+                else
+                {
+                    $this->db->insert('asset_perlengkapan_sub_part',$data);
+                    $id = $this->db->insert_id();
+                    $this->createLog('INSERT ASSET PERLENGKAPAN SUB PART','asset_perlengkapan_sub_part');
+                }
+                
+                echo "{success:true,id:$id}";
+                
+	}
+	
+	function deleteSubPart()
+	{
+		$data = $this->input->post('data');
+                $deletedArray = array();
+                $fail = array();
+                $success = true;
+                foreach($data as $deleted)
+                {
+                    $this->createLog('DELETE ASSET PERLENGKAPAN SUB PART','asset_perlengkapan_sub_part');
+                    $deletedArray[] =$deleted['id'];
+                }
+                    
+                     $this->db->where_in('id',$deletedArray);
+		     $this->db->delete('asset_perlengkapan_sub_part');
+		
+		
+		$result = array('fail' => $fail,
+                                'success'=>$success);
+						
+		echo json_encode($result);
+	}
+        
+        function getSpecificSubPart()
+        {
+           $id_part = $this->input->post('id_part');		
+           $query = "select * FROM asset_perlengkapan_sub_part where id_part = '$id_part'";
+           $r = $this->db->query($query); 
+           $data = array();
+            if ($r->num_rows() > 0)
+            {
+                foreach ($r->result() as $obj)
+                {
+                    $data[] = $obj;
+                }  
+            }
+            $dataSend['results'] = $data;
+            echo json_encode($dataSend);
+        }
+        
+        
+        function createSubSubPart(){
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    $insert_data = array(
+                        'id_sub_part'=>$row->id_sub_part,
+                        'nama'=>$row->nama,
+                        'part_number'=>$row->part_number,
+                        'serial_number'=>$row->serial_number,
+                        'umur'=>$row->umur,
+                        'umur_maks'=>$row->umur_maks,
+                        'is_cycle'=>$row->is_cycle,
+                        'cycle'=>$row->cycle,
+                        'cycle_maks'=>$row->cycle_maks,
+                        'task'=>$row->task,
+                        'is_engine'=>$row->is_engine,
+                        'installation_date'=>$row->installation_date,
+                        'installation_ac_tsn'=>$row->installation_ac_tsn,
+                        'installation_comp_tsn'=>$row->installation_comp_tsn,
+                        'is_oc'=>$row->is_oc,
+                    );
+                    $this->db->insert('asset_perlengkapan_sub_sub_part',$insert_data);
+                    $id_insert = $this->db->insert_id();
+                    
+                    $this->createLog('INSERT ASSET PERLENGKAPAN SUB SUB PART [id='.$id_insert.']','asset_perlengkapan_sub_sub_part');
+                    
+                }
+            }
+            else
+            {
+                
+                $insert_data = array(
+                        'id_sub_part'=>$data->id_sub_part,
+                        'nama'=>$data->nama,
+                        'part_number'=>$data->part_number,
+                        'serial_number'=>$data->serial_number,
+                        'umur'=>$data->umur,
+                        'umur_maks'=>$data->umur_maks,
+                        'is_cycle'=>$data->is_cycle,
+                        'cycle'=>$data->cycle,
+                        'cycle_maks'=>$data->cycle_maks,
+                        'task'=>$data->task,
+                        'is_engine'=>$data->is_engine,
+                        'installation_date'=>$data->installation_date,
+                        'installation_ac_tsn'=>$data->installation_ac_tsn,
+                        'installation_comp_tsn'=>$data->installation_comp_tsn,
+                        'is_oc'=>$data->is_oc,
+                    );
+                    $this->db->insert('asset_perlengkapan_sub_sub_part',$insert_data);
+                    $id_insert = $this->db->insert_id();
+                    
+                    $this->createLog('INSERT ASSET PERLENGKAPAN SUB SUB PART [id='.$id_insert.']','asset_perlengkapan_sub_sub_part');
+            }
+            
+            echo "{success:true}";
+	}
+        
+       function updateSubSubPart(){
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    $this->db->set($row);
+                    $this->db->replace('asset_perlengkapan_sub_sub_part');
+                    $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [id='.$row->id.']','asset_perlengkapan_sub_sub_part');
+                }
+            }
+            else
+            {
+                    $this->db->set($data);
+                    $this->db->replace('asset_perlengkapan_sub_sub_part');
+                    $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [id='.$data->id.']','asset_perlengkapan_sub_sub_part');
+            }
+            
+            echo "{success:true}"; 
+       }
+	
+	function destroySubSubPart()
+	{
+            $data = json_decode($this->input->post('data'));
+            if(count($data) > 1)
+            {
+                foreach($data as $row)
+                {
+                    $this->db->delete('asset_perlengkapan_sub_sub_part', array('id' => $row->id));
+                    $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [part='.$row->part_number.']','asset_perlengkapan_sub_sub_part');
+                }
+            }
+            else
+            {
+                    $this->db->delete('asset_perlengkapan_sub_sub_part', array('id' => $data->id));
+                    $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [part='.$data->part_number.']','asset_perlengkapan_sub_sub_part');
+            }
+		    echo "{success:true}"; 
+	}
+        
+        function getSpecificSubSubPart()
+        {
+           $id_sub_part = $this->input->post('id_sub_part');		
+           $query = "select * FROM asset_perlengkapan_sub_sub_part where id_sub_part = '$id_sub_part'";
+           $r = $this->db->query($query); 
+           $data = array();
+            if ($r->num_rows() > 0)
+            {
+                foreach ($r->result() as $obj)
+                {
+                    $data[] = $obj;
+                }  
+            }
+            $dataSend['results'] = $data;
+            echo json_encode($dataSend);
+            
+            
         }
 }
 ?>

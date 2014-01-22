@@ -573,7 +573,6 @@ LaporanAsetUnitKerja.Container = {
                                 var unker = Ext.getCmp('laporan_aset_unitkerja_nama_unker').value;
                                 var unor = Ext.getCmp('laporan_aset_unitkerja_nama_unor').value;
                                 var tahun = Ext.getCmp('laporan_aset_unitkerja_tahun').value;
-                                debugger;
                                 var golongan = Ext.getCmp('kd_gol').value;
                                 var bidang = Ext.getCmp('kd_bid').value;
                                 var kelompok = Ext.getCmp('kd_kelompok').value;

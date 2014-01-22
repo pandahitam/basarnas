@@ -58,7 +58,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 {
                     $penggunaan = (double)$dataPenggunaan['jumlah_penggunaan'] * (double)1.60934;
                 }
-               $this->db->query("update asset_perlengkapan set umur= umur-".$penggunaan." 
+               $this->db->query("update asset_perlengkapan set umur= umur+".$penggunaan." 
                                  where id in (select id_asset_perlengkapan from ext_asset_angkutan_darat_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." ) ");
                $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_detail_penggunaan');
            }
@@ -87,7 +87,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                      {
                          $penggunaan = (double)$deleted['jumlah_penggunaan'] * (double)1.60934;
                      }
-                    $this->db->query("update asset_perlengkapan set umur= umur+".$penggunaan." 
+                    $this->db->query("update asset_perlengkapan set umur= umur-".$penggunaan." 
                                  where id in (select id_asset_perlengkapan from ext_asset_angkutan_darat_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." ) ");
                     $deletedArray[] =$deleted['id'];
                 }
@@ -115,7 +115,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
            }
            else
            {
-               $this->db->query("update asset_perlengkapan set umur= umur-".$dataPenggunaan['jumlah_penggunaan']." 
+               $this->db->query("update asset_perlengkapan set umur= umur+".$dataPenggunaan['jumlah_penggunaan']." 
                                  where id in (select id_asset_perlengkapan from ext_asset_angkutan_laut_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." ) ");
                $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_detail_penggunaan');
            }
@@ -129,7 +129,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 foreach($data as $deleted)
                 {
                     $this->createLog('DELETE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$deleted['id_ext_asset'].']','ext_asset_angkutan_detail_penggunaan');
-                    $this->db->query("update asset_perlengkapan set umur= umur+".$deleted['jumlah_penggunaan']." 
+                    $this->db->query("update asset_perlengkapan set umur= umur-".$deleted['jumlah_penggunaan']." 
                                  where id in (select id_asset_perlengkapan from ext_asset_angkutan_laut_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." ) ");
                     $deletedArray[] =$deleted['id'];
                 }
@@ -155,7 +155,7 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
         {
             $dataPenggunaan = array();
             $dataPenggunaanFields = array(
-                'id','id_ext_asset','tanggal','jumlah_penggunaan','satuan_penggunaan','keterangan'
+                'id','id_ext_asset','tanggal','jumlah_penggunaan','satuan_penggunaan','keterangan','jumlah_cycle'
             );
             
             foreach ($dataPenggunaanFields as $field) {
@@ -169,8 +169,27 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
            }
            else
            {
-               $this->db->query("update asset_perlengkapan set umur= umur-".$dataPenggunaan['jumlah_penggunaan']." 
+               $this->db->query("update asset_perlengkapan set umur= umur+".$dataPenggunaan['jumlah_penggunaan']." 
                                  where id in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." ) ");
+               
+               $this->db->query("update asset_perlengkapan set cycle= cycle+".$dataPenggunaan['jumlah_cycle']." 
+                                 where id in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." )
+                                 AND is_cycle = 1");
+               
+               $this->db->query("update asset_perlengkapan_sub_part set umur= umur+".$dataPenggunaan['jumlah_penggunaan']." 
+                                 where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." ) ");
+               
+               $this->db->query("update asset_perlengkapan_sub_part set cycle= cycle+".$dataPenggunaan['jumlah_cycle']." 
+                                 where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." )
+                                 AND is_cycle = 1");
+               
+               $this->db->query("update asset_perlengkapan_sub_sub_part set umur= umur+".$dataPenggunaan['jumlah_penggunaan']." 
+                                 where id_sub_part in (select id from asset_perlengkapan_sub_part where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." )) ");
+               
+               $this->db->query("update asset_perlengkapan_sub_sub_part set cycle= cycle+".$dataPenggunaan['jumlah_cycle']." 
+                                 where id_sub_part in (select id from asset_perlengkapan_sub_part where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." )) 
+                                 AND is_cycle = 1");
+               
                $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_udara_detail_penggunaan');
            }
                
@@ -183,8 +202,26 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                 foreach($data as $deleted)
                 {
                     $this->createLog('DELETE DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$deleted['id_ext_asset'].']','ext_asset_angkutan_detail_penggunaan');
-                     $this->db->query("update asset_perlengkapan set umur= umur+".$deleted['jumlah_penggunaan']." 
+                     $this->db->query("update asset_perlengkapan set umur= umur-".$deleted['jumlah_penggunaan']." 
                                  where id in (select id_asset_perlengkapan from ext_asset_angkutan_laut_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." ) ");
+                     $this->db->query("update asset_perlengkapan set cycle= cycle-".$deleted['jumlah_cycle']." 
+                                 where id in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." )
+                                 AND is_cycle = 1");
+               
+                    $this->db->query("update asset_perlengkapan_sub_part set umur= umur-".$deleted['jumlah_penggunaan']." 
+                                      where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." ) ");
+
+                    $this->db->query("update asset_perlengkapan_sub_part set cycle= cycle-".$deleted['jumlah_cycle']." 
+                                      where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." )
+                                      AND is_cycle = 1");
+
+                    $this->db->query("update asset_perlengkapan_sub_sub_part set umur= umur-".$deleted['jumlah_penggunaan']." 
+                                      where id_sub_part in (select id from asset_perlengkapan_sub_part where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." )) ");
+
+                    $this->db->query("update asset_perlengkapan_sub_sub_part set cycle= cycle-".$deleted['jumlah_cycle']." 
+                                      where id_sub_part in (select id from asset_perlengkapan_sub_part where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." )) 
+                                      AND is_cycle = 1");
+                    
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);

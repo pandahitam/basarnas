@@ -37,6 +37,20 @@ class Combo_Ref extends CI_Controller {
         echo json_encode($data);
     }
     
+    function combo_list_angkutan_udara()
+    {
+        $data = array();
+        $query = "select kd_lokasi, kd_brg,no_aset,merk,CONCAT(kd_brg,kd_lokasi,no_aset) as no_induk_asset from view_asset_angkutan_udara";
+        $query_data = $this->db->query($query);
+        
+        foreach($query_data->result() as $obj)
+        {
+            $data[] = $obj;
+        }
+
+        echo json_encode($data);
+    }
+    
     function combo_kelompok_part()
     {
         $data = array();
@@ -441,11 +455,164 @@ class Combo_Ref extends CI_Controller {
         }
     }
     
+    function combo_sub_part_pemeliharaan()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->post("id_part"))
+            {
+                $this->db->select('id,part_number,nama');
+                $this->db->from('asset_perlengkapan_sub_part');
+                $id_part = $this->input->post("id_part");
+                $this->db->where("id_part",$id_part);
+                $query_result = $this->db->get();
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            else
+            {
+                $this->db->select('id,part_number,nama');
+                $this->db->from('asset_perlengkapan_sub_part');
+                $query_result = $this->db->get();
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_sub_part(){
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->post("id_part"))
+            {
+                $this->db->select('id,part_number,nama');
+                $this->db->from('ref_sub_part');
+                $id_part = $this->input->post("id_part");
+                $this->db->where("id_part",$id_part);
+                $query_result = $this->db->get();
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            else if($this->input->post("part_number"))
+            {
+                $part_number = $this->input->post("part_number");
+                $query_result = $this->db->query("select id,part_number,nama,umur,cycle from ref_sub_part where id_part 
+                                  IN (select id from ref_perlengkapan where part_number = '$part_number')");
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            else
+            {
+                $this->db->select('id,part_number,nama');
+                $this->db->from('ref_sub_part');
+                $query_result = $this->db->get();
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_sub_sub_part(){
+        $data = array();
+
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->post("part_number"))
+            {
+               $part_number = $this->input->post("part_number");
+                $query_result = $this->db->query("select id,part_number,nama,umur,cycle from ref_sub_sub_part where id_sub_part 
+                                  IN (select id from ref_sub_part where part_number = '$part_number')");
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            else
+            {
+                $query_result = $this->db->query("select id,part_number,nama,umur,cycle from ref_sub_sub_part");
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            
+            echo json_encode($data);
+        }
+        
+        
+//        $this->db->select('id,part_number,nama,cycle,umur');
+//            $this->db->from('ref_sub_sub_part');
+//            $query_result = $this->db->get();
+//            foreach($query_result->result() as $obj)
+//            {
+//                $data[] = $obj;
+//            }
+//            
+//            echo json_encode($data);
+    }
+    
+   function combo_sub_sub_part_pemeliharaan(){
+        $data = array();
+
+        if($this->input->get_post("id_open"))
+        {
+            if($this->input->post("id_sub_part"))
+            {
+               $this->db->select('id,part_number,nama');
+                $this->db->from('asset_perlengkapan_sub_sub_part');
+                $id_sub_part = $this->input->post("id_sub_part");
+                $this->db->where("id_sub_part",$id_sub_part);
+                $query_result = $this->db->get();
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            else
+            {
+                $this->db->select('id,part_number,nama');
+                $this->db->from('asset_perlengkapan_sub_sub_part');
+                $query_result = $this->db->get();
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            
+            echo json_encode($data);
+        }
+        
+        
+//        $this->db->select('id,part_number,nama,cycle,umur');
+//            $this->db->from('ref_sub_sub_part');
+//            $query_result = $this->db->get();
+//            foreach($query_result->result() as $obj)
+//            {
+//                $data[] = $obj;
+//            }
+//            
+//            echo json_encode($data);
+    }
+    
     function combo_partNumber(){
         $data = array();
         if($this->input->get_post("id_open"))
         {
-            $query = $this->db->query('Select part_number,kd_brg,nama from ref_perlengkapan');
+            $query = $this->db->query('Select id,part_number,kd_brg,nama from ref_perlengkapan');
 
             foreach($query->result() as $obj)
             {

@@ -31,6 +31,8 @@ class Master_Data extends MY_Controller {
 //		$this->load->model('Kec_Model','',TRUE);
 //		$this->load->model('Tasset_tanah_Model','',TRUE);		
 //		$this->load->model('Tasset_bangunan_Model','',TRUE);
+        $this->load->model('Ref_Sub_Part_Model','',TRUE);
+        $this->load->model('Ref_Sub_Sub_Part_Model','',TRUE);
     }
 
     function index() {
@@ -1598,7 +1600,7 @@ class Master_Data extends MY_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','vendor_id','id_kelompok_part','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks'
+            'id','vendor_id','id_kelompok_part','part_number','kd_brg','merek','jenis','nama','part_number_substitusi','umur_maks','jenis_asset'
         );
         
         foreach ($dataFields as $field) {
@@ -1642,6 +1644,224 @@ class Master_Data extends MY_Controller {
     {
 
         $this->db->from('ref_perlengkapan');
+        $this->db->where('part_number',$_POST['part_number']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+    // SUB PART
+    function sub_part() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/sub_part_view', $data);
+        } else {
+            $this->load->view('master/sub_part_view');
+        }
+    }
+
+    function sub_part_getAllData() {
+        if ($this->input->get_post("id_open")) {
+//            $resultData = $this->Kd_Brg_Golongan_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Ref_Sub_Part_Model');
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function sub_part_createSubPart() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id_part','nama','part_number','cycle','umur','is_oc','is_kelompok'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_sub_part');
+        $this->createLog('INSERT REFERENSI SUB PART','ref_sub_part');
+        echo "{success: true}";
+    }
+    
+    function sub_part_modifySubPart() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','id_part','nama','part_number','cycle','umur','is_oc','is_kelompok'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('id', $data['id']);
+        unset($data['id']);
+        $this->db->update('ref_sub_part',$data);
+        $this->createLog('UPDATE REFERENSI SUB PART','ref_sub_part');
+        echo "{success: true}";
+    }
+    
+    function sub_part_deleteSubPart()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_sub_part');
+           $this->createLog('DELETE REFERENSI SUB PART','ref_sub_part');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkSubPart()
+    {
+
+        $this->db->from('ref_sub_part');
+        $this->db->where('part_number',$_POST['part_number']);
+        $result = $this->db->get();
+//        var_dump($this->db->last_query());
+//        var_dump($result->num_rows());
+//        var_dump($_POST);
+//        die;
+
+        if($result->num_rows() === 1)
+        {
+            
+            if($_POST['edit'] == 'true')
+            {
+                echo "true";
+            }
+            else
+            {
+                echo "false";
+            }
+            
+        }
+        else if ($result->num_rows() === 0)
+        {
+            
+            echo "true";
+        }
+        else 
+        {
+            echo "false";
+        }
+    }
+    
+     // SUB SUB PART
+    function sub_sub_part() {
+        if ($this->input->post("id_open")) {
+            $data['jsscript'] = TRUE;
+            $this->load->view('master/sub_sub_part_view', $data);
+        } else {
+            $this->load->view('master/sub_sub_part_view');
+        }
+    }
+
+    function sub_sub_part_getAllData() {
+        if ($this->input->get_post("id_open")) {
+//            $resultData = $this->Kd_Brg_Golongan_Model->get_AllData($this->input->post("start"),$this->input->post("limit"));
+            $resultData = $this->getDataWithFilter('Ref_Sub_Sub_Part_Model');
+            $data = $resultData['data'];
+            $total = $resultData['count'];	  
+            echo '({total:'. $total . ',results:'.json_encode($data).'})';
+        }
+    }
+    
+    function sub_sub_part_createSubSubPart() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id_sub_part','nama','part_number','cycle','umur','is_oc'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->set($data);
+        $this->db->replace('ref_sub_sub_part');
+        $this->createLog('INSERT REFERENSI SUB SUB PART','ref_sub_sub_part');
+        echo "{success: true}";
+    }
+    
+    function sub_sub_part_modifySubSubPart() {
+        
+        $data = array();
+        
+        $dataFields = array(
+            'id','id_sub_part','nama','part_number','cycle','umur','is_oc'
+        );
+        
+        foreach ($dataFields as $field) {
+            $data[$field] = $this->input->post($field);
+        }
+        
+        $this->db->where('id', $data['id']);
+        unset($data['id']);
+        $this->db->update('ref_sub_sub_part',$data);
+        $this->createLog('UPDATE REFERENSI SUB SUB PART','ref_sub_sub_part');
+        echo "{success: true}";
+    }
+    
+    function sub_sub_part_deleteSubSubPart()
+    {
+       $deletedData = $this->input->post('data');
+
+       foreach ($deletedData as $data)
+       {
+           $this->db->where('id', $data['id']);
+           $this->db->delete('ref_sub_sub_part');
+           $this->createLog('DELETE REFERENSI SUB SUB PART','ref_sub_sub_part');
+       }
+       
+       $result = array('fail' => false,
+                       'success'=>true);
+						
+        echo json_encode($result);
+    }
+    
+    function checkSubSubPart()
+    {
+
+        $this->db->from('ref_sub_sub_part');
         $this->db->where('part_number',$_POST['part_number']);
         $result = $this->db->get();
 //        var_dump($this->db->last_query());
@@ -2260,7 +2480,7 @@ class Master_Data extends MY_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','nama_kelompok','jenis_asset'
+            'id','nama_kelompok','keterangan'
         );
         
         foreach ($dataFields as $field) {
@@ -2279,7 +2499,7 @@ class Master_Data extends MY_Controller {
         $data = array();
         
         $dataFields = array(
-            'id','nama_kelompok','jenis_asset'
+            'id','nama_kelompok','keterangan'
         );
         
         foreach ($dataFields as $field) {

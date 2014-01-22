@@ -16,7 +16,7 @@ class Pemeliharaan_Perlengkapan_Model extends MY_Model{
                             freq_waktu, freq_pengunaan, status, durasi, 
                             rencana_waktu, rencana_pengunaan, rencana_keterangan, image_url,document_url, alert";
                 
-                $this->selectColumnInAsset = "SELECT id, kd_brg, kd_lokasi, no_aset, umur,
+                $this->selectColumnInAsset = "SELECT id, kd_brg, kd_lokasi, no_aset, umur, cycle,
                             kode_unker, kode_unor,jenis, nama, 
                             tahun_angaran, pelaksana_tgl, pelaksana_nama, 
                             kondisi, deskripsi, harga, kode_angaran,

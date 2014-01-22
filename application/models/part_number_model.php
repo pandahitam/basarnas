@@ -5,7 +5,7 @@ class Part_Number_Model extends MY_Model{
             parent::__construct();
             $this->table = 'ref_perlengkapan';
             $this->viewTable = 'view_referensi_part_number';
-            $this->selectColumn = "SELECT id, vendor_id, part_number, kd_brg, merek, jenis, nama, part_number_substitusi, umur_maks, nama_kelompok, jenis_asset";
+            $this->selectColumn = "SELECT id, vendor_id, part_number, kd_brg, merek, jenis, nama, part_number_substitusi, umur_maks, nama_kelompok, jenis_asset, id_kelompok_part";
 	}
 	
 	function get_AllData($start=null, $limit=null,$gridFilter = null, $searchByField = null){

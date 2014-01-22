@@ -38,6 +38,8 @@ var Center_MD = {
                         items:[
                             {text: 'Kelompok Part', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_kelompok_part', BASE_URL + 'master_data/kelompok_part');}, tooltip: {text: 'Referensi Kelompok Part'}},
                             {text: 'Part Number', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_partnumber', BASE_URL + 'master_data/part_number');}, tooltip: {text: 'Referensi Part Number'}},
+                            {text: 'Sub Part', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_subpart', BASE_URL + 'master_data/sub_part');}, tooltip: {text: 'Referensi Sub Part'}},
+                            {text: 'Sub Sub Part', iconCls: 'icon-templates', disabled: false, handler: function(){Load_TabPage_MD('master_subsubpart', BASE_URL + 'master_data/sub_sub_part');}, tooltip: {text: 'Referensi Sub Sub Part'}},
                         ]
                 }},
                 {text: 'Kode Barang', iconCls: 'icon-templates', disabled: false, menu:{

@@ -214,7 +214,7 @@
 
         var new_tabpanel_MD = {
             xtype: 'panel',
-            id: 'master_part_number', title: 'PartNumber', iconCls: 'icon-menu_impasing', border: false, closable: true,
+            id: 'master_partnumber', title: 'PartNumber', iconCls: 'icon-menu_impasing', border: false, closable: true,
             layout: 'border', items: [PartNumber.Grid.grid]
         };
      
