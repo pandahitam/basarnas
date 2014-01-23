@@ -198,7 +198,7 @@ class Asset_Perlengkapan extends MY_Controller {
 	  	$dataFields = array(
 			'id','id_part','nama','serial_number','part_number',
                         'installation_date','installation_ac_tsn','installation_comp_tsn','task','is_oc',
-                        'umur','umur_maks','cycle','cycle_maks','is_cycle','is_engine'
+                        'umur','umur_maks','cycle','cycle_maks','is_cycle','is_engine','is_kelompok'
                     );
 
 		foreach ($dataFields as $field) {

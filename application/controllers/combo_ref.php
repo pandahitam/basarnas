@@ -466,6 +466,7 @@ class Combo_Ref extends CI_Controller {
                 $this->db->from('asset_perlengkapan_sub_part');
                 $id_part = $this->input->post("id_part");
                 $this->db->where("id_part",$id_part);
+                $this->db->where("is_kelompok",0);
                 $query_result = $this->db->get();
                 foreach($query_result->result() as $obj)
                 {

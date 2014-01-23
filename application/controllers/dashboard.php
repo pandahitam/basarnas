@@ -83,7 +83,7 @@ class Dashboard extends CI_Controller{
 		AND (
 		(t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
 		OR
-		(a.umur_maks - a.umur < 10 OR (CASE WHEN a.is_cycle = 1 AND a.cycle_maks - a.cycle <10 THEN TRUE ELSE FALSE END))
+		(a.is_kelompok = 0 AND (a.umur_maks - a.umur < 10 OR (CASE WHEN a.is_cycle = 1 AND a.cycle_maks - a.cycle <10 THEN TRUE ELSE FALSE END)))
 		OR
 		(b.umur_maks - b.umur < 10 OR (CASE WHEN b.is_cycle = 1 AND b.cycle_maks - b.cycle <10 THEN TRUE ELSE FALSE END))
 		)
@@ -119,6 +119,7 @@ class Dashboard extends CI_Controller{
                 INNER JOIN asset_perlengkapan as a on a.id = t.id_part
                 WHERE a.alert = 1
 		AND (a.no_induk_asset != '' OR a.no_induk_asset IS NOT NULL)
+                AND t.is_kelompok = 0
 		AND
                 (t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
 		");

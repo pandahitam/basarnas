@@ -1323,7 +1323,7 @@ class Excel_Management extends CI_Controller{
       $ac_tt= ":".$data_ac["tt"]." Hrs";
       
       $query_sub_part = "SELECT 
-                        a.is_kelompok,
+                        t.is_kelompok,
                         t.is_oc,
                         t.id,
                         t.id_part,
@@ -1348,7 +1348,6 @@ class Excel_Management extends CI_Controller{
                         (t.umur_maks - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_hrs,
                         (t.cycle_maks - (SELECT cycle FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_cyc
                         FROM asset_perlengkapan_sub_part AS t
-                        INNER JOIN ref_sub_part AS a ON t.part_number = a.part_number
                         WHERE t.id_part = $data_engine->id";
       
        $r = $this->db->query($query_sub_part);

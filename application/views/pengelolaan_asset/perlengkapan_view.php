@@ -469,6 +469,7 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
+                    id:'asset_perlengkapan_sub_part_fieldset_tambahan_au',
                     title: 'DATA PERLENGKAPAN KHUSUS ANGKUTAN UDARA',
                     border: false,
                     defaultType: 'container',
@@ -540,13 +541,13 @@
                                 name: 'is_oc',
                                 boxLabel: 'Ya'
                             },
-                            {
-                                xtype: 'checkboxfield',
-                                inputValue: 1,
-                                fieldLabel: 'Part Dari Engine/Mesin',
-                                name: 'is_engine',
-                                boxLabel: 'Ya'
-                            }
+//                            {
+//                                xtype: 'checkboxfield',
+//                                inputValue: 1,
+//                                fieldLabel: 'Part Dari Engine/Mesin',
+//                                name: 'is_engine',
+//                                boxLabel: 'Ya'
+//                            }
                             ]
                         }]
                 }]
@@ -591,6 +592,98 @@
                                  name:'nama',
                                  id:'asset_perlengkapan_sub_part_nama',
                              },
+                             {
+                                xtype: 'checkboxfield',
+                                inputValue: 1,
+                                fieldLabel: 'Nama Kelompok',
+                                name: 'is_kelompok',
+                                boxLabel: 'Ya',
+                                listeners:{
+                                        'change':{
+                                            fn:function(obj,value)
+                                            {
+                                                var fieldset_tambahan = Ext.getCmp('asset_perlengkapan_sub_part_fieldset_tambahan_au');
+                                                var part_field = Ext.getCmp('asset_perlengkapan_sub_part_id');
+                                                var serial_field = Ext.getCmp('asset_perlengkapan_sub_part_serial_number');
+                                                var umur_maks_field = Ext.getCmp('asset_perlengkapan_sub_part_umur_maks');
+                                                var umur_field = Ext.getCmp('asset_perlengkapan_sub_part_umur');
+                                                var is_cycle_field = Ext.getCmp('asset_perlengkapan_sub_part_is_cycle');
+                                                var cycle_maks_field = Ext.getCmp('asset_perlengkapan_sub_part_cycle_maks');
+                                                var cycle_field = Ext.getCmp('asset_perlengkapan_sub_part_cycle');
+                                                if(value == true)
+                                                {    
+                                                    if(fieldset_tambahan != null)
+                                                    {
+                                                        fieldset_tambahan.setDisabled(true);
+                                                    }
+//                                                    if(part_field != null)
+//                                                    {   
+//                                                        part_field.setDisabled(true);
+//                                                    }
+                                                    if(serial_field != null)
+                                                    {
+                                                        serial_field.setDisabled(true);
+                                                    }
+                                                    if(umur_maks_field != null)
+                                                    {
+                                                        umur_maks_field.setDisabled(true);
+                                                    }
+                                                    if(umur_field != null)
+                                                    {
+                                                        umur_field.setDisabled(true);
+                                                    }
+                                                    if(is_cycle_field != null)
+                                                    {
+                                                        is_cycle_field.setDisabled(true);
+                                                    }
+                                                    if(cycle_field != null)
+                                                    {
+                                                        cycle_field.setDisabled(true);
+                                                    }
+                                                    if(cycle_maks_field != null)
+                                                    {
+                                                        cycle_maks_field.setDisabled(true);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if(fieldset_tambahan != null)
+                                                    {
+                                                        fieldset_tambahan.setDisabled(false);
+                                                    }
+//                                                    if(part_field != null)
+//                                                    {   
+//                                                        part_field.setDisabled(false);
+//                                                    }
+                                                    if(serial_field != null)
+                                                    {
+                                                        serial_field.setDisabled(false);
+                                                    }
+                                                    if(umur_maks_field != null)
+                                                    {
+                                                        umur_maks_field.setDisabled(false);
+                                                    }
+                                                    if(umur_field != null)
+                                                    {
+                                                        umur_field.setDisabled(false);
+                                                    }
+                                                    if(is_cycle_field != null)
+                                                    {
+                                                        is_cycle_field.setDisabled(false);
+                                                    }
+                                                    if(cycle_field != null)
+                                                    {
+                                                        cycle_field.setDisabled(false);
+                                                    }
+                                                    if(cycle_maks_field != null)
+                                                    {
+                                                        cycle_maks_field.setDisabled(false);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                            },
                              {
                                 xtype: 'combo',
                                 fieldLabel: 'Part',
@@ -648,6 +741,7 @@
                                 xtype:'textfield',
                                 fieldLabel:'Serial Number',
                                 name:'serial_number',
+                                id:'asset_perlengkapan_sub_part_serial_number'
                             },
                             {
                                 xtype:'numberfield',
@@ -659,6 +753,7 @@
                                 xtype:'numberfield',
                                 fieldLabel:'Umur',
                                 name:'umur',
+                                id:'asset_perlengkapan_sub_part_umur'
                             },
                             {
                                 xtype: 'checkboxfield',
@@ -666,6 +761,7 @@
                                 fieldLabel: ' Memiliki Cycle',
                                 name: 'is_cycle',
                                 boxLabel: 'Ya',
+                                id:'asset_perlengkapan_sub_part_is_cycle',
                                 listeners:{
                                         'change':{
                                             fn:function(obj,value)
@@ -1007,7 +1103,7 @@
         Ext.define('MSubPart', {extend: 'Ext.data.Model',
             fields: ['id','id_part','nama','part_number','serial_number','umur_maks',
                     'umur','is_cycle','cycle_maks','cycle','is_oc','installation_date',
-                    'installation_ac_tsn','installation_comp_tsn','task','is_engine'
+                    'installation_ac_tsn','installation_comp_tsn','task','is_engine','is_kelompok'
             ]
         });
         

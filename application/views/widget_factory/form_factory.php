@@ -2586,13 +2586,13 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //                                        name: 'is_oc',
 //                                        boxLabel: 'Ya'
 //                                    },
-                                    {
-                                        xtype: 'checkboxfield',
-                                        inputValue: 1,
-                                        fieldLabel: 'Kelompok',
-                                        name: 'is_kelompok',
-                                        boxLabel: 'Ya'
-                                    },
+//                                    {
+//                                        xtype: 'checkboxfield',
+//                                        inputValue: 1,
+//                                        fieldLabel: 'Kelompok',
+//                                        name: 'is_kelompok',
+//                                        boxLabel: 'Ya'
+//                                    },
                                    ]
                         }]
                 }];
