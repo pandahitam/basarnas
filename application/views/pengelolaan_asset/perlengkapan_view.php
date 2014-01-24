@@ -469,6 +469,97 @@
                     xtype: 'fieldset',
                     layout: 'column',
                     anchor: '100%',
+                    title: 'DATA PERLENGKAPAN KHUSUS ANGKUTAN UDARA',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .6,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                            {
+                                xtype:'datefield',
+                                fieldLabel:'Installation Date',
+                                name:'installation_date',
+                                format: 'Y-m-d'
+                            },
+                            {
+                                xtype:'numberfield',
+                                fieldLabel:'Installation A/C TSN *',
+                                name:'installation_ac_tsn',
+                            },
+                            {
+                                xtype:'numberfield',
+                                fieldLabel:'Installation COMP TSN **',
+                                name:'installation_comp_tsn',
+                            },
+                            {
+                                xtype:'displayfield',
+                                value:''
+                            },
+                            {
+                                xtype:'displayfield',
+                                value:'(*) Installation ENG HRS untuk sub part engine'
+                            },
+                            {
+                                xtype:'displayfield',
+                                value:'(**) Installation COMP HRS untuk sub part engine'
+                            }
+                            ]
+                        },
+                        {
+                            columnWidth: .4,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                                            {
+                                xtype: 'combo',
+                                disabled: false,
+                                fieldLabel: 'Task',
+                                name: 'task',
+                                store: Reference.Data.taskLaporanUdara,
+                                editable:false,
+                                valueField: 'value',
+                                displayField: 'name', emptyText: 'Pilih Task',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                            },
+                            {
+                                xtype: 'checkboxfield',
+                                inputValue: 1,
+                                fieldLabel: 'OC',
+                                name: 'is_oc',
+                                boxLabel: 'Ya'
+                            },
+//                            {
+//                                xtype: 'checkboxfield',
+//                                inputValue: 1,
+//                                fieldLabel: 'Part Dari Engine/Mesin',
+//                                name: 'is_engine',
+//                                boxLabel: 'Ya'
+//                            }
+                            ]
+                        }]
+                }]
+                           
+                            
+                return component;
+        };
+        
+        Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart = function(){
+        var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
                     id:'asset_perlengkapan_sub_part_fieldset_tambahan_au',
                     title: 'DATA PERLENGKAPAN KHUSUS ANGKUTAN UDARA',
                     border: false,
@@ -1287,7 +1378,7 @@
                 }
                     var form = Perlengkapan.Component.panelPerlengkapanSubPart(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);
                     form.insert(0, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,false,Perlengkapan.dataStoreSubSubPart));
-                    form.insert(1, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
+                    form.insert(1, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
                     form.insert(2, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
                     Reference.Data.subPart.changeParams({params:{id_open:1,part_number:data.part_number}});
                     Modal.assetSecondaryWindow.add(form);
@@ -1320,7 +1411,7 @@
                 }
                     var form = Perlengkapan.Component.panelPerlengkapanSubPart(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);
                     form.insert(0, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,true,Perlengkapan.dataStoreSubSubPart));
-                    form.insert(1, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
+                    form.insert(1, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
                     form.insert(2, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
                     Reference.Data.subPart.changeParams({params:{id_open:2}});
                     Perlengkapan.dataStoreSubSubPart.changeParams({params:{id_sub_part:data.id}});

@@ -694,9 +694,9 @@
                             {header: 'Jenis Perlengkapan', dataIndex: 'jenis_perlengkapan', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'No', dataIndex: 'no', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Nama', dataIndex: 'nama', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
-                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Part Number', dataIndex: 'part_number', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Serial Number', dataIndex: 'serial_number', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
+                            {header: 'Kode Barang', dataIndex: 'kd_brg', width: 150, groupable: false, filter: {type: 'string'}},
                             {header: 'Keterangan', dataIndex: 'keterangan', width: 150, hidden: false, groupable: false, filter: {type: 'string'}},
                                 
                         ]
