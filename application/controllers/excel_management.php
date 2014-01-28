@@ -722,8 +722,10 @@ class Excel_Management extends CI_Controller{
       $ac_sn = ":"."$data_detail->no_rangka"; //no rangka
       $ac_owner = ":"."BASARNAS";
       $date = ":".date("d-F-Y");
-      
-      $active_sheet->setTitle("$data_detail->merk");
+      $invalid_character = array(".", "?", "!", "*", "/", "", "[", "]", "'", ":");
+        $name =substr($data_detail->merk,0,30);
+        $name = str_replace($invalid_character," ",$name);
+      $active_sheet->setTitle("$name");
       
       $query_usage = "SELECT CONCAT(kd_brg,kd_lokasi,no_aset) AS no_induk, IFNULL(SUM(jumlah_penggunaan),0) AS jumlah, IFNULL(SUM(jumlah_cycle),0) AS cycle  FROM ext_asset_angkutan_udara_detail_penggunaan AS t
                       LEFT JOIN ext_asset_angkutan AS a ON a.id = t.id_ext_asset
@@ -1299,11 +1301,14 @@ class Excel_Management extends CI_Controller{
   {
 //      var_dump($data_engine);
 //      die;
+     $invalid_character = array(".", "?", "!", "*", "/", "", "[", "]", "'", ":");
+		$name =substr($data_engine->nama,0,30);
+		$name = str_replace($invalid_character," ",$name);
       $page_index = array();
       $excel->createSheet();
       $excel->setActiveSheetIndex($sheet_index);
       $active_sheet = $excel->getActiveSheet();
-      $active_sheet->setTitle("$data_engine->nama");
+      $active_sheet->setTitle("$name");
       
       $active_sheet->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
       $active_sheet->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
