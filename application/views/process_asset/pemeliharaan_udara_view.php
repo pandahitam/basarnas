@@ -132,7 +132,10 @@
 //                           
 //                       }
 //                    });
-                    
+                if(edit == true)
+                {
+                    form.getForm().findField('penambahan_umur').setReadOnly(true);
+                }
                 form.getForm().setValues(data);
             }
             return form;
@@ -192,22 +195,64 @@
             var selected = grid.getSelectionModel().getSelection();
             if(selected.length > 0)
             {
-                Ext.Msg.show({
-                    title: 'Konfirmasi',
-                    msg: 'Apakah Anda yakin untuk menghapus ?',
-                    buttons: Ext.Msg.YESNO,
-                    icon: Ext.Msg.Question,
-                    fn: function(btn) {
-                        if (btn === 'yes')
-                        {
-                            Ext.each(selected, function(obj){
-                                var storeIndex = grid.store.indexOf(obj);
-                                var record = grid.store.getAt(storeIndex);
-                                grid.store.remove(record);
-                            });
-                        }
-                    }
-                });
+//                Ext.Msg.show({
+//                    title: 'Konfirmasi',
+//                    msg: 'Apakah Anda yakin untuk menghapus ?',
+//                    buttons: Ext.Msg.YESNO,
+//                    icon: Ext.Msg.Question,
+//                    fn: function(btn) {
+//                        if (btn === 'yes')
+//                        {
+//                            Ext.each(selected, function(obj){
+//                                var storeIndex = grid.store.indexOf(obj);
+//                                var record = grid.store.getAt(storeIndex);
+//                                grid.store.remove(record);
+//                            });
+//                        }
+//                    }
+//                });
+                
+                    var records=[];
+                   _.each(selected, function(obj) {
+                       records.push(grid.store.getAt(grid.store.indexOf(obj)));
+                   });
+
+                   var messageBox = Ext.create('Ext.window.MessageBox', {
+                                                   width:350,
+                                                   height: 100,
+                                                   buttonText: {yes: "Hapus",no: "Simpan ke Warehouse"},
+
+                                              });
+                    messageBox.show({
+                        title: 'Hapus',
+                        msg: 'Pilih Tindakan',
+                        buttons: Ext.Msg.YESNO,
+                        icon: Ext.Msg.Question,
+                        fn: function(btn) {
+                            if (btn === 'yes')
+                            {
+                                Ext.each(records, function(obj){
+        //                                var storeIndex = grid.store.indexOf(obj);
+        //                                var record = grid.store.getAt(storeIndex);
+                                        grid.store.remove(obj);
+                                });
+                            }
+                            else if(btn === 'no')
+                            {
+        //                        var data = {id_collection:ids};
+                                if (Modal.verySmallWindow.items.length === 0)
+                                {
+                                    Modal.verySmallWindow.setTitle('Simpan ke Warehouse');
+                                }
+                                var form = Form.panelVerySmall2(grid.store,records);                       
+                                form.insert(3, Form.Component.warehousePerlengkapanSmall(false,form));
+        //                        form.getForm().reset();
+        //                        form.getForm().setValues(data);
+                                Modal.verySmallWindow.add(form);
+                                Modal.verySmallWindow.show();
+                            }
+                       }
+                    });
             }
         };
 
@@ -288,7 +333,11 @@
             var arrayDeleted = [];
             _.each(selected, function(obj) {
                 var data = {
-                    id: obj.data.id
+                    id: obj.data.id,
+                    kd_lokasi:obj.data.kd_lokasi,
+                    kd_brg:obj.data.kd_brg,
+                    no_aset:obj.data.no_aset,
+                    penambahan_umur:obj.data.penambahan_umur
                 };
                 arrayDeleted.push(data);
             });

@@ -21,15 +21,21 @@ class Asset_Angkutan_Udara extends MY_Controller {
 	}
 	
 	function modifyAngkutanUdara(){
-                
+
 		$dataSimak = array();
                 $dataExt = array();
                 
                 $dataKode = array();
                 $dataKlasifikasiAset = array();
                 
+                $dataPerlengkapan = array();
+                
                 $klasifikasiAsetFields = array(
                     'kd_lvl1','kd_lvl2','kd_lvl3'
+                );
+                
+                $perlengkapanFields = array(
+                    'no_mesin','udara_no_mesin2','udara_inisialisasi_mesin1','udara_inisialisasi_mesin2'
                 );
                 
                 $kodeFields = array(
@@ -38,17 +44,17 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 
 	  	$simakFields = array(
 			'kd_lokasi', 'kd_brg', 'no_aset', 'kuantitas', 'no_kib', 'merk', 'type', 'pabrik', 'thn_rakit', 'thn_buat', 'negara', 'muat', 'bobot', 'daya', 
-			'msn_gerak', 'jml_msn', 'bhn_bakar', 'no_mesin', 'no_rangka', 'no_polisi', 'no_bpkb', 'lengkap1', 'lengkap2', 'lengkap3', 'jns_trn', 
+			'msn_gerak', 'jml_msn', 'bhn_bakar',  'no_rangka', 'no_polisi', 'no_bpkb', 'lengkap1', 'lengkap2', 'lengkap3', 'jns_trn', 
 			'dari', 'tgl_prl', 'rph_aset', 'dasar_hrg', 'sumber', 'no_dana', 'tgl_dana', 'unit_pmk', 'alm_pmk', 'catatan', 'kondisi', 'tgl_buku', 
 			'rphwajar', 'status'
                 );
                 
                 $extFields = array(
-                        'kd_lokasi', 'kd_brg', 'no_aset', 'id','udara_no_mesin2','udara_inisialisasi_mesin1','udara_inisialisasi_mesin2',
+                        'kd_lokasi', 'kd_brg', 'no_aset', 'id',
                         'kode_unor','image_url', 'document_url','kd_klasifikasi_aset',
                         'udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
                         'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',
-                        'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file'
+                        'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file','udara_umur_pesawat'
                 );
 		
 		foreach ($kodeFields as $field) {
@@ -82,6 +88,63 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 
                 if($dataExt['id'] != '')
                 {
+                    foreach ($perlengkapanFields as $field) {
+			$dataPerlengkapan[$field] = $this->input->post($field);
+                    }
+                    
+                    $jumlah_mesin_query = $this->db->query("select a.id from ext_asset_angkutan_udara_perlengkapan as t LEFT JOIN asset_perlengkapan a ON t.id_asset_perlengkapan = a.id
+                                                            WHERE a.is_engine = 1 AND t.id_ext_asset =".$dataExt['id']);
+                    $jumlah_mesin = $jumlah_mesin_query->num_rows();
+                    if($jumlah_mesin > 0)
+                    {
+                        if($jumlah_mesin ==1)
+                        {
+                            $mesin1_query = $this->db->query("SELECT a.id FROM ext_asset_angkutan_udara_perlengkapan t
+                                LEFT JOIN asset_perlengkapan a ON t.id_asset_perlengkapan = a.id
+                                WHERE a.is_engine = 1 AND t.id_ext_asset =".$dataExt['id']."
+                                ORDER BY t.id ASC ");
+                           $id_mesin = $mesin1_query->row()->id;
+                           
+                           $update_data_mesin = array(
+                               "serial_number"=>$dataPerlengkapan["no_mesin"],
+                               "umur"=>$dataPerlengkapan["udara_inisialisasi_mesin1"]
+                           );
+                           $this->db->where('id',$id_mesin);
+                           $this->db->update('asset_perlengkapan',$update_data_mesin);
+                        }
+                        
+                        if($jumlah_mesin ==2)
+                        {
+                            
+                           $mesin1_query = $this->db->query("SELECT a.id FROM ext_asset_angkutan_udara_perlengkapan t
+                                LEFT JOIN asset_perlengkapan a ON t.id_asset_perlengkapan = a.id
+                                WHERE a.is_engine = 1 AND t.id_ext_asset =".$dataExt['id']."
+                                ORDER BY t.id ASC ");
+                           $id_mesin = $mesin1_query->row()->id;
+                           
+                           $update_data_mesin = array(
+                               "serial_number"=>$dataPerlengkapan["no_mesin"],
+                               "umur"=>$dataPerlengkapan["udara_inisialisasi_mesin1"]
+                           );
+                           $this->db->where('id',$id_mesin);
+                           $this->db->update('asset_perlengkapan',$update_data_mesin);
+                            
+                            $mesin2_query = $this->db->query("SELECT a.id FROM ext_asset_angkutan_udara_perlengkapan t
+                                LEFT JOIN asset_perlengkapan a ON t.id_asset_perlengkapan = a.id
+                                WHERE a.is_engine = 1 AND t.id_ext_asset = ".$dataExt['id']."
+                                ORDER BY t.id DESC ");
+                            
+                            $id_mesin = $mesin2_query->row()->id;
+                           
+                           $update_data_mesin = array(
+                               "serial_number"=>$dataPerlengkapan["udara_no_mesin2"],
+                               "umur"=>$dataPerlengkapan["udara_inisialisasi_mesin2"]
+                           );
+                           $this->db->where('id',$id_mesin);
+                           $this->db->update('asset_perlengkapan',$update_data_mesin);
+                        }
+                    }
+                    
                     $this->createLog('UPDATE ASSET ANGKUTAN UDARA','asset_angkutan,ext_asset_angkutan_udara');
                 }
                 else
@@ -101,6 +164,15 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 }
 		return $this->deleteData($data);
 	}
+        
+        function getSpecificAngkutanUdara()
+        {
+                $data = $this->model->getSpecificAngkutanUdara($_POST['id_ext_asset']);
+                //                $total = $this->model->get_CountData();
+//                $dataSend['total'] = $total;
+		$dataSend['results'] = $data;
+		echo json_encode($dataSend);
+        }
         
         function getSpecificPerlengkapanAngkutanUdara()
         {
@@ -179,6 +251,31 @@ class Asset_Angkutan_Udara extends MY_Controller {
         function deletePerlengkapanAngkutanUdara()
 	{
 		$data = $this->input->post('data');
+
+                $warehouse_id="";
+                $ruang_id="";
+                $rak_id="";
+                
+                if(isset($data[0]["warehouse_id"]))
+                {
+                    $warehouse_id = $data[0]["warehouse_id"];
+                }
+                
+                if(isset($data[0]["ruang_id"]))
+                {
+                    $ruang_id = $data[0]["ruang_id"];
+                }
+                
+                if(isset($data[0]["rak_id"]))
+                {
+                    $rak_id = $data[0]["rak_id"];
+                }
+                
+                
+                
+                    
+                   
+                
                 $deletedArray = array();
                 $updatedAssetPerlengkapan = array();
                 foreach($data as $deleted)
@@ -190,12 +287,21 @@ class Asset_Angkutan_Udara extends MY_Controller {
                         $updatedAssetPerlengkapan = $deleted['id_asset_perlengkapan'];
                     }
                 }
+                
                 $this->db->where_in('id',$deletedArray);
 		$this->db->delete('ext_asset_angkutan_udara_perlengkapan');
                 if(!empty($updatedAssetPerlengkapan))
                 {
                     $this->db->where_in('id',$updatedAssetPerlengkapan);
-                    $this->db->update('asset_perlengkapan',array('no_induk_asset'=>''));
+                    $update_array = array(
+                        "no_induk_asset"=> '',
+                        "warehouse_id"=>$warehouse_id,
+                        "ruang_id"=>$ruang_id,
+                        "rak_id" =>$rak_id
+                    );
+
+                            
+                    $this->db->update('asset_perlengkapan',$update_array);
                 }
 	}
         
@@ -229,6 +335,19 @@ class Asset_Angkutan_Udara extends MY_Controller {
             $sendData = array(
               'status'=>'success',
               'idExt'=>$idExt
+            );
+            
+            echo json_encode($sendData);
+        }
+        
+        function getTotalAttachedEngine()
+        {
+            $id = $this->input->post("id");
+            $jumlah_mesin_query = $this->db->query("select a.id from ext_asset_angkutan_udara_perlengkapan as t LEFT JOIN asset_perlengkapan a ON t.id_asset_perlengkapan = a.id
+                                                            WHERE a.is_engine = 1 AND t.id_ext_asset = $id");
+            $jumlah_mesin = $jumlah_mesin_query->num_rows();
+            $sendData = array(
+              'jumlah'=>$jumlah_mesin
             );
             
             echo json_encode($sendData);

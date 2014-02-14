@@ -99,6 +99,63 @@ class inventory_pengeluaran extends MY_Controller {
                     
                 }
                 
+                $this->db->where('id_source', $data['id']);
+                $pengeluaran_sub_part = $this->db->get('inventory_pengeluaran_data_perlengkapan_sub_part');
+                
+                if($pengeluaran_sub_part->num_rows > 0)
+                {
+                    $data_pengeluaran = $pengeluaran_sub_part->result();
+                    
+                    foreach($data_pengeluaran as $row_pengeluaran)
+                    {
+                        $this->db->where('id', $row_pengeluaran->id_penyimpanan_data_perlengkapan);
+                        $penyimpanan_result = $this->db->get('inventory_penyimpanan_data_perlengkapan_sub_part');
+                        
+                        if($penyimpanan_result->num_rows > 0)
+                        {
+                            $data_penyimpanan = $penyimpanan_result->row();
+                            $qty_akhir = array(
+                                'qty' => (int) $data_penyimpanan->qty + (int) $row_pengeluaran->qty_keluar
+                            );
+                            $this->db->where('id', $data_penyimpanan->id);
+                            $this->db->update('inventory_penyimpanan_data_perlengkapan_sub_part', $qty_akhir);
+                            
+                            
+                        }
+                    }
+                    
+                }
+                
+                
+                $this->db->where('id_source', $data['id']);
+                $pengeluaran_sub_sub_part = $this->db->get('inventory_pengeluaran_data_perlengkapan_sub_sub_part');
+                
+                if($pengeluaran_sub_sub_part->num_rows > 0)
+                {
+                    $data_pengeluaran = $pengeluaran_sub_sub_part->result();
+                    
+                    foreach($data_pengeluaran as $row_pengeluaran)
+                    {
+                        $this->db->where('id', $row_pengeluaran->id_penyimpanan_data_perlengkapan);
+                        $penyimpanan_result = $this->db->get('inventory_penyimpanan_data_perlengkapan_sub_sub_part');
+                        
+                        if($penyimpanan_result->num_rows > 0)
+                        {
+                            $data_penyimpanan = $penyimpanan_result->row();
+                            $qty_akhir = array(
+                                'qty' => (int) $data_penyimpanan->qty + (int) $row_pengeluaran->qty_keluar
+                            );
+                            $this->db->where('id', $data_penyimpanan->id);
+                            $this->db->update('inventory_penyimpanan_data_perlengkapan_sub_sub_part', $qty_akhir);
+                            
+                            
+                        }
+                    }
+                    
+                }
+                
+                
+                
                 //delete inventory pengeluaran data
                 $this->db->where('id',$data['id']);
                 $this->db->delete('inventory_pengeluaran');

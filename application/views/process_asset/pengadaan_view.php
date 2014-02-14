@@ -29,6 +29,50 @@ Pengadaan.dataStoreParts = new Ext.create('Ext.data.Store', {
             }),
         });
 
+Pengadaan.dataStoreSubParts = new Ext.create('Ext.data.Store', {
+            model: MSubPartsPengadaan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificPengadaanPerlengkapanSubPart',
+                create: BASE_URL + 'inventory_perlengkapan/createPengadaanPerlengkapanSubPart',
+                update: BASE_URL + 'inventory_perlengkapan/updatePengadaanPerlengkapanSubPart',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyPengadaanPerlengkapanSubPart'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+
+Pengadaan.dataStoreSubSubParts = new Ext.create('Ext.data.Store', {
+            model: MSubSubPartsPengadaan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificPengadaanPerlengkapanSubSubPart',
+                create: BASE_URL + 'inventory_perlengkapan/createPengadaanPerlengkapanSubSubPart',
+                update: BASE_URL + 'inventory_perlengkapan/updatePengadaanPerlengkapanSubSubPart',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyPengadaanPerlengkapanSubSubPart'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+
 Pengadaan.URL = {
     read : BASE_URL + 'pengadaan/getAllData',
     createUpdate : BASE_URL + 'pengadaan/modifyPengadaan',
@@ -65,6 +109,26 @@ Pengadaan.Form.create = function(data,edit){
                 dataStore:Pengadaan.dataStoreParts,
             };
     
+    var setting_grid_pengadaan_sub_parts = {
+                id:'grid_pengadaan_sub_parts',
+                toolbar:{
+                    add: Pengadaan.addSubParts,
+                    edit: Pengadaan.editSubParts,
+                    remove: Pengadaan.removeSubParts
+                },
+                dataStore:Pengadaan.dataStoreSubParts,
+            };
+    
+    var setting_grid_pengadaan_sub_sub_parts = {
+                id:'grid_pengadaan_sub_sub_parts',
+                toolbar:{
+                    add: Pengadaan.addSubSubParts,
+                    edit: Pengadaan.editSubSubParts,
+                    remove: Pengadaan.removeSubSubParts
+                },
+                dataStore:Pengadaan.dataStoreSubSubParts,
+            };
+    
     var setting = {
             url : Pengadaan.URL.createUpdate,
             data : Pengadaan.Data,
@@ -90,7 +154,7 @@ Pengadaan.Form.create = function(data,edit){
             }
     };
     
-    var form = Form.pengadaan(setting, setting_grid_pengadaan_parts);
+    var form = Form.pengadaan(setting, setting_grid_pengadaan_parts,setting_grid_pengadaan_sub_parts,setting_grid_pengadaan_sub_sub_parts);
 
     if (data !== null)
     {
@@ -175,12 +239,154 @@ Pengadaan.removeParts = function()
     }
 };
 
+Pengadaan.addSubParts = function()
+{
+        if (Modal.assetSecondaryWindow.items.length === 0)
+        {
+            Modal.assetSecondaryWindow.setTitle('Tambah Sub Part');
+        }
+            var form = Form.secondaryWindowAsset(Pengadaan.dataStoreSubParts,'add');
+            form.insert(0, Form.Component.dataInventoryPerlengkapanSubPart(false,form));
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+};
+        
+Pengadaan.editSubParts = function()
+{
+    var grid = Ext.getCmp('grid_pengadaan_sub_parts');
+    var selected = grid.getSelectionModel().getSelection();
+    if (selected.length === 1)
+    {
+
+        var data = selected[0].data;
+        var storeIndex = grid.store.indexOf(selected[0]);
+
+        if (Modal.assetSecondaryWindow.items.length === 0)
+        {
+            Modal.assetSecondaryWindow.setTitle('Edit Sub Part');
+        }
+            var form = Form.secondaryWindowAsset(Pengadaan.dataStoreSubParts, 'edit',storeIndex);
+            form.insert(0, Form.Component.dataInventoryPerlengkapanSubPart(true,form));
+
+            if (data !== null)
+            {
+                Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                });
+                 form.getForm().setValues(data);
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+
+}};
+        
+Pengadaan.removeSubParts = function()
+{
+    var grid = Ext.getCmp('grid_pengadaan_sub_parts');
+    var selected = grid.getSelectionModel().getSelection();
+    if(selected.length > 0)
+    {
+        Ext.Msg.show({
+            title: 'Konfirmasi',
+            msg: 'Apakah Anda yakin untuk menghapus ?',
+            buttons: Ext.Msg.YESNO,
+            icon: Ext.Msg.Question,
+            fn: function(btn) {
+                if (btn === 'yes')
+                {
+                    Ext.each(selected, function(obj){
+                        var storeIndex = grid.store.indexOf(obj);
+                        var record = grid.store.getAt(storeIndex);
+                        grid.store.remove(record);
+                    });
+                }
+            }
+        });
+    }
+};
+
+Pengadaan.addSubSubParts = function()
+{
+        if (Modal.assetSecondaryWindow.items.length === 0)
+        {
+            Modal.assetSecondaryWindow.setTitle('Tambah Sub Sub Part');
+        }
+            var form = Form.secondaryWindowAsset(Pengadaan.dataStoreSubSubParts,'add');
+            form.insert(0, Form.Component.dataInventoryPerlengkapanSubSubPart(false,form));
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+};
+        
+Pengadaan.editSubSubParts = function()
+{
+    var grid = Ext.getCmp('grid_pengadaan_sub_sub_parts');
+    var selected = grid.getSelectionModel().getSelection();
+    if (selected.length === 1)
+    {
+
+        var data = selected[0].data;
+        var storeIndex = grid.store.indexOf(selected[0]);
+
+        if (Modal.assetSecondaryWindow.items.length === 0)
+        {
+            Modal.assetSecondaryWindow.setTitle('Edit Sub Sub Part');
+        }
+            var form = Form.secondaryWindowAsset(Pengadaan.dataStoreSubSubParts, 'edit',storeIndex);
+            form.insert(0, Form.Component.dataInventoryPerlengkapanSubSubPart(true,form));
+
+            if (data !== null)
+            {
+                Ext.Object.each(data,function(key,value,myself){
+                    if(data[key] == '0000-00-00')
+                    {
+                        data[key] = '';
+                    }
+                });
+                 form.getForm().setValues(data);
+            }
+            Modal.assetSecondaryWindow.add(form);
+            Modal.assetSecondaryWindow.show();
+
+}};
+        
+Pengadaan.removeSubSubParts = function()
+{
+    var grid = Ext.getCmp('grid_pengadaan_sub_sub_parts');
+    var selected = grid.getSelectionModel().getSelection();
+    if(selected.length > 0)
+    {
+        Ext.Msg.show({
+            title: 'Konfirmasi',
+            msg: 'Apakah Anda yakin untuk menghapus ?',
+            buttons: Ext.Msg.YESNO,
+            icon: Ext.Msg.Question,
+            fn: function(btn) {
+                if (btn === 'yes')
+                {
+                    Ext.each(selected, function(obj){
+                        var storeIndex = grid.store.indexOf(obj);
+                        var record = grid.store.getAt(storeIndex);
+                        grid.store.remove(record);
+                    });
+                }
+            }
+        });
+    }
+};
+
 Pengadaan.Action.add = function (){
     var _form = Pengadaan.Form.create(null,false);
     Modal.processCreate.setTitle('Create Pengadaan');
     Modal.processCreate.add(_form);
     Pengadaan.dataStoreParts.changeParams({params:{open:'0'}});
     Pengadaan.dataStoreParts.removed = [];
+    Pengadaan.dataStoreSubParts.changeParams({params:{open:'0'}});
+    Pengadaan.dataStoreSubParts.removed = [];
+    Pengadaan.dataStoreSubSubParts.changeParams({params:{open:'0'}});
+    Pengadaan.dataStoreSubSubParts.removed = [];
     Modal.processCreate.show();
 
    
@@ -200,6 +406,10 @@ Pengadaan.Action.edit = function (){
         
         Pengadaan.dataStoreParts.changeParams({params:{open:'1',id_source:data.id}});
         Pengadaan.dataStoreParts.removed = [];
+        Pengadaan.dataStoreSubParts.changeParams({params:{open:'1',id_source:data.id}});
+        Pengadaan.dataStoreSubParts.removed = [];
+        Pengadaan.dataStoreSubSubParts.changeParams({params:{open:'1',id_source:data.id}});
+        Pengadaan.dataStoreSubSubParts.removed = [];
         Modal.processEdit.show();
     }
 };

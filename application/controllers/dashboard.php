@@ -62,7 +62,7 @@ class Dashboard extends CI_Controller{
                 WHERE alert =1  and umur_maks - umur <= 10 and (no_induk_asset != '' or no_induk_asset is not null)";
       
       $new_query ="
-          SELECT t.id,warehouse_id,ruang_id,rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_asset,
+          SELECT t.id,t.warehouse_id,t.ruang_id,t.rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_asset,
                             t.serial_number, t.part_number,kd_brg,kd_lokasi,nama_unker,nama_unor,
                             no_aset,kondisi, kuantitas, dari,
                             tanggal_perolehan,no_dana,penggunaan_waktu,
@@ -75,7 +75,7 @@ class Dashboard extends CI_Controller{
 		            b.nama AS sub_sub_part_nama,b.cycle AS sub_sub_part_cycle,b.cycle_maks AS sub_sub_part_cycle_maks, 
 		            b.umur AS sub_sub_part_umur,
 		            b.umur_maks AS sub_sub_part_umur_maks
-                FROM view_asset_perlengkapan AS t
+                FROM view_alert_asset_perlengkapan AS t
                 INNER JOIN asset_perlengkapan_sub_part AS a ON t.id = a.id_part
 		INNER JOIN asset_perlengkapan_sub_sub_part AS b ON a.id = b.id_sub_part
 		WHERE t.alert = 1
@@ -89,7 +89,35 @@ class Dashboard extends CI_Controller{
 		)
                 group by t.id
           ";
-      $data = $this->Get_By_Query($new_query);
+      
+      $new_query2 = "SELECT t.id,t.warehouse_id,t.ruang_id,t.rak_id,nama_warehouse,nama_rak,nama_ruang,no_induk_asset,
+                            t.serial_number, t.part_number,t.kd_brg,t.kd_lokasi,nama_unker,nama_unor,
+                            t.no_aset,t.kondisi, t.kuantitas, t.dari,
+                            t.tanggal_perolehan,t.no_dana,penggunaan_waktu,
+                            penggunaan_freq,unit_waktu,unit_freq,disimpan, 
+                            dihapus,t.image_url,t.document_url,t.kode_unor
+                            ,nama_klasifikasi_aset, t.kd_klasifikasi_aset,
+                            kd_lvl1,kd_lvl2,kd_lvl3,t.id_pengadaan,nama_part,jenis_asset,nama_kelompok,t.alert, t.umur,t.umur_maks,t.cycle, t.cycle_maks,
+		            a.nama AS sub_part_nama,a.cycle AS sub_part_cycle, a.cycle_maks AS sub_part_cycle_maks, a.umur AS sub_part_umur, 
+		            a.umur_maks AS sub_part_umur_maks,
+		            b.nama AS sub_sub_part_nama,b.cycle AS sub_sub_part_cycle,b.cycle_maks AS sub_sub_part_cycle_maks, 
+		            b.umur AS sub_sub_part_umur,
+		            b.umur_maks AS sub_sub_part_umur_maks
+                FROM view_alert_asset_perlengkapan AS t
+                INNER JOIN asset_perlengkapan_sub_part AS a ON t.id = a.id_part
+		INNER JOIN asset_perlengkapan_sub_sub_part AS b ON a.id = b.id_sub_part
+		WHERE t.alert = 1
+		AND (no_induk_asset != '' OR no_induk_asset IS NOT NULL)
+		AND (
+		(t.umur_maks - t.umur < 10 OR (CASE WHEN t.is_cycle = 1 AND t.cycle_maks - t.cycle <10 THEN TRUE ELSE FALSE END))
+		OR
+		(a.is_kelompok = 0 AND (a.umur_maks - a.umur < 10 OR (CASE WHEN a.is_cycle = 1 AND a.cycle_maks - a.cycle <10 THEN TRUE ELSE FALSE END)))
+		OR
+		(b.umur_maks - b.umur < 10 OR (CASE WHEN b.is_cycle = 1 AND b.cycle_maks - b.cycle <10 THEN TRUE ELSE FALSE END))
+		)
+                GROUP BY t.id";
+      
+      $data = $this->Get_By_Query($new_query2);
 //      var_dump($data);
 //      die;
        $dataSend['results'] = $data;

@@ -80,6 +80,21 @@
                 }
             }
         }); 
+        
+        Modal.verySmallWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: 'fit',
+            width: 350, height: 200, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.verySmallWindow.removeAll(true);
+                }
+            }
+        }); 
 
         Modal.assetCreate = Ext.create('Ext.window.Window', {
             iconCls: 'icon-course',
@@ -153,6 +168,26 @@
             listeners: {
                 'beforeclose': function() {
                     Modal.assetSecondaryWindow.removeAll(true);
+
+                }
+            }
+        });
+        
+        Modal.assetExtraWindow = Ext.create('Ext.window.Window', {
+            iconCls: 'icon-course',
+            modal: true,
+            closable: true,
+            autoDestroy: true,
+            closeAction: 'hide',
+            layout: {
+                type: 'hbox',
+                pack: 'start',
+                align: 'stretch'
+            },
+            width: Measurement.windowWidth, height: Measurement.windowHeight, bodyStyle: 'padding: 5px;',
+            listeners: {
+                'beforeclose': function() {
+                    Modal.assetExtraWindow.removeAll(true);
 
                 }
             }
@@ -340,7 +375,7 @@
                 frame: true,
                 items: [{
                         xtype: 'label',
-                        text: 'Filter By Kode Barang',
+                        text: 'Filter By Part',
                         height: 30,
                         style: 'font-weight:bold; display:block',
                         
@@ -358,8 +393,9 @@
                         layout: 'anchor',
                         anchor: '100%',
                         width: 190,
+                        editable:false,
                         store: Reference.Data.partNumber,
-                        valueField: 'kd_brg',
+                        valueField: 'part_number',
                         displayField: 'nama', emptyText: 'Part',
                         typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Part',
                         listeners: {
@@ -368,13 +404,104 @@
                                     data.clearFilter();
                                     if (value !== null)
                                     {
-                                        data.filter([{property: 'kd_brg', value: value}]);
-                                        
+                                        data.filter([{property: 'part_number', value: value}]);
+                                        var sub_part = Ext.getCmp('aset-subpart'+id);
+                                            var sub_sub_part = Ext.getCmp('aset-subsubpart'+id);
+                                            sub_sub_part.setValue('');
+                                            sub_sub_part.setDisabled(true);
+                                            sub_part.setValue('');
+
+                                            if (value !== null && value != '')
+                                            {
+                                                 sub_part.setDisabled(false);
+                                                 Reference.Data.subPart.changeParams({params:{id_open:1, part_number:value}});
+                                            }
+                                            else
+                                            {
+                                                sub_part.setDisabled(true);
+                                            }
                                     }
                                 }
                             }
                         }
                     },
+                    {
+                        xtype: 'label',
+                        text: 'Sub Part',
+                        height: 30
+                    },
+                    {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                id:'aset-subpart'+id,
+                                allowBlank: true,
+                                hideLabel:true,
+                                width: 190,
+                                store: Reference.Data.subPart,
+                                valueField: 'part_number',
+                                editable:false,
+                                layout: 'anchor',
+                                anchor: '100%',
+                                displayField: 'nama', emptyText: 'Pilih Sub Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            data.clearFilter();
+                                            var sub_sub_part = Ext.getCmp('aset-subsubpart'+id);
+                                                    
+                                                    sub_sub_part.setValue('');
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         data.filter([{property: 'part_number', value: value}]);
+                                                         sub_sub_part.setDisabled(false);
+                                                         Reference.Data.subSubPart.changeParams({params:{id_open:1, part_number:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_sub_part.setDisabled(true);
+                                                    }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                             {
+                                xtype: 'label',
+                                text: 'Sub Sub Part',
+                                height: 30
+                            },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Sub Part',
+                                name: 'part_number',
+                                hideLabel:true,
+                                allowBlank: true,
+                                id:'aset-subsubpart'+id,
+                                layout: 'anchor',
+                                anchor: '100%',
+                                width: 190,
+                                store: Reference.Data.subSubPart,
+                                valueField: 'part_number',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            data.clearFilter();
+                                            if(value != null)
+                                            {
+                                                data.filter([{property: 'part_number', value: value}]);  
+                                            }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
                     {
                         xtype: 'label',
                         text: '   ',
@@ -2160,6 +2287,8 @@
                     }]
             }).show();
         };
+        
+       
 
         Region.createSidePanel = function(actions) {
             var _panels = Ext.create('Ext.panel.Panel', {

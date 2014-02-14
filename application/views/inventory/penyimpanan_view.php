@@ -30,6 +30,50 @@
             }),
         });
         
+        InventoryPenyimpanan.dataStoreSubParts = new Ext.create('Ext.data.Store', {
+            model: MSubPartsPenyimpanan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPenyimpananPerlengkapanSubPart',
+                create: BASE_URL + 'inventory_perlengkapan/createInventoryPenyimpananPerlengkapanSubPart',
+                update: BASE_URL + 'inventory_perlengkapan/updateInventoryPenyimpananPerlengkapanSubPart',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyInventoryPenyimpananPerlengkapanSubPart'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+
+        InventoryPenyimpanan.dataStoreSubSubParts = new Ext.create('Ext.data.Store', {
+            model: MSubSubPartsPenyimpanan, autoLoad: false, noCache: false, clearRemovedOnLoad: true,
+            proxy: new Ext.data.AjaxProxy({
+                actionMethods: {read: 'POST'},
+                api: {
+                read: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPenyimpananPerlengkapanSubSubPart',
+                create: BASE_URL + 'inventory_perlengkapan/createInventoryPenyimpananPerlengkapanSubSubPart',
+                update: BASE_URL + 'inventory_perlengkapan/updateInventoryPenyimpananPerlengkapanSubSubPart',
+                destroy: BASE_URL + 'inventory_perlengkapan/destroyInventoryPenyimpananPerlengkapanSubSubPart'
+                },
+                writer: {
+                type: 'json',
+                writeAllFields: true,
+                root: 'data',
+                encode:true,
+                },
+                reader: new Ext.data.JsonReader({
+                    root: 'results', totalProperty: 'total', idProperty: 'id'}),
+                extraParams:{open:'0'}
+            }),
+        });
+        
         InventoryPenyimpanan.URL = {
             read: BASE_URL + 'inventory_penyimpanan/getAllData',
             createUpdate: BASE_URL + 'inventory_penyimpanan/modifyInventoryPenyimpanan',
@@ -70,6 +114,26 @@
                 dataStore:InventoryPenyimpanan.dataStoreParts,
             };
             
+            var setting_grid_sub_parts = {
+                id:'grid_inventory_penyimpanan_sub_parts',
+                toolbar:{
+                    add: InventoryPenyimpanan.addSubParts,
+                    edit: InventoryPenyimpanan.editSubParts,
+                    remove: InventoryPenyimpanan.removeSubParts
+                },
+                dataStore:InventoryPenyimpanan.dataStoreSubParts,
+            };
+    
+            var setting_grid_sub_sub_parts = {
+                id:'grid_inventory_penyimpanan_sub_sub_parts',
+                toolbar:{
+                    add: InventoryPenyimpanan.addSubSubParts,
+                    edit: InventoryPenyimpanan.editSubSubParts,
+                    remove: InventoryPenyimpanan.removeSubSubParts
+                },
+                dataStore:InventoryPenyimpanan.dataStoreSubSubParts,
+            };
+            
             var setting = {
                 url: InventoryPenyimpanan.URL.createUpdate,
                 data: InventoryPenyimpanan.Data,
@@ -95,7 +159,7 @@
                 }
             };
 
-            var form = Form.inventoryPenyimpanan(setting,setting_grid_parts);
+            var form = Form.inventoryPenyimpanan(setting,setting_grid_parts,setting_grid_sub_parts,setting_grid_sub_sub_parts);
 
             if (data !== null)
             {
@@ -139,7 +203,7 @@
                     Modal.assetSecondaryWindow.setTitle('Edit Part');
                 }
                     var form = Form.secondaryWindowAssetInventoryPenyimpanan(InventoryPenyimpanan.dataStoreParts, 'edit',storeIndex);
-                    form.insert(0, Form.Component.dataInventoryPerlengkapanWithWarehouse());
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanWithWarehouse(true));
 
                     if (data !== null)
                     {
@@ -175,6 +239,180 @@
                                 var record = grid.store.getAt(storeIndex);
                                 grid.store.remove(record);
                             });
+                            
+                            
+                            var gridStoreRecords = Ext.getCmp('grid_inventory_penyimpanan_parts').getStore().getRange();
+                            var count_of_invalid_values = parseInt(0);
+                            Ext.Array.each(gridStoreRecords,function(key,index,self)
+                            {
+                                if(gridStoreRecords[index].data.id_warehouse == '' || gridStoreRecords[index].data.id_warehouse_ruang == '')
+                                {
+                                    count_of_invalid_values++;
+                                }
+                            });
+                            Ext.getCmp('inventory_penyimpanan_grid_invalid_data').setValue(count_of_invalid_values);
+                        }
+                    }
+                });
+            }
+        };
+        
+        InventoryPenyimpanan.addSubParts = function()
+        {
+            if (Modal.assetSecondaryWindow.items.length === 0)
+            {
+                Modal.assetSecondaryWindow.setTitle('Tambah Sub Part');
+            }
+                var form = Form.secondaryWindowAssetInventoryPenyimpananSubPart(InventoryPenyimpanan.dataStoreSubParts,'add');
+                form.insert(0, Form.Component.dataInventoryPerlengkapanSubPartWithWarehouse(false,form));
+                Modal.assetSecondaryWindow.add(form);
+                Modal.assetSecondaryWindow.show();
+        };
+        
+        InventoryPenyimpanan.editSubParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_penyimpanan_sub_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+
+                var data = selected[0].data;
+                var storeIndex = grid.store.indexOf(selected[0]);
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Sub Part');
+                }
+                    var form = Form.secondaryWindowAssetInventoryPenyimpananSubPart(InventoryPenyimpanan.dataStoreSubParts, 'edit',storeIndex);
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanSubPartWithWarehouse(true,form));
+
+                    if (data !== null)
+                    {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+            }
+        };
+
+        InventoryPenyimpanan.removeSubParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_penyimpanan_sub_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if(selected.length > 0)
+            {
+                Ext.Msg.show({
+                    title: 'Konfirmasi',
+                    msg: 'Apakah Anda yakin untuk menghapus ?',
+                    buttons: Ext.Msg.YESNO,
+                    icon: Ext.Msg.Question,
+                    fn: function(btn) {
+                        if (btn === 'yes')
+                        {
+                            Ext.each(selected, function(obj){
+                                var storeIndex = grid.store.indexOf(obj);
+                                var record = grid.store.getAt(storeIndex);
+                                grid.store.remove(record);
+                            });
+                            
+                            var gridStoreRecords = Ext.getCmp('grid_inventory_penyimpanan_sub_parts').getStore().getRange();
+                                    var count_of_invalid_values = parseInt(0);
+                                    Ext.Array.each(gridStoreRecords,function(key,index,self)
+                                    {
+                                        if(gridStoreRecords[index].data.id_warehouse == '' || gridStoreRecords[index].data.id_warehouse_ruang == '')
+                                        {
+                                            count_of_invalid_values++;
+                                        }
+                                    });
+                                    Ext.getCmp('inventory_penyimpanan_grid_sub_parts_invalid_data').setValue(count_of_invalid_values);
+                        }
+                    }
+                });
+            }
+        };
+
+        InventoryPenyimpanan.addSubSubParts = function()
+        {
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Tambah Sub Sub Part');
+                }
+                    var form = Form.secondaryWindowAssetInventoryPenyimpananSubSubPart(InventoryPenyimpanan.dataStoreSubSubParts,'add');
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanSubSubPartWithWarehouse(false,form));
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+        };
+
+        InventoryPenyimpanan.editSubSubParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_penyimpanan_sub_sub_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if (selected.length === 1)
+            {
+
+                var data = selected[0].data;
+                var storeIndex = grid.store.indexOf(selected[0]);
+
+                if (Modal.assetSecondaryWindow.items.length === 0)
+                {
+                    Modal.assetSecondaryWindow.setTitle('Edit Sub Sub Part');
+                }
+                    var form = Form.secondaryWindowAssetInventoryPenyimpananSubSubPart(InventoryPenyimpanan.dataStoreSubSubParts, 'edit',storeIndex);
+                    form.insert(0, Form.Component.dataInventoryPerlengkapanSubSubPartWithWarehouse(true,form));
+
+                    if (data !== null)
+                    {
+                        Ext.Object.each(data,function(key,value,myself){
+                            if(data[key] == '0000-00-00')
+                            {
+                                data[key] = '';
+                            }
+                        });
+                         form.getForm().setValues(data);
+                    }
+                    Modal.assetSecondaryWindow.add(form);
+                    Modal.assetSecondaryWindow.show();
+
+         }
+        };
+
+        InventoryPenyimpanan.removeSubSubParts = function()
+        {
+            var grid = Ext.getCmp('grid_inventory_penyimpanan_sub_sub_parts');
+            var selected = grid.getSelectionModel().getSelection();
+            if(selected.length > 0)
+            {
+                Ext.Msg.show({
+                    title: 'Konfirmasi',
+                    msg: 'Apakah Anda yakin untuk menghapus ?',
+                    buttons: Ext.Msg.YESNO,
+                    icon: Ext.Msg.Question,
+                    fn: function(btn) {
+                        if (btn === 'yes')
+                        {
+                            Ext.each(selected, function(obj){
+                                var storeIndex = grid.store.indexOf(obj);
+                                var record = grid.store.getAt(storeIndex);
+                                grid.store.remove(record);
+                            });
+                            
+                            var gridStoreRecords = Ext.getCmp('grid_inventory_penyimpanan_sub_sub_parts').getStore().getRange();
+                                    var count_of_invalid_values = parseInt(0);
+                                    Ext.Array.each(gridStoreRecords,function(key,index,self)
+                                    {
+                                        if(gridStoreRecords[index].data.id_warehouse == '' || gridStoreRecords[index].data.id_warehouse_ruang == '')
+                                        {
+                                            count_of_invalid_values++;
+                                        }
+                                    });
+                                    Ext.getCmp('inventory_penyimpanan_grid_sub_sub_parts_invalid_data').setValue(count_of_invalid_values);
                         }
                     }
                 });
@@ -187,6 +425,10 @@
             Modal.processCreate.add(_form);
             InventoryPenyimpanan.dataStoreParts.changeParams({params:{open:'0'}});
             InventoryPenyimpanan.dataStoreParts.removed = [];
+            InventoryPenyimpanan.dataStoreSubParts.changeParams({params:{open:'0'}});
+            InventoryPenyimpanan.dataStoreSubParts.removed = [];
+            InventoryPenyimpanan.dataStoreSubSubParts.changeParams({params:{open:'0'}});
+            InventoryPenyimpanan.dataStoreSubSubParts.removed = [];
             Modal.processCreate.show();
         };
 
@@ -205,6 +447,10 @@
                 Modal.processEdit.add(_form);
                 InventoryPenyimpanan.dataStoreParts.changeParams({params:{open:'1',id_source:data.id}});
                 InventoryPenyimpanan.dataStoreParts.removed = [];
+                InventoryPenyimpanan.dataStoreSubParts.changeParams({params:{open:'1',id_source:data.id}});
+                InventoryPenyimpanan.dataStoreSubParts.removed = [];
+                InventoryPenyimpanan.dataStoreSubSubParts.changeParams({params:{open:'1',id_source:data.id}});
+                InventoryPenyimpanan.dataStoreSubSubParts.removed = [];
                 Modal.processEdit.show();
             }
         };

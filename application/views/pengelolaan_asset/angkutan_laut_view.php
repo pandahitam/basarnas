@@ -390,16 +390,69 @@
         AngkutanLaut.removePerlengkapan = function()
         {
             var selected = Ext.getCmp('grid_angkutanLaut_perlengkapan').getSelectionModel().getSelection();
-            if(selected.length > 0)
+           if(selected.length > 0)
             {
+                
                 var arrayDeleted = [];
+                var ids = "";
                 _.each(selected, function(obj) {
                     var data = {
                         id: obj.data.id,
                         id_asset_perlengkapan: obj.data.id_asset_perlengkapan
                     };
                     arrayDeleted.push(data);
+                    ids += obj.data.id_asset_perlengkapan +",";
                 });
+            
+            var messageBox = Ext.create('Ext.window.MessageBox', {
+                                                width:350,
+                                                height: 100,
+                                                buttonText: {yes: "Hapus",no: "Simpan ke Warehouse"},
+
+                                           });
+            messageBox.show({
+                title: 'Hapus',
+                msg: 'Pilih Tindakan',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: AngkutanLaut.URL.removePerlengkapanAngkutanLaut,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                AngkutanLaut.dataStorePerlengkapanAngkutanLaut.load();
+                            }
+                        });
+                        
+//                        Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePerlengkapanAngkutanUdara,AngkutanUdara.dataStorePerlengkapanAngkutanUdara);
+                    }
+                    else if(btn === 'no')
+                    {
+//                        var data = {id_collection:ids};
+                        if (Modal.verySmallWindow.items.length === 0)
+                        {
+                            Modal.verySmallWindow.setTitle('Simpan ke Warehouse');
+                        }
+                        var form = Form.panelVerySmallAngkutan(AngkutanLaut.URL.removePerlengkapanAngkutanLaut, AngkutanLaut.dataStorePerlengkapanAngkutanLaut,arrayDeleted);                       
+                        form.insert(3, Form.Component.warehousePerlengkapanSmall(false,form));
+//                        form.getForm().reset();
+//                        form.getForm().setValues(data);
+                        Modal.verySmallWindow.add(form);
+                        Modal.verySmallWindow.show();
+                        }
+                    }
+                });
+            
             }
             Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePerlengkapanAngkutanLaut,AngkutanLaut.dataStorePerlengkapanAngkutanLaut);
         };

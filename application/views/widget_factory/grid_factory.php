@@ -34,6 +34,122 @@
             return grid;
         };
         
+        Grid.getDetailPerlengkapan = function(id){
+                    Load_TabPage_Asset_Semar('perlengkapan_panel', BASE_URL + 'asset_perlengkapan/perlengkapan', function(cmpx){
+                            $.ajax({
+                            url:BASE_URL + 'asset_perlengkapan/getSpecificPerlengkapan',
+                            type: "POST",
+                            dataType:'json',
+                            async:false,
+                            data:{id:id},
+                            success:function(response, status){
+                                if(status == "success")
+                                {
+                                    Perlengkapan.Form.create = function(data, edit) {
+                                        var setting_grid_sub_part = {
+                                            id:'grid_sub_part',
+                                            toolbar:{
+                                                add: Perlengkapan.addSubPart,
+                                                edit: Perlengkapan.editSubPart,
+                                                remove: Perlengkapan.removeSubPart
+                                            },
+                                            dataStore:Perlengkapan.dataStoreSubPart,
+                                        };
+
+
+                                        var form = Form.extra(Perlengkapan.URL.createUpdate, Perlengkapan.Data, edit);
+                                        form.insert(0, Form.Component.unit(edit,form));
+                            //            form.insert(3, Form.Component.address());
+                            //            form.insert(4, Form.Component.perlengkapan());
+                            //            form.insert(5, Form.Component.tambahanPerlengkapanPerlengkapan());
+                                        form.insert(1, Form.Component.klasifikasiAset(edit))
+                                        form.insert(2, Form.Component.perlengkapan(edit));
+                                        form.insert(3, Form.Component.perlengkapanDataTambahan());
+                                        form.insert(4, Perlengkapan.Component.gridSubPart(setting_grid_sub_part,edit));
+                                        form.insert(5, Form.Component.fileUpload(edit));
+                                        if (data !== null)
+                                        {
+                                            Ext.Object.each(data,function(key,value,myself){
+                                                        if(data[key] == '0000-00-00')
+                                                        {
+                                                            data[key] = '';
+                                                        }
+                                                    });
+                                            form.getForm().setValues(data);
+                                        }
+                                        else
+                                        {
+                                            var presetData = {};
+                                            if(user_kd_lokasi != null)
+                                            {
+                                                presetData.kd_lokasi = user_kd_lokasi;
+                                            }
+                                            if(user_kode_unor != null)
+                                            {
+                                                presetData.kode_unor = user_kode_unor;
+                                            }
+                                            form.getForm().setValues(presetData);
+
+                                        }
+
+
+                                        return form;
+                                    };
+
+                                    Perlengkapan.Action.edit = function() {
+                                        var data = response;
+                                        delete data.nama_unker;
+                                        delete data.nama_unor;
+
+                                        if (Modal.assetExtraWindow.items.length <= 1)
+                                        {
+                                            Modal.assetExtraWindow.setTitle('Edit Perlengkapan');
+                                        }
+
+                                        var _form = Perlengkapan.Form.create(data, true);
+                                        Perlengkapan.dataStoreSubPart.changeParams({params:{open:'1',id_part:data.id}});
+                                        Modal.assetExtraWindow.add(_form);
+                                        Modal.assetExtraWindow.show();
+                                    };
+
+                                    Perlengkapan.addSubPart = function()
+                                    {
+                                        var setting_grid_sub_sub_part = {
+                                            id:'grid_sub_sub_part',
+                                            toolbar:{
+                                                add: Perlengkapan.addSubSubPart,
+                                                edit: Perlengkapan.editSubSubPart,
+                                                remove: Perlengkapan.removeSubSubPart
+                                            },
+                                            dataStore:Perlengkapan.dataStoreSubSubPart,
+                                        };
+
+
+                                            var data = response;
+                                            delete data.nama_unker;
+                                            delete data.nama_unor;
+
+                                            if (Modal.assetSecondaryWindow.items.length === 0)
+                                            {
+                                                Modal.assetSecondaryWindow.setTitle('Tambah Sub Part');
+                                            }
+                                                var form = Perlengkapan.Component.panelPerlengkapanSubPart(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);
+                                                form.insert(0, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,false,Perlengkapan.dataStoreSubSubPart));
+                                                form.insert(1, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
+                                                form.insert(2, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
+                                                Reference.Data.subPart.changeParams({params:{id_open:1,part_number:data.part_number}});
+                                                Modal.assetSecondaryWindow.add(form);
+                                                Modal.assetSecondaryWindow.show();
+
+                                    };
+
+                                    Perlengkapan.Action.edit();
+                                }
+                            }
+                         });
+                        })
+        }
+        
         Grid.baseGridAngkutanPerlengkapan = function(setting, data, feature_list) {
             var grid = new Ext.create('Ext.grid.Panel', {
                 id: setting.grid.id,
@@ -61,43 +177,7 @@
                         }
                         else
                         {
-                               $.ajax({
-                                url:BASE_URL + 'asset_perlengkapan/getSpecificPerlengkapan',
-                                type: "POST",
-                                dataType:'json',
-                                async:false,
-                                data:{id:id},
-                                success:function(response, status){
-                                    if(status == "success")
-                                    {
-                                        if (Modal.assetSecondaryWindow.items.length === 0)
-                                        {
-                                            Modal.assetSecondaryWindow.setTitle('Edit Part');
-                                        }
-                                        var form = Ext.create('Ext.form.Panel', {
-                                            frame: true,
-                                            bodyStyle: 'padding:5px',
-                                            width: '100%',
-                                            height: '100%',
-                                            autoScroll:true,
-                                            fieldDefaults: {
-                                                msgTarget: 'side'
-                                            },
-                                        });
-                                        
-                                        
-                                        form.insert(0, Form.Component.unit(true,form));
-                                        form.insert(1, Form.Component.klasifikasiAset(true))
-                                        form.insert(2, Form.Component.perlengkapan(true));
-                                        form.insert(3, Form.Component.fileUpload(true));
-                                        
-                                        
-                                        form.getForm().setValues(response);
-                                        Modal.assetSecondaryWindow.add(form);
-                                        Modal.assetSecondaryWindow.show();
-                                    }
-                                }
-                             });
+                            Grid.getDetailPerlengkapan(id);
                         }
 //                        Ext.getCmp(setting.toolbar.edit.id).handler.call(Ext.getCmp(setting.toolbar.edit.id).scope);
                     }
@@ -548,8 +628,34 @@
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
+                        }}, '->', {
+                        text: 'Ubah Data Perlengkapan', iconCls: 'icon-edit',
+                        handler: function() {
+                            var grid = Ext.getCmp(setting.id);
+                            if(grid != null)
+                            {
+                                var selected = grid.getSelectionModel().getSelection();
+                                if(selected.length == 1)
+                                {
+                                    var data = selected[0].data;
+                                    if(data.id_asset_perlengkapan == 0 || data.id_asset_perlengkapan == '')
+                                    {
+                                        Ext.MessageBox.alert('Tidak Terdapat Data','Pilihan yang dipilih tidak memiliki data dari asset perlengkapan');
+                                    }
+                                    else
+                                    {
+                                        Grid.getDetailPerlengkapan(data.id_asset_perlengkapan);
+                                    }
+                                    
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert("Error");
+                            }
+                            
                         }
-                    }, '->', 
+                    },
 //                            search
                 ]
             });
@@ -658,8 +764,34 @@
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
+                        }}, '->', {
+                        text: 'Ubah Data Perlengkapan', iconCls: 'icon-edit',
+                        handler: function() {
+                            var grid = Ext.getCmp(setting.id);
+                            if(grid != null)
+                            {
+                                var selected = grid.getSelectionModel().getSelection();
+                                if(selected.length == 1)
+                                {
+                                    var data = selected[0].data;
+                                    if(data.id_asset_perlengkapan == 0 || data.id_asset_perlengkapan == '')
+                                    {
+                                        Ext.MessageBox.alert('Tidak Terdapat Data','Pilihan yang dipilih tidak memiliki data dari asset perlengkapan');
+                                    }
+                                    else
+                                    {
+                                        Grid.getDetailPerlengkapan(data.id_asset_perlengkapan);
+                                    }
+                                    
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert("Error");
+                            }
+                            
                         }
-                    }, '->',
+                    }, 
 //                            search
                 ]
             });
@@ -768,12 +900,38 @@
                         text: 'Hapus', id: settingGrid.toolbar.remove.id, iconCls: 'icon-delete', handler: function() {
                             settingGrid.toolbar.remove.action();
                         }
-                    }, '-', {
+                    },'-', {
                         text: 'Clear Column Filter', iconCls: 'icon-filter_clear',
                         handler: function() {
                             _grid.filters.clearFilters();
+                        }}, '->', {
+                        text: 'Ubah Data Perlengkapan', iconCls: 'icon-edit',
+                        handler: function() {
+                            var grid = Ext.getCmp(setting.id);
+                            if(grid != null)
+                            {
+                                var selected = grid.getSelectionModel().getSelection();
+                                if(selected.length == 1)
+                                {
+                                    var data = selected[0].data;
+                                    if(data.id_asset_perlengkapan == 0 || data.id_asset_perlengkapan == '')
+                                    {
+                                        Ext.MessageBox.alert('Tidak Terdapat Data','Pilihan yang dipilih tidak memiliki data dari asset perlengkapan');
+                                    }
+                                    else
+                                    {
+                                        Grid.getDetailPerlengkapan(data.id_asset_perlengkapan);
+                                    }
+                                    
+                                }
+                            }
+                            else
+                            {
+                                Ext.MessageBox.alert("Error");
+                            }
+                            
                         }
-                    }, '->',
+                    },
 //                            search
                 ]
             });
@@ -932,20 +1090,20 @@
                         ]
                     },
                     search: {
-                        id: 'search_parts'
+                        id: 'search_parts'+setting.id
                     },
                     toolbar: {
-                        id: 'toolbar_parts',
+                        id: 'toolbar_parts'+setting.id,
                         add: {
-                            id: 'button_add_parts',
+                            id: 'button_add_parts'+setting.id,
                             action: setting.toolbar.add
                         },
                         edit: {
-                            id: 'button_edit_parts',
+                            id: 'button_edit_parts'+setting.id,
                             action: setting.toolbar.edit
                         },
                         remove: {
-                            id: 'button_remove_parts',
+                            id: 'button_remove_parts'+setting.id,
                             action: setting.toolbar.remove
                         }
                     }
@@ -968,20 +1126,20 @@
                         ]
                     },
                     search: {
-                        id: 'search_parts'
+                        id: 'search_parts'+setting.id
                     },
                     toolbar: {
-                        id: 'toolbar_parts',
+                        id: 'toolbar_parts'+setting.id,
                         add: {
-                            id: 'button_add_parts',
+                            id: 'button_add_parts'+setting.id,
                             action: setting.toolbar.add
                         },
                         edit: {
-                            id: 'button_edit_parts',
+                            id: 'button_edit_parts'+setting.id,
                             action: setting.toolbar.edit
                         },
                         remove: {
-                            id: 'button_remove_parts',
+                            id: 'button_remove_parts'+setting.id,
                             action: setting.toolbar.remove
                         }
                     }
@@ -1005,20 +1163,20 @@
                         ]
                     },
                     search: {
-                        id: 'search_parts'
+                        id: 'search_parts'+setting.id
                     },
                     toolbar: {
-                        id: 'toolbar_parts',
+                        id: 'toolbar_parts'+setting.id,
                         add: {
-                            id: 'button_add_parts',
+                            id: 'button_add_parts'+setting.id,
                             action: setting.toolbar.add
                         },
                         edit: {
-                            id: 'button_edit_parts',
+                            id: 'button_edit_parts'+setting.id,
                             action: setting.toolbar.edit
                         },
                         remove: {
-                            id: 'button_remove_parts',
+                            id: 'button_remove_parts'+setting.id,
                             action: setting.toolbar.remove
                         }
                     }
@@ -1058,7 +1216,7 @@
                         handler: function() {
                             _grid.filters.clearFilters();
                         }
-                    }, '->',search
+                    }, '->'
                 ]
             });
            

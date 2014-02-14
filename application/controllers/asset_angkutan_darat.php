@@ -186,7 +186,29 @@ class Asset_Angkutan_Darat extends MY_Controller {
         
         function deletePerlengkapanAngkutanDarat()
 	{
+                
+                
 		$data = $this->input->post('data');
+                
+                $warehouse_id="";
+                $ruang_id="";
+                $rak_id="";
+                
+                if(isset($data[0]["warehouse_id"]))
+                {
+                    $warehouse_id = $data[0]["warehouse_id"];
+                }
+                
+                if(isset($data[0]["ruang_id"]))
+                {
+                    $ruang_id = $data[0]["ruang_id"];
+                }
+                
+                if(isset($data[0]["rak_id"]))
+                {
+                    $rak_id = $data[0]["rak_id"];
+                }
+                
                 $deletedArray = array();
                 foreach($data as $deleted)
                 {
@@ -201,7 +223,15 @@ class Asset_Angkutan_Darat extends MY_Controller {
                 if(!empty($updatedAssetPerlengkapan))
                 {
                     $this->db->where_in('id',$updatedAssetPerlengkapan);
-                    $this->db->update('asset_perlengkapan',array('no_induk_asset'=>''));
+                    $update_array = array(
+                        "no_induk_asset"=> '',
+                        "warehouse_id"=>$warehouse_id,
+                        "ruang_id"=>$ruang_id,
+                        "rak_id" =>$rak_id
+                    );
+
+                            
+                    $this->db->update('asset_perlengkapan',$update_array);
                 }
 	}
         

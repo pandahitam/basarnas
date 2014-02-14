@@ -180,7 +180,8 @@ Ext.define('MPerlengkapan', {extend: 'Ext.data.Model',
         'dihapus','image_url','document_url'
         ,'kd_klasifikasi_aset','nama_klasifikasi_aset','kode_unor','id_pengadaan','no_induk_asset','nama_part','umur','jenis_asset',
         'umur_maks','installation_date','installation_ac_tsn','installation_comp_tsn','task','is_oc','is_engine','cycle','cycle_maks','is_cycle'
-        ,'eng_type','eng_tso'
+        ,'eng_type','eng_tso','tipe','id_part','id_sub_part'
+        ,'kd_lvl1','kd_lvl2','kd_lvl3'
         ]
 });
 
@@ -248,7 +249,7 @@ Ext.define('MAngkutanDarat', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanDaratPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg'
+        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg','warehouse_id','ruang_id','rak_id'
     ]
 });
 
@@ -290,7 +291,7 @@ Ext.define('MAngkutanLaut', {extend: 'Ext.data.Model',
 Ext.define('MAngkutanLautPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
-        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg'
+        'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg','warehouse_id','ruang_id','rak_id'
     ]
 });
 
@@ -324,7 +325,7 @@ Ext.define('MAngkutanUdara', {extend: 'Ext.data.Model',
         'udara_surat_bukti_kepemilikan_no','udara_surat_bukti_kepemilikan_keterangan','udara_surat_bukti_kepemilikan_file',
         'udara_sertifikat_pendaftaran_pesawat_udara_no','udara_sertifikat_pendaftaran_pesawat_udara_keterangan','udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku','udara_sertifikat_pendaftaran_pesawat_udara_file',
         'udara_sertifikat_kelaikan_udara_no','udara_sertifikat_kelaikan_udara_keterangan','udara_sertifikat_kelaikan_udara_masa_berlaku','udara_sertifikat_kelaikan_udara_file',
-        'udara_no_mesin2','udara_inisialisasi_mesin1','udara_inisialisasi_mesin2',
+        'udara_no_mesin2','udara_inisialisasi_mesin1','udara_inisialisasi_mesin2','udara_umur_pesawat'
     ]
 });
 
@@ -332,7 +333,7 @@ Ext.define('MAngkutanUdaraPerlengkapan', {extend: 'Ext.data.Model',
     fields: ['id', 'id_ext_asset', 
         'jenis_perlengkapan', 'no', 
         'nama', 'keterangan','id_asset_perlengkapan','part_number','serial_number','kd_brg',
-        'installation_date','installation_ac_tsn','installation_comp_tsn'
+        'installation_date','installation_ac_tsn','installation_comp_tsn','warehouse_id','ruang_id','rak_id'
     ]
 });
   
@@ -534,7 +535,7 @@ Ext.define('MPemeliharaanUdara', {extend: 'Ext.data.Model',
         'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 'kondisi', 
         'deskripsi', 'harga', 'kode_angaran', 'unit_waktu', 'unit_pengunaan', 'freq_waktu', 
         'freq_pengunaan', 'status', 'durasi', 'rencana_waktu', 
-        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url']
+        'rencana_pengunaan', 'rencana_keterangan', 'alert','image_url','document_url','penambahan_umur']
 });
 
 Ext.define('MPemeliharaanBangunan', {extend: 'Ext.data.Model',
@@ -609,11 +610,35 @@ Ext.define('MPartsPengadaan', {extend: 'Ext.data.Model',
         'status_barang', 'qty', 'asal_barang','kd_lokasi']
 });
 
+Ext.define('MSubPartsPengadaan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source','id_part',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang','kd_lokasi']
+});
+
+Ext.define('MSubSubPartsPengadaan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source','id_part','id_sub_part',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang','kd_lokasi']
+});
+
 //inventory penerimaan
 Ext.define('MParts', {extend: 'Ext.data.Model',
     fields: ['id','id_source',
         'serial_number', 'part_number','kd_brg',
         'status_barang', 'qty', 'asal_barang','id_asset_perlengkapan']
+});
+
+Ext.define('MSubPartsPenerimaan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source','id_part',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang']
+});
+
+Ext.define('MSubSubPartsPenerimaan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source','id_part','id_sub_part',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang']
 });
 
 Ext.define('MPartsPenyimpanan', {extend: 'Ext.data.Model',
@@ -624,7 +649,33 @@ Ext.define('MPartsPenyimpanan', {extend: 'Ext.data.Model',
         'nama_warehouse','nama_ruang','nama_rak','invalid_grid_field_count']
 });
 
+Ext.define('MSubPartsPenyimpanan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source','id_asset_perlengkapan_sub_part','id_part',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang',
+        'id_warehouse','id_warehouse_ruang','id_warehouse_rak',
+        'nama_warehouse','nama_ruang','nama_rak','invalid_grid_field_count']
+});
+
+Ext.define('MSubSubPartsPenyimpanan', {extend: 'Ext.data.Model',
+    fields: ['id','id_source','id_asset_perlengkapan_sub_sub_part','id_part','id_sub_part',
+        'serial_number', 'part_number','kd_brg',
+        'status_barang', 'qty', 'asal_barang',
+        'id_warehouse','id_warehouse_ruang','id_warehouse_rak',
+        'nama_warehouse','nama_ruang','nama_rak','invalid_grid_field_count']
+});
+
 Ext.define('MPartsPengeluaran', {extend: 'Ext.data.Model',
+    fields: ['id','id_warehouse','nama_warehouse','id_source','id_penyimpanan_data_perlengkapan',
+            'qty_keluar','qty','nomor_berita_acara','part_number']
+});
+
+Ext.define('MSubPartsPengeluaran', {extend: 'Ext.data.Model',
+    fields: ['id','id_warehouse','nama_warehouse','id_source','id_penyimpanan_data_perlengkapan',
+            'qty_keluar','qty','nomor_berita_acara','part_number']
+});
+
+Ext.define('MSubSubPartsPengeluaran', {extend: 'Ext.data.Model',
     fields: ['id','id_warehouse','nama_warehouse','id_source','id_penyimpanan_data_perlengkapan',
             'qty_keluar','qty','nomor_berita_acara','part_number']
 });

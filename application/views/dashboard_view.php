@@ -1202,6 +1202,738 @@
                                                 
                                                 Perlengkapan.dataStoreListRequiredPemeliharaan.changeParams({params:{id:data.id}});
                                                 
+                                                Perlengkapan.Component.pemeliharaanPerlengkapanSubPart = function(edit) {
+                                                        var component = [{
+                                                                xtype: 'fieldset',
+                                                                layout: 'column',
+                                                                anchor: '100%',
+                                                                title: 'PEMELIHARAAN',
+                                                                border: false,
+                                                                defaultType: 'container',
+                                                                frame: true,
+                                                                items: [{
+                                                                        columnWidth: .34,
+                                                                        layout: 'anchor',
+                                                                        defaults: {
+                                                                            anchor: '95%',
+                                                                            labelWidth: 120
+                                                                        },
+                                                                        defaultType: 'textfield',
+                                                                        items: [
+                                                                            {
+                                                                               xtype:'hidden',
+                                                                               name:'id',
+                                                                            },
+                                                                            {
+                                                                                xtype:'hidden',
+                                                                                name:'id_sub_part',
+                                                                                id:'pemeliharaan_sub_part_id_sub_part'
+                                                                            },
+                                                                            {
+                                                                                xtype:'hidden',
+                                                                                name:'nama',
+                                                                                id:'pemeliharaan_sub_part_nama'
+                                                                            },
+                                                                            {
+                                                                            xtype: 'combo',
+                                                                            fieldLabel: 'Sub Part',
+                                                                            name: 'part_number',
+                                                                            allowBlank: false,
+                                                                            readOnly:edit,
+                                                                            editable:false,
+                                                                            store: Reference.Data.subPartPemeliharaan,
+                                                                            valueField: 'part_number',
+                                                                            displayField: 'nama', emptyText: 'Pilih Part',
+                                                                            typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                                                            listeners: {
+                                                                                'change': {
+                                                                                    fn: function(obj, value) {
+                                                                                        if(obj.valueModels.length > 0 && value != null)
+                                                                                        {
+                                                                                            if(edit == false)
+                                                                                            {
+                                                                                                var nama  = Ext.getCmp('pemeliharaan_sub_part_nama');
+                                                                                                var id_sub_part = Ext.getCmp('pemeliharaan_sub_part_id_sub_part')
+                                                                                                if(nama !=  null)
+                                                                                                {
+                                                                                                    nama.setValue(obj.valueModels[0].data.nama);
+                                                                                                }
+                                                                                                if(id_sub_part !=  null)
+                                                                                                {
+                                                                                                    id_sub_part.setValue(obj.valueModels[0].data.id)
+
+                                                                                                }
+                                                                                            }
+                                            //                                                
+                                                                                        }
+                                                                                    },
+                                                                                    scope: this
+                                                                                }
+                                                                            }
+                                                                         },
+                                                                                {
+                                                                                xtype: 'combo',
+                                                                                fieldLabel: 'Jenis',
+                                                                                name: 'jenis',
+                                                                                allowBlank: true,
+                                                                                store: Reference.Data.jenisPemeliharaan,
+                                                                                valueField: 'id',
+                                                                                displayField: 'nama', emptyText: 'Jenis',
+                                                                                value: 3,
+                                                                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
+
+                                                                            }, {
+                                                                                xtype: 'datefield',
+                                                                                fieldLabel: 'Tanggal Pelaksana',
+                                                                                name: 'pelaksana_tgl',
+                                                                                id: 'pelaksana_tgl',
+                                                                                format: 'Y-m-d',
+                                                                            }, {
+                                                                                fieldLabel: 'Pelaksana',
+                                                                                name: 'pelaksana_nama'
+                                                                            }, {
+                                                                                fieldLabel: 'Kode Angaran',
+                                                                                name: 'kode_angaran'
+                                                                            }, {
+                                                                                xtype: 'combo',
+                                                                                fieldLabel: 'Tahun Anggaran',
+                                                                                name: 'tahun_angaran',
+                                                                                allowBlank: true,
+                                                                                store: Reference.Data.year,
+                                                                                valueField: 'year',
+                                                                                displayField: 'year', emptyText: '',
+                                                                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
+                                                                            },
+
+                                                                        ]
+                                                                    }, {
+                                                                        columnWidth: .33,
+                                                                        layout: 'anchor',
+                                                                        defaults: {
+                                                                            anchor: '95%',
+                                                                            labelWidth: 120
+                                                                        },
+                                                                        defaultType: 'textfield',
+                                                                        items: [
+                                                                            {
+                                                                                xtype: 'combo',
+                                                                                disabled: false,
+                                                                                fieldLabel: 'Kondisi',
+                                                                                name: 'kondisi',
+                                                                                id : 'kondisi_perlengkapan',
+                                                                                allowBlank: true,
+                                                                                store: Reference.Data.kondisiPerlengkapan,
+                                                                                valueField: 'value',
+                                                                                displayField: 'text', emptyText: 'Pilih Kondisi',
+                                                                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                                                            },{
+                                                                                xtype: 'numberfield',
+                                                                                fieldLabel: 'Harga',
+                                                                                name: 'harga'
+                                                                            }, {
+                                                                                fieldLabel: 'Status',
+                                                                                name: 'status'
+                                                                            }, {
+                                                                                fieldLabel: 'Durasi',
+                                                                                name: 'durasi'
+                                                                            },
+                                                                            {
+                                                                                xtype:'numberfield',
+                                                                                fieldLabel: 'Penambahan Umur',
+                                                                                name: 'umur',
+                                                                                allowBlank:false,
+                                                                                value:0,
+                                                                                minValue:0,
+                                                                                readOnly:edit
+                                                                            },
+                                                                            {
+                                                                                xtype:'numberfield',
+                                                                                fieldLabel: 'Penambahan Cycle',
+                                                                                name: 'cycle',
+                                                                                allowBlank:false,
+                                                                                value:0,
+                                                                                minValue:0,
+                                                                                readOnly:edit
+                                                                            }]
+                                                                    },
+                                                                {
+                                                                        columnWidth: .33,
+                                                                        layout: 'anchor',
+                                                                        defaults: {
+                                                                            anchor: '95%',
+                                                                            labelWidth: 120
+                                                                        },
+                                                                        defaultType: 'textfield',
+                                                                        items: [
+                                                                            {
+                                                                                xtype: 'textarea',
+                                                                                fieldLabel: 'Deskripsi',
+                                                                                name: 'deskripsi'
+                                                                            },
+                                            //                                {
+                                            //                                    xtype: 'checkboxfield',
+                                            //                                    inputValue: 1,
+                                            //                                    fieldLabel: 'Alert',
+                                            //                                    name: 'alert',
+                                            //                                    id: 'alert',
+                                            //                                    boxLabel: 'Yes',
+                                            //                                    disabled: true
+                                            //                                }
+                                                                        ]
+                                                                    }]
+                                                            }]
+
+                                                        return component;
+                                                };
+
+                                                Perlengkapan.Component.pemeliharaanPerlengkapanSubSubPart = function(edit) {
+                                                        var component = [{
+                                                                xtype: 'fieldset',
+                                                                layout: 'column',
+                                                                anchor: '100%',
+                                                                title: 'PEMELIHARAAN',
+                                                                border: false,
+                                                                defaultType: 'container',
+                                                                frame: true,
+                                                                items: [{
+                                                                        columnWidth: .34,
+                                                                        layout: 'anchor',
+                                                                        defaults: {
+                                                                            anchor: '95%',
+                                                                            labelWidth: 120
+                                                                        },
+                                                                        defaultType: 'textfield',
+                                                                        items: [
+                                                                            {
+                                                                               xtype:'hidden',
+                                                                               name:'id',
+                                                                            },
+                                                                            {
+                                                                                xtype:'hidden',
+                                                                                name:'id_sub_sub_part',
+                                                                                id:'pemeliharaan_sub_sub_part_id_sub_sub_part'
+                                                                            },
+                                                                            {
+                                                                                xtype:'hidden',
+                                                                                name:'nama',
+                                                                                id:'pemeliharaan_sub_sub_part_nama'
+                                                                            },
+                                                                            {
+                                                                            xtype: 'combo',
+                                                                            fieldLabel: 'Sub Part',
+                                                                            name: 'id_sub_part',
+                                                                            allowBlank: false,
+                                                                            readOnly:edit,
+                                                                            store: Reference.Data.subPartPemeliharaan,
+                                                                            valueField: 'id',
+                                                                            editable:false,
+                                                                            displayField: 'nama', emptyText: 'Pilih Part',
+                                                                            typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                                                            listeners: {
+                                                                                'change': {
+                                                                                    fn: function(obj, value) {
+                                                                                        if(value != null)
+                                                                                        {
+                                                                                            var combo_sub_sub_part = Ext.getCmp('pemeliharaaan_sub_sub_part_combo_part_number');
+                                                                                            if(edit==false)
+                                                                                            {
+                                                                                                combo_sub_sub_part.setValue('');
+                                                                                                Reference.Data.subSubPartPemeliharaan.changeParams({params:{id_open:1,id_sub_part:value}});
+                                                                                            }
+
+                                                                                            if(combo_sub_sub_part != null)
+                                                                                            {
+                                                                                                combo_sub_sub_part.setDisabled(false);
+                                                                                            }
+
+                                                                                        }
+                                                                                    },
+                                                                                    scope: this
+                                                                                }
+                                                                            }
+                                                                         },{
+                                                                            xtype: 'combo',
+                                                                            fieldLabel: 'Sub Sub Part',
+                                                                            name: 'part_number',
+                                                                            id:'pemeliharaaan_sub_sub_part_combo_part_number',
+                                                                            allowBlank: false,
+                                                                            readOnly:edit,
+                                                                            disabled:true,
+                                                                            store: Reference.Data.subSubPartPemeliharaan,
+                                                                            valueField: 'part_number',
+                                                                            editable:false,
+                                                                            displayField: 'nama', emptyText: 'Pilih Part',
+                                                                            typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                                                            listeners: {
+                                                                                'change': {
+                                                                                    fn: function(obj, value) {
+                                                                                        if(obj.valueModels.length > 0 && value != null)
+                                                                                        {
+                                                                                            if(edit == false)
+                                                                                            {
+                                                                                                var nama  = Ext.getCmp('pemeliharaan_sub_sub_part_nama');
+                                                                                                var id_sub_sub_part = Ext.getCmp('pemeliharaan_sub_sub_part_id_sub_sub_part')
+                                                                                                if(nama !=  null)
+                                                                                                {
+                                                                                                    nama.setValue(obj.valueModels[0].data.nama);
+                                                                                                }
+                                                                                                if(id_sub_sub_part !=  null)
+                                                                                                {
+                                                                                                    id_sub_sub_part.setValue(obj.valueModels[0].data.id)
+
+                                                                                                }
+                                                                                            }
+                                            //                                                
+                                                                                        }
+                                                                                    },
+                                                                                    scope: this
+                                                                                }
+                                                                            }
+                                                                         },
+                                                                                {
+                                                                                xtype: 'combo',
+                                                                                fieldLabel: 'Jenis',
+                                                                                name: 'jenis',
+                                                                                allowBlank: true,
+                                                                                store: Reference.Data.jenisPemeliharaan,
+                                                                                valueField: 'id',
+                                                                                displayField: 'nama', emptyText: 'Jenis',
+                                                                                value: 3,
+                                                                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Jenis',
+
+                                                                            }, {
+                                                                                xtype: 'datefield',
+                                                                                fieldLabel: 'Tanggal Pelaksana',
+                                                                                name: 'pelaksana_tgl',
+                                                                                id: 'pelaksana_tgl',
+                                                                                format: 'Y-m-d',
+                                                                            }, {
+                                                                                fieldLabel: 'Pelaksana',
+                                                                                name: 'pelaksana_nama'
+                                                                            }, {
+                                                                                fieldLabel: 'Kode Angaran',
+                                                                                name: 'kode_angaran'
+                                                                            }, {
+                                                                                xtype: 'combo',
+                                                                                fieldLabel: 'Tahun Anggaran',
+                                                                                name: 'tahun_angaran',
+                                                                                allowBlank: true,
+                                                                                store: Reference.Data.year,
+                                                                                valueField: 'year',
+                                                                                displayField: 'year', emptyText: '',
+                                                                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Year',
+                                                                            },
+
+                                                                        ]
+                                                                    }, {
+                                                                        columnWidth: .33,
+                                                                        layout: 'anchor',
+                                                                        defaults: {
+                                                                            anchor: '95%',
+                                                                            labelWidth: 120
+                                                                        },
+                                                                        defaultType: 'textfield',
+                                                                        items: [
+                                                                            {
+                                                                                xtype: 'combo',
+                                                                                disabled: false,
+                                                                                fieldLabel: 'Kondisi',
+                                                                                name: 'kondisi',
+                                                                                id : 'kondisi_perlengkapan',
+                                                                                allowBlank: true,
+                                                                                store: Reference.Data.kondisiPerlengkapan,
+                                                                                valueField: 'value',
+                                                                                displayField: 'text', emptyText: 'Pilih Kondisi',
+                                                                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                                                            },{
+                                                                                xtype: 'numberfield',
+                                                                                fieldLabel: 'Harga',
+                                                                                name: 'harga'
+                                                                            }, {
+                                                                                fieldLabel: 'Status',
+                                                                                name: 'status'
+                                                                            }, {
+                                                                                fieldLabel: 'Durasi',
+                                                                                name: 'durasi'
+                                                                            },
+                                                                            {
+                                                                                xtype:'numberfield',
+                                                                                fieldLabel: 'Penambahan Umur',
+                                                                                name: 'umur',
+                                                                                allowBlank:false,
+                                                                                value:0,
+                                                                                minValue:0,
+                                                                                readOnly:edit
+                                                                            },
+                                                                            {
+                                                                                xtype:'numberfield',
+                                                                                fieldLabel: 'Penambahan Cycle',
+                                                                                name: 'cycle',
+                                                                                allowBlank:false,
+                                                                                value:0,
+                                                                                minValue:0,
+                                                                                readOnly:edit
+                                                                            }]
+                                                                    },
+                                                                {
+                                                                        columnWidth: .33,
+                                                                        layout: 'anchor',
+                                                                        defaults: {
+                                                                            anchor: '95%',
+                                                                            labelWidth: 120
+                                                                        },
+                                                                        defaultType: 'textfield',
+                                                                        items: [
+                                                                            {
+                                                                                xtype: 'textarea',
+                                                                                fieldLabel: 'Deskripsi',
+                                                                                name: 'deskripsi'
+                                                                            },
+                                            //                                {
+                                            //                                    xtype: 'checkboxfield',
+                                            //                                    inputValue: 1,
+                                            //                                    fieldLabel: 'Alert',
+                                            //                                    name: 'alert',
+                                            //                                    id: 'alert',
+                                            //                                    boxLabel: 'Yes',
+                                            //                                    disabled: true
+                                            //                                }
+                                                                        ]
+                                                                    }]
+                                                            }]
+
+                                                        return component;
+                                                    };
+                                                
+                                                Perlengkapan.Form.createPemeliharaanSubPart = function(dataGrid,dataForm,edit) {
+                                        //            var setting = {
+                                        //                url: Perlengkapan.URL.createUpdatePemeliharaan,
+                                        //                data: dataGrid,
+                                        //                isEditing: edit,
+                                        //                isPerlengkapan: true,
+                                        //                dataMainGrid: Perlengkapan.Data,
+                                        //                addBtn: {
+                                        //                    isHidden: true,
+                                        //                    text: '',
+                                        //                    fn: null
+                                        //                },
+                                        //                selectionAsset: {
+                                        //                    noAsetHidden: false
+                                        //                }
+                                        //            };
+
+                                                    var formPanel = Ext.create('Ext.form.Panel', {
+                                                        id : 'form-pemeliharaan-sub-part-in-asset',
+                                                        frame: true,
+                                                        url: Perlengkapan.URL.createUpdatePemeliharaanSubPart,
+                                                        bodyStyle: 'padding:5px',
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        autoScroll:true,
+                                                        trackResetOnLoad:true,
+                                                        fieldDefaults: {
+                                                            msgTarget: 'side'
+                                                        },
+                                                        buttons: [{
+                                                                text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                                                                handler: function() {
+                                                                    var form = formPanel.getForm();
+                                                                    var formValues = form.getValues();
+                                                                    var imageField = form.findField('image_url');
+                                                                    var documentField = form.findField('document_url');
+                                                                    if (imageField !== null)
+                                                                    {
+                                                                        var arrayPhoto = [];
+                                                                        var photoStore = Utils.getPhotoStore(formPanel);
+
+                                                                        _.each(photoStore.data.items, function(obj) {
+                                                                            arrayPhoto.push(obj.data.name);
+                                                                        });
+
+                                                                        imageField.setRawValue(arrayPhoto.join());
+                                                                    }
+
+                                                                    if (documentField !== null)
+                                                                    {
+                                                                        var arrayDoc = [];
+
+                                                                        var documentStore = Utils.getDocumentStore(formPanel);
+
+                                                                        _.each(documentStore.data.items, function(obj) {
+                                                                            arrayDoc.push(obj.data.name);
+                                                                        });
+
+                                                                        documentField.setRawValue(arrayDoc.join());
+                                                                    }
+                                                                    if (form.isValid())
+                                                                    {
+                                                                            form.submit({
+                                                                                success: function(form,action) {
+
+                                                                                    Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                                                                    if (dataGrid !== null)
+                                                                                    {
+                                                                                        dataGrid.load();
+                                                                                    }
+
+                                                                                    Modal.assetSecondaryWindow.close();
+                                                                                    var grid_sub_part = Ext.getCmp('grid_sub_part');
+                                                                                    if(grid_sub_part != null)
+                                                                                    {
+                                                                                        grid_sub_part.getStore().load();
+                                                                                    }
+
+                                                                                    var grid_alert_required_list = Ext.getCmp('alert_perlengkapan_grid_list_required_pemeliharaan');
+                                                                                    if(grid_alert_required_list != null)
+                                                                                    {
+                                                                                        grid_alert_required_list.getStore().load();
+                                                                                    }
+
+                                        //                                            Perlengkapan.Data.load();
+                                        //                                            $.ajax({
+                                        //                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
+                                        //                                                type: "POST",
+                                        //                                                dataType:'json',
+                                        //                                                async:false,
+                                        //                                                data:{kd_brg:formValues.kd_brg, kd_lokasi:formValues.kd_lokasi, no_aset:formValues.no_aset},
+                                        //                                                success:function(response, status){
+                                        //                                                    if(status == "success")
+                                        //                                                    {
+                                        //                                                        var fieldUmur = Ext.getCmp('asset_perlengkapan_umur');
+                                        //                                                        if(fieldUmur != undefined && fieldUmur !=null)
+                                        //                                                        {
+                                        //                                                            fieldUmur.setValue(response);
+                                        //                                                        }
+                                        //                                                        
+                                        //                                                    }
+                                        //
+                                        //                                                }
+                                        //                                             });
+
+                                        //                                           Modal.assetEdit.addListener("close",function(){ dataMainGrid.load() },this)
+                                            //                                        if (edit)
+                                            //                                        {
+                                            //                                            Modal.closeProcessWindow();
+                                            //                                        }
+                                            //                                        else
+                                            //                                        {
+                                            //                                            form.reset();
+                                            //                                        }
+                                                                                },
+                                                                                failure: function() {
+                                                                                    Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                                                                }
+                                                                            });
+
+                                                                    }
+
+                                                                }
+                                                            }]
+                                                    });
+
+                                        //            form.insert(1, Form.Component.hiddenIdentifier());
+                                                    formPanel.insert(2, Perlengkapan.Component.pemeliharaanPerlengkapanSubPart(edit));
+                                                    formPanel.insert(4, Form.Component.fileUpload());
+
+                                                    if (dataForm !== null)
+                                                    {
+                                                         if(dataForm.unit_waktu != 0 && edit == true)
+                                                        {
+                                                            dataForm.comboUnitWaktuOrUnitPenggunaan = 1;
+                                                        }
+                                                        else if(dataForm.unit_pengunaan != 0 && edit == true)
+                                                        {
+                                                            dataForm.comboUnitWaktuOrUnitPenggunaan = 2;
+                                                        }
+
+                                                        Ext.Object.each(dataForm,function(key,value,myself){
+                                                                    if(dataForm[key] == '0000-00-00')
+                                                                    {
+                                                                        dataForm[key] = '';
+                                                                    }
+                                                                });
+                                                        formPanel.getForm().setValues(dataForm);
+                                                    }
+                                                    return formPanel;
+                                                };
+
+                                                Perlengkapan.Form.createPemeliharaanSubSubPart = function(dataGrid,dataForm,edit) {
+                                        //            var setting = {
+                                        //                url: Perlengkapan.URL.createUpdatePemeliharaanSubSubPart,
+                                        //                data: dataGrid,
+                                        //                isEditing: edit,
+                                        //                isPerlengkapan: true,
+                                        //                dataMainGrid: Perlengkapan.Data,
+                                        //                addBtn: {
+                                        //                    isHidden: true,
+                                        //                    text: '',
+                                        //                    fn: null
+                                        //                },
+                                        //                selectionAsset: {
+                                        //                    noAsetHidden: false
+                                        //                }
+                                        //            };
+
+                                                    var formPanel = Ext.create('Ext.form.Panel', {
+                                                        id : 'form-pemeliharaan-sub-sub-part-in-asset',
+                                                        frame: true,
+                                                        url: Perlengkapan.URL.createUpdatePemeliharaanSubSubPart,
+                                                        bodyStyle: 'padding:5px',
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        autoScroll:true,
+                                                        trackResetOnLoad:true,
+                                                        fieldDefaults: {
+                                                            msgTarget: 'side'
+                                                        },
+                                                        buttons: [{
+                                                                text: 'Simpan', id: 'save_pemeliharaan_in_asset', iconCls: 'icon-save', formBind: true,
+                                                                handler: function() {
+                                                                    var form = formPanel.getForm();
+                                                                    var formValues = form.getValues();
+                                                                    var imageField = form.findField('image_url');
+                                                                    var documentField = form.findField('document_url');
+                                                                    if (imageField !== null)
+                                                                    {
+                                                                        var arrayPhoto = [];
+                                                                        var photoStore = Utils.getPhotoStore(formPanel);
+
+                                                                        _.each(photoStore.data.items, function(obj) {
+                                                                            arrayPhoto.push(obj.data.name);
+                                                                        });
+
+                                                                        imageField.setRawValue(arrayPhoto.join());
+                                                                    }
+
+                                                                    if (documentField !== null)
+                                                                    {
+                                                                        var arrayDoc = [];
+
+                                                                        var documentStore = Utils.getDocumentStore(formPanel);
+
+                                                                        _.each(documentStore.data.items, function(obj) {
+                                                                            arrayDoc.push(obj.data.name);
+                                                                        });
+
+                                                                        documentField.setRawValue(arrayDoc.join());
+                                                                    }
+                                                                    if (form.isValid())
+                                                                    {
+                                                                            form.submit({
+                                                                                success: function(form,action) {
+
+                                                                                    Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                                                                    if (dataGrid !== null)
+                                                                                    {
+                                                                                        dataGrid.load();
+                                                                                    }
+
+                                                                                    var grid_alert_required_list = Ext.getCmp('alert_perlengkapan_grid_list_required_pemeliharaan');
+                                                                                    if(grid_alert_required_list != null)
+                                                                                    {
+                                                                                        grid_alert_required_list.getStore().load();
+                                                                                    }
+
+                                                                                    Modal.assetSecondaryWindow.close();
+                                        //                                            Perlengkapan.Data.load();
+                                        //                                            $.ajax({
+                                        //                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
+                                        //                                                type: "POST",
+                                        //                                                dataType:'json',
+                                        //                                                async:false,
+                                        //                                                data:{kd_brg:formValues.kd_brg, kd_lokasi:formValues.kd_lokasi, no_aset:formValues.no_aset},
+                                        //                                                success:function(response, status){
+                                        //                                                    if(status == "success")
+                                        //                                                    {
+                                        //                                                        var fieldUmur = Ext.getCmp('asset_perlengkapan_umur');
+                                        //                                                        if(fieldUmur != undefined && fieldUmur !=null)
+                                        //                                                        {
+                                        //                                                            fieldUmur.setValue(response);
+                                        //                                                        }
+                                        //                                                        
+                                        //                                                    }
+                                        //
+                                        //                                                }
+                                        //                                             });
+
+                                        //                                           Modal.assetEdit.addListener("close",function(){ dataMainGrid.load() },this)
+                                            //                                        if (edit)
+                                            //                                        {
+                                            //                                            Modal.closeProcessWindow();
+                                            //                                        }
+                                            //                                        else
+                                            //                                        {
+                                            //                                            form.reset();
+                                            //                                        }
+                                                                                },
+                                                                                failure: function() {
+                                                                                    Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                                                                }
+                                                                            });
+
+                                                                    }
+
+                                                                }
+                                                            }]
+                                                    });
+
+                                        //            form.insert(1, Form.Component.hiddenIdentifier());
+                                                    formPanel.insert(2, Perlengkapan.Component.pemeliharaanPerlengkapanSubSubPart(edit));
+                                                    formPanel.insert(4, Form.Component.fileUpload());
+
+                                                    if (dataForm !== null)
+                                                    {
+                                                         if(dataForm.unit_waktu != 0 && edit == true)
+                                                        {
+                                                            dataForm.comboUnitWaktuOrUnitPenggunaan = 1;
+                                                        }
+                                                        else if(dataForm.unit_pengunaan != 0 && edit == true)
+                                                        {
+                                                            dataForm.comboUnitWaktuOrUnitPenggunaan = 2;
+                                                        }
+
+                                                        Ext.Object.each(dataForm,function(key,value,myself){
+                                                                    if(dataForm[key] == '0000-00-00')
+                                                                    {
+                                                                        dataForm[key] = '';
+                                                                    }
+                                                                });
+                                                        formPanel.getForm().setValues(dataForm);
+                                                    }
+                                                    return formPanel;
+                                                };
+                                                 Perlengkapan.Action.pemeliharaanSubSubPartEdit = function() {
+                                                    var selected = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan_sub_sub_part').getSelectionModel().getSelection();
+                                                    if (selected.length === 1)
+                                                    {
+                                                        var dataForm = selected[0].data;
+                                                        var form = Perlengkapan.Form.createPemeliharaanSubSubPart(Perlengkapan.dataStorePemeliharaanSubSubPart, dataForm, true)
+                                        //                Tab.addToForm(form, 'asset_perlengkapan-edit-pemeliharaan', 'Edit Pemeliharaan');
+                                                        if (Modal.assetSecondaryWindow.items.length === 0)
+                                                        {
+                                                            Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                                                        }
+                                                        Modal.assetSecondaryWindow.add(form);
+                                                        Modal.assetSecondaryWindow.show();
+                                                    }
+                                                };
+                                                
+                                                 Perlengkapan.Action.pemeliharaanSubPartEdit = function() {
+                                                    var selected = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan_sub_part').getSelectionModel().getSelection();
+                                                    if (selected.length === 1)
+                                                    {
+                                                        var dataForm = selected[0].data;
+                                                        var form = Perlengkapan.Form.createPemeliharaanSubPart(Perlengkapan.dataStorePemeliharaanSubPart, dataForm, true)
+                                        //                Tab.addToForm(form, 'asset_perlengkapan-edit-pemeliharaan', 'Edit Pemeliharaan');
+                                                        if (Modal.assetSecondaryWindow.items.length === 0)
+                                                        {
+                                                            Modal.assetSecondaryWindow.setTitle('Edit Pemeliharaan');
+                                                        }
+                                                        Modal.assetSecondaryWindow.add(form);
+                                                        Modal.assetSecondaryWindow.show();
+                                                    }
+                                                };
+                                                
                                                 Perlengkapan.Action.pemeliharaanAdd = function()
                                                 {
                                                     var dataForm = {
@@ -1252,6 +1984,128 @@
                                                         Modal.assetSecondaryWindow.add(form);
                                                         Modal.assetSecondaryWindow.show();
                                                 };
+                                                
+                                                Perlengkapan.Action.pemeliharaanSubPartRemove = function() {
+                                                    var selected = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan_sub_part').getSelectionModel().getSelection();
+                                                    if (selected.length > 0)
+                                                    {
+                                                        var arrayDeleted = [];
+                                                        _.each(selected, function(obj) {
+                                                            var data = {
+                                                                id: obj.data.id,
+                                                                id_sub_part: obj.data.id_sub_part,
+                                                                umur:obj.data.umur,
+                                                                cycle:obj.data.cycle
+                                                            };
+                                                            arrayDeleted.push(data);
+                                                        });
+                                                        Ext.Msg.show({
+                                                        title: 'Konfirmasi',
+                                                        msg: 'Apakah Anda yakin untuk menghapus ?',
+                                                        buttons: Ext.Msg.YESNO, 
+                                                        icon: Ext.Msg.Question,
+                                                        fn: function(btn) {
+                                                            if (btn === 'yes')
+                                                            {
+                                                                /*debugger;*/
+                                                                var dataSend = {
+                                                                    data: arrayDeleted
+                                                                };
+
+                                                                $.ajax({
+                                                                    type: 'POST',
+                                                                    data: dataSend,
+                                                                    dataType: 'json',
+                                                                    url:  Perlengkapan.URL.removePemeliharaanSubPart,
+                                                                    success: function(data) {
+                                                                          Perlengkapan.dataStorePemeliharaanSubPart.load();
+                                        //                                debugger;
+                                        //                                 var grid_sub_part = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan_sub_part');
+                                        //                                            if(grid_sub_part != null)
+                                        //                                            {
+                                        //                                                grid_sub_part.getStore().load();
+                                        //                                            }
+                                        //                                 Perlengkapan.Data.load();
+                                        //                                 $.ajax({
+                                        //                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
+                                        //                                                type: "POST",
+                                        //                                                dataType:'json',
+                                        //                                                async:false,
+                                        //                                                data:{kd_brg:arrayDeleted[0].kd_brg, kd_lokasi:arrayDeleted[0].kd_lokasi, no_aset:arrayDeleted[0].no_aset},
+                                        //                                                success:function(response, status){
+                                        //                                                    if(status == "success")
+                                        //                                                    {
+                                        //                                                        Ext.getCmp('asset_perlengkapan_umur').setValue(response);
+                                        //                                                    }
+                                        //
+                                        //                                                }
+                                        //                                 });
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    })
+                                        //                Modal.deleteAlert(arrayDeleted, Perlengkapan.URL.removePemeliharaan, Perlengkapan.dataStorePemeliharaan);
+                                                    }
+                                                };
+                                                
+                                                Perlengkapan.Action.pemeliharaanSubSubPartRemove = function() {
+                                                        var selected = Ext.getCmp('asset_perlengkapan_grid_pemeliharaan_sub_sub_part').getSelectionModel().getSelection();
+                                                        if (selected.length > 0)
+                                                        {
+                                                            var arrayDeleted = [];
+                                                            _.each(selected, function(obj) {
+                                                                var data = {
+                                                                    id: obj.data.id,
+                                                                    id_sub_sub_part: obj.data.id_sub_sub_part,
+                                                                    umur:obj.data.umur,
+                                                                    cycle:obj.data.cycle
+                                                                };
+                                                                arrayDeleted.push(data);
+                                                            });
+                                                            Ext.Msg.show({
+                                                            title: 'Konfirmasi',
+                                                            msg: 'Apakah Anda yakin untuk menghapus ?',
+                                                            buttons: Ext.Msg.YESNO, 
+                                                            icon: Ext.Msg.Question,
+                                                            fn: function(btn) {
+                                                                if (btn === 'yes')
+                                                                {
+                                                                    /*debugger;*/
+                                                                    var dataSend = {
+                                                                        data: arrayDeleted
+                                                                    };
+
+                                                                    $.ajax({
+                                                                        type: 'POST',
+                                                                        data: dataSend,
+                                                                        dataType: 'json',
+                                                                        url:  Perlengkapan.URL.removePemeliharaanSubSubPart,
+                                                                        success: function(data) {
+                                                                             Perlengkapan.dataStorePemeliharaanSubSubPart.load();
+                                            //                                 Perlengkapan.Data.load();
+                                            //                                 $.ajax({
+                                            //                                                url:BASE_URL + 'pemeliharaan_perlengkapan/getLatestUmur',
+                                            //                                                type: "POST",
+                                            //                                                dataType:'json',
+                                            //                                                async:false,
+                                            //                                                data:{kd_brg:arrayDeleted[0].kd_brg, kd_lokasi:arrayDeleted[0].kd_lokasi, no_aset:arrayDeleted[0].no_aset},
+                                            //                                                success:function(response, status){
+                                            //                                                    if(status == "success")
+                                            //                                                    {
+                                            //                                                        Ext.getCmp('asset_perlengkapan_umur').setValue(response);
+                                            //                                                    }
+                                            //
+                                            //                                                }
+                                            //                                 });
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        })
+                                            //                Modal.deleteAlert(arrayDeleted, Perlengkapan.URL.removePemeliharaan, Perlengkapan.dataStorePemeliharaan);
+                                                        }
+                                                    };
 //                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_lokasi = data.kd_lokasi;
 //                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.kd_brg = data.kd_brg;
 //                                                Perlengkapan.dataStorePemeliharaan.getProxy().extraParams.no_aset = data.no_aset;

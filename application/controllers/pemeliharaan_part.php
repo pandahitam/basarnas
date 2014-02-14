@@ -248,6 +248,10 @@ class Pemeliharaan_Part extends MY_Controller {
 	function destroyPemeliharaanPartsAngkutanUdara()
 	{
             $data = json_decode($this->input->post('data'));
+            $unattach = array(
+                "no_induk_asset" => '',
+            );
+             
             if(count($data) > 1)
             {
                 foreach($data as $row)
@@ -255,14 +259,21 @@ class Pemeliharaan_Part extends MY_Controller {
                     $this->db->delete('ext_asset_angkutan_udara_perlengkapan', array('id' => $row->id));
                     if($row->jenis_perlengkapan == "Part Pesawat")
                     {
+                        if(isset($row->warehouse_id))
+                        {
+                            $unattach["warehouse_id"] = $row->warehouse_id;
+                            $unattach["ruang_id"] = $row->ruang_id;
+                            $unattach["rak_id"] = $row->rak_id;
+                        }
+                        
                         $this->db->where('id',$row->id_asset_perlengkapan);
-                        $removedFromAngkutanUdara = array(
-                            'warehouse_id'=>0,
-                            'ruang_id'=>0,
-                            'rak_id'=>0,
-                            'no_induk_asset'=>''
-                        );
-                        $this->db->update('asset_perlengkapan',$removedFromAngkutanUdara);
+//                        $removedFromAngkutanUdara = array(
+//                            'warehouse_id'=>0,
+//                            'ruang_id'=>0,
+//                            'rak_id'=>0,
+//                            'no_induk_asset'=>''
+//                        );
+                        $this->db->update('asset_perlengkapan',$unattach);
                     }
                     
                 }
@@ -273,13 +284,19 @@ class Pemeliharaan_Part extends MY_Controller {
                     if($data->jenis_perlengkapan == "Part Pesawat")
                     {
                         $this->db->where('id',$data->id_asset_perlengkapan);
-                        $removedFromAngkutanUdara = array(
-                            'warehouse_id'=>0,
-                            'ruang_id'=>0,
-                            'rak_id'=>0,
-                            'no_induk_asset'=>''
-                        );
-                        $this->db->update('asset_perlengkapan',$removedFromAngkutanUdara);
+                        if(isset($data->warehouse_id))
+                        {
+                            $unattach["warehouse_id"] = $data->warehouse_id;
+                            $unattach["ruang_id"] = $data->ruang_id;
+                            $unattach["rak_id"] = $data->rak_id;
+                        }
+//                        $removedFromAngkutanUdara = array(
+//                            'warehouse_id'=>0,
+//                            'ruang_id'=>0,
+//                            'rak_id'=>0,
+//                            'no_induk_asset'=>''
+//                        );
+                        $this->db->update('asset_perlengkapan',$unattach);
                     }
             }
             
@@ -387,6 +404,9 @@ class Pemeliharaan_Part extends MY_Controller {
 	function destroyPemeliharaanPartsAngkutanDarat()
 	{
             $data = json_decode($this->input->post('data'));
+            $unattach = array(
+                "no_induk_asset" => '',
+            );
             if(count($data) > 1)
             {
                 foreach($data as $row)
@@ -395,13 +415,19 @@ class Pemeliharaan_Part extends MY_Controller {
                     if($row->jenis_perlengkapan == "Part")
                     {
                         $this->db->where('id',$row->id_asset_perlengkapan);
-                        $removedFromAngkutan = array(
-                            'warehouse_id'=>0,
-                            'ruang_id'=>0,
-                            'rak_id'=>0,
-                            'no_induk_asset'=>''
-                        );
-                        $this->db->update('asset_perlengkapan',$removedFromAngkutan);
+//                        $removedFromAngkutan = array(
+//                            'warehouse_id'=>0,
+//                            'ruang_id'=>0,
+//                            'rak_id'=>0,
+//                            'no_induk_asset'=>''
+//                        );
+                        if(isset($row->warehouse_id))
+                        {
+                            $unattach["warehouse_id"] = $row->warehouse_id;
+                            $unattach["ruang_id"] = $row->ruang_id;
+                            $unattach["rak_id"] = $row->rak_id;
+                        }
+                        $this->db->update('asset_perlengkapan',$unattach);
                     }
                     
                 }
@@ -412,13 +438,19 @@ class Pemeliharaan_Part extends MY_Controller {
                     if($data->jenis_perlengkapan == "Part")
                     {
                         $this->db->where('id',$data->id_asset_perlengkapan);
-                        $removedFromAngkutan = array(
-                            'warehouse_id'=>0,
-                            'ruang_id'=>0,
-                            'rak_id'=>0,
-                            'no_induk_asset'=>''
-                        );
-                        $this->db->update('asset_perlengkapan',$removedFromAngkutan);
+//                        $removedFromAngkutan = array(
+//                            'warehouse_id'=>0,
+//                            'ruang_id'=>0,
+//                            'rak_id'=>0,
+//                            'no_induk_asset'=>''
+//                        );
+                        if(isset($data->warehouse_id))
+                        {
+                            $unattach["warehouse_id"] = $data->warehouse_id;
+                            $unattach["ruang_id"] = $data->ruang_id;
+                            $unattach["rak_id"] = $data->rak_id;
+                        }
+                        $this->db->update('asset_perlengkapan',$unattach);
                     }
             }
             
@@ -526,6 +558,9 @@ class Pemeliharaan_Part extends MY_Controller {
 	function destroyPemeliharaanPartsAngkutanLaut()
 	{
             $data = json_decode($this->input->post('data'));
+            $unattach = array(
+                "no_induk_asset" => '',
+            );
             if(count($data) > 1)
             {
                 foreach($data as $row)
@@ -534,13 +569,19 @@ class Pemeliharaan_Part extends MY_Controller {
                     if($row->jenis_perlengkapan == "Part")
                     {
                         $this->db->where('id',$row->id_asset_perlengkapan);
-                        $removedFromAngkutan = array(
-                            'warehouse_id'=>0,
-                            'ruang_id'=>0,
-                            'rak_id'=>0,
-                            'no_induk_asset'=>''
-                        );
-                        $this->db->update('asset_perlengkapan',$removedFromAngkutan);
+                        if(isset($row->warehouse_id))
+                        {
+                            $unattach["warehouse_id"] = $row->warehouse_id;
+                            $unattach["ruang_id"] = $row->ruang_id;
+                            $unattach["rak_id"] = $row->rak_id;
+                        }
+//                        $removedFromAngkutan = array(
+//                            'warehouse_id'=>0,
+//                            'ruang_id'=>0,
+//                            'rak_id'=>0,
+//                            'no_induk_asset'=>''
+//                        );
+                        $this->db->update('asset_perlengkapan',$unattach);
                     }
                     
                 }
@@ -551,13 +592,19 @@ class Pemeliharaan_Part extends MY_Controller {
                     if($data->jenis_perlengkapan == "Part")
                     {
                         $this->db->where('id',$data->id_asset_perlengkapan);
-                        $removedFromAngkutan = array(
-                            'warehouse_id'=>0,
-                            'ruang_id'=>0,
-                            'rak_id'=>0,
-                            'no_induk_asset'=>''
-                        );
-                        $this->db->update('asset_perlengkapan',$removedFromAngkutan);
+                        if(isset($data->warehouse_id))
+                        {
+                            $unattach["warehouse_id"] = $data->warehouse_id;
+                            $unattach["ruang_id"] = $data->ruang_id;
+                            $unattach["rak_id"] = $data->rak_id;
+                        }
+//                        $removedFromAngkutan = array(
+//                            'warehouse_id'=>0,
+//                            'ruang_id'=>0,
+//                            'rak_id'=>0,
+//                            'no_induk_asset'=>''
+//                        );
+                        $this->db->update('asset_perlengkapan',$unattach);
                     }
             }
             

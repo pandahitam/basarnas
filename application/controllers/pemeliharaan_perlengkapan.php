@@ -207,7 +207,6 @@ class Pemeliharaan_Perlengkapan extends MY_Controller {
         
         function modifyPemeliharaanSubPart(){
                 $data = array();
-                
 	  	$fields = array(
                     'id', 'jenis', 'nama', 'id_sub_part','part_number',
                     'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 
@@ -340,9 +339,26 @@ class Pemeliharaan_Perlengkapan extends MY_Controller {
             echo json_encode($dataSend);
 	}
         
+        function getSpecificPemeliharaanSubPart2()
+	{
+           $id = $this->input->post('id');		
+           $query = "select * FROM pemeliharaan_perlengkapan_sub_part where id_sub_part = '$id'";
+           $r = $this->db->query($query); 
+           $data = array();
+            if ($r->num_rows() > 0)
+            {
+                foreach ($r->result() as $obj)
+                {
+                    $data[] = $obj;
+                }  
+            }
+            $dataSend['results'] = $data;
+            echo json_encode($dataSend);
+	}
+        
         function modifyPemeliharaanSubSubPart(){
                 $data = array();
-                
+
 	  	$fields = array(
                     'id', 'jenis', 'nama', 'id_sub_sub_part','part_number',
                     'tahun_angaran', 'pelaksana_tgl', 'pelaksana_nama', 
@@ -420,6 +436,23 @@ class Pemeliharaan_Perlengkapan extends MY_Controller {
                 where id_sub_sub_part 
                IN(select id from asset_perlengkapan_sub_sub_part where id_sub_part 
                IN(select id from asset_perlengkapan_sub_part where id_part = '$id_part'))";
+           $r = $this->db->query($query); 
+           $data = array();
+            if ($r->num_rows() > 0)
+            {
+                foreach ($r->result() as $obj)
+                {
+                    $data[] = $obj;
+                }  
+            }
+            $dataSend['results'] = $data;
+            echo json_encode($dataSend);
+	}
+        
+        function getSpecificPemeliharaanSubSubPart2()
+	{
+           $id = $this->input->post('id');		
+           $query = "SELECT * FROM pemeliharaan_perlengkapan_sub_sub_part where id_sub_sub_part = '$id'";
            $r = $this->db->query($query); 
            $data = array();
             if ($r->num_rows() > 0)

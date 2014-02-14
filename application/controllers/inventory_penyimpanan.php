@@ -68,6 +68,20 @@ class inventory_penyimpanan extends MY_Controller {
             echo json_encode($result);
         }
         
+        function getSpecificInventoryPenyimpananSubPart()
+        {
+            $id = $this->input->post('id');
+            $result = $this->model->get_InventoryPenyimpananSubPart($id);
+            echo json_encode($result);
+        }
+        
+        function getSpecificInventoryPenyimpananSubSubPart()
+        {
+            $id = $this->input->post('id');
+            $result = $this->model->get_InventoryPenyimpananSubSubPart($id);
+            echo json_encode($result);
+        }
+        
         function checkServerQuantity()
         {
             $data = $this->input->post('data');

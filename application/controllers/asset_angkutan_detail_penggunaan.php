@@ -190,6 +190,8 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                                  where id_sub_part in (select id from asset_perlengkapan_sub_part where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$dataPenggunaan['id_ext_asset']." )) 
                                  AND is_cycle = 1");
                
+               $this->db->query("update ext_asset_angkutan set udara_umur_pesawat = udara_umur_pesawat+".$dataPenggunaan['jumlah_penggunaan']." where id = ".$dataPenggunaan['id_ext_asset']) ;
+               
                $this->createLog('INSERT DETAIL PENGGUNAAN ANGKUTAN [id_ext_asset='.$dataPenggunaan['id'].']','ext_asset_angkutan_udara_detail_penggunaan');
            }
                
@@ -222,6 +224,8 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
                                       where id_sub_part in (select id from asset_perlengkapan_sub_part where id_part in (select id_asset_perlengkapan from ext_asset_angkutan_udara_perlengkapan where id_ext_asset =".$deleted['id_ext_asset']." )) 
                                       AND is_cycle = 1");
                     
+                    $this->db->query("update ext_asset_angkutan set udara_umur_pesawat = udara_umur_pesawat-".$deleted['jumlah_penggunaan']." where id = ".$deleted['id_ext_asset']) ;
+                    
                     $deletedArray[] =$deleted['id'];
                 }
                 $this->db->where_in('id',$deletedArray);
@@ -239,22 +243,27 @@ class Asset_Angkutan_Detail_Penggunaan extends MY_Controller {
             $queryMesin = $this->db->query("select SUM(jumlah_penggunaan) AS jumlah_penggunaan
                                 FROM ext_asset_angkutan_udara_detail_penggunaan
                                 where id_ext_asset =".$receivedData['id_ext_asset']);
-            $queryInisialisaiMesin = $this->db->query("select udara_inisialisasi_mesin1, udara_inisialisasi_mesin2
-                                                       FROM ext_asset_angkutan where id =".$receivedData['id_ext_asset']);
+//            $queryInisialisaiMesin = $this->db->query("select udara_inisialisasi_mesin1, udara_inisialisasi_mesin2
+//                                                       FROM ext_asset_angkutan where id =".$receivedData['id_ext_asset']);
 //            $queryMesin2 = $this->db->query("SELECT SUM(jumlah_penggunaan) AS jumlah_penggunaan_mesin2
 //                                FROM ext_asset_angkutan_udara_detail_penggunaan_mesin2
 //                                where id_ext_asset =".$receivedData['id_ext_asset']);
             $resultMesin = $queryMesin->row();
-            $resultInisialisasi = $queryInisialisaiMesin->row();
+//            $resultInisialisasi = $queryInisialisaiMesin->row();
 //            $resultMesin2 = $queryMesin2->row();
 //            $totalPenggunaanMesin1 = $resultMesin1->jumlah_penggunaan_mesin1;
 //            $totalPenggunaanMesin2 = $resultMesin2->jumlah_penggunaan_mesin2;
               $totalPenggunaan = $resultMesin->jumlah_penggunaan;
             
             
-            $sendData = array(
-                    'total_mesin1' => (int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin1,
-                    'total_mesin2' =>(int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin2,
+//            $sendData = array(
+//                    'total_mesin1' => (int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin1,
+//                    'total_mesin2' =>(int)$totalPenggunaan + (int)$resultInisialisasi->udara_inisialisasi_mesin2,
+//                    'status' => 'success'
+//                    );
+              $sendData = array(
+                    'total_mesin1' => (int)$totalPenggunaan,
+                    'total_mesin2' =>(int)$totalPenggunaan,
                     'status' => 'success'
                     );
               

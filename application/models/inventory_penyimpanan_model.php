@@ -130,6 +130,31 @@ class Inventory_Penyimpanan_Model extends MY_Model{
             return $query->row();
 	}
         
+        function get_InventoryPenyimpananSubPart($id)
+	{
+            $query = $this->db->query("select t.*, b.id_part
+                     FROM inventory_penyimpanan_data_perlengkapan_sub_part as t
+                     LEFT JOIN ref_sub_part as b on t.part_number = b.part_number
+                     where t.id=$id");
+//            $this->db->from('inventory_penyimpanan_data_perlengkapan_sub_part');
+//            $this->db->where('id',$id);
+//            $query = $this->db->get();
+            return $query->row();
+	}
+        
+        function get_InventoryPenyimpananSubSubPart($id)
+	{		
+            $query = $this->db->query("select t.*, b.id_part, c.id_sub_part
+                     FROM inventory_penyimpanan_data_perlengkapan_sub_sub_part as t
+                     LEFT JOIN ref_sub_sub_part as c on t.part_number = c.part_number
+                     LEFT JOIN ref_sub_part as b on c.id_sub_part = b.id
+                     where t.id = $id");
+//            $this->db->from('inventory_penyimpanan_data_perlengkapan_sub_sub_part');
+//            $this->db->where('id',$id);
+//            $query = $this->db->get();
+            return $query->row();
+	}
+        
         function checkServerQuantity($id_penyimpanan_perlengkapan, $qty_keluar, $id_penyimpanan)
         {
             $this->db->where('id',$id_penyimpanan_perlengkapan);

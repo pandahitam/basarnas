@@ -406,17 +406,70 @@
             var selected = Ext.getCmp('grid_angkutanUdara_perlengkapan').getSelectionModel().getSelection();
             if(selected.length > 0)
             {
+                
                 var arrayDeleted = [];
+                var ids = "";
                 _.each(selected, function(obj) {
                     var data = {
                         id: obj.data.id,
                         id_asset_perlengkapan: obj.data.id_asset_perlengkapan
                     };
                     arrayDeleted.push(data);
+                    ids += obj.data.id_asset_perlengkapan +",";
                 });
+            
+            var messageBox = Ext.create('Ext.window.MessageBox', {
+                                                width:350,
+                                                height: 100,
+                                                buttonText: {yes: "Hapus",no: "Simpan ke Warehouse"},
+
+                                           });
+            messageBox.show({
+                title: 'Hapus',
+                msg: 'Pilih Tindakan',
+                buttons: Ext.Msg.YESNO,
+                icon: Ext.Msg.Question,
+                fn: function(btn) {
+                    if (btn === 'yes')
+                    {
+                        var dataSend = {
+                            data: arrayDeleted
+                        };
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: AngkutanUdara.URL.removePerlengkapanAngkutanUdara,
+                            success: function(data) {
+                                /*var a = dataGrid;
+                                 debugger;*/
+                                console.log('success to delete');
+                                AngkutanUdara.dataStorePerlengkapanAngkutanUdara.load();
+                            }
+                        });
+                        
+//                        Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePerlengkapanAngkutanUdara,AngkutanUdara.dataStorePerlengkapanAngkutanUdara);
+                    }
+                    else if(btn === 'no')
+                    {
+//                        var data = {id_collection:ids};
+                        if (Modal.verySmallWindow.items.length === 0)
+                        {
+                            Modal.verySmallWindow.setTitle('Simpan ke Warehouse');
+                        }
+                        var form = Form.panelVerySmallAngkutan(AngkutanUdara.URL.removePerlengkapanAngkutanUdara, AngkutanUdara.dataStorePerlengkapanAngkutanUdara,arrayDeleted);                       
+                        form.insert(3, Form.Component.warehousePerlengkapanSmall(false,form));
+//                        form.getForm().reset();
+//                        form.getForm().setValues(data);
+                        Modal.verySmallWindow.add(form);
+                        Modal.verySmallWindow.show();
+                        }
+                    }
+                });
+            
             }
             
-            Modal.deleteAlert(arrayDeleted, AngkutanUdara.URL.removePerlengkapanAngkutanUdara,AngkutanUdara.dataStorePerlengkapanAngkutanUdara);
+            
         };
         
         AngkutanUdara.addDetailPenggunaan = function()
@@ -604,7 +657,7 @@
                         Form.Component.kode(edit),
                         Form.Component.klasifikasiAset(edit),
                         Form.Component.basicAsset(edit),
-                        Form.Component.mechanicalAngkutanUdara(),
+                        Form.Component.mechanicalAngkutanUdara(!edit),
                         Form.Component.angkutan(edit,(edit==false)?'':data.kd_lokasi),
                         Form.Component.detailPenggunaanAngkutanUdara(setting_grid_detail_penggunaan_mesin1,edit,'1'),
 //                        Form.Component.detailPenggunaanAngkutanUdara(setting_grid_detail_penggunaan_mesin2,edit,'2'),
@@ -1350,6 +1403,51 @@
                 if(flagExtAsset == true)
                 {
                     var _form = AngkutanUdara.Form.create(data, true);
+                    
+                    $.ajax({
+                       url:BASE_URL + 'asset_angkutan_udara/getTotalAttachedEngine',
+                       type: "POST",
+                       dataType:'json',
+                       async:false,
+                       data:{id:data.id},
+                       success:function(response, status){
+                        if(status == 'success')
+                        {
+                            var jumlah_mesin = response.jumlah;
+                            var form = _form.getForm();
+                            if(jumlah_mesin == 1)
+                            {
+                                form.findField('no_mesin').setDisabled(false);
+                                form.findField('udara_inisialisasi_mesin1').setDisabled(false);
+                                form.findField('udara_no_mesin2').setDisabled(true);
+                                form.findField('udara_inisialisasi_mesin2').setDisabled(true);
+                            }
+                            else if(jumlah_mesin == 2)
+                            {
+                                form.findField('no_mesin').setDisabled(false);
+                                form.findField('udara_inisialisasi_mesin1').setDisabled(false);
+                                form.findField('udara_no_mesin2').setDisabled(false);
+                                form.findField('udara_inisialisasi_mesin2').setDisabled(false);
+                            }
+                            else if(jumlah_mesin > 2)
+                            {
+                                Ext.MessageBox.alert('Peringatan', 'Program mendeteksi terdapat lebih dari 2 mesin yang terhubung ke data pesawat ini. Harap lakukan perbaikan data perlengkapan pesawat');
+                                form.findField('no_mesin').setDisabled(true);
+                                form.findField('udara_inisialisasi_mesin1').setDisabled(true);
+                                form.findField('udara_no_mesin2').setDisabled(true);
+                                form.findField('udara_inisialisasi_mesin2').setDisabled(true);
+                            }
+                            else
+                            {
+                                form.findField('no_mesin').setDisabled(true);
+                                form.findField('udara_inisialisasi_mesin1').setDisabled(true);
+                                form.findField('udara_no_mesin2').setDisabled(true);
+                                form.findField('udara_inisialisasi_mesin2').setDisabled(true);
+                            }
+                        }
+                           
+                       }
+                    });
                     Tab.addToForm(_form, 'angkutanUdara-details', 'Simak Details');
                     Modal.assetEdit.show();
                     AngkutanUdara.dataStorePerlengkapanAngkutanUdara.changeParams({params:{open:'1',id_ext_asset:data.id}});

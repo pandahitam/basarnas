@@ -34,7 +34,7 @@ class Pemeliharaan_Udara extends MY_Controller {
                     'unit_waktu', 'unit_pengunaan',
                     'freq_waktu', 'freq_pengunaan', 'status', 'durasi', 
                     'rencana_waktu', 'rencana_pengunaan', 'rencana_keterangan', 'alert', 
-                    'document_url','image_url'
+                    'document_url','image_url','penambahan_umur'
                 );
                 
                 foreach ($fields as $field) {
@@ -72,6 +72,15 @@ class Pemeliharaan_Udara extends MY_Controller {
                 
 		if($data['id'] == '')
                 {
+
+                    $kd_brg = $data['kd_brg'];
+                    $kd_lokasi = $data['kd_lokasi'];
+                    $no_aset = $data['no_aset'];
+                    $penambahan_umur = $data['penambahan_umur'];
+                    
+                    $this->db->query("update ext_asset_angkutan set udara_umur_pesawat= udara_umur_pesawat - $penambahan_umur 
+                        where kd_brg = '$kd_brg' and kd_lokasi = '$kd_lokasi' and no_aset = '$no_aset'");
+                    
                     $this->db->insert('pemeliharaan',$data);
                     $this->createLog('INSERT PEMELIHARAAN KENDARAAN UDARA','pemeliharaan');
                 }
@@ -93,6 +102,12 @@ class Pemeliharaan_Udara extends MY_Controller {
 		$data = $this->input->post('data');
                 foreach($data as $dataContent)
                 {
+                    $kd_brg = $dataContent['kd_brg'];
+                    $kd_lokasi = $dataContent['kd_lokasi'];
+                    $no_aset = $dataContent['no_aset'];
+                    $penambahan_umur = $dataContent['penambahan_umur'];
+                    $this->db->query("update ext_asset_angkutan set udara_umur_pesawat= udara_umur_pesawat + $penambahan_umur 
+                        where kd_brg = '$kd_brg' and kd_lokasi = '$kd_lokasi' and no_aset = '$no_aset'");
                     $this->createLog('DELETE PEMELIHARAAN KENDARAAN UDARA','pemeliharaan');
                 }
 		return $this->deleteProcess($data);

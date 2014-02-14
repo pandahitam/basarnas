@@ -173,6 +173,91 @@ class Combo_Ref extends CI_Controller {
         }
     }
     
+    function combo_parts_inventory_pengeluaran_sub_part()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+//            if($this->input->get_post("excludedValue"))
+//            {
+//                $excludedValue = $this->input->post('excludedValue');
+//                $query = $this->db->query("select id, nomor_berita_acara from inventory_penyimpanan where id=$excludedValue");
+//            }
+//            else
+//            {
+//                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan where qty > 0');
+//            }
+            
+           
+            if($this->input->get_post("id_warehouse"))
+            {
+                if($this->input->get_post("excluded_id_penyimpanan_data_perlengkapan") != '')
+                {
+                     $query = $this->db->query('select t.id, a.nama from inventory_penyimpanan_data_perlengkapan_sub_part as t LEFT JOIN ref_sub_part as a on t.part_number = a.part_number where t.id_warehouse='.$this->input->get_post("id_warehouse").' AND t.id NOT IN('.$this->input->get_post("excluded_id_penyimpanan_data_perlengkapan").')');
+                }
+                else
+                {
+                    $query = $this->db->query('select t.id, a.nama from inventory_penyimpanan_data_perlengkapan_sub_part as t LEFT JOIN ref_sub_part as a on t.part_number = a.part_number where t.id_warehouse='.$this->input->get_post("id_warehouse"));
+                }
+                
+            }
+            else
+            {
+                 $query = $this->db->query('select t.id, a.nama  from inventory_penyimpanan_data_perlengkapan_sub_part as t LEFT JOIN ref_sub_part as a on t.part_number = a.part_number');
+            }
+            
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_parts_inventory_pengeluaran_sub_sub_part()
+    {
+        $data = array();
+        if($this->input->get_post("id_open"))
+        {
+//            if($this->input->get_post("excludedValue"))
+//            {
+//                $excludedValue = $this->input->post('excludedValue');
+//                $query = $this->db->query("select id, nomor_berita_acara from inventory_penyimpanan where id=$excludedValue");
+//            }
+//            else
+//            {
+//                 $query = $this->db->query('select id, nomor_berita_acara from inventory_penyimpanan where qty > 0');
+//            }
+            
+           
+            if($this->input->get_post("id_warehouse"))
+            {
+                if($this->input->get_post("excluded_id_penyimpanan_data_perlengkapan") != '')
+                {
+                     $query = $this->db->query('select t.id, a.nama from inventory_penyimpanan_data_perlengkapan_sub_sub_part as t LEFT JOIN ref_sub_sub_part as a on t.part_number = a.part_number where t.id_warehouse='.$this->input->get_post("id_warehouse").' AND t.id NOT IN('.$this->input->get_post("excluded_id_penyimpanan_data_perlengkapan").')');
+                }
+                else
+                {
+                    $query = $this->db->query('select t.id, a.nama from inventory_penyimpanan_data_perlengkapan_sub_sub_part as t LEFT JOIN ref_sub_sub_part as a on t.part_number = a.part_number where t.id_warehouse='.$this->input->get_post("id_warehouse"));
+                }
+                
+            }
+            else
+            {
+                 $query = $this->db->query('select t.id, a.nama  from inventory_penyimpanan_data_perlengkapan_sub_sub_part as t LEFT JOIN ref_sub_sub_part as a on t.part_number = a.part_number');
+            }
+            
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        }
+    }
+    
+    
     function combo_penyimpanan()
     {
         $data = array();
@@ -286,6 +371,27 @@ class Combo_Ref extends CI_Controller {
 
     }
     
+    function combo_pengadaan_perlengkapan()
+    {
+        $data = array();
+//        if($this->input->post("id"))
+//        {
+            $query = $this->db->query("select id as pengadaan_id, kode_unor,id_vendor, kd_lokasi,kd_brg,no_aset,merek,model,nama,
+                tahun_angaran, perolehan_sumber, perolehan_bmn, perolehan_tanggal,
+                no_sppa, asal_pengadaan, harga_total, deskripsi, 
+                faktur_no, faktur_tanggal, kuitansi_no, kuitansi_tanggal, 
+                sp2d_no, sp2d_tanggal, mutasi_no, mutasi_tanggal, 
+                garansi_berlaku, garansi_keterangan, pelihara_berlaku, pelihara_keterangan, 
+                spk_no, spk_jenis, spk_berlaku, spk_keterangan, is_terpelihara, 
+                is_garansi, is_spk, data_kontrak,image_url,document_url from pengadaan");
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+//        }
+        echo json_encode($data);
+    }
+    
     function combo_klasifikasiAset_lvl1()
     {
         $data = array();
@@ -393,6 +499,50 @@ class Combo_Ref extends CI_Controller {
         
     }
     
+    function combo_warehouse_inventory_pengeluaran_sub_part(){
+        
+        $data = array();
+            if(isset($_POST['edit']))
+            {
+                $query_text = "select id, nama from ref_warehouse";
+            }
+            else
+            {
+                 $query_text = "select id, nama from ref_warehouse where id in (select id_warehouse from inventory_penyimpanan_data_perlengkapan_sub_part where qty >0)";
+            }
+           
+            $query = $this->db->query($query_text);
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        
+    }
+    
+    function combo_warehouse_inventory_pengeluaran_sub_sub_part(){
+        
+        $data = array();
+            if(isset($_POST['edit']))
+            {
+                $query_text = "select id, nama from ref_warehouse";
+            }
+            else
+            {
+                 $query_text = "select id, nama from ref_warehouse where id in (select id_warehouse from inventory_penyimpanan_data_perlengkapan_sub_sub_part where qty >0)";
+            }
+           
+            $query = $this->db->query($query_text);
+            foreach($query->result() as $obj)
+            {
+                $data[] = $obj;
+            }
+
+            echo json_encode($data);
+        
+    }
+    
     function combo_warehouse(){
         
         $data = array();
@@ -487,6 +637,54 @@ class Combo_Ref extends CI_Controller {
         }
     }
     
+    function combo_sub_sub_part_add_existing(){
+        $data = array();
+        if($this->input->get_post("part_number"))
+        {
+            $part_number = $this->input->post("part_number");
+            $query = $this->db->query("SELECT DISTINCT t.* FROM asset_perlengkapan_sub_sub_part AS t
+					LEFT JOIN ref_sub_sub_part AS d ON t.part_number = d.part_number
+                                        LEFT JOIN ref_sub_part AS a ON a.id = d.id_sub_part
+                                        LEFT JOIN asset_perlengkapan_sub_part AS c ON a.part_number = c.part_number
+					WHERE t.id_sub_part = 0 AND c.part_number = '$part_number'");
+//                $this->db->select('id,part_number,nama');
+//                $this->db->from('asset_perlengkapan_sub_part');
+//                $this->db->join('ref_sub_part', 'ref_sub_part.part_number = asset_perlengkapan_sub_part.part_number');
+//                $id_part = $this->input->post("id_part");
+//                $this->db->where("ref_sub_part.id_part",0);
+//                $query_result = $this->db->get();
+                foreach($query->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            echo json_encode($data);
+        }
+    }
+    
+    function combo_sub_part_add_existing(){
+        $data = array();
+        if($this->input->get_post("id_part"))
+        {
+            $id_part = $this->input->post("id_part");
+            $query = $this->db->query("SELECT t.* FROM asset_perlengkapan_sub_part AS t
+                                        LEFT JOIN ref_sub_part AS a ON a.part_number = t.part_number
+                                        LEFT JOIN ref_perlengkapan AS b ON a.id_part = b.id
+                                        LEFT JOIN asset_perlengkapan AS c ON b.part_number = c.part_number
+                                        WHERE t.id_part = 0 AND c.id = $id_part");
+//                $this->db->select('id,part_number,nama');
+//                $this->db->from('asset_perlengkapan_sub_part');
+//                $this->db->join('ref_sub_part', 'ref_sub_part.part_number = asset_perlengkapan_sub_part.part_number');
+//                $id_part = $this->input->post("id_part");
+//                $this->db->where("ref_sub_part.id_part",0);
+//                $query_result = $this->db->get();
+                foreach($query->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            echo json_encode($data);
+        }
+    }
+    
     function combo_sub_part(){
         $data = array();
         if($this->input->get_post("id_open"))
@@ -537,6 +735,18 @@ class Combo_Ref extends CI_Controller {
                $part_number = $this->input->post("part_number");
                 $query_result = $this->db->query("select id,part_number,nama,umur,cycle from ref_sub_sub_part where id_sub_part 
                                   IN (select id from ref_sub_part where part_number = '$part_number')");
+                foreach($query_result->result() as $obj)
+                {
+                    $data[] = $obj;
+                }
+            }
+            else if($this->input->post("id_sub_part"))
+            {
+                $id_sub_part = $this->input->post("id_sub_part");
+                $this->db->select('id,part_number,nama');
+                $this->db->from('ref_sub_sub_part');
+                $this->db->where("id_sub_part",$id_sub_part);
+                $query_result = $this->db->get();
                 foreach($query_result->result() as $obj)
                 {
                     $data[] = $obj;

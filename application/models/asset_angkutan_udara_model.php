@@ -20,19 +20,20 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
 //                            b.udara_sertifikat_kelaikan_udara_no,b.udara_sertifikat_kelaikan_udara_keterangan,b.udara_sertifikat_kelaikan_udara_masa_berlaku,b.udara_sertifikat_kelaikan_udara_file
 //                            ";
                 
-                 $this->selectColumn = "SELECT kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
-                            msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
-                            dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status,
-                            id, kode_unor, image_url, document_url, 
-                            udara_no_mesin2,udara_inisialisasi_mesin1,udara_inisialisasi_mesin2,
-                            nama_unker, nama_unor,
-                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel
-                            ,nama_klasifikasi_aset, kd_klasifikasi_aset,
-                            kd_lvl1,kd_lvl2,kd_lvl3,
-                            udara_surat_bukti_kepemilikan_no,udara_surat_bukti_kepemilikan_keterangan,udara_surat_bukti_kepemilikan_file,
-                            udara_sertifikat_pendaftaran_pesawat_udara_no,udara_sertifikat_pendaftaran_pesawat_udara_keterangan,udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku,udara_sertifikat_pendaftaran_pesawat_udara_file,
-                            udara_sertifikat_kelaikan_udara_no,udara_sertifikat_kelaikan_udara_keterangan,udara_sertifikat_kelaikan_udara_masa_berlaku,udara_sertifikat_kelaikan_udara_file
-                            ";
+//                 $this->selectColumn = "SELECT kd_lokasi, kd_brg, no_aset, kuantitas, no_kib, merk, type, pabrik, thn_rakit, thn_buat, negara, muat, bobot, daya, 
+//                            msn_gerak, jml_msn, bhn_bakar, no_mesin, no_rangka, no_polisi, no_bpkb, lengkap1, lengkap2, lengkap3, jns_trn, dari, tgl_prl, rph_aset, 
+//                            dasar_hrg, sumber, no_dana, tgl_dana, unit_pmk, alm_pmk, catatan, kondisi, tgl_buku, rphwajar, status,
+//                            id, kode_unor, image_url, document_url, 
+//                            udara_no_mesin2,udara_inisialisasi_mesin1,udara_inisialisasi_mesin2,
+//                            nama_unker, nama_unor,
+//                            kd_gol,kd_bid,kd_kelompok,kd_skel, kd_sskel, ur_sskel
+//                            ,nama_klasifikasi_aset, kd_klasifikasi_aset,
+//                            kd_lvl1,kd_lvl2,kd_lvl3,
+//                            udara_surat_bukti_kepemilikan_no,udara_surat_bukti_kepemilikan_keterangan,udara_surat_bukti_kepemilikan_file,
+//                            udara_sertifikat_pendaftaran_pesawat_udara_no,udara_sertifikat_pendaftaran_pesawat_udara_keterangan,udara_sertifikat_pendaftaran_pesawat_udara_masa_berlaku,udara_sertifikat_pendaftaran_pesawat_udara_file,
+//                            udara_sertifikat_kelaikan_udara_no,udara_sertifikat_kelaikan_udara_keterangan,udara_sertifikat_kelaikan_udara_masa_berlaku,udara_sertifikat_kelaikan_udara_file
+//                            ";
+                    $this->selectColumn = "Select *";
 	}
 	
 	function get_AllData($start=null, $limit=null, $searchByBarcode=null, $gridFilter = null, $searchByField = null){
@@ -327,6 +328,24 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
                         FROM ext_asset_angkutan_udara_perlengkapan as t
                         LEFT JOIN asset_perlengkapan as a on t.id_asset_perlengkapan = a.id
                         WHERE t.id_ext_asset = $id_ext_asset";
+//                return $this->Get_By_Query($query);
+                $r = $this->db->query($query);
+                 $data = array();
+                if ($r->num_rows() > 0)
+		{
+		    foreach ($r->result() as $obj)
+		    {
+			$data[] = $obj;
+		    }  
+		}
+                return $data;
+            
+        }
+        
+        function getSpecificAngkutanUdara($id_ext_asset)
+        {
+            
+                $query = "select * FROM view_asset_angkutan_udara WHERE id = $id_ext_asset";
 //                return $this->Get_By_Query($query);
                 $r = $this->db->query($query);
                  $data = array();

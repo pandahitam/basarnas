@@ -218,7 +218,10 @@ class MY_Controller extends CI_Controller{
         
         function noAssetGenerator($kd_brg, $kd_lokasi)
         {
-            
+//            if($kd_brg == "" || $kd_brg == null)
+//            {
+//               $kd_brg = 0; 
+//            }
             $this->db->where("kd_brg",$kd_brg);
             $this->db->where("kd_lokasi",$kd_lokasi);
             $this->db->order_by("no_aset",'desc');

@@ -72,6 +72,29 @@ class Inventory_Perlengkapan_Model extends MY_Model{
                 return $this->Get_By_Query($query); 
 	}
         
+        function get_InventoryPerlengkapanSubPart($id,$table,$table_source)
+	{
+            $query = "select t.*, a.kd_lokasi,a.kode_unor, b.id_part
+                     FROM $table as t
+                     LEFT JOIN $table_source as a on a.id = t.id_source
+                     LEFT JOIN ref_sub_part as b on t.part_number = b.part_number
+                     where id_source = $id";
+		
+                return $this->Get_By_Query($query); 
+	}
+        
+        function get_InventoryPerlengkapanSubSubPart($id,$table,$table_source)
+	{
+            $query = "select t.*, a.kd_lokasi,a.kode_unor, b.id_part, c.id_sub_part
+                     FROM $table as t
+                     LEFT JOIN $table_source as a on a.id = t.id_source
+                     LEFT JOIN ref_sub_sub_part as c on t.part_number = c.part_number
+                     LEFT JOIN ref_sub_part as b on c.id_sub_part = b.id
+                     where id_source = $id";
+		
+                return $this->Get_By_Query($query); 
+	}
+        
         
         function get_InventoryPerlengkapanPenyimpanan($id)
         {
@@ -80,6 +103,31 @@ class Inventory_Perlengkapan_Model extends MY_Model{
                       LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
                       LEFT JOIN ref_warehouseruang as b on b.id = t.id_warehouse_ruang
                       LEFT JOIN ref_warehouserak as c on c.id =  t.id_warehouse_rak
+                      where id_source =$id";
+            return $this->Get_By_Query($query); 
+        }
+        
+        function get_InventoryPerlengkapanPenyimpananSubPart($id)
+        {
+            $query = "select t.*,d.id_part, a.nama as nama_warehouse, b.nama as nama_ruang, c.nama as nama_rak
+                      FROM inventory_penyimpanan_data_perlengkapan_sub_part as t
+                      LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
+                      LEFT JOIN ref_warehouseruang as b on b.id = t.id_warehouse_ruang
+                      LEFT JOIN ref_warehouserak as c on c.id =  t.id_warehouse_rak
+                      LEFT JOIN ref_sub_part as d on t.part_number = d.part_number
+                      where id_source =$id";
+            return $this->Get_By_Query($query); 
+        }
+        
+        function get_InventoryPerlengkapanPenyimpananSubSubPart($id)
+        {
+            $query = "select t.*,d.id_part,e.id_sub_part, a.nama as nama_warehouse, b.nama as nama_ruang, c.nama as nama_rak
+                      FROM inventory_penyimpanan_data_perlengkapan_sub_sub_part as t
+                      LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
+                      LEFT JOIN ref_warehouseruang as b on b.id = t.id_warehouse_ruang
+                      LEFT JOIN ref_warehouserak as c on c.id =  t.id_warehouse_rak
+                      LEFT JOIN ref_sub_sub_part as e on t.part_number = e.part_number
+                      LEFT JOIN ref_sub_part as d on e.id_sub_part = d.id
                       where id_source =$id";
             return $this->Get_By_Query($query); 
         }
@@ -94,10 +142,44 @@ class Inventory_Perlengkapan_Model extends MY_Model{
             return $this->Get_By_Query($query); 
         }
         
+        function get_InventoryPerlengkapanPengeluaranSubPart($id)
+        {
+            $query = "select t.*,a.nama as nama_warehouse, b.part_number
+                      FROM inventory_pengeluaran_data_perlengkapan_sub_part as t
+                      LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
+                      LEFT JOIN inventory_penyimpanan_data_perlengkapan_sub_part as b on b.id = t.id_penyimpanan_data_perlengkapan
+                      where t.id_source =$id";
+            return $this->Get_By_Query($query); 
+        }
+        
+        function get_InventoryPerlengkapanPengeluaranSubSubPart($id)
+        {
+            $query = "select t.*,a.nama as nama_warehouse, b.part_number
+                      FROM inventory_pengeluaran_data_perlengkapan_sub_sub_part as t
+                      LEFT JOIN ref_warehouse as a on a.id = t.id_warehouse
+                      LEFT JOIN inventory_penyimpanan_data_perlengkapan_sub_sub_part as b on b.id = t.id_penyimpanan_data_perlengkapan
+                      where t.id_source =$id";
+            return $this->Get_By_Query($query); 
+        }
+        
         function get_partNumberDetails($part_number)
         {
             $this->db->where('part_number',"$part_number");
             $query = $this->db->get('ref_perlengkapan');
+            return $query->row();
+        }
+        
+        function get_partNumberSubPartDetails($part_number)
+        {
+            $this->db->where('part_number',"$part_number");
+            $query = $this->db->get('ref_sub_part');
+            return $query->row();
+        }
+        
+        function get_partNumberSubSubPartDetails($part_number)
+        {
+            $this->db->where('part_number',"$part_number");
+            $query = $this->db->get('ref_sub_sub_part');
             return $query->row();
         }
 	

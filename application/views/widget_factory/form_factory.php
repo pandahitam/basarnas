@@ -32,11 +32,16 @@
             klasifikasiAset_lvl2: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl2',
             klasifikasiAset_lvl3: BASE_URL +'combo_ref/combo_klasifikasiAset_lvl3',
             pengadaan: BASE_URL + 'combo_ref/combo_pengadaan',
+            pengadaanPerlengkapan: BASE_URL + 'combo_ref/combo_pengadaan_perlengkapan',
             penerimaanPemeriksaan: BASE_URL + 'combo_ref/combo_penerimaan_pemeriksaan',
             penyimpanan: BASE_URL + 'combo_ref/combo_penyimpanan',
             partsInventoryPengeluaran: BASE_URL + 'combo_ref/combo_parts_inventory_pengeluaran',
+            partsInventoryPengeluaranSubPart: BASE_URL + 'combo_ref/combo_parts_inventory_pengeluaran_sub_part',
+            partsInventoryPengeluaranSubSubPart: BASE_URL + 'combo_ref/combo_parts_inventory_pengeluaran_sub_sub_part',
             assetPerlengkapanPart: BASE_URL + 'combo_ref/combo_asset_perlengkapan_part',
             warehouseInventoryPengeluaran: BASE_URL +'combo_ref/combo_warehouse_inventory_pengeluaran',
+            warehouseInventoryPengeluaranSubPart: BASE_URL +'combo_ref/combo_warehouse_inventory_pengeluaran_sub_part',
+            warehouseInventoryPengeluaranSubSubPart: BASE_URL +'combo_ref/combo_warehouse_inventory_pengeluaran_sub_sub_part',
             provinsi:BASE_URL + 'combo_ref/combo_prov',
             kabupaten:BASE_URL + 'combo_ref/combo_kabkota',
             unkerForReferensiWarehouseRuangRak:BASE_URL + 'combo_ref/combo_unit_kerja_referensi_warehouse_ruang_rak',
@@ -47,10 +52,41 @@
             subPartPemeliharaan: BASE_URL + 'combo_ref/combo_sub_part_pemeliharaan',
             subSubPart: BASE_URL + 'combo_ref/combo_sub_sub_part',
             subSubPartPemeliharaan: BASE_URL + 'combo_ref/combo_sub_sub_part_pemeliharaan',
-            listAngkutanUdara: BASE_URL + 'combo_ref/combo_list_angkutan_udara'
+            listAngkutanUdara: BASE_URL + 'combo_ref/combo_list_angkutan_udara',
+            subPartAddExisting: BASE_URL + 'combo_ref/combo_sub_part_add_existing',
+            subSubPartAddExisting: BASE_URL + 'combo_ref/combo_sub_sub_part_add_existing',
         };
         
        
+       Reference.Data.subSubPartAddExisting = new Ext.create('Ext.data.Store', {
+             fields: ['id','id_sub_part','nama','part_number','serial_number','umur_maks',
+                    'umur','is_cycle','cycle_maks','cycle','is_oc','installation_date',
+                    'installation_ac_tsn','installation_comp_tsn','task','is_engine',
+                    'kd_brg','kd_lokasi',
+                    'no_aset','kondisi', 'kuantitas', 'dari',
+                    'tanggal_perolehan','no_dana','document_url','image_url','kd_klasifikasi_aset','kode_unor'
+                    ,'kd_lvl1','kd_lvl2','kd_lvl3',
+                    'warehouse_id','ruang_id','rak_id'], storeId: 'DataSubPartAddExisting',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.subSubPartAddExisting, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.subPartAddExisting = new Ext.create('Ext.data.Store', {
+             fields: ['id','id_part','nama','part_number','serial_number','umur_maks',
+                    'umur','is_cycle','cycle_maks','cycle','is_oc','installation_date',
+                    'installation_ac_tsn','installation_comp_tsn','task','is_engine','is_kelompok',
+                    'kd_brg','kd_lokasi',
+                    'no_aset','kondisi', 'kuantitas', 'dari',
+                    'tanggal_perolehan','no_dana','document_url','image_url','kd_klasifikasi_aset','kode_unor'
+                    ,'kd_lvl1','kd_lvl2','kd_lvl3',
+                    'warehouse_id','ruang_id','rak_id'], storeId: 'DataSubPartAddExisting',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.subPartAddExisting, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
         
         Reference.Data.kelompokPart = new Ext.create('Ext.data.Store', {
              fields: ['id', 'nama_kelompok'], storeId: 'DataReferensiKelompokPart',
@@ -117,6 +153,22 @@
             autoLoad: true
         });
         
+         Reference.Data.partsInventoryPengeluaranSubPart = new Ext.create('Ext.data.Store', {
+            fields: ['id','part_number','nama'], storeId: 'DataPartsInventoryPengeluaranSubPartCombo',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.partsInventoryPengeluaranSubPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+         Reference.Data.partsInventoryPengeluaranSubSubPart = new Ext.create('Ext.data.Store', {
+            fields: ['id','part_number','nama'], storeId: 'DataPartsInventoryPengeluaranSubSubPartCombo',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.partsInventoryPengeluaranSubSubPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
         Reference.Data.penyimpanan = new Ext.create('Ext.data.Store', {
             fields: ['id','nomor_berita_acara'], storeId: 'DataPenyimpananCombo',
             proxy: new Ext.data.AjaxProxy({
@@ -129,6 +181,21 @@
             fields: ['id','no_sppa', 'part_number', 'serial_number'], storeId: 'DataPengadaanCombo',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.pengadaan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1 }
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.pengadaanPerlengkapan = new Ext.create('Ext.data.Store', {
+            fields: ['pengadaan_id', 'kode_unor', 'nama_unker', 'nama_unor','id_vendor', 'kd_lokasi','kd_brg','no_aset','merek','model','nama',
+                'tahun_angaran', 'perolehan_sumber', 'perolehan_bmn', 'perolehan_tanggal',
+                'no_sppa', 'asal_pengadaan', 'harga_total', 'deskripsi', 
+                'faktur_no', 'faktur_tanggal', 'kuitansi_no', 'kuitansi_tanggal', 
+                'sp2d_no', 'sp2d_tanggal', 'mutasi_no', 'mutasi_tanggal', 
+                'garansi_berlaku', 'garansi_keterangan', 'pelihara_berlaku', 'pelihara_keterangan', 
+                'spk_no', 'spk_jenis', 'spk_berlaku', 'spk_keterangan', 'is_terpelihara', 
+                'is_garansi', 'is_spk', 'data_kontrak','image_url','document_url'], storeId: 'DataPengadaanPerlengkapanCombo',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.pengadaanPerlengkapan, actionMethods: {read: 'POST'}, extraParams: {id_open: 1 }
             }),
             autoLoad: true
         });
@@ -170,6 +237,22 @@
             fields: ['id', 'nama'], storeId: 'DataWarehouseInventoryPengeluaran',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.warehouseInventoryPengeluaran, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.warehouseInventoryPengeluaranSubPart = new Ext.create('Ext.data.Store', {
+            fields: ['id', 'nama'], storeId: 'DataWarehouseInventoryPengeluaranSubPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.warehouseInventoryPengeluaranSubPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
+            }),
+            autoLoad: true
+        });
+        
+        Reference.Data.warehouseInventoryPengeluaranSubSubPart = new Ext.create('Ext.data.Store', {
+            fields: ['id', 'nama'], storeId: 'DataWarehouseInventoryPengeluaranSubSubPart',
+            proxy: new Ext.data.AjaxProxy({
+                url: Reference.URL.warehouseInventoryPengeluaranSubSubPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
             autoLoad: true
         });
@@ -522,7 +605,7 @@
 
 		
 		
-Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
+Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, setting_grid_sub_parts, setting_grid_sub_sub_parts)
         {
             var pilihPengadaan = [{
                     xtype: 'fieldset',
@@ -587,6 +670,52 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                             dataStoreInventoryPenerimaanPemeriksaan.add(data);
                                                         }
                                                         });
+                                                        
+                                                        Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_perlengkapan/getSpecificPengadaanPerlengkapanSubPart',
+                                                        params: {
+                                                            id_source: value
+                                                        },
+                                                        success: function(response){
+                                                            var convertedResponseData = eval ("(" + response.responseText + ")");
+                                                            var data = convertedResponseData.results;
+                                                            var kd_lokasi = data[0].kd_lokasi;
+                                                            var kode_unor = data[0].kode_unor;
+                                                            var dataStoreInventoryPenerimaanPemeriksaan = Ext.getCmp('grid_inventory_penerimaan_pemeriksaan_sub_parts').getStore();
+                                                            dataStoreInventoryPenerimaanPemeriksaan.removeAll();
+                                                            Ext.getCmp('kd_lokasi').setValue(kd_lokasi);
+                                                            Ext.getCmp('kode_unor').setValue(kode_unor);
+                                                            
+                                                            Ext.Array.each(data,function(key,index,myself){
+                                                                data[index].id = '';
+                                                                data[index].id_source = '';
+                                                            });
+                                                            dataStoreInventoryPenerimaanPemeriksaan.add(data);
+                                                        }
+                                                        });
+                                                        
+                                                        Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_perlengkapan/getSpecificPengadaanPerlengkapanSubSubPart',
+                                                        params: {
+                                                            id_source: value
+                                                        },
+                                                        success: function(response){
+                                                            var convertedResponseData = eval ("(" + response.responseText + ")");
+                                                            var data = convertedResponseData.results;
+                                                            var kd_lokasi = data[0].kd_lokasi;
+                                                            var kode_unor = data[0].kode_unor;
+                                                            var dataStoreInventoryPenerimaanPemeriksaan = Ext.getCmp('grid_inventory_penerimaan_pemeriksaan_sub_sub_parts').getStore();
+                                                            dataStoreInventoryPenerimaanPemeriksaan.removeAll();
+                                                            Ext.getCmp('kd_lokasi').setValue(kd_lokasi);
+                                                            Ext.getCmp('kode_unor').setValue(kode_unor);
+                                                            
+                                                            Ext.Array.each(data,function(key,index,myself){
+                                                                data[index].id = '';
+                                                                data[index].id_source = '';
+                                                            });
+                                                            dataStoreInventoryPenerimaanPemeriksaan.add(data);
+                                                        }
+                                                        });
                                                     }
                                                     
                                                 }
@@ -598,18 +727,19 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             ]
                         }]
                 }];
-            var form = Form.panelInventory(setting.url, setting.data, setting.isEditing, setting_grid_parts.dataStore);
+            var form = Form.panelInventoryPenerimaanPemeriksaan(setting.url, setting.data, setting.isEditing, setting_grid_parts.dataStore);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPengadaan);
             form.insert(2, Form.Component.inventoryPenerimaanPemeriksaan());
             form.insert(3, Form.Component.gridParts(setting_grid_parts,false));
-
+            form.insert(4, Form.Component.gridSubParts(setting_grid_sub_parts,false));
+            form.insert(5, Form.Component.gridSubSubParts(setting_grid_sub_sub_parts,false));
             return form;
         };
         
 
         
-        Form.inventoryPenyimpanan = function(setting,setting_grid_parts)
+        Form.inventoryPenyimpanan = function(setting,setting_grid_parts,setting_grid_sub_parts,setting_grid_sub_sub_parts)
         {
 
             var pilihPenerimaanPemeriksaan = [{
@@ -662,6 +792,8 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 if (value !== null && value !== '')
                                                 {
                                                     var number_of_invalid_fields = parseInt(0);
+                                                    var number_of_invalid_fields_sub_part = parseInt(0);
+                                                    var number_of_invalid_fields_sub_sub_part = parseInt(0);
                                                     
                                                     /*
                                                      * If is edit, the combo box will present all id_penerimaan that isn't used yet + the current selected value
@@ -703,6 +835,78 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                             // process server response here
                                                         }
                                                         });
+                                                    
+                                                    Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPenerimaanPemeriksaanPerlengkapanSubPart',
+                                                        params: {
+                                                            id_source: value
+                                                        },
+                                                        success: function(response,action){
+                                                                
+                                                                if(setting.isEditing == false)
+                                                                {
+                                                                    
+                                                                    
+                                                                    var convertedResponseData = eval ("(" + response.responseText + ")");
+                                                                    var data = convertedResponseData.results;
+                                                                    var kd_lokasi = data[0].kd_lokasi;
+                                                                    var kode_unor = data[0].kode_unor;
+                                                                    var dataStoreInventoryPenyimpanan = Ext.getCmp('grid_inventory_penyimpanan_sub_parts').getStore();
+                                                                    dataStoreInventoryPenyimpanan.removeAll();
+                                                                    Ext.getCmp('kd_lokasi').setValue(kd_lokasi);
+                                                                    Ext.getCmp('kode_unor').setValue(kode_unor);
+                                                                    Ext.Array.each(data,function(key,index,myself){
+                                                                        data[index].id = '';
+                                                                        data[index].id_source = '';
+                                                                        if(data[index].id_warehouse == undefined || data[index].id_warehouse_ruang == undefined)
+                                                                        {
+                                                                            number_of_invalid_fields_sub_part++;
+                                                                        }
+                                                                    });
+                                                                    dataStoreInventoryPenyimpanan.add(data);
+                                                                    Ext.getCmp('inventory_penyimpanan_grid_sub_parts_invalid_data').setValue(parseInt(number_of_invalid_fields_sub_part));
+                                                                }
+                                                            
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                        
+                                                        Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_perlengkapan/getSpecificInventoryPenerimaanPemeriksaanPerlengkapanSubSubPart',
+                                                        params: {
+                                                            id_source: value
+                                                        },
+                                                        success: function(response,action){
+                                                                
+                                                                if(setting.isEditing == false)
+                                                                {
+                                                                    
+                                                                    
+                                                                    var convertedResponseData = eval ("(" + response.responseText + ")");
+                                                                    var data = convertedResponseData.results;
+                                                                    var kd_lokasi = data[0].kd_lokasi;
+                                                                    var kode_unor = data[0].kode_unor;
+                                                                    var dataStoreInventoryPenyimpanan = Ext.getCmp('grid_inventory_penyimpanan_sub_sub_parts').getStore();
+                                                                    dataStoreInventoryPenyimpanan.removeAll();
+                                                                    Ext.getCmp('kd_lokasi').setValue(kd_lokasi);
+                                                                    Ext.getCmp('kode_unor').setValue(kode_unor);
+                                                                    Ext.Array.each(data,function(key,index,myself){
+                                                                        data[index].id = '';
+                                                                        data[index].id_source = '';
+                                                                        if(data[index].id_warehouse == undefined || data[index].id_warehouse_ruang == undefined)
+                                                                        {
+                                                                            number_of_invalid_fields_sub_sub_part++;
+                                                                        }
+                                                                    });
+                                                                    dataStoreInventoryPenyimpanan.add(data);
+                                                                    Ext.getCmp('inventory_penyimpanan_grid_sub_sub_parts_invalid_data').setValue(parseInt(number_of_invalid_fields_sub_sub_part));
+                                                                }
+                                                            
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
                                                 }
 
                                             },
@@ -714,16 +918,18 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             ]
                         }]
                 }];
-            var form = Form.panelInventory(setting.url, setting.data, setting.isEditing,setting_grid_parts.dataStore);
+            var form = Form.panelInventoryPenyimpanan(setting.url, setting.data, setting.isEditing,setting_grid_parts.dataStore);
             form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, pilihPenerimaanPemeriksaan);
             form.insert(2, Form.Component.inventoryPenyimpanan(setting.isEditing));
             form.insert(3, Form.Component.gridPartsInventoryPenyimpanan(setting_grid_parts));
+            form.insert(4, Form.Component.gridSubPartsInventoryPenyimpanan(setting_grid_sub_parts));
+            form.insert(5, Form.Component.gridSubSubPartsInventoryPenyimpanan(setting_grid_sub_sub_parts));
 
             return form;
         }
         
-        Form.inventoryPengeluaran = function(setting,setting_grid_parts,id_perlengkapan)
+        Form.inventoryPengeluaran = function(setting,setting_grid_parts,setting_grid_sub_parts,setting_grid_sub_sub_parts)
         {
 
             var form = Form.panelInventoryPengeluaran(setting.url, setting.data, setting.isEditing, setting_grid_parts.dataStore);
@@ -731,14 +937,16 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             form.insert(1, Form.Component.inventoryPengeluaran(setting.isEditing));
 //            form.insert(2, Form.Component.dataInventoryPerlengkapan(true));
             form.insert(3, Form.Component.gridParts(setting_grid_parts,true));
+            form.insert(4, Form.Component.gridSubParts(setting_grid_sub_parts,true));
+            form.insert(5, Form.Component.gridSubSubParts(setting_grid_sub_sub_parts,true));
             return form;
         }
         
-        Form.pengadaan = function(setting,setting_grid_parts)
+        Form.pengadaan = function(setting,setting_grid_parts,setting_grid_sub_parts,setting_grid_sub_sub_parts)
         {
             
             var form = Form.panelPengadaan(setting.url, setting.data, setting.isEditing, setting.addBtn);
-             form.insert(0, Form.Component.unit(setting.isEditing,form));
+            form.insert(0, Form.Component.unit(setting.isEditing,form));
             form.insert(1, {
                 xtype: 'fieldset',
                 layout: 'column',
@@ -826,7 +1034,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //            });
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.gridParts(setting_grid_parts,false));
-            form.insert(4, Form.Component.fileUpload());
+            form.insert(4, Form.Component.gridSubParts(setting_grid_sub_parts,false));
+            form.insert(5, Form.Component.gridSubSubParts(setting_grid_sub_sub_parts,false));
+            form.insert(6, Form.Component.fileUpload());
 
             return form;
         };
@@ -849,6 +1059,110 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             form.insert(1, Form.Component.hiddenIdentifier());
             form.insert(2, Form.Component.pengadaan());
             form.insert(3, Form.Component.fileUpload());
+
+            return form;
+        }
+        
+        Form.Component.pengadaanPerlengkapanExisting = function(form)
+        {
+            var pengadaan_existing = {
+                 xtype: 'fieldset',
+                 layout: 'anchor',
+                 anchor: '100%',
+                 title: 'MASUKAN KE PENGADAAN YANG SUDAH ADA',
+                 border: false,
+                 frame: true,
+                 defaultType: 'container',
+                 defaults: {
+                     layout: 'anchor'
+                 },
+                 items: [{
+                         columnWidth: 1,
+                         layout: 'anchor',
+                         defaults: {
+                             anchor: '95%'
+                         },
+                         defaultType: 'numberfield',
+                         items: [
+                            {
+                                xtype: 'combo',
+                                labelWidth:120,
+                                fieldLabel: 'No SPPA Pengadaan',
+                                name: 'pengadaan_existing_id',
+                                id:'pengadaan_perlengkapan_add_existing',
+                                editable:false,
+                                allowBlank: false,
+                                store: Reference.Data.pengadaanPerlengkapan,
+                                valueField: 'pengadaan_id',
+                                displayField: 'no_sppa', emptyText: 'Pilih NO SPPA',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if(value != null && value != '')
+                                            {
+                                                if(obj.valueModels[0].data != null && obj.valueModels[0].data != undefined)
+                                                {
+                                                    
+                                                    var data = obj.valueModels[0].data;
+                                                    var storeImage = form.getComponent('fileUpload').getComponent('photoColumn').getComponent('photoPanel').getComponent('photoView').getStore();
+                                                    var storeDocument = form.getComponent('fileUpload').getComponent('documentColumn').getComponent('documentGrid').getStore();
+                                                    storeImage.removeAll();
+                                                    storeDocument.removeAll();
+                                                    if (data !== null)
+                                                    {
+                                                        Ext.Object.each(data,function(key,value,myself){
+                                                                    if(data[key] == '0000-00-00')
+                                                                    {
+                                                                        data[key] = '';
+                                                                    }
+                                                                });
+                                                        form.getForm().setValues(data);
+                                                    }
+                                                }
+//                                                var data = obj.valueModels[0].data;
+//                                                var storeImage = form.getComponent('fileUpload').getComponent('photoColumn').getComponent('photoPanel').getComponent('photoView').getStore();
+//                                                var storeDocument = form.getComponent('fileUpload').getComponent('documentColumn').getComponent('documentGrid').getStore();
+//                                                storeImage.removeAll();
+//                                                storeDocument.removeAll();
+//                                                if (data !== null)
+//                                                {
+//                                                    Ext.Object.each(data,function(key,value,myself){
+//                                                                if(data[key] == '0000-00-00')
+//                                                                {
+//                                                                    data[key] = '';
+//                                                                }
+//                                                            });
+//                                                    form.getForm().setValues(data);
+//                                                }
+                                            }
+                                                
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                            ]
+                     }]
+             };
+             
+             return pengadaan_existing;
+        };
+        
+        Form.pengadaanInAssetPerlengkapan = function(setting,id_asset_perlengkapan,jenis_perlengkapan)
+        {
+            var perlengkapan_id = [{ xtype : 'hidden', name: 'id_asset_perlengkapan', value: id_asset_perlengkapan},
+                { xtype : 'hidden', name: 'jenis_perlengkapan', value: jenis_perlengkapan},
+                                
+                            ];
+            
+            
+            var form = Form.processPengadaanInPerlengkapan(setting.url, setting.data, setting.isEditing, setting.addBtn);
+            form.insert(0, perlengkapan_id);
+            form.insert(1, Form.Component.pengadaanPerlengkapanExisting(form));
+            form.insert(2, Form.Component.hiddenIdentifier());
+            form.insert(3, Form.Component.pengadaan());
+            form.insert(4, Form.Component.fileUpload());
 
             return form;
         }
@@ -3794,6 +4108,116 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        Form.secondaryWindowAssetInventoryPenyimpananSubPart= function(data,operationType,storeIndex) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: '',
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                if(operationType == 'add')
+                                {
+                                    data.add(formValues);
+                                }
+                                if(operationType == 'edit')
+                                {
+                                    var record = data.getAt(storeIndex);
+                                    record.set(formValues);
+                                    var gridStoreRecords = Ext.getCmp('grid_inventory_penyimpanan_sub_parts').getStore().getRange();
+                                    var count_of_invalid_values = parseInt(0);
+                                    Ext.Array.each(gridStoreRecords,function(key,index,self)
+                                    {
+                                        if(gridStoreRecords[index].data.id_warehouse == '' || gridStoreRecords[index].data.id_warehouse_ruang == '')
+                                        {
+                                            count_of_invalid_values++;
+                                        }
+                                    });
+                                    Ext.getCmp('inventory_penyimpanan_grid_sub_parts_invalid_data').setValue(count_of_invalid_values);
+                                }
+                                
+                                if(operationType == 'remove')
+                                {
+//                                    data.removeAt(storeIndex);
+//                                    data.commitChanges();
+                                }
+                                
+                                
+                                Modal.assetSecondaryWindow.close();
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
+        Form.secondaryWindowAssetInventoryPenyimpananSubSubPart= function(data,operationType,storeIndex) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: '',
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                if(operationType == 'add')
+                                {
+                                    data.add(formValues);
+                                }
+                                if(operationType == 'edit')
+                                {
+                                    var record = data.getAt(storeIndex);
+                                    record.set(formValues);
+                                    var gridStoreRecords = Ext.getCmp('grid_inventory_penyimpanan_sub_sub_parts').getStore().getRange();
+                                    var count_of_invalid_values = parseInt(0);
+                                    Ext.Array.each(gridStoreRecords,function(key,index,self)
+                                    {
+                                        if(gridStoreRecords[index].data.id_warehouse == '' || gridStoreRecords[index].data.id_warehouse_ruang == '')
+                                        {
+                                            count_of_invalid_values++;
+                                        }
+                                    });
+                                    Ext.getCmp('inventory_penyimpanan_grid_sub_sub_parts_invalid_data').setValue(count_of_invalid_values);
+                                }
+                                
+                                if(operationType == 'remove')
+                                {
+//                                    data.removeAt(storeIndex);
+//                                    data.commitChanges();
+                                }
+                                
+                                
+                                Modal.assetSecondaryWindow.close();
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
         
         Form.secondaryWindowAsset= function(data,operationType,storeIndex) {
             var _form = Ext.create('Ext.form.Panel', {
@@ -3807,7 +4231,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_perlengkapan', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             var formValues = form.getValues();
@@ -3851,7 +4275,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_tertiary_window_asset', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             var formValues = form.getValues();
@@ -3897,7 +4321,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_inventory', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             if (form.isValid())
@@ -3916,6 +4340,179 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         });
                                             gridStore.sync();
                    
+                                        
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+//                                        if (edit)
+//                                        {
+//                                            Modal.closeProcessWindow();
+//                                        }
+//                                        else
+//                                        {
+//                                            form.reset();
+//                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    },]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelInventoryPenyimpanan = function(url, data, edit, dataStoreParts) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function(form,action) {
+                                        var id = action.result.id;
+                                        var gridStore = dataStoreParts;
+                                        var gridStoreSubPart = Ext.getCmp('grid_inventory_penyimpanan_sub_parts').getStore();
+                                        var gridStoreSubSubPart = Ext.getCmp('grid_inventory_penyimpanan_sub_sub_parts').getStore();
+                                        var new_records = gridStore.getNewRecords();
+                                        var new_records_sub_part = gridStoreSubPart.getNewRecords();
+                                        var new_records_sub_sub_part = gridStoreSubSubPart.getNewRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
+                                        Ext.each(new_records, function(obj){
+                                            var index = gridStore.indexOf(obj);
+                                            var record = gridStore.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                        
+                                        Ext.each(new_records_sub_part, function(obj){
+                                            var index = gridStoreSubPart.indexOf(obj);
+                                            var record = gridStoreSubPart.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                        
+                                        Ext.each(new_records_sub_sub_part, function(obj){
+                                            var index = gridStoreSubSubPart.indexOf(obj);
+                                            var record = gridStoreSubSubPart.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                        
+                                            gridStore.sync();
+                                            gridStoreSubPart.sync();
+                                            gridStoreSubSubPart.sync();
+                                        
+                   
+                                        
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                        if (data !== null)
+                                        {
+                                            data.load();
+                                        }
+                                        Modal.closeProcessWindow();
+//                                        if (edit)
+//                                        {
+//                                            Modal.closeProcessWindow();
+//                                        }
+//                                        else
+//                                        {
+//                                            form.reset();
+//                                        }
+
+
+
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                            
+                        }
+                    },]
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelInventoryPenerimaanPemeriksaan = function(url, data, edit, dataStoreParts) {
+            var _form = Ext.create('Ext.form.Panel', {
+                id : 'form-process',
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                trackResetOnLoad:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function(form,action) {
+                                        var id = action.result.id;
+                                        var gridStore = dataStoreParts;
+                                        var gridStoreSubPart = Ext.getCmp('grid_inventory_penerimaan_pemeriksaan_sub_parts').getStore();
+                                        var gridStoreSubSubPart = Ext.getCmp('grid_inventory_penerimaan_pemeriksaan_sub_sub_parts').getStore();
+                                        var new_records = gridStore.getNewRecords();
+                                        var new_records_sub_part = gridStoreSubPart.getNewRecords();
+                                        var new_records_sub_sub_part = gridStoreSubSubPart.getNewRecords();
+//                                        var updated_records = grid.getUpdatedRecords();
+//                                        var removed_records = grid.getRemovedRecords();
+                                        Ext.each(new_records, function(obj){
+                                            var index = gridStore.indexOf(obj);
+                                            var record = gridStore.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                        
+                                        Ext.each(new_records_sub_part, function(obj){
+                                            var index = gridStoreSubPart.indexOf(obj);
+                                            var record = gridStoreSubPart.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                        
+                                        Ext.each(new_records_sub_sub_part, function(obj){
+                                            var index = gridStoreSubSubPart.indexOf(obj);
+                                            var record = gridStoreSubSubPart.getAt(index);
+                                            record.set('id_source',id);
+                                        });
+                                        
+                                            gridStore.sync();
+                                            gridStoreSubPart.sync();
+                                            gridStoreSubSubPart.sync();
+                                        
+                                        
+                                            
                                         
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
                                         if (data !== null)
@@ -3998,7 +4595,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         success: function(form,action) {
                                             var id = action.result.id;
                                             var gridStore = dataStoreParts;
+                                            var gridStoreSubPart = Ext.getCmp('grid_inventory_pengeluaran_sub_parts').getStore();
+                                            var gridStoreSubSubPart = Ext.getCmp('grid_inventory_pengeluaran_sub_sub_parts').getStore();
                                             var new_records = gridStore.getNewRecords();
+                                            var new_records_sub_part = gridStoreSubPart.getNewRecords();
+                                            var new_records_sub_sub_part = gridStoreSubSubPart.getNewRecords();
     //                                        var updated_records = grid.getUpdatedRecords();
     //                                        var removed_records = grid.getRemovedRecords();
                                             Ext.each(new_records, function(obj){
@@ -4006,7 +4607,23 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 var record = gridStore.getAt(index);
                                                 record.set('id_source',id);
                                             });
+
+                                            Ext.each(new_records_sub_part, function(obj){
+                                                var index = gridStoreSubPart.indexOf(obj);
+                                                var record = gridStoreSubPart.getAt(index);
+                                                record.set('id_source',id);
+                                            });
+
+                                            Ext.each(new_records_sub_sub_part, function(obj){
+                                                var index = gridStoreSubSubPart.indexOf(obj);
+                                                var record = gridStoreSubSubPart.getAt(index);
+                                                record.set('id_source',id);
+                                            });
+
                                                 gridStore.sync();
+                                                gridStoreSubPart.sync();
+                                                gridStoreSubSubPart.sync();
+
 
 
                                             Ext.MessageBox.alert('Success', 'Changes saved successfully.');
@@ -4400,7 +5017,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     success: function(form) {
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
                                         
-
+                                        var pengadaan_existing = Ext.getCmp('pengadaan_perlengkapan_add_existing');
+                                        if(pengadaan_existing != null)
+                                        {
+                                            pengadaan_existing.setReadOnly(true);
+                                        }
 
 
                                     },
@@ -4435,7 +5056,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     msgTarget: 'side'
                 },
                 buttons: [{
-                        text: 'Simpan', id: 'save_process', iconCls: 'icon-save', formBind: true,
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
                         handler: function() {
                             var form = _form.getForm();
                             var imageField = form.findField('image_url');
@@ -4488,7 +5109,11 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                 }
                                              });
                                         var gridStore = Ext.getCmp('grid_pengadaan_parts').getStore();
+                                        var gridStoreSubPart = Ext.getCmp('grid_pengadaan_sub_parts').getStore();
+                                        var gridStoreSubSubPart = Ext.getCmp('grid_pengadaan_sub_sub_parts').getStore();
                                         var new_records = gridStore.getNewRecords();
+                                        var new_records_sub_part = gridStoreSubPart.getNewRecords();
+                                        var new_records_sub_sub_part = gridStoreSubSubPart.getNewRecords();
 //                                        var updated_records = grid.getUpdatedRecords();
 //                                        var removed_records = grid.getRemovedRecords();
                                         Ext.each(new_records, function(obj){
@@ -4497,7 +5122,24 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                             record.set('id_source',id);
                                             record.set('kd_lokasi',kd_lokasi);
                                         });
+                                        
+                                        Ext.each(new_records_sub_part, function(obj){
+                                            var index = gridStoreSubPart.indexOf(obj);
+                                            var record = gridStoreSubPart.getAt(index);
+                                            record.set('id_source',id);
+                                            record.set('kd_lokasi',kd_lokasi);
+                                        });
+                                        
+                                        Ext.each(new_records_sub_sub_part, function(obj){
+                                            var index = gridStoreSubSubPart.indexOf(obj);
+                                            var record = gridStoreSubSubPart.getAt(index);
+                                            record.set('id_source',id);
+                                            record.set('kd_lokasi',kd_lokasi);
+                                        });
+                                        
                                             gridStore.sync();
+                                            gridStoreSubPart.sync();
+                                            gridStoreSubSubPart.sync();
                      
                                         
                                         Ext.MessageBox.alert('Success', 'Changes saved successfully.');
@@ -4520,9 +5162,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                     }, {
                         text: addBtn.text, iconCls: 'icon-add', hidden: addBtn.isHidden,
                         handler: addBtn.fn
-                    }]
+                    }
+                    ]
             });
-
 
             return _form;
         };
@@ -6336,6 +6978,100 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return _form;
         };
         
+        Form.extra = function(url, data, edit, hasTabs) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            if(hasTabs == true)
+                            {
+                                var uploadComponent = Ext.getCmp('form_tabs').items.items[0];
+                            }
+                            
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                                if(hasTabs == true)
+                                {
+                                    photoStore = Utils.getPhotoStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    photoStore = Utils.getPhotoStore(_form);
+                                }
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                                if(hasTabs == true)
+                                {
+                                    documentStore = Utils.getDocumentStore(uploadComponent);
+                                }
+                                else
+                                {
+                                    documentStore = Utils.getDocumentStore(_form);
+                                }
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            
+                            if (form.isValid())
+                            {
+                                
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+//                                        if (!edit)
+//                                        {
+//                                            Modal.closeAssetWindow();
+//                                        }
+                                            Modal.assetExtraWindow.close();
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
         Form.asset = function(url, data, edit, hasTabs) {
             var _form = Ext.create('Ext.form.Panel', {
                 frame: true,
@@ -6415,6 +7151,142 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 //                                            Modal.closeAssetWindow();
 //                                        }
                                             Modal.closeAssetWindow();
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelVerySmall2 = function(store, records) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+//                           debugger;
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            if (form.isValid())
+                            {
+                                Ext.each(records,function(obj){
+                                    obj.data.warehouse_id = formValues.warehouse_id;
+                                    obj.data.ruang_id = formValues.ruang_id;
+                                    obj.data.rak_id = formValues.rak_id;
+                                    store.remove(obj);
+                                });
+                                Modal.verySmallWindow.close();
+                                
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+        Form.panelVerySmallAngkutan = function(url, data, deleted) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var formValues = form.getValues();
+                            Ext.each(deleted,function(obj){
+                                obj.warehouse_id = formValues.warehouse_id;
+                                obj.ruang_id = formValues.ruang_id;
+                                obj.rak_id = formValues.rak_id;
+                            });
+                            if (form.isValid())
+                            {
+                                var dataSend = {
+                                    data: deleted
+                                };
+                        $.ajax({
+                            type: 'POST',
+                            data: dataSend,
+                            dataType: 'json',
+                            url: url,
+                            success: function() {
+                                data.load();
+                                Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                Modal.verySmallWindow.close();
+                            }
+                        });
+                                
+                                
+                                
+
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+
+            return _form;
+        };
+        
+         Form.panelVerySmall = function(url, data, data2) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan',  iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                           
+                            var form = _form.getForm();
+                            
+                            if (form.isValid())
+                            {
+                                
+                                form.submit({
+                                    success: function() {
+                                        data.load();
+                                        if(data2 != null)
+                                        {
+                                            data2.load();
+                                        }
+                                        Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+
+//                                        if (!edit)
+//                                        {
+//                                            Modal.closeAssetWindow();
+//                                        }
+                                            Modal.verySmallWindow.close();
                                     },
                                     failure: function() {
                                         Ext.MessageBox.alert('Fail', 'Changes saved fail.');
@@ -6554,6 +7426,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         if (Modal.assetSecondaryWindow.isVisible(true))
                                         {
                                             var id_ext_asset = Ext.getCmp('id_ext_asset_detail_penggunaan_angkutan').value;
+                                            
                                             $.ajax({
                                                 url:BASE_URL + 'asset_angkutan_detail_penggunaan/getTotalPenggunaanAngkutanUdara/',
                                                 type: "POST",
@@ -6570,6 +7443,33 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                             Ext.getCmp('total_detail_penggunaan_angkutan_udara_mesin2').setValue(updateTotalPenggunaanMesin2);
                                                         
                                                         
+                                                 }
+
+                                                }
+                                             });
+                                             
+                                              $.ajax({
+                                                url:BASE_URL + 'asset_angkutan_udara/getSpecificAngkutanUdara/',
+                                                type: "POST",
+                                                dataType:'json',
+                                                async:false,
+                                                data:{id_ext_asset:id_ext_asset},
+                                                success:function(response, status){
+                                                 if(status == 'success')
+                                                 {
+//                                                       var rep= response.results[0];
+                                                       var a = response.results[0].udara_inisialisasi_mesin1;
+                                                       var b = response.results[0].udara_inisialisasi_mesin2;
+//                                                       var c = response.results[0].udara_no_mesin2;
+                                                       var d = response.results[0].udara_umur_pesawat;
+//                                                       var e = response.results[0].no_mesin;
+                                                       
+                                                       Ext.getCmp('udara_inisialisasi_mesin1').setValue(a);
+                                                       Ext.getCmp('udara_inisialisasi_mesin2').setValue(b);
+//                                                       Ext.getCmp('udara_no_mesin2').setValue(c);
+                                                       Ext.getCmp('udara_umur_pesawat').setValue(d);
+//                                                       Ext.getCmp('no_mesin').setValue(e);
+                                                       
                                                  }
 
                                                 }
@@ -6753,6 +7653,135 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return _form;
         };
+        
+        Form.Component.unitNew = function(edit,form,isReadOnly,isUnorReadOnly) {
+            
+            if(user_kd_lokasi != null) //user session kd_lokasi
+            {
+                isReadOnly = true;
+            }
+            
+            var component = {
+                xtype: 'fieldset',
+//                itemId : 'unit_selection',
+                title: 'UNIT',
+                itemId:'fieldset_unit',
+//                formBind:true,
+                layout: 'column',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        itemId:'column_unker',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Kerja *',
+                                name: 'kd_lokasi',
+//                                id: 'kd_lokasi',
+                                itemId: 'unker',
+                                editable:false,
+                                allowBlank: false,
+                                readOnly:(isReadOnly == true)?true:false,
+                                store: Reference.Data.unker,
+                                valueField: 'kdlok',
+                                displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(isReadOnly == false)
+                                            {
+                                                comboField.expand();
+                                            }
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+
+                                            if (value !== null)
+                                            {
+                                                var unorField = form.getForm().findField('kode_unor');
+                                                if (unorField !== null) {
+                                                    if (value.length > 0) {
+                                                        unorField.enable();
+                                                        Reference.Data.unor.changeParams({params: {id_open: 1, kode_unker: value}});
+                                                    }
+                                                    else {
+                                                        unorField.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('unit organisasi could not be found');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .5,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '100%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Unit Organisasi',
+                                name: 'kode_unor',
+//                                id: 'kode_unor',
+                                disabled: false,
+                                allowBlank: true,
+                                editable:false,
+                                readOnly:(isReadOnly == true)?true:false,
+                                store: Reference.Data.unor,
+                                valueField: 'kode_unor',
+                                displayField: 'nama_unor', emptyText: 'Pilih Unit Organisasi',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            if(isReadOnly == false)
+                                            {
+                                                var dataStore = comboField.getStore();
+               
+                                                var kd_lokasi = form.getForm().findField("kd_lokasi");
+                                                if (kd_lokasi !== null)
+                                                {
+                                                    dataStore.clearFilter();
+                                                    dataStore.filter({property:"kd_lokasi", value:kd_lokasi.value});
+                                                }
+                                                comboField.expand();
+                                            }
+                                            
+                                            
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var kodeUnorField = form.getForm().findField('kode_unor');
+                                            if (kodeUnorField !== null && !isNaN(value)) {
+                                                kodeUnorField.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }]
+            };
+
+
+            return component;
+        };
 
         Form.Component.unit = function(edit,form,isReadOnly,isUnorReadOnly) {
             
@@ -6824,6 +7853,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unker,
                                 valueField: 'kdlok',
+                                editable:false,
                                 displayField: 'ur_upb', emptyText: 'Pilih Unit Kerja',
                                 typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Unit Kerja',
                                 listeners: {
@@ -6877,6 +7907,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'nama_unor',
                                 disabled: false,
                                 allowBlank: true,
+                                editable:false,
                                 readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unor,
                                 valueField: 'kode_unor',
@@ -7105,6 +8136,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'nama_unker',
                                 itemId: 'unker',
                                 allowBlank: true,
+                                editable:false,
                                 readOnly:(isReadOnly == true)?true:false,
                                 store: Reference.Data.unker,
                                 valueField: 'kdlok',
@@ -7457,7 +8489,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         Form.Component.fileUpload = function(edit) {
             
             var photoStore = new Ext.create('Ext.data.Store', {
-                                        fields: ['url', 'name']
+                                        fields: ['url', 'name'],
                                     });
                                     
             var documentStore = new Ext.create('Ext.data.Store', {
@@ -7907,6 +8939,196 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return component;
         };
         
+        Form.Component.klasifikasiAsetNew = function(edit,form) {
+
+            var component = {
+                xtype: 'fieldset',
+                title: 'KLASIFIKASI ASET',
+                layout: 'column',
+                itemId:'fieldset_klasifikasi_aset',
+                border: false,
+                defaultType: 'container',
+                margin: 0,
+                items: [{
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'kd_lvl1',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboLvl1 = form.getForm().findField('combo_kd_lvl1');
+                                            if (comboLvl1 !== null)
+                                            {
+                                                comboLvl1.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_lvl2',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboLvl2 = form.getForm().findField('combo_kd_lvl2');
+                                            if (comboLvl2 !== null)
+                                            {
+                                                comboLvl2.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'kd_lvl3',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboLvl3 = form.getForm().findField('combo_kd_lvl3');
+                                            if (comboLvl3 !== null)
+                                            {
+                                                comboLvl3.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Level 1 *',
+                                name: 'combo_kd_lvl1',
+                                hideLabel: false,
+                                allowBlank: true,
+                                editable:false,
+                                store: Reference.Data.klasifikasiAset_lvl1,
+                                valueField: 'kd_lvl1',
+                                displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if (value !== null)
+                                            {
+                                                var Lvl3Field = form.getForm().findField('combo_kd_lvl3'); 
+                                                var Lvl2Field = form.getForm().findField('combo_kd_lvl2');
+                                                Lvl2Field.disable();
+                                                Lvl3Field.disable();
+                                                var Lvl1Field = form.getForm().findField('kd_lvl1');
+                                                if (Lvl1Field !== null && Lvl2Field !== null) {
+                                                    if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                        Lvl2Field.enable();
+                                                        Lvl1Field.setValue(value);
+                                                        Reference.Data.klasifikasiAset_lvl2.changeParams({params: {id_open: 1, kd_lvl1: value}});
+                                                    }
+                                                    else {
+                                                        Lvl2Field.disable();
+                                                    }
+                                                }
+                                                else {
+                                                    console.error('error');
+                                                }
+                                            }
+
+                                        },
+                                        scope: this
+                                    }
+                                }
+                            },
+                            {
+                                fieldLabel: 'Level 2 *',
+                                name: 'combo_kd_lvl2',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                store: Reference.Data.klasifikasiAset_lvl2,
+                                valueField: 'kd_lvl2',
+                                displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var Lvl3Field = form.getForm().findField('combo_kd_lvl3');
+                                            var Lvl2Field = form.getForm().findField('kd_lvl2');
+                                            var Lvl1Field = form.getForm().findField('kd_lvl1').getValue();
+                                            if (Lvl3Field !== null && Lvl2Field !== null) {
+                                                if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                    Lvl3Field.enable();
+                                                    Lvl2Field.setValue(value);
+                                                    Reference.Data.klasifikasiAset_lvl3.changeParams({params: {id_open: 1, kd_lvl1: Lvl1Field, kd_lvl2: value}});
+                                                }
+                                                else {
+                                                    Lvl3Field.disable();
+                                                }
+                                            }
+                                            else {
+                                                console.error('error');
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }, {
+                        columnWidth: .50,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'combo',
+                        items: [{
+                                fieldLabel: 'Level 3 *',
+                                name: 'combo_kd_lvl3',
+                                disabled: true,
+                                allowBlank: false,
+                                editable:false,
+                                labelWidth : 110,
+                                store: Reference.Data.klasifikasiAset_lvl3,
+                                valueField: 'kd_lvl3',
+                                displayField: 'nama', emptyText: 'Klasifikasi Aset',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Klasifikasi Aset',
+                                listeners: {
+                                    'focus': {
+                                        fn: function(comboField) {
+                                            comboField.expand();
+                                        },
+                                        scope: this
+                                    },
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var Lvl3Field = form.getForm().findField('kd_lvl3');
+
+                                            if (Lvl3Field !== null && !isNaN(value)) {
+                                                Lvl3Field.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }]
+                    }]
+            };
+
+
+            return component;
+        };
+        
         Form.Component.klasifikasiAset = function(edit) {
 
             var component = {
@@ -7977,6 +9199,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 id: 'combo_kd_lvl1',
                                 hideLabel: false,
                                 allowBlank: true,
+                                editable:false,
                                 store: Reference.Data.klasifikasiAset_lvl1,
                                 valueField: 'kd_lvl1',
                                 displayField: 'nama', emptyText: 'Klasifikasi Aset',
@@ -8022,6 +9245,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'combo_kd_lvl2',
                                 id: 'combo_kd_lvl2',
                                 disabled: true,
+                                editable:false,
                                 allowBlank: false,
                                 store: Reference.Data.klasifikasiAset_lvl2,
                                 valueField: 'kd_lvl2',
@@ -8068,6 +9292,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'combo_kd_lvl3',
                                 id: 'combo_kd_lvl3',
                                 disabled: true,
+                                editable:false,
                                 allowBlank: false,
                                 labelWidth : 110,
                                 store: Reference.Data.klasifikasiAset_lvl3,
@@ -8561,7 +9786,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
         };
         
         
-        Form.Component.mechanicalAngkutanUdara = function() {
+        Form.Component.mechanicalAngkutanUdara = function(edit) {
             var component = {
                 xtype: 'fieldset',
                 layout: 'column',
@@ -8591,10 +9816,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'pabrik'
                             }, {
                                 fieldLabel: 'No Mesin 1',
-                                name: 'no_mesin'
+                                name: 'no_mesin',
+                                id:'no_mesin',
+                                disabled:edit,
                             },{
                                 fieldLabel: 'No Mesin 2',
-                                name: 'udara_no_mesin2'
+                                name: 'udara_no_mesin2',
+                                id:'udara_no_mesin2',
+                                disabled:edit,
                             }]
                     }, {
                         columnWidth: .33,
@@ -8614,16 +9843,20 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 name: 'negara'
                             },{
                                 xtype:'numberfield',
-                                fieldLabel: 'Inisialisasi Mesin 1',
+                                fieldLabel: 'Umur Mesin 1',
                                 name: 'udara_inisialisasi_mesin1',
+                                id:'udara_inisialisasi_mesin1',
                                 value:0,
                                 minValue:0,
+                                disabled:edit,
                             },{
                                 xtype:'numberfield',
-                                fieldLabel: 'Inisialisasi Mesin 2',
+                                fieldLabel: 'Umur Mesin 2',
                                 name: 'udara_inisialisasi_mesin2',
+                                id:'udara_inisialisasi_mesin2',
                                 value:0,
-                                minValue:0
+                                minValue:0,
+                                disabled:edit,
                             }, ]
                     }, {
                         columnWidth: .34,
@@ -8644,7 +9877,15 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             }, {
                                 fieldLabel: 'Lengkap 3',
                                 name: 'lengkap3'
-                            }]
+                            },
+                            {
+                                xtype:'numberfield',
+                                fieldLabel: 'Umur Pesawat',
+                                name: 'udara_umur_pesawat',
+                                id:'udara_umur_pesawat',
+//                                value:0,
+//                                minValue:0
+                            },]
                     }]
             };
 
@@ -9343,6 +10584,42 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return component;
         };
         
+        Form.Component.gridSubParts = function(setting,isInventoryPengeluaran) {
+    
+
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 325,
+                anchor: '100%',
+                title: 'SUB PARTS',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'container',height:300,items:[Grid.parts(setting,false,isInventoryPengeluaran)]}]
+            };
+
+            return component;
+        };
+        
+        Form.Component.gridSubSubParts = function(setting,isInventoryPengeluaran) {
+    
+
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 325,
+                anchor: '100%',
+                title: 'SUB SUB PARTS',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'container',height:300,items:[Grid.parts(setting,false,isInventoryPengeluaran)]}]
+            };
+
+            return component;
+        };
+        
          Form.Component.gridPartsInventoryPenyimpanan = function(setting) {
             
             Ext.apply(Ext.form.field.VTypes, {
@@ -9364,6 +10641,59 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                 frame: true,
                 defaultType: 'container',
                 items: [{xtype:'textfield', readOnly:true, vtype:'ZeroOnly', labelWidth:240, id:'inventory_penyimpanan_grid_invalid_data', fieldLabel:'Jumlah data pada grid yang harus diperbaiki', name:'invalid_grid_field_count',value:0},{xtype:'container',height:300,items:[Grid.parts(setting,true,false)]}]
+            };
+
+            return component;
+        };
+        
+        
+        Form.Component.gridSubPartsInventoryPenyimpanan = function(setting) {
+            
+            Ext.apply(Ext.form.field.VTypes, {
+                ZeroOnly:  function(v) {
+                    return /0$/.test(v);
+                },
+                ZeroOnlyText: 'Terdapat kesalahan pada data di grid',
+                ZeroOnlyMask: ''
+            });
+    
+
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 350,
+                anchor: '100%',
+                title: 'SUB PARTS',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'textfield', readOnly:true, vtype:'ZeroOnly', labelWidth:240, id:'inventory_penyimpanan_grid_sub_parts_invalid_data', fieldLabel:'Jumlah data pada grid yang harus diperbaiki', name:'invalid_grid_field_count',value:0},{xtype:'container',height:300,items:[Grid.parts(setting,true,false)]}]
+            };
+
+            return component;
+        };
+        
+        Form.Component.gridSubSubPartsInventoryPenyimpanan = function(setting) {
+            
+            Ext.apply(Ext.form.field.VTypes, {
+                ZeroOnly:  function(v) {
+                    return /0$/.test(v);
+                },
+                ZeroOnlyText: 'Terdapat kesalahan pada data di grid',
+                ZeroOnlyMask: ''
+            });
+    
+
+            var component = {
+                xtype: 'fieldset',
+                layout:'anchor',
+                height: 350,
+                anchor: '100%',
+                title: 'SUB SUB PARTS',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                items: [{xtype:'textfield', readOnly:true, vtype:'ZeroOnly', labelWidth:240, id:'inventory_penyimpanan_grid_sub_sub_parts_invalid_data', fieldLabel:'Jumlah data pada grid yang harus diperbaiki', name:'invalid_grid_field_count',value:0},{xtype:'container',height:300,items:[Grid.parts(setting,true,false)]}]
             };
 
             return component;
@@ -11156,7 +12486,16 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                 }, {
                                     fieldLabel: 'Durasi',
                                     name: 'durasi'
-                                }]
+                                },
+                                (tipe_angkutan == 'udara')?{
+                                    xtype:'numberfield',
+                                    fieldLabel: 'Penambahan Umur Pesawat',
+                                    name:'penambahan_umur',
+                                    value:0,
+                                    minValue:0
+                                    
+                                }:{xtype:'displayfield'}
+                                ]
                         }, {
                             columnWidth: .33,
                             layout: 'anchor',
@@ -11652,54 +12991,9 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                         {
                         defaultType: 'hidden',
                         items: [{
-                                name:'no_induk_asset',
-                        }
-                            ,{
-                                name: 'warehouse_id',
-                                id: 'warehouse_id',
-                                listeners: {
-                                    change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboWarehouse = Ext.getCmp('combo_warehouse_id');
-                                            if (comboWarehouse !== null)
-                                            {
-                                                comboWarehouse.setValue(value);
-                                            }
-                                        }
-                                    }
+                                    name:'no_induk_asset',
                                 }
-                            }, {
-                                name: 'ruang_id',
-                                id: 'ruang_id',
-                                listeners: {
-                                    change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
-                                            if (comboWarehouseRuang !== null)
-                                            {
-                                                comboWarehouseRuang.setValue(value);
-                                            }
-                                        }
-                                    }
-                                }
-                            }, {
-                                name: 'rak_id',
-                                id: 'rak_id',
-                                listeners: {
-                                    change: function(obj, value) {
-                                        if (edit)
-                                        {
-                                            var comboWarehouseRak = Ext.getCmp('combo_rak_id');
-                                            if (comboWarehouseRak !== null)
-                                            {
-                                                comboWarehouseRak.setValue(value);
-                                            }
-                                        }
-                                    }
-                                }
-                            },
+                            ,
                                 {
                                 name: 'unit_waktu',
                                 id: 'unit_waktu',
@@ -11765,147 +13059,8 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             ]
                     },
                         
-                       {
-                            columnWidth: .34,
-                            layout: 'anchor',
-                            defaults: {
-                                anchor: '95%',
-                                labelWidth: 120
-                            },
-                            defaultType: 'textfield',
-                            items: [{
-                                    xtype: 'combo',
-                                    disabled: false,
-                                    fieldLabel: 'Warehouse',
-                                    name: 'combo_warehouse_id',
-                                    id : 'combo_warehouse_id',
-                                    allowBlank: true,
-                                    store: Reference.Data.warehouse,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                        listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var comboWarehouseRuang = Ext.getCmp('combo_ruang_id');
-                                                    var fieldWarehouse = Ext.getCmp('warehouse_id');
-                                                    
-                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            comboWarehouseRuang.enable();
-                                                            fieldWarehouse.setValue(value);
-                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
-                                                        }
-                                                        else {
-                                                            comboWarehouseRuang.disable();
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                }, {
-                                    xtype: 'combo',
-                                    disabled: true,
-                                    fieldLabel: 'Ruang',
-                                    name: 'combo_ruang_id',
-                                    id : 'combo_ruang_id',
-                                    allowBlank: false,
-                                    store: Reference.Data.warehouseRuang,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Ruang',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var comboWarehouseRak = Ext.getCmp('combo_rak_id');
-                                                    var fieldWarehouseRuang = Ext.getCmp('ruang_id');
-                                                    
-                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            comboWarehouseRak.enable();
-                                                            fieldWarehouseRuang.setValue(value);
-                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
-                                                        }
-                                                        else {
-                                                            comboWarehouseRak.disable();
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                }, {
-                                    xtype: 'combo',
-                                    disabled: true,
-                                    fieldLabel: 'Rak',
-                                    name: 'combo_rak_id',
-                                    id : 'combo_rak_id',
-                                    allowBlank: false,
-                                    store: Reference.Data.warehouseRak,
-                                    valueField: 'id',
-                                    displayField: 'nama', emptyText: 'Pilih Rak',
-                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
-                                    listeners: {
-                                        'focus': {
-                                            fn: function(comboField) {
-                                                comboField.expand();
-                                            },
-                                            scope: this
-                                        },
-                                        'change': {
-                                            fn: function(obj, value) {
-
-                                                if (value !== null)
-                                                {
-                                                    var fieldWarehouseRak = Ext.getCmp('rak_id');
-                                                    
-                                                    if (fieldWarehouseRak != null) {
-                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
-                                                            fieldWarehouseRak.setValue(value);
-                                                        }
-                                                    }
-                                                    else {
-                                                        console.error('error');
-                                                    }
-                                                }
-
-                                            },
-                                            scope: this
-                                        }
-                                    }
-                                }
-                                  ]
-                        }, {
-                            columnWidth: .33,
+                        {
+                            columnWidth: .5,
                             layout: 'anchor',
                             defaults: {
                                 anchor: '95%',
@@ -12009,7 +13164,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     name: 'no_dana'
                                 },]
                         }, {
-                            columnWidth: .33,
+                            columnWidth: .5,
                             layout: 'anchor',
                             defaults: {
                                 anchor: '100%',
@@ -12239,6 +13394,441 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     boxLabel: 'Ya',
                                 }
                                 
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.warehousePerlengkapanSmall = function(edit,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'anchor',
+                    anchor: '100%',
+                    itemId:'fieldset_warehouse',
+                    title: 'DATA WAREHOUSE',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                        {
+                        defaultType: 'hidden',
+                        items: [{
+                                xtype:'hidden',
+                                name:'id_collection',
+                        },{
+                                name: 'warehouse_id',
+//                                id: 'warehouse_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouse = form.getForm().findField('combo_warehouse_id');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'ruang_id',
+//                                id: 'ruang_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRuang = form.getForm().findField('combo_ruang_id');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'rak_id',
+//                                id: 'rak_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRak = form.getForm().findField('combo_rak_id');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'combo_warehouse_id',
+//                                    id : 'combo_warehouse_id',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    editable:false,
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = form.getForm().findField('combo_ruang_id');
+                                                    var fieldWarehouse = form.getForm().findField('warehouse_id');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Ruang',
+                                    name: 'combo_ruang_id',
+//                                    id : 'combo_ruang_id',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    editable:false,
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = form.getForm().findField('combo_rak_id');
+                                                    var fieldWarehouseRuang = form.getForm().findField('ruang_id');
+                                                    
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Rak',
+                                    name: 'combo_rak_id',
+//                                    id : 'combo_rak_id',
+                                    allowBlank: true,
+                                    editable:false,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = form.getForm().findField('rak_id');
+                                                    
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }
+                            ]
+                    },
+                        ]
+                }]
+
+            return component;
+        };
+        
+         Form.Component.warehousePerlengkapan = function(edit,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    itemId:'fieldset_warehouse',
+                    title: 'DATA WAREHOUSE',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                        {
+                        defaultType: 'hidden',
+                        items: [{
+                                name: 'warehouse_id',
+//                                id: 'warehouse_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouse = form.getForm().findField('combo_warehouse_id');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'ruang_id',
+//                                id: 'ruang_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRuang = form.getForm().findField('combo_ruang_id');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }, {
+                                name: 'rak_id',
+//                                id: 'rak_id',
+                                listeners: {
+                                    change: function(obj, value) {
+                                        if (edit)
+                                        {
+                                            var comboWarehouseRak = form.getForm().findField('combo_rak_id');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            ]
+                    },
+                        
+                       {
+                            columnWidth: .34,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '98%',
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'combo_warehouse_id',
+//                                    id : 'combo_warehouse_id',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    editable:false,
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = form.getForm().findField('combo_ruang_id');
+                                                    var fieldWarehouse = form.getForm().findField('warehouse_id');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, 
+                                  ]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '98%',
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Ruang',
+                                    name: 'combo_ruang_id',
+//                                    id : 'combo_ruang_id',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    editable:false,
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = form.getForm().findField('combo_rak_id');
+                                                    var fieldWarehouseRuang = form.getForm().findField('ruang_id');
+                                                    
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },]
+                        }, {
+                            columnWidth: .33,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '98%',
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Rak',
+                                    name: 'combo_rak_id',
+//                                    id : 'combo_rak_id',
+                                    allowBlank: true,
+                                    editable:false,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+//                                        'focus': {
+//                                            fn: function(comboField) {
+//                                                comboField.expand();
+//                                            },
+//                                            scope: this
+//                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = form.getForm().findField('rak_id');
+                                                    
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }
                             ]
                         }]
                 }]
@@ -12591,13 +14181,13 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     }
                                 },
                                     {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     disabled: false,
                                     fieldLabel: 'Kode Barang',
                                     name: 'kd_brg',
                                     id:'inventory_data_perlengkapan_kode_barang'
                                     },{
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Part Number *',
@@ -12610,7 +14200,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     fieldLabel: 'Serial Number',
                                     name: 'serial_number',
                                     id:'inventory_data_perlengkapan_serial_number',
@@ -12636,7 +14226,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     }
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Status Barang',
@@ -12649,14 +14239,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'numberfield',
                                     fieldLabel: 'Qty',
                                     name: 'qty',
                                     id:'inventory_data_perlengkapan_qty'
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     disabled: false,
                                     fieldLabel: 'Asal Barang',
                                     name: 'asal_barang',
@@ -12679,6 +14269,756 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
 
             return component;
         };
+        
+        Form.Component.dataInventoryPerlengkapanSubPartWithWarehouse = function(readOnly,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                        
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'hidden',
+                                name: 'id_warehouse',
+                                id: 'inventory_perlengkapan_id_warehouse',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouse = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'id_warehouse_ruang',
+                                id: 'inventory_perlengkapan_id_warehouse_ruang',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouseRuang = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_ruang');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'id_warehouse_rak',
+                                id: 'inventory_perlengkapan_id_warehouse_rak',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouseRak = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_rak');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_warehouse',
+                                id: 'inventory_perlengkapan_nama_warehouse',
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_ruang',
+                                id: 'inventory_perlengkapan_nama_warehouse_ruang',
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_rak',
+                                id: 'inventory_perlengkapan_nama_warehouse_rak',
+                            },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'combo_warehouse_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_ruang');
+                                                    var fieldWarehouse = Ext.getCmp('inventory_perlengkapan_id_warehouse');
+                                                    var fieldNamaWarehouse = Ext.getCmp('inventory_perlengkapan_nama_warehouse');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            fieldNamaWarehouse.setValue(obj.rawValue);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Ruang',
+                                    name: 'combo_ruang_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse_ruang',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_rak');
+                                                    var fieldWarehouseRuang = Ext.getCmp('inventory_perlengkapan_id_warehouse_ruang');
+                                                    var fieldNamaWarehouseRuang = Ext.getCmp('inventory_perlengkapan_nama_warehouse_ruang');
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            fieldNamaWarehouseRuang.setValue(obj.rawValue);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Rak',
+                                    name: 'combo_rak_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse_rak',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = Ext.getCmp('inventory_perlengkapan_id_warehouse_rak');
+                                                    var fieldNamaWarehouseRak = Ext.getCmp('inventory_perlengkapan_nama_warehouse_rak');
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                            fieldNamaWarehouseRak.setValue(obj.rawValue);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                    {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
+                                        fieldLabel:'Part',
+                                        xtype:'combo',
+                                        name:'id_part',
+//                                        readOnly:(readOnly == true)?true:false,
+                                        allowBlank: false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    var sub_part = Ext.getCmp('inventory_perlengkapan_sub_part_id');
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null)
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },}
+                                        }    
+                                    },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                name: 'part_number',
+                                id:'inventory_perlengkapan_sub_part_id',
+                                allowBlank: false,
+                                editable:false,
+//                                readOnly:(readOnly == true)?true:false,
+                                store: Reference.Data.subPart,
+                                valueField: 'part_number',
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    if(value != null && value != "")
+                                                    {
+//                                                        debugger;
+                                                        var x = form.getForm();
+                                                        x.checkValidity();
+//                                                        x.wasValid = true;
+                                                    }
+                                                    
+                                                    }
+                                        } 
+                             }
+                             },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+         Form.Component.dataInventoryPerlengkapanSubSubPartWithWarehouse = function(readOnly,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL SUB SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                        
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [{
+                                xtype:'hidden',
+                                name: 'id_warehouse',
+                                id: 'inventory_perlengkapan_id_warehouse',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouse = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse');
+                                            if (comboWarehouse !== null)
+                                            {
+                                                comboWarehouse.setValue(value);
+                                            }
+
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'id_warehouse_ruang',
+                                id: 'inventory_perlengkapan_id_warehouse_ruang',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouseRuang = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_ruang');
+                                            if (comboWarehouseRuang !== null)
+                                            {
+                                                comboWarehouseRuang.setValue(value);
+                                            }
+                                        
+                                    }
+                                }
+                            }, {
+                                xtype:'hidden',
+                                name: 'id_warehouse_rak',
+                                id: 'inventory_perlengkapan_id_warehouse_rak',
+                                listeners: {
+                                    change: function(obj, value) {
+
+                                            var comboWarehouseRak = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_rak');
+                                            if (comboWarehouseRak !== null)
+                                            {
+                                                comboWarehouseRak.setValue(value);
+                                            }
+                                        
+                                    }
+                                }
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_warehouse',
+                                id: 'inventory_perlengkapan_nama_warehouse',
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_ruang',
+                                id: 'inventory_perlengkapan_nama_warehouse_ruang',
+                            },
+                            {
+                                xtype:'hidden',
+                                name: 'nama_rak',
+                                id: 'inventory_perlengkapan_nama_warehouse_rak',
+                            },
+                                {
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Warehouse',
+                                    name: 'combo_warehouse_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouse,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRuang = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_ruang');
+                                                    var fieldWarehouse = Ext.getCmp('inventory_perlengkapan_id_warehouse');
+                                                    var fieldNamaWarehouse = Ext.getCmp('inventory_perlengkapan_nama_warehouse');
+                                                    
+                                                    if (comboWarehouseRuang != null && fieldWarehouse != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRuang.enable();
+                                                            fieldWarehouse.setValue(value);
+                                                            fieldNamaWarehouse.setValue(obj.rawValue);
+                                                            Reference.Data.warehouseRuang.changeParams({params: {id_open: 1, warehouse_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRuang.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Ruang',
+                                    name: 'combo_ruang_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse_ruang',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseRuang,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Ruang',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var comboWarehouseRak = Ext.getCmp('combo_inventory_perlengkapan_id_warehouse_rak');
+                                                    var fieldWarehouseRuang = Ext.getCmp('inventory_perlengkapan_id_warehouse_ruang');
+                                                    var fieldNamaWarehouseRuang = Ext.getCmp('inventory_perlengkapan_nama_warehouse_ruang');
+                                                    if (comboWarehouseRak != null && fieldWarehouseRuang != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            comboWarehouseRak.enable();
+                                                            fieldWarehouseRuang.setValue(value);
+                                                            fieldNamaWarehouseRuang.setValue(obj.rawValue);
+                                                            Reference.Data.warehouseRak.changeParams({params: {id_open: 1, warehouseruang_id: value}});
+                                                        }
+                                                        else {
+                                                            comboWarehouseRak.disable();
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Rak',
+                                    name: 'combo_rak_id',
+                                    id : 'combo_inventory_perlengkapan_id_warehouse_rak',
+                                    allowBlank: true,
+                                    store: Reference.Data.warehouseRak,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Rak',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'focus': {
+                                            fn: function(comboField) {
+                                                comboField.expand();
+                                            },
+                                            scope: this
+                                        },
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null)
+                                                {
+                                                    var fieldWarehouseRak = Ext.getCmp('inventory_perlengkapan_id_warehouse_rak');
+                                                    var fieldNamaWarehouseRak = Ext.getCmp('inventory_perlengkapan_nama_warehouse_rak');
+                                                    if (fieldWarehouseRak != null) {
+                                                        if (!isNaN(value) && value.length > 0 || edit === true) {
+                                                            fieldWarehouseRak.setValue(value);
+                                                            fieldNamaWarehouseRak.setValue(obj.rawValue);
+                                                        }
+                                                    }
+                                                    else {
+                                                        console.error('error');
+                                                    }
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                    {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },
+                             {
+                                        fieldLabel:'Part',
+                                        name:'id_part',
+                                        xtype:'combo',
+                                        allowBlank: false,
+//                                        readOnly:(readOnly == true)?true:false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+//                                                    var sub_part = Ext.getCmp('combo_inventory_perlengkapan_sub_sub_part_sub_part');
+//                                                    var sub_sub_part = Ext.getCmp('inventory_perlengkapan_sub_sub_part_id');\
+                                                    var sub_part = form.getForm().findField("id_sub_part");
+                                                    var sub_sub_part = form.getForm().findField("part_number");
+                                                    sub_sub_part.setDisabled(true);
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_sub_part.setValue('');
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },scope: this}
+                                        }    
+                                    },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                name:'id_sub_part',
+//                                id:'combo_inventory_perlengkapan_sub_sub_part_sub_part',
+                                allowBlank: false,
+//                                readOnly:(readOnly == true)?true:false,
+                                store: Reference.Data.subPart,
+                                valueField: 'id',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Sub Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var sub_sub_part = form.getForm().findField("part_number");
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         sub_sub_part.setDisabled(false);
+                                                         Reference.Data.subSubPart.changeParams({params:{id_open:1, id_sub_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_sub_part.setDisabled(true);
+                                                    }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Sub Part',
+                                name: 'part_number',
+                                allowBlank: false,
+//                                readOnly:(readOnly == true)?true:false,
+//                                id:'inventory_perlengkapan_sub_sub_part_id',
+                                store: Reference.Data.subSubPart,
+                                valueField: 'part_number',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if(value != "" && value != null)
+                                            {
+                                                    form.getForm().checkValidity();
+                                            }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null || value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
         
         
         
@@ -12703,26 +15043,27 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                             defaultType: 'textfield',
                             items: [
                                     {
-                                    readOnly:readOnly,
+//                                    readOnly:readOnly,
                                     disabled: false,
                                     fieldLabel: 'Kode Barang',
                                     name: 'kd_brg',
                                     id:'inventory_data_perlengkapan_kode_barang'
                                     },{
-                                    readOnly:readOnly,
+//                                    readOnly:readOnly,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Part *',
                                     name: 'part_number',
                                     id:'inventory_data_perlengkapan_part_number',
                                     allowBlank: false,
+                                    editable:false,
                                     store: Reference.Data.partNumber,
                                     valueField: 'part_number',
                                     displayField: 'nama', emptyText: 'Pilih Part Number',
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     fieldLabel: 'Serial Number',
                                     name: 'serial_number',
                                     id:'inventory_data_perlengkapan_serial_number',
@@ -12730,7 +15071,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                         'change': {
                                             fn: function(obj, value) {
 
-                                                if (value !== null || value != '')
+                                                if (value !== null && value != '')
                                                 {
                                                     var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
                                                     qtyField.setValue(1);
@@ -12748,7 +15089,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     }
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'combo',
                                     disabled: false,
                                     fieldLabel: 'Status Barang',
@@ -12761,14 +15102,14 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                     typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     xtype: 'numberfield',
                                     fieldLabel: 'Qty',
                                     name: 'qty',
                                     id:'inventory_data_perlengkapan_qty'
                                 },
                                 {
-                                    readOnly:(readOnly == true)?true:false,
+//                                    readOnly:(readOnly == true)?true:false,
                                     disabled: false,
                                     fieldLabel: 'Asal Barang',
                                     name: 'asal_barang',
@@ -12792,6 +15133,838 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
             return component;
         };
         
+        Form.Component.dataInventoryPerlengkapanSubPart = function(readOnly,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
+                                        fieldLabel:'Part',
+                                        xtype:'combo',
+                                        name:'id_part',
+//                                        readOnly:(readOnly == true)?true:false,
+                                        allowBlank: false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    var sub_part = Ext.getCmp('inventory_perlengkapan_sub_part_id');
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null)
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },}
+                                        }    
+                                    },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                name: 'part_number',
+                                id:'inventory_perlengkapan_sub_part_id',
+                                allowBlank: false,
+                                editable:false,
+//                                readOnly:(readOnly == true)?true:false,
+                                store: Reference.Data.subPart,
+                                valueField: 'part_number',
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    if(value != null && value != "")
+                                                    {
+//                                                        debugger;
+                                                        var x = form.getForm();
+                                                        x.checkValidity();
+//                                                        x.wasValid = true;
+                                                    }
+                                                    
+                                                    }
+                                        } 
+                             }
+                             },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null && value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_sub_part_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_sub_part_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_sub_part_qty'
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.dataInventoryPerlengkapanSubSubPart = function(readOnly,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL SUB SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },
+                                    {
+                                        fieldLabel:'Part',
+                                        name:'id_part',
+                                        xtype:'combo',
+                                        allowBlank: false,
+//                                        readOnly:(readOnly == true)?true:false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+//                                                    var sub_part = Ext.getCmp('combo_inventory_perlengkapan_sub_sub_part_sub_part');
+//                                                    var sub_sub_part = Ext.getCmp('inventory_perlengkapan_sub_sub_part_id');\
+                                                    var sub_part = form.getForm().findField("id_sub_part");
+                                                    var sub_sub_part = form.getForm().findField("part_number");
+                                                    sub_sub_part.setDisabled(true);
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_sub_part.setValue('');
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },scope: this}
+                                        }    
+                                    },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                name:'id_sub_part',
+                                id:'combo_inventory_perlengkapan_sub_sub_part_sub_part',
+                                allowBlank: false,
+//                                readOnly:(readOnly == true)?true:false,
+                                store: Reference.Data.subPart,
+                                valueField: 'id',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Sub Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var sub_sub_part = form.getForm().findField("part_number");
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         sub_sub_part.setDisabled(false);
+                                                         Reference.Data.subSubPart.changeParams({params:{id_open:1, id_sub_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_sub_part.setDisabled(true);
+                                                    }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Sub Part',
+                                name: 'part_number',
+                                allowBlank: false,
+//                                readOnly:(readOnly == true)?true:false,
+//                                id:'inventory_perlengkapan_sub_sub_part_id',
+                                store: Reference.Data.subSubPart,
+                                valueField: 'part_number',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if(value != "" && value != null)
+                                            {
+                                                    form.getForm().checkValidity();
+                                            }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null && value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
+                                },
+                                {
+//                                    readOnly:(readOnly == true)?true:false,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.dataInventoryPerlengkapanPartPengeluaran = function(readOnly) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL PERLENGKAPAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+                                    readOnly:true,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
+                                    readOnly:true,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Part *',
+                                    name: 'part_number',
+                                    id:'inventory_data_perlengkapan_part_number',
+                                    allowBlank: false,
+                                    editable:false,
+                                    store: Reference.Data.partNumber,
+                                    valueField: 'part_number',
+                                    displayField: 'nama', emptyText: 'Pilih Part Number',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                },
+                                {
+                                    readOnly:true,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null && value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    readOnly:true,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+                                    readOnly:true,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
+                                },
+                                {
+                                    readOnly:true,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.dataInventoryPerlengkapanSubPartPengeluaran = function(readOnly,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+                                    readOnly:true,
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },{
+                                        fieldLabel:'Part',
+                                        xtype:'combo',
+                                        name:'id_part',
+                                        readOnly:true,
+                                        allowBlank: false,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    var sub_part = Ext.getCmp('inventory_perlengkapan_sub_part_id');
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null)
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },}
+                                        }    
+                                    },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                name: 'part_number',
+                                id:'inventory_perlengkapan_sub_part_id',
+                                allowBlank: false,
+                                editable:false,
+                                readOnly:true,
+                                store: Reference.Data.subPart,
+                                valueField: 'part_number',
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+                                                    if(value != null && value != "")
+                                                    {
+//                                                        debugger;
+                                                        var x = form.getForm();
+                                                        x.checkValidity();
+//                                                        x.wasValid = true;
+                                                    }
+                                                    
+                                                    }
+                                        } 
+                             }
+                             },
+                                {
+                                    readOnly:true,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null && value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_sub_part_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_sub_part_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    readOnly:true,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+                                    readOnly:true,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_sub_part_qty'
+                                },
+                                {
+                                    readOnly:true,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.dataInventoryPerlengkapanSubSubPartPengeluaran = function(readOnly,form) {
+
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'DETAIL SUB SUB PART',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [ 
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 120
+                            },
+                            defaultType: 'textfield',
+                            items: [
+                                    {
+                                    readOnly:true,                     
+                                    disabled: false,
+                                    fieldLabel: 'Kode Barang',
+                                    name: 'kd_brg',
+                                    id:'inventory_data_perlengkapan_kode_barang'
+                                    },
+                                    {
+                                        fieldLabel:'Part',
+                                        name:'id_part',
+                                        xtype:'combo',
+                                        allowBlank: false,
+                                        readOnly:true,
+                                        store: Reference.Data.partNumber,
+                                        valueField: 'id',
+                                        displayField: 'nama', emptyText: 'Pilih Part',
+                                        editable:false,
+                                        typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                        listeners: {
+                                            'change': {
+                                                fn: function(obj, value) {
+//                                                    var sub_part = Ext.getCmp('combo_inventory_perlengkapan_sub_sub_part_sub_part');
+//                                                    var sub_sub_part = Ext.getCmp('inventory_perlengkapan_sub_sub_part_id');\
+                                                    var sub_part = form.getForm().findField("id_sub_part");
+                                                    var sub_sub_part = form.getForm().findField("part_number");
+                                                    sub_sub_part.setDisabled(true);
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_sub_part.setValue('');
+                                                        sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         sub_part.setDisabled(false);
+                                                         Reference.Data.subPart.changeParams({params:{id_open:1, id_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_part.setDisabled(true);
+                                                    }
+
+                                                },scope: this}
+                                        }    
+                                    },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Part',
+                                name:'id_sub_part',
+                                id:'combo_inventory_perlengkapan_sub_sub_part_sub_part',
+                                allowBlank: false,
+                                readOnly:true,
+                                store: Reference.Data.subPart,
+                                valueField: 'id',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Sub Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            var sub_sub_part = form.getForm().findField("part_number");
+                                                    
+                                                    if(readOnly == false)
+                                                    {
+                                                        sub_sub_part.setValue('');
+                                                    }
+                                                    
+                                                    
+                                                    if (value !== null && value != '')
+                                                    {
+                                                         sub_sub_part.setDisabled(false);
+                                                         Reference.Data.subSubPart.changeParams({params:{id_open:1, id_sub_part:value}});
+                                                    }
+                                                    else
+                                                    {
+                                                        sub_sub_part.setDisabled(true);
+                                                    }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                             {
+                                disabled:true,
+                                xtype: 'combo',
+                                fieldLabel: 'Sub Sub Part',
+                                name: 'part_number',
+                                allowBlank: false,
+                                readOnly:true,
+//                                id:'inventory_perlengkapan_sub_sub_part_id',
+                                store: Reference.Data.subSubPart,
+                                valueField: 'part_number',
+                                editable:false,
+                                displayField: 'nama', emptyText: 'Pilih Part',
+                                typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: 'Pilih Part',
+                                listeners: {
+                                    'change': {
+                                        fn: function(obj, value) {
+                                            if(value != "" && value != null)
+                                            {
+                                                    form.getForm().checkValidity();
+                                            }
+                                        },
+                                        scope: this
+                                    }
+                                }
+                             },
+                                {
+                                    readOnly:true,
+                                    fieldLabel: 'Serial Number',
+                                    name: 'serial_number',
+                                    id:'inventory_data_perlengkapan_serial_number',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+
+                                                if (value !== null && value != '')
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setValue(1);
+                                                    qtyField.setReadOnly(true);
+                                                }
+                                                else
+                                                {
+                                                    var qtyField = Ext.getCmp('inventory_data_perlengkapan_qty');
+                                                    qtyField.setReadOnly(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    readOnly:true,
+                                    xtype: 'combo',
+                                    disabled: false,
+                                    fieldLabel: 'Status Barang',
+                                    name: 'status_barang',
+                                    id:'inventory_data_perlengkapan_status_barang',
+                                    allowBlank: true,
+                                    store: Reference.Data.kondisiPerlengkapan,
+                                    valueField: 'value',
+                                    displayField: 'text', emptyText: 'Pilih Status',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: ''
+                                },
+                                {
+                                  readOnly:true,
+                                    xtype: 'numberfield',
+                                    fieldLabel: 'Qty',
+                                    name: 'qty',
+                                    id:'inventory_data_perlengkapan_qty'
+                                },
+                                {
+                                    readOnly:true,
+                                    disabled: false,
+                                    fieldLabel: 'Asal Barang',
+                                    name: 'asal_barang',
+                                    id:'inventory_data_perlengkapan_asal_barang'
+                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id',
+//                                    value:'',
+//                                },
+//                                {
+//                                    xtype:'hidden',
+//                                    name: 'id_inventory',
+//                                    value:'',
+//                                },
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
         
         
         
@@ -12936,6 +16109,367 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts)
                                                                     {
                                                                         Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').value));
                                                                         Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setMaxValue(Ext.getCmp('inventory_data_perlengkapan_qty').value);
+                                                                    }
+                                                                    
+                                                                }
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                        
+                                                        
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },{
+                                    xtype:'numberfield',
+                                    fieldLabel:'Qty Keluar',
+                                    name:'qty_keluar',
+                                    id:'inventory_pengeluaran_data_perlengkapan_parts_qty_keluar',
+                                    minValue:1,
+                                    disabled:true,
+                                    allowBlank:false,
+                                }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.dataInventoryPerlengkapanPengeluaranSubPart = function (readOnly,form){
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENGELUARAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 220
+                            },
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_id',
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'nomor_berita_acara',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_nomor_berita_acara',
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'nama_warehouse',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_nama_warehouse',
+                                    },
+                                    {
+                                    readOnly:readOnly,
+                                    xtype: 'combo',
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'id_warehouse',
+                                    id:'inventory_pengeluaran_data_perlengkapan_id_warehouse',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseInventoryPengeluaranSubPart,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                if (value !== null && value !== '')
+                                                {
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_nama_warehouse').setValue(obj.rawValue);
+                                                    var excluded_id_penyimpanan_data_perlengkapan = '';
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_nomor_berita_acara').setValue(obj.rawValue);
+                                                    if(readOnly != true)
+                                                    {
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setValue('');
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setDisabled(true);
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setDisabled(true);
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setValue('');
+                                                    var gridData = Ext.getCmp('grid_inventory_pengeluaran_sub_parts').getStore().getRange();
+                                                        Ext.Array.each(gridData,function(key,index,self){
+                                                        if(gridData[index].data.id_warehouse == value)
+                                                        {
+                                                            excluded_id_penyimpanan_data_perlengkapan += gridData[index].data.id_penyimpanan_data_perlengkapan +',';
+                                                        }
+                                                     });
+                                                    }
+                                                    Reference.Data.partsInventoryPengeluaranSubPart.changeParams({params: {id_open: 1, id_warehouse: value, excluded_id_penyimpanan_data_perlengkapan:excluded_id_penyimpanan_data_perlengkapan.slice(0,-1)}});
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setDisabled(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    allowBlank:false,
+                                    readOnly:readOnly,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Sub Part *',
+                                    name: 'id_penyimpanan_data_perlengkapan',
+                                    id:'inventory_pengeluaran_data_perlengkapan_parts_combo',
+                                    store: Reference.Data.partsInventoryPengeluaranSubPart,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Part',
+                                    editable:false,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                
+                                                
+                                              
+                                                if (value !== null && value !== '')
+                                                {
+                                                    
+                                                    if(readOnly != true)
+                                                    {
+                                                        Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setValue('');
+                                                        Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setDisabled(true);
+                                                        
+                                                    }
+                                                   Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpananSubPart',
+                                                        dataType: 'JSON',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                                form.getForm().findField('id_part').setValue(data.id_part);
+                                                                form.getForm().findField('part_number').setValue(data.part_number);
+                                                                form.getForm().findField('serial_number').setValue(data.serial_number);
+                                                                form.getForm().findField('qty').setValue(data.qty);
+                                                                form.getForm().findField('status_barang').setValue(data.status_barang);
+                                                                form.getForm().findField('asal_barang').setValue(data.asal_barang);
+                                                                form.getForm().findField('kd_brg').setValue(data.kd_brg);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
+                                                                Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setMaxValue(data.qty);
+                                                                Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setDisabled(false);
+//                                                                var gridData = Ext.getCmp('grid_inventory_pengeluaran_parts').getStore().getRange();
+//                                                                debugger;
+//                                                                Ext.Array.each(gridData,function(key,index,self){
+//                                                                    var grid_id_penyimpanan = gridData[index].data.id_penyimpanan;
+//                                                                    var grid_id_penyimpanan_data_perlengkapan = gridData[index].data.id_penyimpanan_data_perlengkapan;
+//                                                                    var grid_qty_keluar = gridData[index].data.id_penyimpanan_data_perlengkapan.qty_keluar;
+//                                                                    var form_current_id_penyimpanan = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_id_penyimpanan').value;
+//                                                                    var form_current_id_penyimpanan_data_perlengkapan = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').value;
+//                                                                    
+//                                                                    if(grid_id_penyimpanan == form_current_id_penyimpanan && grid_id_penyimpanan_data_perlengkapan == form_current_id_penyimpanan_data_perlengkapan)
+//                                                                    {
+//                                                                        
+//                                                                    }
+//                                                                    
+//                                                                });
+//                                                                debugger;
+                                                                if(readOnly == true)
+                                                                {
+                                                                    var id_pengeluaran = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_id').value;
+                                                                    if(id_pengeluaran != '') //if the record has been committed to the database
+                                                                    {
+//                                                                        Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').value));
+                                                                        form.getForm().findField('qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').value));
+                                                                        
+                                                                        Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setMaxValue(form.getForm().findField('qty').value);
+                                                                    }
+                                                                    
+                                                                }
+                                                           
+                                                            // process server response here
+                                                        }
+                                                        });
+                                                        
+                                                        
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },{
+                                    xtype:'numberfield',
+                                    fieldLabel:'Qty Keluar',
+                                    name:'qty_keluar',
+                                    id:'inventory_pengeluaran_data_perlengkapan_parts_qty_keluar',
+                                    minValue:1,
+                                    disabled:true,
+                                    allowBlank:false,
+                                }
+                                
+                            ]
+                        }]
+                }]
+
+            return component;
+        };
+        
+        Form.Component.dataInventoryPerlengkapanPengeluaranSubSubPart = function (readOnly,form){
+            var component = [{
+                    xtype: 'fieldset',
+                    layout: 'column',
+                    anchor: '100%',
+                    title: 'PENGELUARAN',
+                    border: false,
+                    defaultType: 'container',
+                    frame: true,
+                    items: [
+                       {
+                            columnWidth: .99,
+                            layout: 'anchor',
+                            defaults: {
+                                anchor: '95%',
+                                labelWidth: 220
+                            },
+                            items: [{
+                                        xtype:'hidden',
+                                        name:'id',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_id',
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'nomor_berita_acara',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_nomor_berita_acara',
+                                    },
+                                    {
+                                        xtype:'hidden',
+                                        name:'nama_warehouse',
+                                        id:'inventory_pengeluaran_data_perlengkapan_parts_nama_warehouse',
+                                    },
+                                    {
+                                    readOnly:readOnly,
+                                    xtype: 'combo',
+                                    fieldLabel: 'Pilih Warehouse *',
+                                    name: 'id_warehouse',
+                                    id:'inventory_pengeluaran_data_perlengkapan_id_warehouse',
+                                    allowBlank: false,
+                                    store: Reference.Data.warehouseInventoryPengeluaranSubSubPart,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Warehouse',
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                if (value !== null && value !== '')
+                                                {
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_nama_warehouse').setValue(obj.rawValue);
+                                                    var excluded_id_penyimpanan_data_perlengkapan = '';
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_nomor_berita_acara').setValue(obj.rawValue);
+                                                    if(readOnly != true)
+                                                    {
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setValue('');
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setDisabled(true);
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setDisabled(true);
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setValue('');
+                                                    var gridData = Ext.getCmp('grid_inventory_pengeluaran_sub_sub_parts').getStore().getRange();
+                                                        Ext.Array.each(gridData,function(key,index,self){
+                                                        if(gridData[index].data.id_warehouse == value)
+                                                        {
+                                                            excluded_id_penyimpanan_data_perlengkapan += gridData[index].data.id_penyimpanan_data_perlengkapan +',';
+                                                        }
+                                                     });
+                                                    }
+                                                    Reference.Data.partsInventoryPengeluaranSubSubPart.changeParams({params: {id_open: 1, id_warehouse: value, excluded_id_penyimpanan_data_perlengkapan:excluded_id_penyimpanan_data_perlengkapan.slice(0,-1)}});
+                                                    Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').setDisabled(false);
+                                                }
+
+                                            },
+                                            scope: this
+                                        }
+                                    }
+                                },
+                                {
+                                    allowBlank:false,
+                                    readOnly:readOnly,
+                                    xtype: 'combo',
+                                    disabled: true,
+                                    fieldLabel: 'Sub Sub Part *',
+                                    name: 'id_penyimpanan_data_perlengkapan',
+                                    id:'inventory_pengeluaran_data_perlengkapan_parts_combo',
+                                    store: Reference.Data.partsInventoryPengeluaranSubSubPart,
+                                    valueField: 'id',
+                                    displayField: 'nama', emptyText: 'Pilih Part',
+                                    editable:false,
+                                    typeAhead: true, forceSelection: false, selectOnFocus: true, valueNotFoundText: '',
+                                    listeners: {
+                                        'change': {
+                                            fn: function(obj, value) {
+                                                if (value !== null && value !== '')
+                                                {
+                                                    
+                                                    if(readOnly != true)
+                                                    {
+                                                        Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setValue('');
+                                                        Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setDisabled(true);
+                                                        
+                                                    }
+                                                   Ext.Ajax.request({
+                                                        url: BASE_URL + 'inventory_penyimpanan/getSpecificInventoryPenyimpananSubSubPart',
+                                                        dataType: 'JSON',
+                                                        params: {
+                                                            id: value
+                                                        },
+                                                        success: function(response){
+                                                            var data = eval ("(" + response.responseText + ")");
+                                                            form.getForm().findField('id_part').setValue(data.id_part);
+                                                            form.getForm().findField('id_sub_part').setValue(data.id_sub_part);
+                                                            form.getForm().findField('part_number').setValue(data.part_number);
+                                                            form.getForm().findField('serial_number').setValue(data.serial_number);
+                                                            form.getForm().findField('qty').setValue(data.qty);
+                                                            form.getForm().findField('status_barang').setValue(data.status_barang);
+                                                            form.getForm().findField('asal_barang').setValue(data.asal_barang);
+                                                            form.getForm().findField('kd_brg').setValue(data.kd_brg);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_part_number').setValue(data.part_number);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_serial_number').setValue(data.serial_number);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_qty').setValue(data.qty);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_status_barang').setValue(data.status_barang);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_asal_barang').setValue(data.asal_barang);
+//                                                                Ext.getCmp('inventory_data_perlengkapan_kode_barang').setValue(data.kd_brg);
+                                                                Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setMaxValue(data.qty);
+                                                                Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setDisabled(false);
+//                                                                var gridData = Ext.getCmp('grid_inventory_pengeluaran_parts').getStore().getRange();
+//                                                                debugger;
+//                                                                Ext.Array.each(gridData,function(key,index,self){
+//                                                                    var grid_id_penyimpanan = gridData[index].data.id_penyimpanan;
+//                                                                    var grid_id_penyimpanan_data_perlengkapan = gridData[index].data.id_penyimpanan_data_perlengkapan;
+//                                                                    var grid_qty_keluar = gridData[index].data.id_penyimpanan_data_perlengkapan.qty_keluar;
+//                                                                    var form_current_id_penyimpanan = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_id_penyimpanan').value;
+//                                                                    var form_current_id_penyimpanan_data_perlengkapan = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_combo').value;
+//                                                                    
+//                                                                    if(grid_id_penyimpanan == form_current_id_penyimpanan && grid_id_penyimpanan_data_perlengkapan == form_current_id_penyimpanan_data_perlengkapan)
+//                                                                    {
+//                                                                        
+//                                                                    }
+//                                                                    
+//                                                                });
+//                                                                debugger;
+                                                                if(readOnly == true)
+                                                                {
+                                                                    var id_pengeluaran = Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_id').value;
+                                                                    if(id_pengeluaran != '') //if the record has been committed to the database
+                                                                    {
+//                                                                        Ext.getCmp('inventory_data_perlengkapan_qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').value));
+                                                                        form.getForm().findField('qty').setValue(parseInt(data.qty) + parseInt(Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').value));
+                                                                            Ext.getCmp('inventory_pengeluaran_data_perlengkapan_parts_qty_keluar').setMaxValue(form.getForm().findField('qty').value);
                                                                     }
                                                                     
                                                                 }
