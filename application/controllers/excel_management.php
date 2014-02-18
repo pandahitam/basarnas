@@ -764,13 +764,13 @@ class Excel_Management extends CI_Controller{
                 t.umur_maks AS operating_time_limit,
                 t.task,
                 (t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) AS remove_due,
-                CASE WHEN (t.umur_maks - $data_usage->jumlah) < t.umur_maks
+                CASE WHEN (t.umur_maks - ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - $data_usage->jumlah)) < t.umur_maks
                 THEN  
-                (t.umur_maks - $data_usage->jumlah)
+                (t.umur_maks - ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - $data_usage->jumlah))
                 ELSE
                 'Expired'
                 END AS tsn_tso_current,
-                (t.umur_maks - $data_usage->jumlah) AS time_available
+                ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - $data_usage->jumlah) AS time_available
                 FROM asset_perlengkapan AS t
                 INNER JOIN ref_perlengkapan AS a ON t.part_number = a.part_number
                 LEFT JOIN ref_kelompok_part AS b ON a.id_kelompok_part  = b.id
@@ -1348,9 +1348,9 @@ class Excel_Management extends CI_Controller{
                         t.cycle_maks,
                         (t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) AS remove_due_hrs,
                         (t.cycle_maks) AS remove_due_cyc,
-                        (t.umur_maks - (t.umur_maks - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id))) AS tsn_tso_current_hrs,
+                        (t.umur_maks - ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id))) AS tsn_tso_current_hrs,
                         (t.cycle_maks - (t.cycle_maks - (SELECT cycle FROM asset_perlengkapan WHERE id = $data_engine->id))) AS tsn_tso_current_cyc,
-                        (t.umur_maks - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_hrs,
+                        ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_hrs,
                         (t.cycle_maks - (SELECT cycle FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_cyc
                         FROM asset_perlengkapan_sub_part AS t
                         WHERE t.id_part = $data_engine->id";
@@ -1411,9 +1411,9 @@ class Excel_Management extends CI_Controller{
                             t.cycle_maks,
                             (t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) AS remove_due_hrs,
                             (t.cycle_maks) AS remove_due_cyc,
-                            (t.umur_maks - (t.umur_maks - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id))) AS tsn_tso_current_hrs,
+                            (t.umur_maks - ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id))) AS tsn_tso_current_hrs,
                             (t.cycle_maks - (t.cycle_maks - (SELECT cycle FROM asset_perlengkapan WHERE id = $data_engine->id))) AS tsn_tso_current_cyc,
-                            (t.umur_maks - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_hrs,
+                            ((t.umur_maks + t.installation_ac_tsn - t.installation_comp_tsn) - (SELECT umur FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_hrs,
                             (t.cycle_maks - (SELECT cycle FROM asset_perlengkapan WHERE id = $data_engine->id)) AS time_available_cyc
                             FROM asset_perlengkapan_sub_sub_part AS t
                             WHERE t.id_sub_part IN (SELECT id FROM asset_perlengkapan_sub_part WHERE id_part = $data_engine->id)
