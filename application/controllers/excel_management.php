@@ -755,7 +755,7 @@ class Excel_Management extends CI_Controller{
                 t.cycle,
                 t.cycle_maks,
                 (SELECT DATE_FORMAT(pelaksana_tgl,'%d-%m-%Y') FROM pemeliharaan_perlengkapan WHERE CONCAT(kd_brg,kd_lokasi,no_aset) = 
-                (SELECT CONCAT(kd_brg,kd_lokasi,no_aset) FROM asset_perlengkapan AS X WHERE  x.part_number = t.part_number AND x.serial_number = t.serial_number)ORDER BY pelaksana_tgl LIMIT 1) AS date_of_mnf_specific, 
+                (SELECT CONCAT(kd_brg,kd_lokasi,no_aset) FROM asset_perlengkapan AS X WHERE  x.id = t.id)ORDER BY pelaksana_tgl LIMIT 1) AS date_of_mnf_specific, 
                 (SELECT DATE_FORMAT(pelaksana_tgl,'%d-%m-%Y') FROM view_pemeliharaan_udara
                 WHERE CONCAT(kd_brg,kd_lokasi,no_aset) = '$no_induk_asset' ORDER BY pelaksana_tgl LIMIT 1) AS date_of_mnf_general, 
                 DATE_FORMAT(t.installation_date,'%d-%m-%Y') AS installation_date,
