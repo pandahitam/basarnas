@@ -123,12 +123,21 @@ class Asset_Perlengkapan extends MY_Controller {
                 
                 if($dataSimak['id'] != '')
                 {
+                    unset($dataSimak['no_induk_asset']);
+//                    $this->db->set($dataSimak);
+//                    $this->db->replace('asset_perlengkapan');
+                    $this->db->where('id',$dataSimak['id']);
+                    $this->db->update('asset_perlengkapan',$dataSimak);
                     $this->createLog('UPDATE ASSET PERLENGKAPAN','asset_perlengkapan');
+                    echo "{success:true}";
                 }
                 else
                 {
+                    $this->db->set($dataSimak);
+                    $this->db->replace('asset_perlengkapan');
 //                    $dataSimak['umur'] = $partNumberDetails->umur_maks;
                     $this->createLog('INSERT ASSET PERLENGKAPAN','asset_perlengkapan');
+                    echo "{success:true}";
                 }
                 
 //                $dataSimak['part_number'] = $partNumberDetails->part_number;
@@ -140,7 +149,7 @@ class Asset_Perlengkapan extends MY_Controller {
 //                
 //                $dataExt['kd_brg'] = $kd_brg;	
                 
-		$this->modifyData($dataSimak, null);
+//		$this->modifyData($dataSimak, null);
 	}
 	
 	function deletePerlengkapan()
@@ -702,6 +711,49 @@ class Asset_Perlengkapan extends MY_Controller {
             $dataSend['results'] = $data;
             echo json_encode($dataSend);
             
+            
+        }
+        
+        function getNamaPartInduk()
+        {
+            $id = $this->input->post("id");
+            $type = $this->input->post("type");
+            if($type == "Part")
+            {
+                $query = $this->db->query("select nama from ref_perlengkapan as t 
+                    INNER JOIN asset_perlengkapan as a on t.part_number = a.part_number
+                    where a.id = $id");
+                $result = $query->row();
+                echo json_encode($result->nama);
+            }
+            else if($type == "SubPart")
+            {
+                $query = $this->db->query("select t.nama from asset_perlengkapan_sub_part as t 
+                    INNER JOIN asset_perlengkapan_sub_sub_part as a on t.id = a.id_sub_part
+                    where t.id = $id");
+                $result = $query->row();
+                echo json_encode($result->nama);
+            }
+            
+        }
+        
+        function getNamaPartIndukByPartNumber()
+        {
+            $part_number = $this->input->post("part_number");
+            $type = $this->input->post("type");
+            if($type == "Part")
+            {
+                $query = $this->db->query("select nama from ref_perlengkapan
+                    where part_number = '$part_number'");
+                $result = $query->row();
+                echo json_encode($result->nama);
+            }
+            else if($type == "SubPart")
+            {
+                $query = $this->db->query("select nama from ref_sub_part where part_number = '$part_number'");
+                $result = $query->row();
+                echo json_encode($result->nama);
+            }
             
         }
 }

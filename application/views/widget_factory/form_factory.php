@@ -138,7 +138,7 @@
         });
         
         Reference.Data.assetPerlengkapanPart = new Ext.create('Ext.data.Store', {
-            fields: ['id','part_number','serial_number','nama','kd_brg'], storeId: 'assetPerlengkapanPart',
+            fields: ['id','part_number','serial_number','nama','kd_brg','nama_clean'], storeId: 'assetPerlengkapanPart',
             proxy: new Ext.data.AjaxProxy({
                 url: Reference.URL.assetPerlengkapanPart, actionMethods: {read: 'POST'}, extraParams: {id_open: 1}
             }),
@@ -9709,6 +9709,36 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
 
             return component;
         };
+        
+        Form.Component.perlengkapanPartInduk = function(nama) {
+            var component = {
+                xtype: 'fieldset',
+                layout: 'column',
+                anchor: '100%',
+                title: 'PART INDUK',
+                border: false,
+                frame: true,
+                defaultType: 'container',
+                defaults: {
+                    layout: 'anchor'
+                },
+                items: [{
+                        columnWidth: 1,
+                        layout: 'anchor',
+                        defaults: {
+                            anchor: '95%'
+                        },
+                        defaultType: 'textfield',
+                        items: [{
+                                xtype:'displayfield',
+                                name: 'no_induk_asset',
+                                value:(nama != null && nama != undefined)?nama:'',
+                            }]
+                    }]
+            };
+
+            return component;
+        };
 
         Form.Component.mechanical = function() {
             var component = {
@@ -9951,6 +9981,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_serial_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_part_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_kd_brg').setDisabled(true);
+                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_nama').setReadOnly(false);
 //                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(false);
                                             }
                                         },
@@ -9964,6 +9995,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                             }, {
                                 fieldLabel: 'Nama',
                                 name: 'nama',
+                                id:'angkutan_darat_asset_perlengkapan_nama'
                             },
                             {
                                 xtype: 'combo',
@@ -9984,13 +10016,20 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                         fn: function(obj, value) {
                                             if(readOnly == true)
                                             {
-                                                Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 2}});
+                                                Reference.Data.assetPerlengkapanPart.load({params: {id_open: 2}, callback:function(){
+                                                        var nama = obj.valueModels[0].data.nama_clean;
+                                                        Ext.getCmp('angkutan_darat_asset_perlengkapan_nama').setValue(nama);
+                                                        Ext.getCmp('angkutan_darat_asset_perlengkapan_nama').setReadOnly(true);
+                                                }});
                                             }
                                             else
                                             {
                                                 var serial_number = obj.valueModels[0].data.serial_number;
                                                 var part_number = obj.valueModels[0].data.part_number;
                                                 var kd_brg = obj.valueModels[0].data.kd_brg;
+                                                var nama = obj.valueModels[0].data.nama_clean;
+                                                        Ext.getCmp('angkutan_darat_asset_perlengkapan_nama').setValue(nama);
+                                                        Ext.getCmp('angkutan_darat_asset_perlengkapan_nama').setReadOnly(true);
                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_serial_number').setValue(serial_number);
                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_part_number').setValue(part_number);
                                                 Ext.getCmp('angkutan_darat_asset_perlengkapan_kd_brg').setValue(kd_brg);
@@ -10094,6 +10133,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_serial_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_part_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_kd_brg').setDisabled(true);
+                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_nama').setReadOnly(false);
 //                                                Ext.getCmp('perlengkapan_angkutan_udara_keterangan').setDisabled(false);
                                             }
                                         },
@@ -10107,6 +10147,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                             }, {
                                 fieldLabel: 'Nama',
                                 name: 'nama',
+                                id:'angkutan_laut_asset_perlengkapan_nama'
                             },
                             {
                                 xtype: 'combo',
@@ -10127,13 +10168,20 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                         fn: function(obj, value) {
                                             if(readOnly == true)
                                             {
-                                                Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 2}});
+                                                 Reference.Data.assetPerlengkapanPart.load({params: {id_open: 2}, callback:function(){
+                                                        var nama = obj.valueModels[0].data.nama_clean;
+                                                        Ext.getCmp('angkutan_laut_asset_perlengkapan_nama').setValue(nama);
+                                                        Ext.getCmp('angkutan_laut_asset_perlengkapan_nama').setReadOnly(true);
+                                                }});
                                             }
                                             else
                                             {
                                                 var serial_number = obj.valueModels[0].data.serial_number;
                                                 var part_number = obj.valueModels[0].data.part_number;
                                                 var kd_brg = obj.valueModels[0].data.kd_brg;
+                                                var nama = obj.valueModels[0].data.nama_clean;
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_nama').setValue(nama);
+                                                Ext.getCmp('angkutan_laut_asset_perlengkapan_nama').setReadOnly(true);
                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_serial_number').setValue(serial_number);
                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_part_number').setValue(part_number);
                                                 Ext.getCmp('angkutan_laut_asset_perlengkapan_kd_brg').setValue(kd_brg);
@@ -10230,6 +10278,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setDisabled(false);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_part_number').setDisabled(false);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_kd_brg').setDisabled(false);
+                                                 
 //                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_date').setDisabled(false);
 //                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_ac_tsn').setDisabled(false);
 //                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_comp_tsn').setDisabled(false);
@@ -10241,6 +10290,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_part_number').setDisabled(true);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_kd_brg').setDisabled(true);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_nama').setReadOnly(false);
 //                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_date').setDisabled(true);
 //                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_ac_tsn').setDisabled(true);
 //                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_installation_comp_tsn').setDisabled(true);
@@ -10257,6 +10307,7 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                             }, {
                                 fieldLabel: 'Nama',
                                 name: 'nama',
+                                id:'angkutan_udara_asset_perlengkapan_nama',
                             },
                             {
                                 disabled:true,
@@ -10278,7 +10329,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                            
                                             if(readOnly == true)
                                             {
-                                                Reference.Data.assetPerlengkapanPart.changeParams({params: {id_open: 2}});
+                                                Reference.Data.assetPerlengkapanPart.load({params: {id_open: 2}, callback:function(){
+                                                        var nama = obj.valueModels[0].data.nama_clean;
+                                                        Ext.getCmp('angkutan_udara_asset_perlengkapan_nama').setValue(nama);
+                                                        Ext.getCmp('angkutan_udara_asset_perlengkapan_nama').setReadOnly(true);
+                                                }});
+                                                
                                             }
                                             else
                                             {
@@ -10286,9 +10342,12 @@ Form.inventoryPenerimaanPemeriksaan = function(setting, setting_grid_parts, sett
                                                 var serial_number = obj.valueModels[0].data.serial_number;
                                                 var part_number = obj.valueModels[0].data.part_number;
                                                 var kd_brg = obj.valueModels[0].data.kd_brg;
+                                                var nama = obj.valueModels[0].data.nama_clean;
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_serial_number').setValue(serial_number);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_part_number').setValue(part_number);
                                                 Ext.getCmp('angkutan_udara_asset_perlengkapan_kd_brg').setValue(kd_brg);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_nama').setValue(nama);
+                                                Ext.getCmp('angkutan_udara_asset_perlengkapan_nama').setReadOnly(true);
                                             }
                                             
                                         },

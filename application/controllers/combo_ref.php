@@ -84,12 +84,12 @@ class Combo_Ref extends CI_Controller {
         $data = array();
         if($this->input->get_post("id_open"))
         {
-            $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama from asset_perlengkapan as t
+            $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama, a.nama as nama_clean from asset_perlengkapan as t
                       LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number
                       where no_induk_asset = '' or no_induk_asset is null";
             if($_POST['id_open'] == 2)
             {
-                $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama from asset_perlengkapan as t
+                $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama,a.nama as nama_clean from asset_perlengkapan as t
                       LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number";
             }
             
@@ -98,21 +98,21 @@ class Combo_Ref extends CI_Controller {
                 $jenis_asset = strtolower($_POST['jenis_asset']);
                 if($jenis_asset == "darat")
                 {
-                    $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama from asset_perlengkapan as t
+                    $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama,a.nama as nama_clean from asset_perlengkapan as t
                       LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number
                       LEFT JOIN ref_kelompok_part as b on a.id_kelompok_part = b.id
                       where (no_induk_asset = '' or no_induk_asset is null) AND jenis_asset = 'Darat' ";
                 }
                 else if($jenis_asset == "laut")
                 {
-                    $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama from asset_perlengkapan as t
+                    $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama,a.nama as nama_clean from asset_perlengkapan as t
                       LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number
                       LEFT JOIN ref_kelompok_part as b on a.id_kelompok_part = b.id
                       where (no_induk_asset = '' or no_induk_asset is null) AND jenis_asset = 'Laut' ";
                 }
                 else if($jenis_asset == "udara")
                 {
-                    $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama from asset_perlengkapan as t
+                    $query = "select t.id, t.part_number, t.serial_number,t.kd_brg, CONCAT(a.nama,'(PART NUMBER: ',t.part_number,'[SN: ',t.serial_number,'])') as nama,a.nama as nama_clean from asset_perlengkapan as t
                       LEFT JOIN ref_perlengkapan as a on t.part_number = a.part_number
                       LEFT JOIN ref_kelompok_part as b on a.id_kelompok_part = b.id
                       where (no_induk_asset = '' or no_induk_asset is null) AND jenis_asset = 'Udara' ";

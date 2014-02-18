@@ -324,7 +324,7 @@ class Asset_Angkutan_Udara_Model extends MY_Model{
         function getSpecificPerlengkapanAngkutanUdara($id_ext_asset)
         {
             
-                $query = "select t.id,t.id_ext_asset,a.kd_brg,a.part_number,a.serial_number,t.jenis_perlengkapan,t.no,t.nama,t.keterangan , t.id_asset_perlengkapan, t.installation_date, t.installation_ac_tsn, t.installation_comp_tsn
+                $query = "select t.id,t.id_ext_asset,a.kd_brg,a.part_number,a.serial_number,t.jenis_perlengkapan,t.no,(CASE WHEN t.jenis_perlengkapan = 'Part Pesawat' THEN (select nama from ref_perlengkapan as rp where rp.part_number=a.part_number LIMIT 1) ELSE t.nama END) as nama,t.keterangan , t.id_asset_perlengkapan, t.installation_date, t.installation_ac_tsn, t.installation_comp_tsn
                         FROM ext_asset_angkutan_udara_perlengkapan as t
                         LEFT JOIN asset_perlengkapan as a on t.id_asset_perlengkapan = a.id
                         WHERE t.id_ext_asset = $id_ext_asset";

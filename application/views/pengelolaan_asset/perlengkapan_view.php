@@ -694,6 +694,105 @@
         };
         
         
+        Perlengkapan.Component.panelPerlengkapanSubPart2 = function(url, data, storeSubSubPart) {
+            var _form = Ext.create('Ext.form.Panel', {
+                frame: true,
+                url: url,
+                bodyStyle: 'padding:5px',
+                width: '100%',
+                height: '100%',
+                autoScroll:true,
+                fieldDefaults: {
+                    msgTarget: 'side'
+                },
+                buttons: [{
+                        text: 'Simpan', iconCls: 'icon-save', formBind: true,
+                        handler: function() {
+                            var form = _form.getForm();
+                            var imageField = form.findField('image_url');
+                            var documentField = form.findField('document_url');
+                            
+                            if (imageField !== null)
+                            {
+                                var arrayPhoto = [];
+                                var photoStore = null;
+                              
+                               photoStore = Utils.getPhotoStore(_form);
+                                
+                                
+                                
+                                _.each(photoStore.data.items, function(obj) {
+                                    arrayPhoto.push(obj.data.name);
+                                });
+                                
+                                imageField.setRawValue(arrayPhoto.join());
+                            }
+                            
+                            if (documentField !== null)
+                            {
+                                var arrayDoc = [];
+                                var documentStore = null;
+                               
+                                documentStore = Utils.getDocumentStore(_form);
+                                
+                                
+                                
+                                _.each(documentStore.data.items, function(obj) {
+                                    arrayDoc.push(obj.data.name);
+                                });
+                                
+                                
+                                documentField.setRawValue(arrayDoc.join());
+                            }
+                            if (form.isValid())
+                            {
+                                form.submit({
+                                    success: function(form, action) {
+                                        var id = action.result.id;
+                                        data.load();
+                                        if(storeSubSubPart != null)
+                                        {
+                                            var gridStore = storeSubSubPart;
+                                            var rec = gridStore.getRange();
+                                            var new_records = gridStore.getNewRecords();
+//                                            var updated_records = gridStore.getUpdatedRecords();
+    //                                        var removed_records = grid.getRemovedRecords();
+                                            Ext.each(rec, function(obj){
+                                                var index = gridStore.indexOf(obj);
+                                                var record = gridStore.getAt(index);
+                                                if (record.data.id_sub_part == 0 || record.data.id_sub_part == '')
+                                                {
+                                                    record.set('id_sub_part',id);
+                                                    record.setDirty();
+                                                }
+                                                
+                                            });
+                                            
+//                                            Ext.each(new_records, function(obj){
+//                                                var index = gridStore.indexOf(obj);
+//                                                var record = gridStore.getAt(index);
+//                                                record.set('id_sub_part',id);
+//                                            });
+                                              gridStore.sync();
+                                        }
+                                            
+                                           Ext.MessageBox.alert('Success', 'Changes saved successfully.');
+                                           Modal.assetSecondaryWindow2.close();
+                                    },
+                                    failure: function() {
+                                        Ext.MessageBox.alert('Fail', 'Changes saved fail.');
+                                    }
+                                });
+                            }
+                        }
+                    }]// BUTTONS END
+
+            });
+
+            return _form;
+        };
+        
+        
         
         Perlengkapan.Component.dataTambahanPerlengkapanUdara = function(){
         var component = [{
@@ -2803,6 +2902,22 @@
                     Modal.assetTertiaryWindow.setTitle('Tambah Sub Sub Part');
                 }
                     var sub_part = Ext.getCmp('asset_perlengkapan_sub_part_id').value;
+                    var induk = "";
+                    $.ajax({
+                        url:BASE_URL + 'asset_perlengkapan/getNamaPartIndukByPartNumber',
+                        type: "POST",
+                        dataType:'json',
+                        async:false,
+                        data:{part_number:sub_part,type:'SubPart'},
+                        success:function(response, status){
+                            if(status == "success")
+                            {
+                               induk = response;
+
+                            }
+
+                        }
+                     });
 //                    var sub_part_id = Ext.getCmp('asset_perlengkapan_sub_part_id').valueModels[0].data.id;
                     Reference.Data.subSubPart.changeParams({params:{id_open:1, part_number:sub_part}});
                     var form = Perlengkapan.Component.panelPerlengkapanSubSubPart(Perlengkapan.dataStoreSubSubPart,'add');
@@ -2810,9 +2925,10 @@
                     form.insert(1, Form.Component.unitNew(false,form));
                     form.insert(2, Form.Component.klasifikasiAsetNew(false,form));
                     form.insert(3, Form.Component.warehousePerlengkapan(false,form));
-                    form.insert(4,Perlengkapan.Component.dataPerlengkapanSubSubPart('',false));
-                    form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
-                    form.insert(6, Form.Component.fileUpload(false));
+                    form.insert(4, Form.Component.perlengkapanPartInduk(induk));
+                    form.insert(5,Perlengkapan.Component.dataPerlengkapanSubSubPart('',false));
+                    form.insert(6, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
+                    form.insert(7, Form.Component.fileUpload(false));
                     Reference.Data.subSubPartAddExisting.changeParams({params:{part_number:sub_part}});
                     Modal.assetTertiaryWindow.add(form);
                     Modal.assetTertiaryWindow.show();
@@ -2834,13 +2950,32 @@
                     var sub_part = Ext.getCmp('asset_perlengkapan_sub_part_id').value;
                     Reference.Data.subSubPart.changeParams({params:{id_open:2}});
                     
+                    var induk = "";
+                    $.ajax({
+                        url:BASE_URL + 'asset_perlengkapan/getNamaPartInduk',
+                        type: "POST",
+                        dataType:'json',
+                        async:false,
+                        data:{id:data.id_sub_part,type:'SubPart'},
+                        success:function(response, status){
+                            if(status == "success")
+                            {
+                               induk = response;
+
+                            }
+
+                        }
+                     });
+                    
                     var form = Perlengkapan.Component.panelPerlengkapanSubSubPart(Perlengkapan.dataStoreSubSubPart,'edit',storeIndex);
-                    form.insert(3,Perlengkapan.Component.dataPerlengkapanSubSubPart(sub_part,true));
-                    form.insert(4, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
                     form.insert(0, Form.Component.unitNew(true,form));
                     form.insert(1, Form.Component.klasifikasiAsetNew(true,form));
                     form.insert(2, Form.Component.warehousePerlengkapan(true,form));
-                    form.insert(5, Form.Component.fileUpload(true));
+                    form.insert(3, Form.Component.perlengkapanPartInduk(induk));
+                    form.insert(4,Perlengkapan.Component.dataPerlengkapanSubSubPart(sub_part,true));
+                    form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
+                    form.insert(6, Form.Component.fileUpload(true));
+
 
                     if (data !== null)
                     {
@@ -2947,23 +3082,40 @@
                 delete data.nama_unker;
                 delete data.nama_unor;
                 
-                if (Modal.assetSecondaryWindow.items.length === 0)
+                if (Modal.assetSecondaryWindow2.items.length === 0)
                 {
-                    Modal.assetSecondaryWindow.setTitle('Tambah Sub Part');
+                    Modal.assetSecondaryWindow2.setTitle('Tambah Sub Part');
                 }
-                    var form = Perlengkapan.Component.panelPerlengkapanSubPart(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);                                                            
+                var induk = "";
+                $.ajax({
+                        url:BASE_URL + 'asset_perlengkapan/getNamaPartInduk',
+                        type: "POST",
+                        dataType:'json',
+                        async:false,
+                        data:{id:data.id,type:'Part'},
+                        success:function(response, status){
+                            if(status == "success")
+                            {
+                               induk = response;
+
+                            }
+
+                        }
+                     });
+                    var form = Perlengkapan.Component.panelPerlengkapanSubPart2(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);                                                            
                     form.insert(0, Perlengkapan.Component.dataPerlengkapanSubPartAddExisting(form,data.id));
                     form.insert(1, Form.Component.unitNew(false,form));
                     form.insert(2, Form.Component.klasifikasiAsetNew(false,form));
                     form.insert(3, Form.Component.warehousePerlengkapan(false,form));
-                    form.insert(4, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,false,Perlengkapan.dataStoreSubSubPart));
-                    form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
-                    form.insert(6, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
-                    form.insert(7, Form.Component.fileUpload(false));
+                    form.insert(4, Form.Component.perlengkapanPartInduk(induk));
+                    form.insert(5, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,false,Perlengkapan.dataStoreSubSubPart));
+                    form.insert(6, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
+                    form.insert(7, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
+                    form.insert(8, Form.Component.fileUpload(false));
                     Reference.Data.subPart.changeParams({params:{id_open:1,part_number:data.part_number}});
                     Reference.Data.subPartAddExisting.changeParams({params:{id_part:data.id}});
-                    Modal.assetSecondaryWindow.add(form);
-                    Modal.assetSecondaryWindow.show();
+                    Modal.assetSecondaryWindow2.add(form);
+                    Modal.assetSecondaryWindow2.show();
             }
         };
         
@@ -2985,20 +3137,37 @@
             {
                
                 var data = selected[0].data;
+                var induk = "";
+                $.ajax({
+                    url:BASE_URL + 'asset_perlengkapan/getNamaPartInduk',
+                    type: "POST",
+                    dataType:'json',
+                    async:false,
+                    data:{id:data.id_part,type:'Part'},
+                    success:function(response, status){
+                        if(status == "success")
+                        {
+                           induk = response;
+
+                        }
+
+                    }
+                 });
                 
-                
-                if (Modal.assetSecondaryWindow.items.length === 0)
+                if (Modal.assetSecondaryWindow2.items.length === 0)
                 {
-                    Modal.assetSecondaryWindow.setTitle('Edit Sub Part');
+                    Modal.assetSecondaryWindow2.setTitle('Edit Sub Part');
                 }
-                    var form = Perlengkapan.Component.panelPerlengkapanSubPart(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);
-                    form.insert(3, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,true,Perlengkapan.dataStoreSubSubPart));
-                    form.insert(4, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
-                    form.insert(5, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
+                    var form = Perlengkapan.Component.panelPerlengkapanSubPart2(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);
                     form.insert(0, Form.Component.unitNew(true,form));
                     form.insert(1, Form.Component.klasifikasiAsetNew(true,form));
                     form.insert(2, Form.Component.warehousePerlengkapan(true,form));
-                    form.insert(6, Form.Component.fileUpload(true));
+                    form.insert(3, Form.Component.perlengkapanPartInduk(induk));
+                    form.insert(4, Perlengkapan.Component.dataPerlengkapanSubPart(data.id,true,Perlengkapan.dataStoreSubSubPart));
+                    form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
+                    form.insert(6, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
+                    form.insert(7, Form.Component.fileUpload(true));
+                    
                     Reference.Data.subPart.changeParams({params:{id_open:2}});
                     Perlengkapan.dataStoreSubSubPart.changeParams({params:{id_sub_part:data.id}});
                     if (data !== null)
@@ -3011,8 +3180,8 @@
                         });
                          form.getForm().setValues(data);
                     }
-                    Modal.assetSecondaryWindow.add(form);
-                    Modal.assetSecondaryWindow.show();
+                    Modal.assetSecondaryWindow2.add(form);
+                    Modal.assetSecondaryWindow2.show();
                 
              }
         };
@@ -3102,10 +3271,11 @@
 //            form.insert(5, Form.Component.tambahanPerlengkapanPerlengkapan());
             form.insert(1, Form.Component.klasifikasiAset(edit))
             form.insert(2, Form.Component.warehousePerlengkapan(edit,form));
-            form.insert(3, Form.Component.perlengkapan(edit));
-            form.insert(4, Form.Component.perlengkapanDataTambahan());
-            form.insert(5, Perlengkapan.Component.gridSubPart(setting_grid_sub_part,edit));
-            form.insert(6, Form.Component.fileUpload(edit));
+            form.insert(3, Form.Component.perlengkapanPartInduk());
+            form.insert(4, Form.Component.perlengkapan(edit));
+            form.insert(5, Form.Component.perlengkapanDataTambahan());
+            form.insert(6, Perlengkapan.Component.gridSubPart(setting_grid_sub_part,edit));
+            form.insert(7, Form.Component.fileUpload(edit));
             if (data !== null)
             {
                 Ext.Object.each(data,function(key,value,myself){
@@ -4837,13 +5007,14 @@
                         Modal.assetSecondaryWindow.add(Tab.create());
                     }
                         var form = Perlengkapan.Component.panelPerlengkapanSubPart(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);
-                        form.insert(3, Perlengkapan.Component.dataPerlengkapanSubPart(data.id_part,true,Perlengkapan.dataStoreSubSubPart));
-                        form.insert(4, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
-                        form.insert(5, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
                         form.insert(0, Form.Component.unitNew(true,form));
                         form.insert(1, Form.Component.klasifikasiAsetNew(true,form));
                         form.insert(2, Form.Component.warehousePerlengkapan(true,form));
-                        form.insert(6, Form.Component.fileUpload(true));
+                        form.insert(3, Form.Component.perlengkapanPartInduk());
+                        form.insert(4, Perlengkapan.Component.dataPerlengkapanSubPart(data.id_part,true,Perlengkapan.dataStoreSubSubPart));
+                        form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdaraSubPart());
+                        form.insert(6, Perlengkapan.Component.gridSubSubPart(setting_grid_sub_sub_part));
+                        form.insert(7, Form.Component.fileUpload(true));
                         Reference.Data.subPart.changeParams({params:{id_open:2}});
                         Perlengkapan.dataStoreSubSubPart.changeParams({params:{id_sub_part:data.id}});
                         data.nama = data.nama_part;
@@ -4877,12 +5048,13 @@
                    }
                         var url = BASE_URL + 'asset_perlengkapan/updateSubSubPart2';
                         var form = Perlengkapan.Component.panelPerlengkapanSubSubPart2(url,Perlengkapan.Data);
-                        form.insert(3,Perlengkapan.Component.dataPerlengkapanSubSubPart(data.id_sub_part,true));
-                        form.insert(4, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
                         form.insert(0, Form.Component.unitNew(true,form));
                         form.insert(1, Form.Component.klasifikasiAsetNew(true,form));
                         form.insert(2, Form.Component.warehousePerlengkapan(true,form));
-                        form.insert(5, Form.Component.fileUpload(true));
+                        form.insert(3, Form.Component.perlengkapanPartInduk());
+                        form.insert(4,Perlengkapan.Component.dataPerlengkapanSubSubPart(data.id_sub_part,true));
+                        form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
+                        form.insert(6, Form.Component.fileUpload(true));
                         data.nama = data.nama_part;
                         if (data !== null)
                         {
