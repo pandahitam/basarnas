@@ -17,7 +17,7 @@ if(isset($dataprn) && count($dataprn)){
 	$Line = array('src'=> base_url().'assets/images/line_cover.jpg','width'=>'22px','style'=>'padding: 2px 2px 2px 2px;');
 	
 	foreach($dataprn as $row){
-	
+		//print_r($row);
 		// COVER ------------------------------------------------- START
 		$html .= "<div id='frame_cover'>";
 		$html .= "<div id='frame_logo'>".img($Logo)."</div>";
@@ -27,8 +27,8 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "<div id='head_sparator'></div>";
 		$html .= "<div id='data_cover'>";
 		$html .= "<table width='500px' style='border-collapse: collapse;'>\n";
-		$html .= "<tr><td class='txtcover' width='175px'>UNIT KERJA</td><td class='txtcover' width='20px'>:</td><td class='txtcover'>xxx</td></tr>";
-		$html .= "<tr><td class='txtcover'>UNIT ORGANISASI</td><td class='txtcover'>:</td><td class='txtcover'>xxx</td></tr>";
+		$html .= "<tr><td class='txtcover' width='175px'>UNIT KERJA</td><td class='txtcover' width='20px'>:</td><td class='txtcover'>".$row['nama_unker']."</td></tr>";
+		$html .= "<tr><td class='txtcover'>UNIT ORGANISASI</td><td class='txtcover'>:</td><td class='txtcover'>".$row['nama_unor']."</td></tr>";
 		/*$html .= "<tr><td class='txtcover'>GOLONGAN</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_gol']."</td></tr>";
       $html .= "<tr><td class='txtcover'>BIDANG</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_bid']."</td></tr>";
       $html .= "<tr><td class='txtcover'>KELOMPOK</td><td class='txtcover'>:</td><td class='txtcover'>".$row['kd_kelompok']."</td></tr>";
@@ -51,7 +51,7 @@ if(isset($dataprn) && count($dataprn)){
 		$html .= "<div id='BoxTbl'>";
 		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
 		$html .= "<tbody>";
-   	$html .= "<tr><td width='100'>Warehouse</td><td>".$row['warehouse_id']."</td></tr>";
+   	$html .= "<tr><td width='100'>Warehouse</td><td>".$row['nama_warehouse']."</td></tr>";
       $html .= "<tr><td>Ruang</td><td>".$row['ruang_id']."</td></tr>";
       $html .= "<tr><td>Rak</td><td>".$row['rak_id']."</td></tr>";
       $html .= "<tr><td>Part Number</td><td>".$row['part_number']."</td></tr>";
@@ -59,15 +59,38 @@ if(isset($dataprn) && count($dataprn)){
       $html .= "<tr><td>Kondisi</td><td>".$row['kondisi']."</td></tr>";
       $html .= "<tr><td>Kuantitas</td><td>".$row['kuantitas']."</td></tr>";
       $html .= "<tr><td>Dari</td><td>".$row['dari']."</td></tr>";
+	  
       $html .= "<tr><td>Tanggal Perolehan</td><td>".$row['tanggal_perolehan']."</td></tr>";
-      $html .= "<tr><td>No Dana</td><td>".$row['no_dana']."</td></tr>";
-      $html .= "<tr><td>Penggunaan Waktu</td><td>".$row['penggunaan_waktu']."</td></tr>";
-      $html .= "<tr><td>Penggunaan Freq</td><td>".$row['penggunaan_freq']."</td></tr>";
-      $html .= "<tr><td>Unit Waktu</td><td>".$row['unit_waktu']."</td></tr>";
-      $html .= "<tr><td>Unit Freq</td><td>".$row['unit_freq']."</td></tr>";
-      $html .= "<tr><td>Disimpan</td><td>".$row['disimpan']."</td></tr>";
-      $html .= "<tr><td>Dihapus</td><td>".$row['dihapus']."</td></tr>";
+      $html .= "<tr><td>Umur</td><td>".$row['umur']."</td></tr>";
+      $html .= "<tr><td>Umur Maksimum</td><td>".$row['umur_maks']."</td></tr>";
+      $html .= "<tr><td>Memiliki Cycle</td><td>".$row['is_cycle']."</td></tr>";
+      $html .= "<tr><td>Cycle</td><td>".$row['cycle']."</td></tr>";
+      $html .= "<tr><td>Maks Cycle</td><td>".$row['cycle_maks']."</td></tr>";
+	  if ($row['alert'] == '0') {$x =  'Ya';} else {$x = 'Tidak';}
+      $html .= "<tr><td>Alert</td><td>".$x."</td></tr>";
   
+		$html .= "</tbody>";
+		$html .= "</table>";
+		$html .= "</div>";
+		
+		
+		$html .= "<div id='subtitle_profil'><br><br>II. DATA PERLENGKAPAN KHUSUS ANGKUTAN UDARA</div>";
+		$html .= "<div id='BoxTbl'>";
+		$html .= "<table width='100%' class='report' style='border-collapse: collapse;'>\n";
+		$html .= "<tbody>";
+		$html .= "<tr><td width='100'>Installation Date</td><td>".$row['installation_date']."</td></tr>";
+		if ($row['jenis_asset'] == 'Udara') { 
+		$html .= "<tr><td>Installation A/C TSN</td><td>".$row['installation_ac_tsn']."</td></tr>";
+		$html .= "<tr><td>Installation COMP TSN</td><td>".$row['installation_comp_tsn']."</td></tr>";
+		$html .= "<tr><td>Task</td><td>".$row['task']."</td></tr>";
+		if ($row['is_oc'] == '0') {$x =  'Ya';} else {$x = 'Tidak';}
+		$html .= "<tr><td>OC</td><td>".$x."</td></tr>";
+		if ($row['is_engine'] == '0') {$x =  'Ya';} else {$x = 'Tidak';}
+		$html .= "<tr><td>Engine/Mesin</td><td>".$x."</td></tr>";
+		$html .= "<tr><td>ENG Type</td><td>".$row['eng_type']."</td></tr>";
+		$html .= "<tr><td>ENG TSO</td><td>".$row['eng_tso']."</td></tr>";
+		}
+
 		$html .= "</tbody>";
 		$html .= "</table>";
 		$html .= "</div>";
