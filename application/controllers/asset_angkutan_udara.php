@@ -236,9 +236,9 @@ class Asset_Angkutan_Udara extends MY_Controller {
                 $no_induk_pesawat = $query_result->kd_brg.$query_result->kd_lokasi.$query_result->no_aset;
                 
                 $update_data_no_induk = array(
-                    'warehouse_id' => 0,
-                    'ruang_id'=>0,
-                    'rak_id'=>0,
+                    'warehouse_id' => null,
+                    'ruang_id'=>null,
+                    'rak_id'=>null,
                     'no_induk_asset'=>$no_induk_pesawat
                 );
                 $this->db->where('id',$dataPerlengkapanUdara['id_asset_perlengkapan']);

@@ -124,6 +124,16 @@ class Asset_Perlengkapan extends MY_Controller {
                 if($dataSimak['id'] != '')
                 {
                     unset($dataSimak['no_induk_asset']);
+                    if($dataSimak["warehouse_id"] != "" && $dataSimak["warehouse_id"] != null)
+                    {
+                        if($dataSimak["warehouse_id"] > 0)
+                        {
+                            $this->db->query("delete from ext_asset_angkutan_darat_perlengkapan where id_asset_perlengkapan =".$dataSimak["id"]);
+                            $this->db->query("delete from ext_asset_angkutan_laut_perlengkapan where id_asset_perlengkapan =".$dataSimak["id"]);
+                            $this->db->query("delete from ext_asset_angkutan_udara_perlengkapan where id_asset_perlengkapan =".$dataSimak["id"]);
+                            $this->db->query("update asset_perlengkapan set no_induk_asset = null where id =".$dataSimak["id"]);
+                        }
+                    }
 //                    $this->db->set($dataSimak);
 //                    $this->db->replace('asset_perlengkapan');
                     $this->db->where('id',$dataSimak['id']);
@@ -180,7 +190,9 @@ class Asset_Perlengkapan extends MY_Controller {
                     
                      $this->db->where('id_part',$keys['id']);
                      $this->db->update('asset_perlengkapan_sub_part',$unattachPart);
-                     
+                    $this->db->query("delete from ext_asset_angkutan_darat_perlengkapan where id_asset_perlengkapan =".$keys['id']);
+                    $this->db->query("delete from ext_asset_angkutan_laut_perlengkapan where id_asset_perlengkapan =".$keys['id']);
+                    $this->db->query("delete from ext_asset_angkutan_udara_perlengkapan where id_asset_perlengkapan =".$keys['id']);
 		}
                 
                 
@@ -276,6 +288,13 @@ class Asset_Perlengkapan extends MY_Controller {
                 if($data['id'] != '')
                 {
                     $id = $data['id'];
+                    if($data["warehouse_id"] != "" && $data["warehouse_id"] != null)
+                    {
+                        if($data["warehouse_id"] > 0)
+                        {
+                            $data["id_part"] = 0;
+                        }
+                    }
                     $this->db->set($data);
                     $this->db->replace('asset_perlengkapan_sub_part');
                     $this->createLog('UPDATE ASSET PERLENGKAPAN SUB PART','asset_perlengkapan_sub_part');
@@ -591,6 +610,13 @@ class Asset_Perlengkapan extends MY_Controller {
                 }
                 
                 $id = $data['id'];
+                if($data["warehouse_id"] != "" && $data["warehouse_id"] != null)
+                    {
+                        if($data["warehouse_id"] > 0)
+                        {
+                            $data["id_sub_part"] = 0;
+                        }
+                    }
                     $this->db->set($data);
                     $this->db->replace('asset_perlengkapan_sub_sub_part');
                     $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [id='.$id.']','asset_perlengkapan_sub_sub_part');
@@ -610,6 +636,13 @@ class Asset_Perlengkapan extends MY_Controller {
                     );
                     $row->kd_klasifikasi_aset = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasi);
                     unset($row->kd_lvl1,$row->kd_lvl2,$row->kd_lvl3);
+                    if($row->warehouse_id != "" && $row->warehouse_id != null)
+                    {
+                        if($row->warehouse_id > 0)
+                        {
+                            $row->id_sub_part = 0;
+                        }
+                    }
                     $this->db->set($row);
                     $this->db->replace('asset_perlengkapan_sub_sub_part');
                     $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [id='.$row->id.']','asset_perlengkapan_sub_sub_part');
@@ -624,6 +657,13 @@ class Asset_Perlengkapan extends MY_Controller {
                     );
                     $data->kd_klasifikasi_aset = $this->kodeKlasifikasiAsetGenerator($dataKlasifikasi);
                     unset($data->kd_lvl1,$data->kd_lvl2,$data->kd_lvl3);
+                    if($data->warehouse_id != "" && $data->warehouse_id != null)
+                    {
+                        if($data->warehouse_id > 0)
+                        {
+                            $data->id_sub_part = 0;
+                        }
+                    }
                     $this->db->set($data);
                     $this->db->replace('asset_perlengkapan_sub_sub_part');
                     $this->createLog('UPDATE ASSET PERLENGKAPAN SUB SUB PART [id='.$data->id.']','asset_perlengkapan_sub_sub_part');

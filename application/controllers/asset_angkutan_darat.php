@@ -173,9 +173,9 @@ class Asset_Angkutan_Darat extends MY_Controller {
 //                var_dump(array($no_induk_asset,$dataPerlengkapanDarat['id_ext_asset'],$dataPerlengkapanDarat['id_asset_perlengkapan']));
 //                die;
                 $update_data_no_induk = array(
-                    'warehouse_id' => 0,
-                    'ruang_id'=>0,
-                    'rak_id'=>0,
+                    'warehouse_id' => null,
+                    'ruang_id'=>null,
+                    'rak_id'=>null,
                     'no_induk_asset'=>$no_induk_asset
                 );
                 $this->db->where('id',$dataPerlengkapanDarat['id_asset_perlengkapan']);

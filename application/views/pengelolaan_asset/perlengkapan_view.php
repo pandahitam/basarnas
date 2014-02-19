@@ -2932,6 +2932,16 @@
                     Reference.Data.subSubPartAddExisting.changeParams({params:{part_number:sub_part}});
                     Modal.assetTertiaryWindow.add(form);
                     Modal.assetTertiaryWindow.show();
+                    var presetData = {};
+                    if(user_kd_lokasi != null)
+                    {
+                        presetData.kd_lokasi = user_kd_lokasi;
+                    }
+                    if(user_kode_unor != null)
+                    {
+                        presetData.kode_unor = user_kode_unor;
+                    }
+                    form.getForm().setValues(presetData);
         };
 
         Perlengkapan.editSubSubPart = function()
@@ -2976,7 +2986,7 @@
                     form.insert(5, Perlengkapan.Component.dataTambahanPerlengkapanUdara());
                     form.insert(6, Form.Component.fileUpload(true));
 
-
+                    
                     if (data !== null)
                     {
                         Ext.Object.each(data,function(key,value,myself){
@@ -2985,7 +2995,35 @@
                                 data[key] = '';
                             }
                         });
+                        if(data.kd_lokasi == "" || data.kd_lokasi == undefined)
+                        {
+                            if(user_kd_lokasi != null)
+                            {
+                                data.kd_lokasi = user_kd_lokasi;
+                            }
+                        }
+                        
+                        if(data.kode_unor == "" || data.kode_unor == undefined)
+                        {
+                            if(user_kode_unor != null)
+                            {
+                                data.kode_unor = user_kode_unor;
+                            }
+                        }
                          form.getForm().setValues(data);
+                    }
+                    else
+                    {
+                        var presetData = {};
+                        if(user_kd_lokasi != null)
+                        {
+                            presetData.kd_lokasi = user_kd_lokasi;
+                        }
+                        if(user_kode_unor != null)
+                        {
+                            presetData.kode_unor = user_kode_unor;
+                        }
+                        form.getForm().setValues(presetData);
                     }
                     
                     Modal.assetTertiaryWindow.add(form);
@@ -3102,6 +3140,8 @@
 
                         }
                      });
+                     
+                
                     var form = Perlengkapan.Component.panelPerlengkapanSubPart2(Perlengkapan.URL.createUpdateSubPart, Perlengkapan.dataStoreSubPart, Perlengkapan.dataStoreSubSubPart);                                                            
                     form.insert(0, Perlengkapan.Component.dataPerlengkapanSubPartAddExisting(form,data.id));
                     form.insert(1, Form.Component.unitNew(false,form));
@@ -3116,6 +3156,16 @@
                     Reference.Data.subPartAddExisting.changeParams({params:{id_part:data.id}});
                     Modal.assetSecondaryWindow2.add(form);
                     Modal.assetSecondaryWindow2.show();
+                    var presetData = {};
+                    if(user_kd_lokasi != null)
+                    {
+                        presetData.kd_lokasi = user_kd_lokasi;
+                    }
+                    if(user_kode_unor != null)
+                    {
+                        presetData.kode_unor = user_kode_unor;
+                    }
+                    form.getForm().setValues(presetData);
             }
         };
         
@@ -3178,7 +3228,37 @@
                                 data[key] = '';
                             }
                         });
+                        
+                        if(data.kd_lokasi == "" || data.kd_lokasi == undefined)
+                        {
+                            if(user_kd_lokasi != null)
+                            {
+                                data.kd_lokasi = user_kd_lokasi;
+                            }
+                        }
+                        
+                        if(data.kode_unor == "" || data.kode_unor == undefined)
+                        {
+                            if(user_kode_unor != null)
+                            {
+                                data.kode_unor = user_kode_unor;
+                            }
+                        }
+                        
                          form.getForm().setValues(data);
+                    }
+                    else
+                    {
+                        var presetData = {};
+                        if(user_kd_lokasi != null)
+                        {
+                            presetData.kd_lokasi = user_kd_lokasi;
+                        }
+                        if(user_kode_unor != null)
+                        {
+                            presetData.kode_unor = user_kode_unor;
+                        }
+                        form.getForm().setValues(presetData);
                     }
                     Modal.assetSecondaryWindow2.add(form);
                     Modal.assetSecondaryWindow2.show();
@@ -4933,6 +5013,19 @@
                             form.insert(1, Form.Component.klasifikasiAsetNew(false,form));
                             form.insert(2, Form.Component.warehousePerlengkapan(false,form));
                             form.insert(6, Form.Component.fileUpload(false));
+                            
+                        
+                            var presetData = {};
+                            if(user_kd_lokasi != null)
+                            {
+                                presetData.kd_lokasi = user_kd_lokasi;
+                            }
+                            if(user_kode_unor != null)
+                            {
+                                presetData.kode_unor = user_kode_unor;
+                            }
+                            form.getForm().setValues(presetData);
+                        
                             Modal.assetSecondaryWindow.add(form);
                             Modal.assetSecondaryWindow.show();
 
@@ -4951,6 +5044,18 @@
                             form.insert(1, Form.Component.klasifikasiAsetNew(false,form));
                             form.insert(2, Form.Component.warehousePerlengkapan(false,form));
                             form.insert(5, Form.Component.fileUpload(false));
+                            
+                            var presetData = {};
+                            if(user_kd_lokasi != null)
+                            {
+                                presetData.kd_lokasi = user_kd_lokasi;
+                            }
+                            if(user_kode_unor != null)
+                            {
+                                presetData.kode_unor = user_kode_unor;
+                            }
+                            form.getForm().setValues(presetData);
+                            
                             Modal.assetSecondaryWindow.add(form);
                             Modal.assetSecondaryWindow.show();
                    }
@@ -5026,8 +5131,40 @@
                                     data[key] = '';
                                 }
                             });
+                            
+                            if(data.kd_lokasi == "" || data.kd_lokasi == undefined)
+                            {
+                                if(user_kd_lokasi != null)
+                                {
+                                    data.kd_lokasi = user_kd_lokasi;
+                                }
+                            }
+
+                            if(data.kode_unor == "" || data.kode_unor == undefined)
+                            {
+                                if(user_kode_unor != null)
+                                {
+                                    data.kode_unor = user_kode_unor;
+                                }
+                            }
+                            
+                            
                              form.getForm().setValues(data);
                         }
+                        else
+                        {
+                            var presetData = {};
+                            if(user_kd_lokasi != null)
+                            {
+                                presetData.kd_lokasi = user_kd_lokasi;
+                            }
+                            if(user_kode_unor != null)
+                            {
+                                presetData.kode_unor = user_kode_unor;
+                            }
+                            form.getForm().setValues(presetData);
+                        }
+                       
 //                        if(Modal.assetSecondaryWindow.hasListener("close") == false)
 //                        {
 //                            Modal.assetSecondaryWindow.addListener("close", function(){ Perlengkapan.Data.load() }, this);
@@ -5064,7 +5201,35 @@
                                     data[key] = '';
                                 }
                             });
+                            if(data.kd_lokasi == "" || data.kd_lokasi == undefined)
+                            {
+                                if(user_kd_lokasi != null)
+                                {
+                                    data.kd_lokasi = user_kd_lokasi;
+                                }
+                            }
+
+                            if(data.kode_unor == "" || data.kode_unor == undefined)
+                            {
+                                if(user_kode_unor != null)
+                                {
+                                    data.kode_unor = user_kode_unor;
+                                }
+                            }
                              form.getForm().setValues(data);
+                        }
+                        else
+                        {
+                            var presetData = {};
+                            if(user_kd_lokasi != null)
+                            {
+                                presetData.kd_lokasi = user_kd_lokasi;
+                            }
+                            if(user_kode_unor != null)
+                            {
+                                presetData.kode_unor = user_kode_unor;
+                            }
+                            form.getForm().setValues(presetData);
                         }
 //                        Modal.assetTertiaryWindow.addListener("close", function(){ Perlengkapan.Data.load() }, this);
 //                        if(Modal.assetSecondaryWindow.hasListener("close") == false)

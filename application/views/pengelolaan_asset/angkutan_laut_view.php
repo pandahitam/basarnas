@@ -454,7 +454,7 @@
                 });
             
             }
-            Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePerlengkapanAngkutanLaut,AngkutanLaut.dataStorePerlengkapanAngkutanLaut);
+//            Modal.deleteAlert(arrayDeleted, AngkutanLaut.URL.removePerlengkapanAngkutanLaut,AngkutanLaut.dataStorePerlengkapanAngkutanLaut);
         };
         
         AngkutanLaut.addDetailPenggunaan = function()
